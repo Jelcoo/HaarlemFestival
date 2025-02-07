@@ -1,0 +1,5 @@
+/vendor/
+.php-cs-fixer.cache
+config.php
+supervisord.log
+supervisord.pid
