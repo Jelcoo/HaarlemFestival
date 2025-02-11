@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
 use App\Helpers\QueryBuilder;
 
 class UserRepository extends Repository
