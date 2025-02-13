@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Models;
+
+use App\Enum\InvoiceStatusEnum;
+use Carbon\Carbon;
+
+class Invoice
+{
+    public int $id;
+    public int $user_id;
+    public InvoiceStatusEnum $status;
+    public Carbon $created_at;
+    public Carbon $completed_at;
+
+    public function __construct(array $collection)
+    {
+        $this->id = $collection["id"];
+        $this->user_id = $collection["user_id"];
+        $this->status = InvoiceStatusEnum::from($collection["status"]);
+        $this->created_at = Carbon::parse($collection["created_at"]);
+        $this->completed_at = Carbon::parse($collection["completed_at"]);
+    }
+}
