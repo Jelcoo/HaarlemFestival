@@ -36,7 +36,8 @@ CREATE TABLE artists (
     name VARCHAR(255) NOT NULL,
     preview_description TEXT,
     main_description TEXT,
-    iconic_albums TEXT
+    iconic_albums TEXT,
+    image VARCHAR(255)
 );
 
 CREATE TABLE restaurants (
