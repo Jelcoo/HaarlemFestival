@@ -32,6 +32,9 @@
             <label for="password">Password</label>
             <input type="password" class="form-control" name="password" placeholder="Password" <?php echo isset($fields['password']) ? 'value="' . $fields['password'] . '"' : ''; ?>>
         </div>
+        <div class="checkbox mb-3">
+            <div class="cf-turnstile" data-sitekey="<?php echo \App\Config\Config::getKey('TURNSTILE_KEY'); ?>" data-theme="light"></div>
+        </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Application\Request;
 use App\Application\Response;
 use App\Application\Session;
+use App\Helpers\TurnstileHelper;
 use App\Repositories\UserRepository;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
@@ -26,6 +27,15 @@ class AuthController extends Controller
 
     public function registerPost(): string
     {
+        $token = $_POST['cf-turnstile-response'];
+
+        if (TurnstileHelper::verify($token) === false) {
+            return $this->rerenderRegister([
+                'error' => 'Turnstile verification failed',
+                'fields' => $_POST,
+            ]);
+        }
+
         $validator = new Validator();
         $validator->addValidator('unique', new UniqueRule());
         $validation = $validator->validate($_POST, [
