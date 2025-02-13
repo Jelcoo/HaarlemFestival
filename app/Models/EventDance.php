@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Enum\EventTypeEnum;
-use Carbon\Carbon;
-
 class EventDance extends Event
 {
     public int $id;
@@ -17,12 +14,12 @@ class EventDance extends Event
 
     public function __construct(array $collection)
     {
-        $this->id = $collection["id"];
-        $this->event_id = $collection["event_id"];
-        $this->artist = $collection["artist"];
-        $this->location = $collection["location"];
-        $this->total_tickets = $collection["total_tickets"];
-        $this->tickets_left = $collection["tickets_left"];
-        $this->price = $collection["price"];
+        $this->id = $collection['id'];
+        $this->event_id = $collection['event_id'];
+        $this->artist = $collection['artist'];
+        $this->location = $collection['location'];
+        $this->total_tickets = $collection['total_tickets'];
+        $this->tickets_left = $collection['tickets_left'];
+        $this->price = $collection['price'];
     }
 }

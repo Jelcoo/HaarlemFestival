@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Enum\UserRoleEnum;
 use Carbon\Carbon;
+use App\Enum\UserRoleEnum;
 
 class User
 {
@@ -21,16 +21,16 @@ class User
 
     public function __construct(array $collection)
     {
-        $this->id = $collection["id"];
-        $this->firstname = $collection["firstname"];
-        $this->lastname = $collection["lastname"];
-        $this->email = $collection["email"];
-        $this->password = $collection["password"];
-        $this->role = UserRoleEnum::from($collection["role"]);
-        $this->address = $collection["address"];
-        $this->city = $collection["city"];
-        $this->postal_code = $collection["postal_code"];
-        $this->profile_picture = $collection["profile_picture"];
-        $this->created_at = Carbon::parse($collection["created_at"]);
+        $this->id = $collection['id'];
+        $this->firstname = $collection['firstname'];
+        $this->lastname = $collection['lastname'];
+        $this->email = $collection['email'];
+        $this->password = $collection['password'];
+        $this->role = UserRoleEnum::from($collection['role']);
+        $this->address = $collection['address'];
+        $this->city = $collection['city'];
+        $this->postal_code = $collection['postal_code'];
+        $this->profile_picture = $collection['profile_picture'];
+        $this->created_at = Carbon::parse($collection['created_at']);
     }
 }

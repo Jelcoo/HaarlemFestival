@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Enum\EventTypeEnum;
-use Carbon\Carbon;
-
 class EventYummy extends Event
 {
     public int $id;
@@ -17,12 +14,12 @@ class EventYummy extends Event
 
     public function __construct(array $collection)
     {
-        $this->id = $collection["id"];
-        $this->restaurant = $collection["restaurant"];
-        $this->restaurant_type = $collection["restaurant_type"];
-        $this->restaurant_type = $collection["restaurant_type"];
-        $this->rating = $collection["rating"];
-        $this->kids_price = $collection["kids_price"];
-        $this->adult_price = $collection["adult_price"];
+        $this->id = $collection['id'];
+        $this->restaurant = $collection['restaurant'];
+        $this->restaurant_type = $collection['restaurant_type'];
+        $this->restaurant_type = $collection['restaurant_type'];
+        $this->rating = $collection['rating'];
+        $this->kids_price = $collection['kids_price'];
+        $this->adult_price = $collection['adult_price'];
     }
 }

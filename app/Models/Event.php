@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Enum\EventTypeEnum;
 use Carbon\Carbon;
+use App\Enum\EventTypeEnum;
 
 class Event
 {
@@ -17,12 +17,12 @@ class Event
 
     public function __construct(array $collection)
     {
-        $this->id = $collection["id"];
-        $this->page_id = $collection["page"];
-        $this->event_type = EventTypeEnum::from($collection["type"]);
-        $this->session = $collection["session"];
-        $this->start = Carbon::parse($collection["start"]);
-        $this->end = Carbon::parse($collection["end"]);
-        $this->created_at = Carbon::parse($collection["created_at"]);
+        $this->id = $collection['id'];
+        $this->page_id = $collection['page'];
+        $this->event_type = EventTypeEnum::from($collection['type']);
+        $this->session = $collection['session'];
+        $this->start = Carbon::parse($collection['start']);
+        $this->end = Carbon::parse($collection['end']);
+        $this->created_at = Carbon::parse($collection['created_at']);
     }
 }

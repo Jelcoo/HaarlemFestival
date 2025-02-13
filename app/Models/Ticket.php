@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enum\InvoiceStatusEnum;
 use Carbon\Carbon;
 
 class Ticket
@@ -15,10 +14,10 @@ class Ticket
 
     public function __construct(array $collection)
     {
-        $this->id = $collection["id"];
-        $this->invoice_id = $collection["invoice_id"];
-        $this->qrcode = $collection["qrcode"];
-        $this->session = $collection["session"];
-        $this->created_at = Carbon::parse($collection["created_at"]);
+        $this->id = $collection['id'];
+        $this->invoice_id = $collection['invoice_id'];
+        $this->qrcode = $collection['qrcode'];
+        $this->session = $collection['session'];
+        $this->created_at = Carbon::parse($collection['created_at']);
     }
 }

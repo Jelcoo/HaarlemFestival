@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Enum\InvoiceStatusEnum;
-use Carbon\Carbon;
-
 class TicketYummy extends Ticket
 {
     public int $id;
@@ -15,10 +12,10 @@ class TicketYummy extends Ticket
 
     public function __construct(array $collection)
     {
-        $this->id = $collection["id"];
-        $this->ticket_id = $collection["ticket_id"];
-        $this->event_id = $collection["event_id"];
-        $this->kids_count = $collection["kids_count"];
-        $this->adult_count = $collection["adult_count"];
+        $this->id = $collection['id'];
+        $this->ticket_id = $collection['ticket_id'];
+        $this->event_id = $collection['event_id'];
+        $this->kids_count = $collection['kids_count'];
+        $this->adult_count = $collection['adult_count'];
     }
 }
