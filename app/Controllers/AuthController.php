@@ -3,12 +3,12 @@
 namespace App\Controllers;
 
 use App\Application\Request;
-use App\Application\Response;
 use App\Application\Session;
-use App\Helpers\TurnstileHelper;
-use App\Repositories\UserRepository;
+use App\Application\Response;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
+use App\Helpers\TurnstileHelper;
+use App\Repositories\UserRepository;
 
 class AuthController extends Controller
 {
@@ -59,10 +59,10 @@ class AuthController extends Controller
             $password = Request::getPostField('password');
 
             $createdUser = $this->userRepository->createUser([
-                'firstname'=> $firstname,
+                'firstname' => $firstname,
                 'lastname' => $lastname,
                 'email' => $email,
-                'password'=> password_hash($password, PASSWORD_DEFAULT),
+                'password' => password_hash($password, PASSWORD_DEFAULT),
             ]);
 
             $_SESSION['user_id'] = $createdUser->id;

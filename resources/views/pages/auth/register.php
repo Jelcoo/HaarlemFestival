@@ -4,11 +4,11 @@
         <div class="alert alert-danger" role="alert">
             <?php if (is_array($error)) { ?>
                 <ul>
-                    <?php foreach ($error as $e): ?>
-                        <?php foreach ($e as $key => $value): ?>
+                    <?php foreach ($error as $e) { ?>
+                        <?php foreach ($e as $key => $value) { ?>
                             <li><?php echo $value; ?></li>
-                        <?php endforeach; ?>
-                    <?php endforeach; ?>
+                        <?php } ?>
+                    <?php } ?>
                 </ul>
             <?php } else { ?>
                 <?php echo $error; ?>
@@ -33,7 +33,7 @@
             <input type="password" class="form-control" name="password" placeholder="Password" <?php echo isset($fields['password']) ? 'value="' . $fields['password'] . '"' : ''; ?>>
         </div>
         <div class="checkbox mb-3">
-            <div class="cf-turnstile" data-sitekey="<?php echo \App\Config\Config::getKey('TURNSTILE_KEY'); ?>" data-theme="light"></div>
+            <div class="cf-turnstile" data-sitekey="<?php echo App\Config\Config::getKey('TURNSTILE_KEY'); ?>" data-theme="light"></div>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
