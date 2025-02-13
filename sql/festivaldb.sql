@@ -8,7 +8,6 @@ CREATE TABLE users (
     address VARCHAR(255),
     city VARCHAR(255),
     postal_code VARCHAR(255),
-    profile_picture VARCHAR(255),
     stripe_customer_id VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -28,7 +27,8 @@ CREATE TABLE locations (
     name VARCHAR(255) NOT NULL,
     coordinates VARCHAR(255),
     adress TEXT,
-    description TEXT
+    preview_description TEXT,
+    main_description TEXT
 );
 
 CREATE TABLE artists (
@@ -36,8 +36,7 @@ CREATE TABLE artists (
     name VARCHAR(255) NOT NULL,
     preview_description TEXT,
     main_description TEXT,
-    iconic_albums TEXT,
-    image VARCHAR(255)
+    iconic_albums TEXT
 );
 
 CREATE TABLE restaurants (
@@ -46,7 +45,8 @@ CREATE TABLE restaurants (
     name VARCHAR(255) NOT NULL,
     restaurant_type VARCHAR(255),
     rating INT,
-    description TEXT,
+    preview_description TEXT,
+    main_description TEXT,
     menu TEXT,
     FOREIGN KEY (location_id) REFERENCES locations(id)
 );
@@ -141,10 +141,11 @@ CREATE TABLE history_tickets (
 
 CREATE TABLE assets (
     id INT PRIMARY KEY AUTO_INCREMENT,
+    collection VARCHAR(255) NOT NULL,
     filename VARCHAR(255) NOT NULL,
-    mimetype VARCHAR(100) NOT NULL,
+    mimetype VARCHAR(255) NOT NULL,
     size INT NOT NULL,
-    model VARCHAR(100) NOT NULL,
+    model VARCHAR(255) NOT NULL,
     model_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
