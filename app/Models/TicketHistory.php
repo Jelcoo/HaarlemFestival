@@ -12,8 +12,8 @@ class TicketHistory extends Ticket
     {
         parent::__construct($collection);
 
-        $this->history_event_id = $collection["history_event_id"];
-        $this->total_seats = $collection["total_seats"];
-        $this->family_ticket = $collection["family_ticket"];
+        $this->history_event_id = $collection['history_event_id'];
+        $this->total_seats = $collection['total_seats'];
+        $this->family_ticket = $collection['family_ticket'];
     }
 }

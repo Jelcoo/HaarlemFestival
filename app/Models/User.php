@@ -13,10 +13,10 @@ class User
     public string $email;
     public string $password;
     public UserRoleEnum $role;
-    public string|null $address;
-    public string|null $city;
-    public string|null $postal_code;
-    public string|null $stripe_customer_id;
+    public ?string $address;
+    public ?string $city;
+    public ?string $postal_code;
+    public ?string $stripe_customer_id;
     public Carbon $created_at;
 
     public function __construct(array $collection)

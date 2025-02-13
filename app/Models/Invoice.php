@@ -10,7 +10,7 @@ class Invoice
     public int $id;
     public int $user_id;
     public InvoiceStatusEnum $status;
-    public string|null $stripe_payment_id;
+    public ?string $stripe_payment_id;
     public Carbon $created_at;
     public Carbon $completed_at;
 

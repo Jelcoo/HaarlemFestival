@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
-
 class Restaurant
 {
     public int $id;
@@ -11,9 +9,9 @@ class Restaurant
     public string $name;
     public string $restaurant_type;
     public int $rating;
-    public string|null $preview_description;
-    public string|null $main_description;
-    public string|null $menu;
+    public ?string $preview_description;
+    public ?string $main_description;
+    public ?string $menu;
 
     public function __construct(array $collection)
     {

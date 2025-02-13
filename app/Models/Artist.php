@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
-
 class Artist
 {
     public int $id;
     public string $name;
-    public string|null $preview_description;
-    public string|null $main_description;
-    public string|null $iconic_albums;
+    public ?string $preview_description;
+    public ?string $main_description;
+    public ?string $iconic_albums;
 
     public function __construct(array $collection)
     {
