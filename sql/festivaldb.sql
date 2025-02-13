@@ -41,7 +41,7 @@ CREATE TABLE artists (
 
 CREATE TABLE restaurants (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    location_id INT,
+    location_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
     restaurant_type VARCHAR(255),
     rating INT,
@@ -53,8 +53,8 @@ CREATE TABLE restaurants (
 
 CREATE TABLE dance_events (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    artist_id INT,
-    location_id INT,
+    artist_id INT NOT NULL,
+    location_id INT NOT NULL,
     total_tickets INT NOT NULL,
     session VARCHAR(255),
     price DECIMAL(10,2) NOT NULL,
@@ -69,11 +69,11 @@ CREATE TABLE dance_events (
 
 CREATE TABLE yummy_events (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    restaurant_id INT,
+    restaurant_id INT NOT NULL,
+    total_seats INT NOT NULL,
     kids_price DECIMAL(10,2) NOT NULL,
     adult_price DECIMAL(10,2) NOT NULL,
     vat DECIMAL(10,2) NOT NULL,
-    total_seats INT NOT NULL,
     start_time TIME NOT NULL,
     start_date DATE NOT NULL,
     end_time TIME NOT NULL,
@@ -85,7 +85,7 @@ CREATE TABLE history_events (
     id INT PRIMARY KEY AUTO_INCREMENT,
     seats_per_tour INT NOT NULL,
     language VARCHAR(255) NOT NULL,
-    guide VARCHAR(255),
+    guide VARCHAR(255) NOT NULL,
     family_price DECIMAL(10,2) NOT NULL,
     single_price DECIMAL(10,2) NOT NULL,
     vat DECIMAL(10,2) NOT NULL,

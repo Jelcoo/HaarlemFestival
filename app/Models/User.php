@@ -13,10 +13,10 @@ class User
     public string $email;
     public string $password;
     public UserRoleEnum $role;
-    public string $address;
-    public string $city;
-    public string $postal_code;
-    public string $profile_picture;
+    public string|null $address;
+    public string|null $city;
+    public string|null $postal_code;
+    public string|null $stripe_customer_id;
     public Carbon $created_at;
 
     public function __construct(array $collection)
@@ -30,7 +30,7 @@ class User
         $this->address = $collection['address'];
         $this->city = $collection['city'];
         $this->postal_code = $collection['postal_code'];
-        $this->profile_picture = $collection['profile_picture'];
+        $this->stripe_customer_id = $collection['stripe_customer_id'];
         $this->created_at = Carbon::parse($collection['created_at']);
     }
 }

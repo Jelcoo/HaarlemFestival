@@ -2,24 +2,24 @@
 
 namespace App\Models;
 
+use App\Enum\DanceSessionEnum;
+
 class EventDance extends Event
 {
-    public int $id;
-    public int $event_id;
-    public string $artist;
-    public string $location;
+    public int $artist_id;
+    public int $location_id;
     public int $total_tickets;
-    public int $tickets_left;
+    public DanceSessionEnum $session;
     public float $price;
 
     public function __construct(array $collection)
     {
-        $this->id = $collection['id'];
-        $this->event_id = $collection['event_id'];
-        $this->artist = $collection['artist'];
-        $this->location = $collection['location'];
+        parent::__construct($collection);
+
+        $this->artist_id = $collection['artist_id'];
+        $this->location_id = $collection['location'];
         $this->total_tickets = $collection['total_tickets'];
-        $this->tickets_left = $collection['tickets_left'];
+        $this->session = DanceSessionEnum::from($collection['session']);
         $this->price = $collection['price'];
     }
 }
