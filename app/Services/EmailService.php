@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Config\Config;
-use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class EmailService
 {
@@ -23,7 +23,7 @@ class EmailService
         $this->mailer->Host = Config::getKey('MAIL_HOST');
         $this->mailer->Username = Config::getKey('MAIL_USER');
         $this->mailer->Password = Config::getKey('MAIL_PASSWORD');
-        $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
+        $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $this->mailer->Port = Config::getKey('MAIL_PORT');
 
         $this->mailer->setFrom(Config::getKey('MAIL_USER'), Config::getKey('APP_NAME'));
