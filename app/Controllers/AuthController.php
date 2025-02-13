@@ -29,8 +29,8 @@ class AuthController extends Controller
         $validator = new Validator();
         $validator->addValidator('unique', new UniqueRule());
         $validation = $validator->validate($_POST, [
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
+            'firstname' => 'required|max:255',
+            'lastname' => 'required|max:255',
             'email' => 'required|email|unique:users,email|max:255',
             'password' => 'required|min:6',
         ]);
@@ -43,14 +43,14 @@ class AuthController extends Controller
         }
 
         try {
-            $first_name = Request::getPostField('first_name');
-            $last_name = Request::getPostField('last_name');
+            $firstname = Request::getPostField('firstname');
+            $lastname = Request::getPostField('lastname');
             $email = Request::getPostField('email');
             $password = Request::getPostField('password');
 
             $createdUser = $this->userRepository->createUser([
-                'first_name'=> $first_name,
-                'last_name' => $last_name,
+                'firstname'=> $firstname,
+                'lastname' => $lastname,
                 'email' => $email,
                 'password'=> password_hash($password, PASSWORD_DEFAULT),
             ]);
