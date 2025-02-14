@@ -8,4 +8,5 @@ return $config = [
     'DB_USER' => 'developer',
     'DB_PASSWORD' => 'secret123',
     'DB_NAME' => 'festivaldb',
+    'STRIPE_SECRET_KEY' => '',
 ];
