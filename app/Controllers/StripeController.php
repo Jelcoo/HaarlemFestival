@@ -80,7 +80,7 @@ class StripeController extends Controller
             $event = \Stripe\Webhook::constructEvent(
                 $payload,
                 $_SERVER['HTTP_STRIPE_SIGNATURE'],
-                "whsec_314aeb9ea753efb35ea2d448a3d9356a1dfc94bdb35ff89b660c34a86cc8ddd4"
+                Config::getKey("STRIPE_WEBHOOK_SECRET")
             );
         } catch (Exception $e) {
             $response = new Response();

@@ -9,4 +9,5 @@ return $config = [
     'DB_PASSWORD' => 'secret123',
     'DB_NAME' => 'festivaldb',
     'STRIPE_SECRET_KEY' => '',
+    'STRIPE_WEBHOOK_SECRET' => '',
 ];
