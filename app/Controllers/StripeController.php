@@ -70,6 +70,47 @@ class StripeController extends Controller
             exit;
         }
 
+    }
+    public function webhook()
+    {
+        $payload = file_get_contents('php://input');
+        $event = null;
 
+        try {
+            $event = \Stripe\Webhook::constructEvent(
+                $payload,
+                $_SERVER['HTTP_STRIPE_SIGNATURE'],
+                "whsec_314aeb9ea753efb35ea2d448a3d9356a1dfc94bdb35ff89b660c34a86cc8ddd4"
+            );
+        } catch (Exception $e) {
+            $response = new Response();
+            $response->setStatusCode(400);
+            $response->setContent($e->getMessage());
+            $response->sendJson();
+            exit();
+        }
+
+        switch ($event->type) {
+            case 'payment_intent.succeeded':
+                $paymentIntent = $event->data->object; // contains a \Stripe\PaymentIntent
+                // Then define and call a method to handle the successful payment intent.
+                // handlePaymentIntentSucceeded($paymentIntent);
+                $uploadDir = '/app/storage/';
+                $destination = "{$uploadDir}intent.txt";
+                if (file_put_contents($destination, json_encode($paymentIntent))) {
+                    http_response_code(200);
+                } else {
+                    http_response_code(301);
+                }
+                break;
+            case 'payment_method.attached':
+                $paymentMethod = $event->data->object; // contains a \Stripe\PaymentMethod
+                // Then define and call a method to handle the successful attachment of a PaymentMethod.
+                // handlePaymentMethodAttached($paymentMethod);
+                break;
+            // ... handle other event types
+            default:
+                echo 'Received unknown event type ' . $event->type;
+        }
     }
 }
