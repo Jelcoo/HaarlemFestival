@@ -1,20 +1,6 @@
 <div class="container">
     <h1>Register</h1>
-    <?php if (isset($error)) { ?>
-        <div class="alert alert-danger" role="alert">
-            <?php if (is_array($error)) { ?>
-                <ul>
-                    <?php foreach ($error as $e) { ?>
-                        <?php foreach ($e as $key => $value) { ?>
-                            <li><?php echo $value; ?></li>
-                        <?php } ?>
-                    <?php } ?>
-                </ul>
-            <?php } else { ?>
-                <?php echo $error; ?>
-            <?php } ?>
-        </div>
-    <?php } ?>
+    <?php include __DIR__.'/../../components/errordisplay.php'; ?>
     <form action="/register" method="POST">
         <div class="form-group">
             <label for="firstname">First name</label>
