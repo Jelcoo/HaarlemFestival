@@ -1,21 +1,21 @@
 <?php
 
 namespace App\Controllers;
-use App\Application\Response;
+
 use App\Config\Config;
-use App\Controllers\Controller;
-use Error;
-use Exception;
 use Stripe\StripeClient;
+use App\Application\Response;
 
 class StripeController extends Controller
 {
     private StripeClient $stripe;
+
     public function __construct()
     {
         parent::__construct();
-        $this->stripe = new StripeClient(Config::getKey("STRIPE_SECRET_KEY"));
+        $this->stripe = new StripeClient(Config::getKey('STRIPE_SECRET_KEY'));
     }
+
     public function index()
     {
         return $this->pageLoader->setPage('checkout')->render();
@@ -41,6 +41,7 @@ class StripeController extends Controller
             foreach ($items as $item) {
                 $total += $item->amount;
             }
+
             return $total;
         }
         try {
@@ -53,7 +54,7 @@ class StripeController extends Controller
                 'amount' => calculateOrderAmount($jsonObj->items),
                 'currency' => 'eur',
                 'metadata' => [
-                    'invoice_id' => 1
+                    'invoice_id' => 1,
                 ],
             ]);
 
@@ -62,7 +63,7 @@ class StripeController extends Controller
             ];
 
             return json_encode($output);
-        } catch (Error $e) {
+        } catch (\Error $e) {
             $response = new Response();
             $response->setStatusCode(500);
             $response->setContent($e->getMessage());
@@ -71,6 +72,7 @@ class StripeController extends Controller
         }
 
     }
+
     public function webhook()
     {
         $payload = file_get_contents('php://input');
@@ -80,14 +82,14 @@ class StripeController extends Controller
             $event = \Stripe\Webhook::constructEvent(
                 $payload,
                 $_SERVER['HTTP_STRIPE_SIGNATURE'],
-                Config::getKey("STRIPE_WEBHOOK_SECRET")
+                Config::getKey('STRIPE_WEBHOOK_SECRET')
             );
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $response = new Response();
             $response->setStatusCode(400);
             $response->setContent($e->getMessage());
             $response->sendJson();
-            exit();
+            exit;
         }
 
         switch ($event->type) {
@@ -96,7 +98,19 @@ class StripeController extends Controller
                 // Then define and call a method to handle the successful payment intent.
                 // handlePaymentIntentSucceeded($paymentIntent);
                 $uploadDir = '/app/storage/';
-                $destination = "{$uploadDir}intent.txt";
+                $destination = "{$uploadDir}succeeded_intent.json";
+                if (file_put_contents($destination, json_encode($paymentIntent))) {
+                    http_response_code(200);
+                } else {
+                    http_response_code(301);
+                }
+                break;
+            case 'payment_intent.payment_failed':
+                $paymentIntent = $event->data->object; // contains a \Stripe\PaymentIntent
+                // Then define and call a method to handle the successful payment intent.
+                // handlePaymentIntentSucceeded($paymentIntent);
+                $uploadDir = '/app/storage/';
+                $destination = "{$uploadDir}failed_intent.json";
                 if (file_put_contents($destination, json_encode($paymentIntent))) {
                     http_response_code(200);
                 } else {
@@ -108,7 +122,7 @@ class StripeController extends Controller
                 // Then define and call a method to handle the successful attachment of a PaymentMethod.
                 // handlePaymentMethodAttached($paymentMethod);
                 break;
-            // ... handle other event types
+                // ... handle other event types
             default:
                 echo 'Received unknown event type ' . $event->type;
         }
