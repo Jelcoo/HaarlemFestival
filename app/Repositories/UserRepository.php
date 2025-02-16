@@ -16,6 +16,15 @@ class UserRepository extends Repository
         return $queryUser ? new User($queryUser) : null;
     }
 
+    public function getUserByEmail(string $email): ?User
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $queryUser = $queryBuilder->table('users')->where('email', '=', $email)->first();
+
+        return $queryUser ? new User($queryUser) : null;
+    }
+
     public function createUser(array $data): User
     {
         $queryBuilder = new QueryBuilder($this->getConnection());

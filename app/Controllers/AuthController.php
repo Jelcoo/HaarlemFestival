@@ -17,6 +17,7 @@ class AuthController extends Controller
     public function __construct()
     {
         parent::__construct();
+
         $this->userRepository = new UserRepository();
     }
 
@@ -77,14 +78,74 @@ class AuthController extends Controller
         return $this->pageLoader->setPage('auth/register')->render();
     }
 
+    public function login(): string
+    {
+        return $this->pageLoader->setPage('auth/login')->render();
+    }
+
+    public function loginPost(): string
+    {
+        $token = $_POST['cf-turnstile-response'];
+
+        if (TurnstileHelper::verify($token) === false) {
+            return $this->rerederLogin([
+                'error' => 'Turnstile verification failed',
+                'fields' => $_POST,
+            ]);
+        }
+
+        $validator = new Validator();
+        $validator->addValidator('unique', new UniqueRule());
+        $validation = $validator->validate($_POST, [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if ($validation->fails()) {
+            return $this->rerederLogin([
+                'error' => $validation->errors()->toArray(),
+                'fields' => $_POST,
+            ]);
+        }
+
+        try {
+            $email = Request::getPostField('email');
+            $password = Request::getPostField('password');
+
+            $user = $this->userRepository->getUserByEmail($email);
+
+            if (password_verify($password, $user?->password)) {
+                $_SESSION['user_id'] = $user->id;
+                Response::redirect('/');
+            } else {
+                return $this->rerederLogin([
+                    'error'=> 'Invalid credentials',
+                    'fields' => $_POST,
+                ]);
+            }
+        } catch (\Exception $e) {
+            return $this->rerederLogin([
+                'error' => $e->getMessage(),
+                'fields' => $_POST,
+            ]);
+        }
+
+        return $this->pageLoader->setPage('auth/login')->render();
+    }
+
     public function logout(): void
     {
         Session::destroy();
-        Response::redirect('/register');
+        Response::redirect('/');
     }
 
     private function rerenderRegister(array $parameters = []): string
     {
         return $this->pageLoader->setPage('auth/register')->render($parameters);
+    }
+
+    private function rerederLogin(array $parameters = []): string
+    {
+        return $this->pageLoader->setPage('auth/login')->render($parameters);
     }
 }
