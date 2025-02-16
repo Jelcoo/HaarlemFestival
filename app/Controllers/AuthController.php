@@ -119,7 +119,7 @@ class AuthController extends Controller
                 Response::redirect('/');
             } else {
                 return $this->rerederLogin([
-                    'error'=> 'Invalid credentials',
+                    'error' => 'Invalid credentials',
                     'fields' => $_POST,
                 ]);
             }

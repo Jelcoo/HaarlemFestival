@@ -1,6 +1,6 @@
 <div class="container">
     <h1>Login</h1>
-    <?php include __DIR__.'/../../components/errordisplay.php'; ?>
+    <?php include __DIR__ . '/../../components/errordisplay.php'; ?>
     <form action="/login" method="POST">
         <div class="form-group">
             <label for="email">Email</label>

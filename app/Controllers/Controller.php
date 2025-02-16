@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Application\PageLoader;
-use App\Application\Session;
 use App\Models\User;
+use App\Application\Session;
+use App\Application\PageLoader;
 use App\Repositories\UserRepository;
 
 class Controller
@@ -24,7 +24,7 @@ class Controller
         if (isset($this->user)) {
             return $this->user;
         }
-        
+
         if (Session::isValidSession()) {
             $this->user = $this->userRepository->getUserById($_SESSION['user_id']);
         }

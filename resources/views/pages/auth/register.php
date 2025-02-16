@@ -1,6 +1,6 @@
 <div class="container">
     <h1>Register</h1>
-    <?php include __DIR__.'/../../components/errordisplay.php'; ?>
+    <?php include __DIR__ . '/../../components/errordisplay.php'; ?>
     <form action="/register" method="POST">
         <div class="form-group">
             <label for="firstname">First name</label>
