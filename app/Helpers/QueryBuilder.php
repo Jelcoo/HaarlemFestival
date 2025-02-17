@@ -2,8 +2,6 @@
 
 namespace App\Helpers;
 
-use App\Exceptions\InvalidTableException;
-
 enum QueryType
 {
     case QUERY_TYPE_ALL;
