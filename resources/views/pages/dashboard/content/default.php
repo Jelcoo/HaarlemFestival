@@ -1,0 +1,1 @@
+<p>default content</p>
