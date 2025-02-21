@@ -9,7 +9,11 @@
             <th>Last Name</th>
             <th>Email</th>
             <th>Role</th>
+            <th>Adress</th>
+            <th>City</th>
+            <th>Postal Code</th>
             <th>Created At</th>
+            <th>Stripe ID</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -22,7 +26,11 @@
                     <td><?= $user->lastname ?></td>
                     <td><?= $user->email ?></td>
                     <td><?= $user->role->value ?></td>
+                    <td><?= $user->address ?></td>
+                    <td><?= $user->city ?></td>
+                    <td><?= $user->postal_code ?></td>
                     <td><?= $user->created_at ?></td>
+                    <td><?= $user->stripe_customer_id ?></td>
                     <td>
                         <form action="/dashboard/users" method="POST" style="display:inline;">
                             <input type="hidden" name="id" value="<?= $user->id ?>">
