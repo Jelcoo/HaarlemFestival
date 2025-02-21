@@ -24,4 +24,18 @@ class UserRepository extends Repository
 
     return $queryUsers ? array_map(fn($userData) => new User($userData), $queryUsers) : [];
   }
+
+  public function deleteUser(int $id): ?User
+  {
+    $queryBuilder = new QueryBuilder($this->getConnection());
+
+    $queryUser = $this->getUserById($id);
+
+    if ($queryUser) {
+      $queryBuilder->table('users')->where('id', '=', $id)->delete();
+      return $queryUser;
+    }
+
+    return null;
+  }
 }

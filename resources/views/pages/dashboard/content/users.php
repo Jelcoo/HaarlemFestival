@@ -14,8 +14,8 @@
         </tr>
     </thead>
     <tbody>
-        <?php if (!empty($data['users'])): ?>
-            <?php foreach ($data['users'] as $user): ?>
+        <?php if (!empty($users)): ?>
+            <?php foreach ($users as $user): ?>
                 <tr>
                     <td><?= $user->id ?></td>
                     <td><?= $user->firstname ?></td>
@@ -24,8 +24,15 @@
                     <td><?= $user->role->value ?></td>
                     <td><?= $user->created_at ?></td>
                     <td>
-                        <a href="edit.php?id=<?= $user->id ?>" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="delete.php?id=<?= $user->id ?>" class="btn btn-danger btn-sm">Delete</a>
+                        <form action="/dashboard/users" method="POST" style="display:inline;">
+                            <input type="hidden" name="id" value="<?= $user->id ?>">
+
+                            <!-- Edit Button -->
+                            <button type="submit" class="btn btn-warning btn-sm" name="action" value="edit">Edit</button>
+
+                            <!-- Delete Button -->
+                            <button type="submit" class="btn btn-danger btn-sm" name="action" value="delete">Delete</button>
+                        </form>
                     </td>
                 </tr>
             <?php endforeach; ?>
