@@ -2,8 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Enum\UserRoleEnum;
 use App\Repositories\UserRepository;
 use App\Application\Response;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -26,38 +28,39 @@ class DashboardController extends Controller
 
   public function users(): string
   {
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
-
     $users = $this->userRepository->getAllUsers();
+
+    $status = $_GET['status'] ?? '';
 
     return $this->pageLoader->setPage('dashboard/index')->render([
       'activePage' => 'users',
       'sidebarItems' => $this->getSidebarItems(),
-      'content' => $this->loadContent('users', ['users' => $users]),
+      'content' => $this->loadContent('users', ['users' => $users, 'status' => $status]),
     ]);
   }
 
   public function handleAction(): void
   {
-    $action = $_POST['action'] ?? null;
-    $userId = $_POST['id'] ?? null;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      $action = $_POST['action'] ?? null;
+      $userId = $_POST['id'] ?? null;
 
-    if (!$userId || !$action) {
-      $this->redirectToUsers();
-      return;
-    }
-
-    switch ($action) {
-      case 'delete':
-        $this->deleteUser($userId);
-        break;
-      case 'edit':
-        $this->editUser($userId);
-        break;
-      default:
+      if (!$userId) {
         $this->redirectToUsers();
-        break;
+        return;
+      }
+
+      switch ($action) {
+        case 'delete':
+          $this->deleteUser($userId);
+          break;
+        case 'update':
+          $this->updateUser($userId);
+          break;
+        default:
+          $this->redirectToUsers();
+          break;
+      }
     }
   }
 
@@ -72,9 +75,32 @@ class DashboardController extends Controller
     }
   }
 
-  private function editUser(int $userId): void
+  private function updateuser(int $userId): void
   {
-    Response::redirect('/dashboard/user/edit?id=' . $userId);
+    $existingUser = $this->userRepository->getUserById($userId);
+
+    if (!$existingUser) {
+      $this->redirectToUsers('error');
+      return;
+    }
+
+    $fieldsToUpdate = [
+      'firstname' => $_POST['firstname'] ?? $existingUser->firstname,
+      'lastname' => $_POST['lastname'] ?? $existingUser->lastname,
+      'email' => $_POST['email'] ?? $existingUser->email,
+      'role' => isset($_POST['role']) ? UserRoleEnum::from(strtolower($_POST['role'])) : $existingUser->role,
+      'address' => $_POST['address'] ?? $existingUser->address,
+      'city' => $_POST['city'] ?? $existingUser->city,
+      'postal_code' => $_POST['postal_code'] ?? $existingUser->postal_code
+    ];
+
+    foreach ($fieldsToUpdate as $fields => $value) {
+      $existingUser->$field = $value;
+    }
+
+    $updatedUser = $this->userRepository->updateUser($existingUser);
+
+    $this->redirectToUsers($updatedUser ? 'success' : 'error');
   }
 
   private function redirectToUsers(string $status = ''): void
@@ -103,4 +129,3 @@ class DashboardController extends Controller
     return ob_get_clean();
   }
 }
-

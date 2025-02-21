@@ -38,4 +38,39 @@ class UserRepository extends Repository
 
     return null;
   }
+
+  public function updateUser(User $user): ?User
+  {
+    $queryBuilder = new QueryBuilder($this->getConnection());
+
+    $existingUser = $this->getUserById($user->id);
+    if (!$existingUser) {
+      return null;
+    }
+
+    $fieldsToCompare = [
+      'firstname' => $user->firstname,
+      'lastname' => $user->lastname,
+      'email' => $user->email,
+      'role' => $user->role->value,
+      'address' => $user->address,
+      'city' => $user->city,
+      'postal_code' => $user->postal_code,
+    ];
+
+    $updatedFields = [];
+
+    foreach ($fieldsToCompare as $field => $newValue) {
+      if ($newValue !== $existingUser->$field) {
+        $updatedFields[$field] = $newValue;
+      }
+    }
+
+    if (!empty($updatedFields)) {
+      $queryBuilder->table('users')->where('id', '=', $user->id)->update($updatedFields);
+      return $this->getUserById($user->id);
+    }
+
+    return $existingUser;
+  }
 }
