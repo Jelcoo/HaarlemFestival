@@ -16,6 +16,16 @@ class UserRepository extends Repository
     return $queryUser ? new User($queryUser) : null;
   }
 
+  public function createUser(array $data): User
+  {
+    $queryBuilder = new QueryBuilder($this->getConnection());
+
+    $userId = $queryBuilder->table('users')->insert($data);
+    $user = $this->getUserById((int) $userId);
+
+    return $user;
+  }
+
   public function getAllUsers(): array
   {
     $queryBuilder = new QueryBuilder($this->getConnection());

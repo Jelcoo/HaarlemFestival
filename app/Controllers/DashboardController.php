@@ -28,10 +28,22 @@ class DashboardController extends Controller
 
   public function users(): string
   {
+
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
     $users = $this->userRepository->getAllUsers();
 
     $status = $_SESSION['status'] ?? '';
     unset($_SESSION['status']);
+
+    if (!empty($_SESSION['show_create_user_form'])) {
+      unset($_SESSION['show_create_user_form']);
+      return $this->pageLoader->setPage('dashboard/index')->render([
+        'activePage' => 'users_create',
+        'sidebarItems' => $this->getSidebarItems(),
+        'content' => $this->loadContent('users_create'),
+      ]);
+    }
 
     return $this->pageLoader->setPage('dashboard/index')->render([
       'activePage' => 'users',
@@ -46,17 +58,21 @@ class DashboardController extends Controller
       $action = $_POST['action'] ?? null;
       $userId = $_POST['id'] ?? null;
 
-      if (!$userId) {
-        $this->redirectToUsers();
-        return;
-      }
-
       switch ($action) {
         case 'delete':
-          $this->deleteUser($userId);
+          if ($userId)
+            $this->deleteUser($userId);
           break;
         case 'update':
-          $this->updateUser($userId);
+          if ($userId)
+            $this->updateUser($userId);
+          break;
+        case 'create':
+          $_SESSION['show_create_user_form'] = true;
+          Response::redirect('/dashboard/users');
+          break;
+        case 'createNewUser':
+          $this->createNewUser();
           break;
         default:
           $this->redirectToUsers();
@@ -105,6 +121,36 @@ class DashboardController extends Controller
       $updatedUser ? true : false,
       $updatedUser ? 'User updated successfully.' : 'No changes were made.'
     );
+  }
+
+  private function createNewUser(): void
+  {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    if (empty($_POST['firstname']) || empty($_POST['lastname']) || empty($_POST['email'])) {
+      $this->redirectToUsers(0, 'Please fill in all required fields.');
+      return;
+    }
+
+    $user = [
+      'firstname' => $_POST['firstname'],
+      'lastname' => $_POST['lastname'],
+      'email' => $_POST['email'],
+      'password' => '',
+      'role' => isset($_POST['role']) ? UserRoleEnum::from(strtolower($_POST['role']))->value : UserRoleEnum::USER->value,
+      'address' => $_POST['address'] ?? '',
+      'city' => $_POST['city'] ?? '',
+      'postal_code' => $_POST['postal_code'] ?? '',
+      'stripe_customer_id' => $_POST['stripe_customer_id'] ?? '',
+    ];
+
+    $createdUser = $this->userRepository->createUser($user);
+
+    if ($createdUser) {
+      $this->redirectToUsers(1, 'User created successfully.');
+    } else {
+      $this->redirectToUsers(0, 'Failed to create user.');
+    }
   }
 
   private function redirectToUsers(string $status = '', string $message = ''): void

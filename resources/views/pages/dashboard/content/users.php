@@ -7,6 +7,11 @@
     </div>
 <?php endif; ?>
 
+<!-- Create Button -->
+<form action="/dashboard/users" method="POST">
+    <button type="submit" class="btn btn-primary mb-3" name="action" value="create">Create New User</button>
+</form>
+
 <table class="table table-bordered">
     <thead>
         <tr>
