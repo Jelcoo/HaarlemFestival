@@ -1,7 +1,7 @@
 <h2>User Management</h2>
 
 <!-- Status message -->
-<?php if (!empty($status)): ?>
+<?php if (!empty($status['message'])): ?>
     <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
         <?php echo $status['message'] ?>
     </div>

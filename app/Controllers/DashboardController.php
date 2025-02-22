@@ -28,13 +28,33 @@ class DashboardController extends Controller
 
   public function users(): string
   {
-    error_reporting(E_ALL);
     ini_set('display_errors', 1);
-
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
     $sortColumn = $_GET['sort'] ?? 'id';
     $sortDirection = $_GET['direction'] ?? 'asc';
+    $columns = $this->getColumns();
 
-    $columns = [
+    $users = $this->userRepository->getSortedUsers($sortColumn, $sortDirection);
+
+    $status = $this->getStatus();
+
+    if ($this->shouldShowCreateUserForm()) {
+      return $this->renderPage('users_create', []);
+    }
+
+    return $this->renderPage('users', [
+      'users' => $users,
+      'status' => $status,
+      'columns' => $columns,
+      'sortColumn' => $sortColumn,
+      'sortDirection' => $sortDirection,
+    ]);
+  }
+
+  private function getColumns(): array
+  {
+    return [
       'id' => ['label' => 'ID', 'sortable' => true],
       'firstname' => ['label' => 'First Name', 'sortable' => true],
       'lastname' => ['label' => 'Last Name', 'sortable' => true],
@@ -47,32 +67,34 @@ class DashboardController extends Controller
       'stripe_customer_id' => ['label' => 'Stripe ID', 'sortable' => false],
       'actions' => ['label' => 'Actions', 'sortable' => false],
     ];
+  }
 
-
-    $users = $this->userRepository->getSortedUsers($sortColumn, $sortDirection);
-
-    $status = $_SESSION['status'] ?? '';
+  private function getStatus(): array
+  {
+    $status = $_SESSION['status'] ?? ['status' => false, 'message' => ''];
     unset($_SESSION['status']);
 
+    return [
+      'status' => $status['status'] ?? false,
+      'message' => $status['message'] ?? '',
+    ];
+  }
+
+  private function shouldShowCreateUserForm(): bool
+  {
     if (!empty($_SESSION['show_create_user_form'])) {
       unset($_SESSION['show_create_user_form']);
-      return $this->pageLoader->setPage('dashboard/index')->render([
-        'activePage' => 'users_create',
-        'sidebarItems' => $this->getSidebarItems(),
-        'content' => $this->loadContent('users_create'),
-      ]);
+      return true;
     }
+    return false;
+  }
 
+  private function renderPage(string $page, array $data): string
+  {
     return $this->pageLoader->setPage('dashboard/index')->render([
-      'activePage' => 'users',
+      'activePage' => $page,
       'sidebarItems' => $this->getSidebarItems(),
-      'content' => $this->loadContent('users', [
-        'users' => $users,
-        'status' => $status,
-        'columns' => $columns,
-        'sortColumn' => $sortColumn,
-        'sortDirection' => $sortDirection,
-      ]),
+      'content' => $this->loadContent($page, $data),
     ]);
   }
 
@@ -110,18 +132,18 @@ class DashboardController extends Controller
     $deletedUser = $this->userRepository->deleteUser($userId);
 
     if ($deletedUser) {
-      $this->redirectToUsers(1, 'User deleted successfully.');
+      $this->redirectToUsers(true, 'User deleted successfully.');
     } else {
-      $this->redirectToUsers(0, 'Failed to delete user.');
+      $this->redirectToUsers(false, 'Failed to delete user.');
     }
   }
 
-  private function updateuser(int $userId): void
+  private function updateUser(int $userId): void
   {
     $existingUser = $this->userRepository->getUserById($userId);
 
     if (!$existingUser) {
-      $this->redirectToUsers(0, 'User not found.');
+      $this->redirectToUsers(false, 'User not found.');
       return;
     }
 
@@ -171,20 +193,18 @@ class DashboardController extends Controller
     $createdUser = $this->userRepository->createUser($user);
 
     if ($createdUser) {
-      $this->redirectToUsers(1, 'User created successfully.');
+      $this->redirectToUsers(true, 'User created successfully.');
     } else {
-      $this->redirectToUsers(0, 'Failed to create user.');
+      $this->redirectToUsers(false, 'Failed to create user.');
     }
   }
 
-  private function redirectToUsers(string $status = '', string $message = ''): void
+  private function redirectToUsers(bool $success = false, string $message = ''): void
   {
-    if ($status) {
-      $_SESSION['status'] = [
-        'status' => $status,
-        'message' => $message,
-      ];
-    }
+    $_SESSION['status'] = [
+      'status' => $success,
+      'message' => $message,
+    ];
     Response::redirect('/dashboard/users');
   }
 
