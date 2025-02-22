@@ -30,7 +30,8 @@ class DashboardController extends Controller
   {
     $users = $this->userRepository->getAllUsers();
 
-    $status = $_GET['status'] ?? '';
+    $status = $_SESSION['status'] ?? '';
+    unset($_SESSION['status']);
 
     return $this->pageLoader->setPage('dashboard/index')->render([
       'activePage' => 'users',
@@ -69,9 +70,9 @@ class DashboardController extends Controller
     $deletedUser = $this->userRepository->deleteUser($userId);
 
     if ($deletedUser) {
-      $this->redirectToUsers('success');
+      $this->redirectToUsers(1, 'User deleted successfully.');
     } else {
-      $this->redirectToUsers('error');
+      $this->redirectToUsers(0, 'Failed to delete user.');
     }
   }
 
@@ -80,7 +81,7 @@ class DashboardController extends Controller
     $existingUser = $this->userRepository->getUserById($userId);
 
     if (!$existingUser) {
-      $this->redirectToUsers('error');
+      $this->redirectToUsers(0, 'User not found.');
       return;
     }
 
@@ -94,22 +95,27 @@ class DashboardController extends Controller
       'postal_code' => $_POST['postal_code'] ?? $existingUser->postal_code
     ];
 
-    foreach ($fieldsToUpdate as $fields => $value) {
+    foreach ($fieldsToUpdate as $field => $value) {
       $existingUser->$field = $value;
     }
 
     $updatedUser = $this->userRepository->updateUser($existingUser);
 
-    $this->redirectToUsers($updatedUser ? 'success' : 'error');
+    $this->redirectToUsers(
+      $updatedUser ? true : false,
+      $updatedUser ? 'User updated successfully.' : 'No changes were made.'
+    );
   }
 
-  private function redirectToUsers(string $status = ''): void
+  private function redirectToUsers(string $status = '', string $message = ''): void
   {
-    $redirectUrl = '/dashboard/users';
     if ($status) {
-      $redirectUrl .= '?status=' . $status;
+      $_SESSION['status'] = [
+        'status' => $status,
+        'message' => $message,
+      ];
     }
-    Response::redirect($redirectUrl);
+    Response::redirect('/dashboard/users');
   }
 
   private function getSidebarItems(): array

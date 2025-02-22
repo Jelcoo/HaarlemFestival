@@ -1,9 +1,9 @@
 <h2>User Management</h2>
 
 <!-- Status message -->
-<?php if (isset($status) && $status): ?>
-    <div class="alert alert-<?php echo $status === 'success' ? 'success' : 'danger'; ?>">
-        <?php echo $status === 'success' ? 'Action completed successfully.' : 'There was an error processing the action.'; ?>
+<?php if (!empty($status)): ?>
+    <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
+        <?php echo $status['message'] ?>
     </div>
 <?php endif; ?>
 
@@ -67,7 +67,7 @@
 
                         <td>
                             <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <input type="text" name="address" value="<?= $user->address ?>" required>
+                                <input type="text" name="address" value="<?= $user->address ?>">
                             <?php else: ?>
                                 <?= $user->address ?>
                             <?php endif; ?>
@@ -75,7 +75,7 @@
 
                         <td>
                             <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <input type="text" name="city" value="<?= $user->city ?>" required>
+                                <input type="text" name="city" value="<?= $user->city ?>">
                             <?php else: ?>
                                 <?= $user->city ?>
                             <?php endif; ?>
@@ -83,7 +83,7 @@
 
                         <td>
                             <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <input type="text" name="postal_code" value="<?= $user->postal_code ?>" required>
+                                <input type="text" name="postal_code" value="<?= $user->postal_code ?>">
                             <?php else: ?>
                                 <?= $user->postal_code ?>
                             <?php endif; ?>
