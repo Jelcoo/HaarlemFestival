@@ -15,19 +15,17 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Adress</th>
-            <th>City</th>
-            <th>Postal Code</th>
-            <th>Created At</th>
-            <th>Stripe ID</th>
-            <th>Actions</th>
+            <?php foreach ($columns as $column => $data): ?>
+                <?php if ($data['sortable']): ?>
+                    <?php $newDirection = ($sortColumn == $column && $sortDirection == 'asc') ? 'desc' : 'asc'; ?>
+                    <th><a href="?sort=<?= $column ?>&direction=<?= $newDirection ?>"><?= $data['label'] ?></a></th>
+                <?php else: ?>
+                    <th><?= $data['label'] ?></th>
+                <?php endif; ?>
+            <?php endforeach; ?>
         </tr>
     </thead>
+
     <tbody>
         <?php if (!empty($users)): ?>
             <?php foreach ($users as $user): ?>

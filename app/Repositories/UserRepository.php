@@ -35,6 +35,23 @@ class UserRepository extends Repository
     return $queryUsers ? array_map(fn($userData) => new User($userData), $queryUsers) : [];
   }
 
+  public function getSortedUsers(string $sortColumn = 'id', string $sortDirection = 'asc'): array
+  {
+    $allowedColumns = ['id', 'firstname', 'lastname', 'email', 'role', 'city', 'created_at'];
+    if (!in_array($sortColumn, $allowedColumns)) {
+      $sortColumn = 'id';
+    }
+    if (!in_array($sortDirection, ['asc', 'desc'])) {
+      $sortDirection = 'asc';
+    }
+
+    $queryBuilder = new QueryBuilder($this->getConnection());
+
+    $queryUsers = $queryBuilder->table('users')->orderBy($sortColumn, $sortDirection)->get();
+
+    return $queryUsers ? array_map(fn($userData) => new User($userData), $queryUsers) : [];
+  }
+
   public function deleteUser(int $id): ?User
   {
     $queryBuilder = new QueryBuilder($this->getConnection());

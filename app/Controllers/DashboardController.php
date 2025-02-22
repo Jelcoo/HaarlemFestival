@@ -28,10 +28,28 @@ class DashboardController extends Controller
 
   public function users(): string
   {
-
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
-    $users = $this->userRepository->getAllUsers();
+
+    $sortColumn = $_GET['sort'] ?? 'id';
+    $sortDirection = $_GET['direction'] ?? 'asc';
+
+    $columns = [
+      'id' => ['label' => 'ID', 'sortable' => true],
+      'firstname' => ['label' => 'First Name', 'sortable' => true],
+      'lastname' => ['label' => 'Last Name', 'sortable' => true],
+      'email' => ['label' => 'Email', 'sortable' => true],
+      'role' => ['label' => 'Role', 'sortable' => true],
+      'address' => ['label' => 'Address', 'sortable' => false],
+      'city' => ['label' => 'City', 'sortable' => true],
+      'postal_code' => ['label' => 'Postal Code', 'sortable' => false],
+      'created_at' => ['label' => 'Created At', 'sortable' => true],
+      'stripe_customer_id' => ['label' => 'Stripe ID', 'sortable' => false],
+      'actions' => ['label' => 'Actions', 'sortable' => false],
+    ];
+
+
+    $users = $this->userRepository->getSortedUsers($sortColumn, $sortDirection);
 
     $status = $_SESSION['status'] ?? '';
     unset($_SESSION['status']);
@@ -48,7 +66,13 @@ class DashboardController extends Controller
     return $this->pageLoader->setPage('dashboard/index')->render([
       'activePage' => 'users',
       'sidebarItems' => $this->getSidebarItems(),
-      'content' => $this->loadContent('users', ['users' => $users, 'status' => $status]),
+      'content' => $this->loadContent('users', [
+        'users' => $users,
+        'status' => $status,
+        'columns' => $columns,
+        'sortColumn' => $sortColumn,
+        'sortDirection' => $sortDirection,
+      ]),
     ]);
   }
 
