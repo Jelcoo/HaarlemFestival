@@ -34,21 +34,23 @@
 
                         <td>
                             <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <input type="text" name="firstname" value="<?= $user->firstname ?>" required>
+                                <input type="text" name="firstname" value="<?= $user->firstname ?>" class="form-control w-100"
+                                    required>
                             <?php else: ?>
                                 <?= $user->firstname ?>
                             <?php endif; ?>
                         </td>
                         <td>
                             <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <input type="text" name="lastname" value="<?= $user->lastname ?>" required>
+                                <input type="text" name="lastname" value="<?= $user->lastname ?>" class="form-control w-100"
+                                    required>
                             <?php else: ?>
                                 <?= $user->lastname ?>
                             <?php endif; ?>
                         </td>
                         <td>
                             <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <input type="email" name="email" value="<?= $user->email ?>" required>
+                                <input type="email" name="email" value="<?= $user->email ?>" class="form-control w-100" required>
                             <?php else: ?>
                                 <?= $user->email ?>
                             <?php endif; ?>
@@ -67,7 +69,7 @@
 
                         <td>
                             <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <input type="text" name="address" value="<?= $user->address ?>">
+                                <input type="text" name="address" value="<?= $user->address ?>" class="form-control w-100">
                             <?php else: ?>
                                 <?= $user->address ?>
                             <?php endif; ?>
@@ -75,7 +77,7 @@
 
                         <td>
                             <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <input type="text" name="city" value="<?= $user->city ?>">
+                                <input type="text" name="city" value="<?= $user->city ?>" class="form-control w-100">
                             <?php else: ?>
                                 <?= $user->city ?>
                             <?php endif; ?>
@@ -83,14 +85,22 @@
 
                         <td>
                             <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <input type="text" name="postal_code" value="<?= $user->postal_code ?>">
+                                <input type="text" name="postal_code" value="<?= $user->postal_code ?>" class="form-control w-100">
                             <?php else: ?>
                                 <?= $user->postal_code ?>
                             <?php endif; ?>
                         </td>
 
-                        <td><?= $user->created_at ?></td>
-                        <td><?= $user->stripe_customer_id ?></td>
+                        <td class="text-nowrap"><?= $user->created_at ?></td>
+
+                        <td>
+                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
+                                <input type="text" name="stripe_customer_id" value="<?= $user->stripe_customer_id ?>"
+                                    class="form-control w-100">
+                            <?php else: ?>
+                                <?= $user->stripe_customer_id ?>
+                            <?php endif; ?>
+                        </td>
 
                         <td>
                             <!-- Edit/Update Button -->
