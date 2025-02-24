@@ -7,7 +7,9 @@
         }
     },
     "require": {
-        "nesbot/carbon": "^3.8"
+        "nesbot/carbon": "^3.8",
+        "rakit/validation": "^1.4",
+        "phpmailer/phpmailer": "^6.9"
     },
     "require-dev": {
         "phpstan/phpstan": "^2.0",

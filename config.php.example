@@ -3,6 +3,7 @@
 return $config = [
     'APP_URL' => 'http://localhost',
     'APP_ENV' => 'production',
+    'APP_NAME' => 'The Festival',
 
     'STORAGE_PATH' => __DIR__ . '/public/storage/',
 
@@ -11,4 +12,12 @@ return $config = [
     'DB_USER' => 'developer',
     'DB_PASSWORD' => 'secret123',
     'DB_NAME' => 'festivaldb',
+
+    'TURNSTILE_KEY' => '',
+    'TURNSTILE_SECRET' => '',
+
+    'MAIL_HOST' => '',
+    'MAIL_USER' => '',
+    'MAIL_PASSWORD' => '',
+    'MAIL_PORT' => 587,
 ];
