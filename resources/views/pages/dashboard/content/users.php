@@ -28,13 +28,15 @@
         <tr>
             <?php foreach ($columns as $column => $data): ?>
                 <?php if ($data['sortable']): ?>
-                    <?php $newDirection = ($sortColumn == $column && $sortDirection == 'asc') ? 'desc' : 'asc'; ?>
+                    <?php
+                    $newDirection = ($sortColumn == $column && $sortDirection == 'asc') ? 'desc' : 'asc';
+                    $sortUrl = "?sort={$column}&direction={$newDirection}";
+                    if (!empty($searchQuery)) {
+                        $sortUrl .= "&search=" . htmlspecialchars($searchQuery);
+                    }
+                    ?>
                     <th>
-                        <a href="?sort=<?= $column ?>&direction=<?= $newDirection ?>
-                            <?php if (!empty($searchQuery)): ?>
-                                &search=<?= htmlspecialchars($searchQuery) ?>
-                            <?php endif; ?>
-                        ">
+                        <a href="<? $sortUrl ?>">
                             <?= $data['label'] ?>
                         </a>
                     </th>
@@ -56,72 +58,49 @@
 
                         <td>
                             <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <input type="text" name="firstname" value="<?= $user->firstname ?>" class="form-control w-100"
-                                    required>
+                                <input type="text" name="firstname" value="<?= htmlspecialchars($user->firstname) ?>"
+                                    class="form-control w-100" required>
                             <?php else: ?>
-                                <?= $user->firstname ?>
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <input type="text" name="lastname" value="<?= $user->lastname ?>" class="form-control w-100"
-                                    required>
-                            <?php else: ?>
-                                <?= $user->lastname ?>
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <input type="email" name="email" value="<?= $user->email ?>" class="form-control w-100" required>
-                            <?php else: ?>
-                                <?= $user->email ?>
+                                <?= htmlspecialchars($user->firstname) ?>
                             <?php endif; ?>
                         </td>
 
                         <td>
                             <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <select name="role" required>
-                                    <option value="ADMIN" <?= $user->role->value == 'ADMIN' ? 'selected' : '' ?>>Admin</option>
-                                    <option value="USER" <?= $user->role->value == 'USER' ? 'selected' : '' ?>>User</option>
-                                </select>
+                                <input type="text" name="lastname" value="<?= htmlspecialchars($user->lastname) ?>"
+                                    class="form-control w-100" required>
                             <?php else: ?>
-                                <?= $user->role->value ?>
+                                <?= htmlspecialchars($user->lastname) ?>
                             <?php endif; ?>
                         </td>
 
                         <td>
                             <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <input type="text" name="address" value="<?= $user->address ?>" class="form-control w-100">
+                                <input type="email" name="email" value="<?= htmlspecialchars($user->email) ?>"
+                                    class="form-control w-100" required>
                             <?php else: ?>
-                                <?= $user->address ?>
+                                <?= htmlspecialchars($user->email) ?>
                             <?php endif; ?>
                         </td>
 
+                        <td><?= htmlspecialchars($user->role->value) ?></td>
+
                         <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <input type="text" name="city" value="<?= $user->city ?>" class="form-control w-100">
-                            <?php else: ?>
-                                <?= $user->city ?>
-                            <?php endif; ?>
+                            <?= htmlspecialchars($user->address) ?>
                         </td>
 
                         <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <input type="text" name="postal_code" value="<?= $user->postal_code ?>" class="form-control w-100">
-                            <?php else: ?>
-                                <?= $user->postal_code ?>
-                            <?php endif; ?>
+                            <?= htmlspecialchars($user->city) ?>
+                        </td>
+
+                        <td>
+                            <?= htmlspecialchars($user->postal_code) ?>
                         </td>
 
                         <td class="text-nowrap"><?= $user->created_at ?></td>
 
                         <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
-                                <input type="text" name="stripe_customer_id" value="<?= $user->stripe_customer_id ?>"
-                                    class="form-control w-100">
-                            <?php else: ?>
-                                <?= $user->stripe_customer_id ?>
-                            <?php endif; ?>
+                            <?= htmlspecialchars($user->stripe_customer_id) ?>
                         </td>
 
                         <td>
@@ -140,7 +119,7 @@
             <?php endforeach; ?>
         <?php else: ?>
             <tr>
-                <td colspan="7">No users found.</td>
+                <td colspan="<?= count($columns) ?>">No users found.</td>
             </tr>
         <?php endif; ?>
     </tbody>
