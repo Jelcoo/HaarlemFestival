@@ -72,10 +72,20 @@ class StripeController extends Controller
         }
 
         switch ($event->type) {
+            case 'payment_intent.created':
+                /** @var \Stripe\PaymentIntent $paymentIntent */
+                $paymentIntent = $event->data;
+                $uploadDir = '/app/storage/';
+                $destination = "{$uploadDir}created_intent.json";
+                if (file_put_contents($destination, json_encode($paymentIntent))) {
+                    http_response_code(200);
+                } else {
+                    http_response_code(301);
+                }
+                break;
             case 'payment_intent.succeeded':
-                $paymentIntent = $event->data->object; // contains a \Stripe\PaymentIntent
-                // Then define and call a method to handle the successful payment intent.
-                // handlePaymentIntentSucceeded($paymentIntent);
+                /** @var \Stripe\PaymentIntent $paymentIntent */
+                $paymentIntent = $event->data;
                 $uploadDir = '/app/storage/';
                 $destination = "{$uploadDir}succeeded_intent.json";
                 if (file_put_contents($destination, json_encode($paymentIntent))) {
@@ -85,9 +95,8 @@ class StripeController extends Controller
                 }
                 break;
             case 'payment_intent.payment_failed':
-                $paymentIntent = $event->data->object; // contains a \Stripe\PaymentIntent
-                // Then define and call a method to handle the successful payment intent.
-                // handlePaymentIntentSucceeded($paymentIntent);
+                /** @var \Stripe\PaymentIntent $paymentIntent */
+                $paymentIntent = $event->data;
                 $uploadDir = '/app/storage/';
                 $destination = "{$uploadDir}failed_intent.json";
                 if (file_put_contents($destination, json_encode($paymentIntent))) {
@@ -96,12 +105,6 @@ class StripeController extends Controller
                     http_response_code(301);
                 }
                 break;
-            case 'payment_method.attached':
-                $paymentMethod = $event->data->object; // contains a \Stripe\PaymentMethod
-                // Then define and call a method to handle the successful attachment of a PaymentMethod.
-                // handlePaymentMethodAttached($paymentMethod);
-                break;
-                // ... handle other event types
             default:
                 echo 'Received unknown event type ' . $event->type;
         }
