@@ -25,6 +25,7 @@ $loggedIn = Session::isValidSession();
         });
     </script>
 
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
     <script src="/assets/js/utils.js"></script>
 </head>
 
