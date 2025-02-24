@@ -19,6 +19,11 @@ class DashboardUsersController extends DashboardController
     {
         $sortColumn = $_GET['sort'] ?? 'id';
         $sortDirection = $_GET['direction'] ?? 'asc';
+        $searchQuery = $_GET['search'] ?? '';
+
+        if (isset($_GET['search']) && $searchQuery === '') {
+            $this->redirectToUsers();
+        }
 
         if (!empty($_SESSION['show_create_user_form'])) {
             unset($_SESSION['show_create_user_form']);
@@ -26,11 +31,12 @@ class DashboardUsersController extends DashboardController
         }
 
         return $this->renderPage('users', [
-            'users' => $this->userRepository->getSortedUsers($sortColumn, $sortDirection),
+            'users' => $this->userRepository->getSortedUsers($searchQuery ?? '', $sortColumn, $sortDirection),
             'status' => $this->getStatus(),
             'columns' => $this->getColumns(),
             'sortColumn' => $sortColumn,
             'sortDirection' => $sortDirection,
+            'searchQuery' => $searchQuery,
         ]);
     }
 

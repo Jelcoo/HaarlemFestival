@@ -35,7 +35,7 @@ class UserRepository extends Repository
     return $queryUsers ? array_map(fn($userData) => new User($userData), $queryUsers) : [];
   }
 
-  public function getSortedUsers(string $sortColumn = 'id', string $sortDirection = 'asc'): array
+  public function getSortedUsers(string $searchQuery, string $sortColumn = 'id', string $sortDirection = 'asc'): array
   {
     $allowedColumns = ['id', 'firstname', 'lastname', 'email', 'role', 'city', 'created_at'];
     if (!in_array($sortColumn, $allowedColumns)) {
@@ -46,8 +46,16 @@ class UserRepository extends Repository
     }
 
     $queryBuilder = new QueryBuilder($this->getConnection());
+    $query = $queryBuilder->table('users');
 
-    $queryUsers = $queryBuilder->table('users')->orderBy($sortColumn, $sortDirection)->get();
+    if (!empty($searchQuery)) {
+      $query->where('firstname', 'LIKE', "%{$searchQuery}%")
+        ->orWhere('lastname', 'LIKE', "%{$searchQuery}%")
+        ->orWhere('email', 'LIKE', "%{$searchQuery}%")
+        ->orWhere('city', 'LIKE', "%{$searchQuery}%");
+    }
+
+    $queryUsers = $query->orderBy($sortColumn, $sortDirection)->get();
 
     return $queryUsers ? array_map(fn($userData) => new User($userData), $queryUsers) : [];
   }

@@ -12,13 +12,32 @@
     <button type="submit" class="btn btn-primary mb-3" name="action" value="create">Create New User</button>
 </form>
 
+<!-- Search Form -->
+<form method="GET" action="/dashboard/users" class="mb-3 d-flex align-items-center">
+    <input type="text" name="search" placeholder="Search users..." value="<?= htmlspecialchars($searchQuery) ?>"
+        class="form-control d-inline-block w-auto me-2">
+
+    <button type="submit" class="btn btn-primary me-2">Search</button>
+    <?php if (!empty($searchQuery)): ?>
+        <a href="/dashboard/users" class="btn btn-secondary text-white">Clear</a>
+    <?php endif; ?>
+</form>
+
 <table class="table table-bordered">
     <thead>
         <tr>
             <?php foreach ($columns as $column => $data): ?>
                 <?php if ($data['sortable']): ?>
                     <?php $newDirection = ($sortColumn == $column && $sortDirection == 'asc') ? 'desc' : 'asc'; ?>
-                    <th><a href="?sort=<?= $column ?>&direction=<?= $newDirection ?>"><?= $data['label'] ?></a></th>
+                    <th>
+                        <a href="?sort=<?= $column ?>&direction=<?= $newDirection ?>
+                            <?php if (!empty($searchQuery)): ?>
+                                &search=<?= htmlspecialchars($searchQuery) ?>
+                            <?php endif; ?>
+                        ">
+                            <?= $data['label'] ?>
+                        </a>
+                    </th>
                 <?php else: ?>
                     <th><?= $data['label'] ?></th>
                 <?php endif; ?>
