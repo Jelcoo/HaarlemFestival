@@ -4,7 +4,7 @@
             <ul>
                 <?php foreach ($error as $e) {
                     foreach ($e as $key => $value) {
-                        "<li>$value</li>";
+                        echo "<li>$value</li>";
                     }
                 } ?>
             </ul>
