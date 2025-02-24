@@ -36,7 +36,7 @@ class DashboardUsersController extends DashboardController
 
     public function handleAction(): void
     {
-        if ($_SERVER['REQUEST_METHOD' !== 'POST']) return;
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') return;
 
         $action = $_POST['action'] ?? null;
         $userId = $_POST['id'] ?? null;
@@ -95,7 +95,7 @@ class DashboardUsersController extends DashboardController
             'lastname' => $_POST['lastname'],
             'email' => $_POST['email'],
             'password' => '', // TODO
-            'role' => isset($_POST['role']) ?? UserRoleEnum::USER->value,
+            'role' => $_POST['role'] ?? UserRoleEnum::USER->value,
             'address' => $_POST['address'] ?? '',
             'city' => $_POST['city'] ?? '',
             'postal_code' => $_POST['postal_code'] ?? '',
