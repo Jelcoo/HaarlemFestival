@@ -3,17 +3,17 @@
 namespace App\Controllers;
 
 use App\Config\Config;
-use Stripe\StripeClient;
+use App\Helpers\StripeHelper;
 use App\Application\Response;
 
 class StripeController extends Controller
 {
-    private StripeClient $stripe;
+    private StripeHelper $stripe;
 
     public function __construct()
     {
         parent::__construct();
-        $this->stripe = new StripeClient(Config::getKey('STRIPE_SECRET_KEY'));
+        $this->stripe = new StripeHelper();
     }
 
     public function index()
@@ -33,36 +33,15 @@ class StripeController extends Controller
 
     public function create()
     {
-        function calculateOrderAmount(array $items): int
-        {
-            // Calculate the order total on the server to prevent
-            // people from directly manipulating the amount on the client
-            $total = 0;
-            foreach ($items as $item) {
-                $total += $item->amount;
-            }
 
-            return $total;
-        }
         try {
             // retrieve JSON from POST body
             $jsonStr = file_get_contents('php://input');
-            $jsonObj = json_decode($jsonStr);
+            $jsonObj = json_decode($jsonStr, true);
+            $amount = StripeHelper::calculateOrderAmount($jsonObj['items']);
+            $clientSecret = $this->stripe->createIntent($amount, null);
 
-            // Create a PaymentIntent with amount and currency
-            $paymentIntent = $this->stripe->paymentIntents->create([
-                'amount' => calculateOrderAmount($jsonObj->items),
-                'currency' => 'eur',
-                'metadata' => [
-                    'invoice_id' => 1,
-                ],
-            ]);
-
-            $output = [
-                'clientSecret' => $paymentIntent->client_secret,
-            ];
-
-            return json_encode($output);
+            return json_encode($clientSecret);
         } catch (\Error $e) {
             $response = new Response();
             $response->setStatusCode(500);
@@ -122,7 +101,7 @@ class StripeController extends Controller
                 // Then define and call a method to handle the successful attachment of a PaymentMethod.
                 // handlePaymentMethodAttached($paymentMethod);
                 break;
-                // ... handle other event types
+            // ... handle other event types
             default:
                 echo 'Received unknown event type ' . $event->type;
         }

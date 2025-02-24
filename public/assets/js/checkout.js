@@ -4,7 +4,7 @@ const stripe = Stripe(
 );
 
 // The items the customer wants to buy
-const items = [{ id: "xl-tshirt", amount: 1000 }];
+const items = [{ price: 1000, quantity: 1 }];
 
 let elements;
 
