@@ -42,7 +42,11 @@ class QueryBuilder
     public function where(string $column, string $operator, $value): self
     {
         $placeholder = ':' . str_replace('.', '_', $column) . count($this->conditions);
-        $this->conditions[] = "$column $operator $placeholder";
+        if (!empty($this->conditions)) {
+            $this->conditions[] = "AND $column $operator $placeholder";
+        } else {
+            $this->conditions[] = "$column $operator $placeholder";
+        }
         $this->bindings[$placeholder] = $value;
 
         return $this;
@@ -80,7 +84,7 @@ class QueryBuilder
         $sql = $this->buildSelectQuery();
         $stmt = $this->pdo->prepare($sql);
         foreach ($this->bindings as $key => $value) {
-            $stmt->bindValue($key, $value);
+            $this->bindValueWithType($stmt, $key, $value);
         }
         $stmt->execute();
 
@@ -93,7 +97,7 @@ class QueryBuilder
         $sql = $this->buildSelectQuery();
         $stmt = $this->pdo->prepare($sql);
         foreach ($this->bindings as $key => $value) {
-            $stmt->bindValue($key, $value);
+            $this->bindValueWithType($stmt, $key, $value);
         }
         $stmt->execute();
 
@@ -111,11 +115,24 @@ class QueryBuilder
     public function insert(array $data): string
     {
         $columns = implode(', ', array_keys($data));
-        $placeholders = implode(', ', array_fill(0, count($data), '?'));
-        $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
+        $placeholders = [];
+        $values = [];
+
+        foreach ($data as $column => $value) {
+            $placeholder = ":insert_$column";
+            $placeholders[] = $placeholder;
+            $values[$placeholder] = $value;
+        }
+
+        $placeholderStr = implode(', ', $placeholders);
+        $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholderStr)";
         $stmt = $this->pdo->prepare($sql);
-        $values = array_values($data);
-        $stmt->execute($values);
+
+        foreach ($values as $placeholder => $value) {
+            $this->bindValueWithType($stmt, $placeholder, $value);
+        }
+
+        $stmt->execute();
 
         return $this->pdo->lastInsertId();
     }
@@ -127,11 +144,11 @@ class QueryBuilder
         $stmt = $this->pdo->prepare($sql);
 
         foreach ($this->updates as $column => $value) {
-            $stmt->bindValue(":update_$column", $value);
+            $this->bindValueWithType($stmt, ":update_$column", $value);
         }
 
         foreach ($this->bindings as $key => $value) {
-            $stmt->bindValue($key, $value);
+            $this->bindValueWithType($stmt, $key, $value);
         }
 
         $stmt->execute();
@@ -185,7 +202,7 @@ class QueryBuilder
         $stmt = $this->pdo->prepare($sql);
 
         foreach ($this->bindings as $key => $value) {
-            $stmt->bindValue($key, $value);
+            $this->bindValueWithType($stmt, $key, $value);
         }
 
         $stmt->execute();
@@ -202,5 +219,28 @@ class QueryBuilder
         }
 
         return $sql;
+    }
+
+    private function bindValueWithType(\PDOStatement $stmt, string $param, $value): void
+    {
+        $type = match (true) {
+            is_bool($value) => \PDO::PARAM_BOOL,
+            is_int($value) => \PDO::PARAM_INT,
+            is_null($value) => \PDO::PARAM_NULL,
+            is_float($value) => \PDO::PARAM_STR, // PDO doesn't have a specific float type
+            default => \PDO::PARAM_STR,
+        };
+
+        $stmt->bindValue($param, $value, $type);
+    }
+
+    public function startTransaction(): void
+    {
+        $this->pdo->beginTransaction();
+    }
+
+    public function commit(): void
+    {
+        $this->pdo->commit();
     }
 }
