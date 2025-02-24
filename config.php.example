@@ -2,10 +2,16 @@
 
 return $config = [
     'APP_ENV' => 'production',
+    'APP_NAME' => 'The Festival',
 
     'DB_HOST' => 'mysql',
     'DB_PORT' => 3306,
     'DB_USER' => 'developer',
     'DB_PASSWORD' => 'secret123',
     'DB_NAME' => 'festivaldb',
+
+    'MAIL_HOST' => '',
+    'MAIL_USER' => '',
+    'MAIL_PASSWORD' => '',
+    'MAIL_PORT' => 587,
 ];
