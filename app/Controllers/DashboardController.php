@@ -11,11 +11,7 @@ class DashboardController extends Controller
 
     public function index(): string
     {
-        return $this->pageLoader->setPage('dashboard/index')->render([
-            'activePage' => 'home',
-            'sidebarItems' => $this->getSidebarItems(),
-            'content' => $this->loadContent('default'),
-        ]);
+        return $this->renderPage('home', []);
     }
 
     protected function renderPage(string $page, array $data): string
