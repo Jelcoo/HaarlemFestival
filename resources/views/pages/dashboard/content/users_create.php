@@ -1,11 +1,11 @@
 <h2>Create New User</h2>
 
 <!-- Status message -->
-<?php if (!empty($status)): ?>
+<?php if (!empty($status)) { ?>
     <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
-        <?php echo $status['message'] ?>
+        <?php echo $status['message']; ?>
     </div>
-<?php endif; ?>
+<?php } ?>
 
 <form action="/dashboard/users" method="POST">
     <input type="hidden" name="action" value="createNewUser">

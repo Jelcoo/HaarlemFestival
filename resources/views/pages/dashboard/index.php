@@ -5,7 +5,7 @@
 
         <!-- Main Content Area -->
         <main class="col-lg-10 p-4">
-            <?= $content ?? 'Error loading page content'; ?>
+            <?php echo $content ?? 'Error loading page content'; ?>
         </main>
     </div>
 </div>

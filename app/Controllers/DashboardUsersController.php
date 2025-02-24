@@ -27,6 +27,7 @@ class DashboardUsersController extends DashboardController
 
         if (!empty($_SESSION['show_create_user_form'])) {
             unset($_SESSION['show_create_user_form']);
+
             return $this->renderPage('users_create', []);
         }
 
@@ -42,7 +43,9 @@ class DashboardUsersController extends DashboardController
 
     public function handleAction(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') return;
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return;
+        }
 
         $action = $_POST['action'] ?? null;
         $userId = $_POST['id'] ?? null;
@@ -68,6 +71,7 @@ class DashboardUsersController extends DashboardController
 
         if (!$existingUser) {
             $this->redirectToUsers(false, 'User not found.');
+
             return;
         }
 
@@ -78,7 +82,7 @@ class DashboardUsersController extends DashboardController
             'role' => isset($_POST['role']) ? UserRoleEnum::from(strtolower($_POST['role'])) : $existingUser->role,
             'address' => $_POST['address'] ?? $existingUser->address,
             'city' => $_POST['city'] ?? $existingUser->city,
-            'postal_code' => $_POST['postal_code'] ?? $existingUser->postal_code
+            'postal_code' => $_POST['postal_code'] ?? $existingUser->postal_code,
         ];
 
         foreach ($fieldsToUpdate as $field => $value) {
@@ -93,6 +97,7 @@ class DashboardUsersController extends DashboardController
     {
         if (empty($_POST['firstname']) || empty($_POST['lastname']) || empty($_POST['email'])) {
             $this->redirectToUsers(false, 'Please fill in all required fields.');
+
             return;
         }
 
@@ -133,14 +138,15 @@ class DashboardUsersController extends DashboardController
     {
         $status = $_SESSION['status'] ?? ['status' => false, 'message' => ''];
         unset($_SESSION['status']);
+
         return $status;
     }
 
     private function redirectToUsers(bool $success = false, string $message = ''): void
     {
         $_SESSION['status'] = ['status' => $success, 'message' => $message];
-        header("Location: /dashboard/users");
-        exit();
+        header('Location: /dashboard/users');
+        exit;
     }
 
     private function showCreateUserForm(): void

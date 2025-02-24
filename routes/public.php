@@ -1,7 +1,6 @@
 <?php
 
 use App\Middleware\EnsureLoggedIn;
-use App\Middleware\EnsureNotLoggedIn;
 
 $router = App\Application\Router::getInstance();
 
