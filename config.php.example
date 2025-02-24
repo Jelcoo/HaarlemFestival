@@ -2,6 +2,7 @@
 
 return $config = [
     'APP_ENV' => 'production',
+    'APP_NAME' => 'The Festival',
 
     'DB_HOST' => 'mysql',
     'DB_PORT' => 3306,
@@ -11,4 +12,9 @@ return $config = [
 
     'TURNSTILE_KEY' => '',
     'TURNSTILE_SECRET' => '',
+
+    'MAIL_HOST' => '',
+    'MAIL_USER' => '',
+    'MAIL_PASSWORD' => '',
+    'MAIL_PORT' => 587,
 ];
