@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
+use App\Config\Config;
 
 class Asset
 {
@@ -13,9 +13,18 @@ class Asset
     public int $size;
     public string $model;
     public int $model_id;
-    public Carbon $created_at;
+    public string $created_at;
 
-    public function __construct(array $collection)
+    public function __construct()
+    {
+        $arguments = func_get_args();
+
+        if (!empty($arguments)) {
+            $this->fill($arguments[0]);
+        }
+    }
+
+    public function fill(array $collection)
     {
         $this->id = $collection['id'];
         $this->collection = $collection['collection'];
@@ -24,6 +33,11 @@ class Asset
         $this->size = $collection['size'];
         $this->model = $collection['model'];
         $this->model_id = $collection['model_id'];
-        $this->created_at = Carbon::parse($collection['created_at']);
+        $this->created_at = $collection['created_at'];
+    }
+
+    public function getUrl(): string
+    {
+        return Config::getKey('APP_URL') . '/assets/' . $this->filename;
     }
 }
