@@ -32,12 +32,12 @@ class UserRepository extends Repository
 
         $queryUsers = $queryBuilder->table('users')->get();
 
-        return $queryUsers ? array_map(fn ($userData) => new User($userData), $queryUsers) : [];
+        return $queryUsers ? array_map(fn($userData) => new User($userData), $queryUsers) : [];
     }
 
     public function getSortedUsers(string $searchQuery, string $sortColumn = 'id', string $sortDirection = 'asc'): array
     {
-        $allowedColumns = ['id', 'firstname', 'lastname', 'email', 'role', 'city', 'created_at'];
+        $allowedColumns = ['id', 'firstname', 'lastname', 'email', 'role', 'city', 'postal_code', 'created_at'];
         if (!in_array($sortColumn, $allowedColumns)) {
             $sortColumn = 'id';
         }
@@ -50,14 +50,14 @@ class UserRepository extends Repository
 
         if (!empty($searchQuery)) {
             $query->where('firstname', 'LIKE', "%{$searchQuery}%")
-              ->orWhere('lastname', 'LIKE', "%{$searchQuery}%")
-              ->orWhere('email', 'LIKE', "%{$searchQuery}%")
-              ->orWhere('city', 'LIKE', "%{$searchQuery}%");
+                ->orWhere('lastname', 'LIKE', "%{$searchQuery}%")
+                ->orWhere('email', 'LIKE', "%{$searchQuery}%")
+                ->orWhere('city', 'LIKE', "%{$searchQuery}%");
         }
 
         $queryUsers = $query->orderBy($sortColumn, $sortDirection)->get();
 
-        return $queryUsers ? array_map(fn ($userData) => new User($userData), $queryUsers) : [];
+        return $queryUsers ? array_map(fn($userData) => new User($userData), $queryUsers) : [];
     }
 
     public function deleteUser(int $id): ?User

@@ -127,7 +127,7 @@ class DashboardUsersController extends DashboardController
             'role' => ['label' => 'Role', 'sortable' => true],
             'address' => ['label' => 'Address', 'sortable' => false],
             'city' => ['label' => 'City', 'sortable' => true],
-            'postal_code' => ['label' => 'Postal Code', 'sortable' => false],
+            'postal_code' => ['label' => 'Postal Code', 'sortable' => true],
             'created_at' => ['label' => 'Created At', 'sortable' => true],
             'stripe_customer_id' => ['label' => 'Stripe ID', 'sortable' => false],
             'actions' => ['label' => 'Actions', 'sortable' => false],
