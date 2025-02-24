@@ -36,7 +36,7 @@
                     }
                     ?>
                     <th>
-                        <a href="<? $sortUrl ?>">
+                        <a href="<?= $sortUrl ?>">
                             <?= $data['label'] ?>
                         </a>
                     </th>
@@ -83,24 +83,53 @@
                             <?php endif; ?>
                         </td>
 
-                        <td><?= htmlspecialchars($user->role->value) ?></td>
-
                         <td>
-                            <?= htmlspecialchars($user->address) ?>
+                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
+                                <select name="role" required>
+                                    <option value="ADMIN" <?= $user->role->value == 'ADMIN' ? 'selected' : '' ?>>Admin</option>
+                                    <option value="USER" <?= $user->role->value == 'USER' ? 'selected' : '' ?>>User</option>
+                                </select>
+                            <?php else: ?>
+                                <?= $user->role->value ?>
+                            <?php endif; ?>
                         </td>
 
                         <td>
-                            <?= htmlspecialchars($user->city) ?>
+                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
+                                <input type="text" name="address" value="<?= htmlspecialchars($user->address) ?>"
+                                    class="form-control w-100" required>
+                            <?php else: ?>
+                                <?= htmlspecialchars($user->address) ?>
+                            <?php endif; ?>
                         </td>
 
                         <td>
-                            <?= htmlspecialchars($user->postal_code) ?>
+                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
+                                <input type="text" name="city" value="<?= htmlspecialchars($user->city) ?>"
+                                    class="form-control w-100" required>
+                            <?php else: ?>
+                                <?= htmlspecialchars($user->city) ?>
+                            <?php endif; ?>
+                        </td>
+
+                        <td>
+                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
+                                <input type="text" name="postal_code" value="<?= htmlspecialchars($user->postal_code) ?>"
+                                    class="form-control w-100" required>
+                            <?php else: ?>
+                                <?= htmlspecialchars($user->postal_code) ?>
+                            <?php endif; ?>
                         </td>
 
                         <td class="text-nowrap"><?= $user->created_at ?></td>
 
                         <td>
-                            <?= htmlspecialchars($user->stripe_customer_id) ?>
+                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id): ?>
+                                <input type="text" name="stripe_customer_id"
+                                    value="<?= htmlspecialchars($user->stripe_customer_id) ?>" class="form-control w-100" required>
+                            <?php else: ?>
+                                <?= htmlspecialchars($user->stripe_customer_id) ?>
+                            <?php endif; ?>
                         </td>
 
                         <td>
