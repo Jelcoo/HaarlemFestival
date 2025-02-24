@@ -3,8 +3,8 @@
 namespace App\Controllers;
 
 use App\Config\Config;
-use App\Helpers\StripeHelper;
 use App\Application\Response;
+use App\Helpers\StripeHelper;
 
 class StripeController extends Controller
 {
@@ -101,7 +101,7 @@ class StripeController extends Controller
                 // Then define and call a method to handle the successful attachment of a PaymentMethod.
                 // handlePaymentMethodAttached($paymentMethod);
                 break;
-            // ... handle other event types
+                // ... handle other event types
             default:
                 echo 'Received unknown event type ' . $event->type;
         }
