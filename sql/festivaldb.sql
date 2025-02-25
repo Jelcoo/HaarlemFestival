@@ -26,7 +26,7 @@ CREATE TABLE locations (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     coordinates VARCHAR(255),
-    adress TEXT,
+    address TEXT,
     preview_description TEXT,
     main_description TEXT
 );
