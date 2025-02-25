@@ -16,6 +16,15 @@ class UserRepository extends Repository
         return $queryUser ? new User($queryUser) : null;
     }
 
+    public function getUserByEmail(string $email): ?User
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $queryUser = $queryBuilder->table('users')->where('email', '=', $email)->first();
+
+        return $queryUser ? new User($queryUser) : null;
+    }
+
     public function createUser(array $data): User
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
@@ -32,7 +41,7 @@ class UserRepository extends Repository
 
         $queryUsers = $queryBuilder->table('users')->get();
 
-        return $queryUsers ? array_map(fn ($userData) => new User($userData), $queryUsers) : [];
+        return $queryUsers ? array_map(fn($userData) => new User($userData), $queryUsers) : [];
     }
 
     public function getSortedUsers(string $searchQuery, string $sortColumn = 'id', string $sortDirection = 'asc'): array
@@ -57,7 +66,7 @@ class UserRepository extends Repository
 
         $queryUsers = $query->orderBy($sortColumn, $sortDirection)->get();
 
-        return $queryUsers ? array_map(fn ($userData) => new User($userData), $queryUsers) : [];
+        return $queryUsers ? array_map(fn($userData) => new User($userData), $queryUsers) : [];
     }
 
     public function deleteUser(int $id): ?User
