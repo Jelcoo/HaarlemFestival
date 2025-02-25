@@ -134,19 +134,9 @@ class DashboardUsersController extends DashboardController
         ];
     }
 
-    private function getStatus(): array
-    {
-        $status = $_SESSION['status'] ?? ['status' => false, 'message' => ''];
-        unset($_SESSION['status']);
-
-        return $status;
-    }
-
     private function redirectToUsers(bool $success = false, string $message = ''): void
     {
-        $_SESSION['status'] = ['status' => $success, 'message' => $message];
-        header('Location: /dashboard/users');
-        exit;
+        $this->redirectTo('users', $success, $message);
     }
 
     private function showCreateUserForm(): void
