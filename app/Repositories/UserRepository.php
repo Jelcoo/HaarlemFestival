@@ -34,4 +34,17 @@ class UserRepository extends Repository
 
         return $user;
     }
+
+    public function updateUser(User $user): void
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+        $queryBuilder->table('users')->where('id', '=', $user->id)->update([
+            'firstname' => $user->firstname,
+            'lastname' => $user->lastname,
+            'email' => $user->email,
+            'address' => $user->address,
+            'city' => $user->city,
+            'postal_code' => $user->postal_code,
+        ]);
+    }
 }

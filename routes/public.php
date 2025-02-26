@@ -19,5 +19,6 @@ $router->middleware(EnsureNotLoggedIn::class, function () use ($router) {
 $router->middleware(EnsureLoggedIn::class, function () use ($router) {
     $router->get('/logout', [App\Controllers\AuthController::class, 'logout']);
 
-    $router->get('/account', [App\Controllers\HomeController::class, 'account']);
+    $router->get('/account/manage', [App\Controllers\ProfileController::class, 'index']);
+    $router->post('/account/manage', [App\Controllers\ProfileController::class, 'update']);
 });

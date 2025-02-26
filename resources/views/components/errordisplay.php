@@ -2,14 +2,14 @@
     <div class="alert alert-danger" role="alert">
         <?php if (is_array($error)) { ?>
             <ul>
-                <?php foreach ($error as $e) { ?>
-                    <?php foreach ($e as $key => $value) { ?>
-                        <li><?php echo $value; ?></li>
-                    <?php } ?>
-                <?php } ?>
+                <?php foreach ($error as $e) {
+                    foreach ($e as $key => $value) {
+                        echo "<li>$value</li>";
+                    }
+                } ?>
             </ul>
-        <?php } else { ?>
-            <?php echo $error; ?>
-        <?php } ?>
+        <?php } else {
+            echo $error;
+        } ?>
     </div>
 <?php } ?>
