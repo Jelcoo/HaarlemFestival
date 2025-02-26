@@ -84,7 +84,7 @@ class UserRepository extends Repository
         return null;
     }
 
-    public function updateUser(User $user): ?User
+    public function updateUserAdmin(User $user): ?User
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
 
@@ -118,5 +118,18 @@ class UserRepository extends Repository
         }
 
         return $existingUser;
+    }
+
+    public function updateUser(User $user): void
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+        $queryBuilder->table('users')->where('id', '=', $user->id)->update([
+            'firstname' => $user->firstname,
+            'lastname' => $user->lastname,
+            'email' => $user->email,
+            'address' => $user->address,
+            'city' => $user->city,
+            'postal_code' => $user->postal_code,
+        ]);
     }
 }

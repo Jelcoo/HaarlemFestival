@@ -89,7 +89,7 @@ class DashboardUsersController extends DashboardController
             $existingUser->$field = $value;
         }
 
-        $updatedUser = $this->userRepository->updateUser($existingUser);
+        $updatedUser = $this->userRepository->updateUserAdmin($existingUser);
         $this->redirectToUsers(!empty($updatedUser), $updatedUser ? 'User updated successfully.' : 'No changes were made.');
     }
 
