@@ -28,8 +28,9 @@
     <div class="form-group">
         <label for="role">Role</label>
         <select id="role" name="role" class="form-control" required>
-            <option value="USER">User</option>
-            <option value="ADMIN">Admin</option>
+            <?php foreach ($roles as $role) { ?>
+                <option value="<?php echo $role; ?>"><?php echo ucfirst($role); ?></option>
+            <?php } ?>
         </select>
     </div>
 

@@ -28,7 +28,9 @@ class DashboardUsersController extends DashboardController
         if (!empty($_SESSION['show_create_user_form'])) {
             unset($_SESSION['show_create_user_form']);
 
-            return $this->renderPage('users_create', []);
+            return $this->renderPage('users_create', [
+                'roles' => array_column(UserRoleEnum::cases(), 'value'),
+            ]);
         }
 
         return $this->renderPage('users', [
