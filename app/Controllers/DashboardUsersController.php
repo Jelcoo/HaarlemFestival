@@ -32,7 +32,7 @@ class DashboardUsersController extends DashboardController
         }
 
         return $this->renderPage('users', [
-            'users' => $this->userRepository->getSortedUsers($searchQuery ?? '', $sortColumn, $sortDirection),
+            'users' => $this->userRepository->getSortedUsers($searchQuery, $sortColumn, $sortDirection),
             'status' => $this->getStatus(),
             'columns' => $this->getColumns(),
             'sortColumn' => $sortColumn,
@@ -113,8 +113,15 @@ class DashboardUsersController extends DashboardController
             'stripe_customer_id' => $_POST['stripe_customer_id'] ?? '',
         ];
 
-        $createdUser = $this->userRepository->createUser($user);
-        $this->redirectToUsers(!empty($createdUser), $createdUser ? 'User created successfully.' : 'Failed to create user.');
+        try {
+            $this->userRepository->createUser($user);
+        } catch (\Exception $e) {
+            $this->redirectToUsers(false, 'Failed to create user: ' . $e->getMessage());
+
+            return;
+        }
+
+        $this->redirectToUsers(true, 'User created successfully.');
     }
 
     private function getColumns(): array
