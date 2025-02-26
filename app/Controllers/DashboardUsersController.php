@@ -35,6 +35,7 @@ class DashboardUsersController extends DashboardController
 
         return $this->renderPage('users', [
             'users' => $this->userRepository->getSortedUsers($searchQuery, $sortColumn, $sortDirection),
+            'roles' => array_column(UserRoleEnum::cases(), 'value'),
             'status' => $this->getStatus(),
             'columns' => $this->getColumns(),
             'sortColumn' => $sortColumn,

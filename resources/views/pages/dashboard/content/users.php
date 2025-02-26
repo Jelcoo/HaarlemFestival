@@ -86,8 +86,9 @@
                         <td>
                             <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
                                 <select name="role" required>
-                                    <option value="ADMIN" <?php echo $user->role->value == 'ADMIN' ? 'selected' : ''; ?>>Admin</option>
-                                    <option value="USER" <?php echo $user->role->value == 'USER' ? 'selected' : ''; ?>>User</option>
+                                    <?php foreach ($roles as $role) { ?>
+                                        <option value="<?php echo $role; ?>" <?php echo $user->role->value == $role ? 'selected' : ''; ?>><?php echo ucfirst($role); ?></option>
+                                    <?php } ?>
                                 </select>
                             <?php } else { ?>
                                 <?php echo $user->role->value; ?>
