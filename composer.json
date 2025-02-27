@@ -10,7 +10,8 @@
         "nesbot/carbon": "^3.8",
         "stripe/stripe-php": "^16.5",
         "rakit/validation": "^1.4",
-        "phpmailer/phpmailer": "^6.9"
+        "phpmailer/phpmailer": "^6.9",
+        "endroid/qr-code": "^6.0"
     },
     "require-dev": {
         "phpstan/phpstan": "^2.0",
