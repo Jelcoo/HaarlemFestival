@@ -35,6 +35,91 @@ class UserRepository extends Repository
         return $user;
     }
 
+    public function getAllUsers(): array
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $queryUsers = $queryBuilder->table('users')->get();
+
+        return $queryUsers ? array_map(fn ($userData) => new User($userData), $queryUsers) : [];
+    }
+
+    public function getSortedUsers(string $searchQuery, string $sortColumn = 'id', string $sortDirection = 'asc'): array
+    {
+        $allowedColumns = ['id', 'firstname', 'lastname', 'email', 'role', 'city', 'postal_code', 'created_at'];
+        if (!in_array($sortColumn, $allowedColumns)) {
+            $sortColumn = 'id';
+        }
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'asc';
+        }
+
+        $queryBuilder = new QueryBuilder($this->getConnection());
+        $query = $queryBuilder->table('users');
+
+        if (!empty($searchQuery)) {
+            $query->where('firstname', 'LIKE', "%{$searchQuery}%")
+                ->orWhere('lastname', 'LIKE', "%{$searchQuery}%")
+                ->orWhere('email', 'LIKE', "%{$searchQuery}%")
+                ->orWhere('city', 'LIKE', "%{$searchQuery}%");
+        }
+
+        $queryUsers = $query->orderBy($sortColumn, $sortDirection)->get();
+
+        return $queryUsers ? array_map(fn ($userData) => new User($userData), $queryUsers) : [];
+    }
+
+    public function deleteUser(int $id): ?User
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $queryUser = $this->getUserById($id);
+
+        if ($queryUser) {
+            $queryBuilder->table('users')->where('id', '=', $id)->delete();
+
+            return $queryUser;
+        }
+
+        return null;
+    }
+
+    public function updateUserAdmin(User $user): ?User
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $existingUser = $this->getUserById($user->id);
+        if (!$existingUser) {
+            return null;
+        }
+
+        $fieldsToCompare = [
+            'firstname' => $user->firstname,
+            'lastname' => $user->lastname,
+            'email' => $user->email,
+            'role' => $user->role->value,
+            'address' => $user->address,
+            'city' => $user->city,
+            'postal_code' => $user->postal_code,
+        ];
+
+        $updatedFields = [];
+
+        foreach ($fieldsToCompare as $field => $newValue) {
+            if ($newValue !== $existingUser->$field) {
+                $updatedFields[$field] = $newValue;
+            }
+        }
+
+        if (!empty($updatedFields)) {
+            $queryBuilder->table('users')->where('id', '=', $user->id)->update($updatedFields);
+
+            return $this->getUserById($user->id);
+        }
+
+        return $existingUser;
+    }
+
     public function updateUser(User $user): void
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
