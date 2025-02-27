@@ -1,6 +1,7 @@
 <?php
 
 use App\Middleware\EnsureLoggedIn;
+use App\Middleware\EnsureNotLoggedIn;
 
 $router = App\Application\Router::getInstance();
 
@@ -11,6 +12,18 @@ $router->post('/checkout/create', [App\Controllers\StripeController::class, 'cre
 $router->get('/checkout/complete', [App\Controllers\StripeController::class, 'complete']);
 $router->post('/stripe/webhook', [App\Controllers\StripeController::class, 'webhook']);
 
+
+$router->middleware(EnsureNotLoggedIn::class, function () use ($router) {
+    $router->get('/register', [App\Controllers\AuthController::class, 'register']);
+    $router->post('/register', [App\Controllers\AuthController::class, 'registerPost']);
+
+    $router->get('/login', [App\Controllers\AuthController::class, 'login']);
+    $router->post('/login', [App\Controllers\AuthController::class, 'loginPost']);
+});
+
 $router->middleware(EnsureLoggedIn::class, function () use ($router) {
-    $router->get('/account', [App\Controllers\HomeController::class, 'account']);
+    $router->get('/logout', [App\Controllers\AuthController::class, 'logout']);
+
+    $router->get('/account/manage', [App\Controllers\ProfileController::class, 'index']);
+    $router->post('/account/manage', [App\Controllers\ProfileController::class, 'update']);
 });

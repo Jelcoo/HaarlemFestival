@@ -1,7 +1,11 @@
 <?php
 
 return $config = [
+    'APP_URL' => 'http://localhost',
     'APP_ENV' => 'production',
+    'APP_NAME' => 'The Festival',
+
+    'STORAGE_PATH' => __DIR__ . '/public/storage/',
 
     'DB_HOST' => 'mysql',
     'DB_PORT' => 3306,
@@ -10,4 +14,12 @@ return $config = [
     'DB_NAME' => 'festivaldb',
     'STRIPE_SECRET_KEY' => '',
     'STRIPE_WEBHOOK_SECRET' => '',
+
+    'TURNSTILE_KEY' => '1x00000000000000000000AA',
+    'TURNSTILE_SECRET' => '1x0000000000000000000000000000000AA',
+
+    'MAIL_HOST' => '',
+    'MAIL_USER' => '',
+    'MAIL_PASSWORD' => '',
+    'MAIL_PORT' => 587,
 ];
