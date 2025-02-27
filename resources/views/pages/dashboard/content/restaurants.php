@@ -120,7 +120,7 @@
                             <?php } ?>
                         </td>
 
-                        <td>
+                        <td class="d-flex align-items-center gap-2">
                             <!-- Edit/Update Button -->
                             <?php if (isset($_GET['edit']) && $_GET['edit'] == $restaurant->id) { ?>
                                 <button type="submit" class="btn btn-success btn-sm" name="action" value="update">Update</button>
