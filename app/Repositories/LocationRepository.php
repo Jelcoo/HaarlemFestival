@@ -48,4 +48,52 @@ class LocationRepository extends Repository
         return $queryLocations ? array_map(fn($locationData) => new Location($locationData), $queryLocations) : [];
     }
 
+    public function deleteLocation(int $id): ?Location
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $queryLocation = $this->getLocationById($id);
+
+        if ($queryLocation) {
+            $queryBuilder->table('locations')->where('id', '=', $id)->delete();
+
+            return $queryLocation;
+        }
+
+        return null;
+    }
+
+    public function updateLocation(Location $location): ?Location
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $existingLocation = $this->getLocationById($location->id);
+        if (!$existingLocation) {
+            return null;
+        }
+
+        $fieldsToCompare = [
+            'name' => $location->name,
+            'coordinates' => $location->coordinates,
+            'address' => $location->address,
+            'preview_description' => $location->preview_description,
+            'main_description' => $location->main_description,
+        ];
+
+        $updatedFields = [];
+
+        foreach ($fieldsToCompare as $field => $newValue) {
+            if ($newValue !== $existingLocation->$field) {
+                $updatedFields[$field] = $newValue;
+            }
+        }
+
+        if (!empty($updatedFields)) {
+            $queryBuilder->table('locations')->where('id', '=', $location->id)->update($updatedFields);
+
+            return $this->getLocationById($location->id);
+        }
+
+        return $existingLocation;
+    }
 }

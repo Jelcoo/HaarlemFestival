@@ -15,6 +15,7 @@ $router->get('/dashboard/restaurants', [App\Controllers\DashboardRestaurantsCont
 $router->post('/dashboard/restaurants', [App\Controllers\DashboardRestaurantsController::class, 'handleAction']);
 
 $router->get('/dashboard/locations', [App\Controllers\DashboardLocationsController::class, 'index']);
+$router->post('/dashboard/locations', [App\Controllers\DashboardLocationsController::class, 'handleAction']);
 
 $router->middleware(EnsureNotLoggedIn::class, function () use ($router) {
     $router->get('/register', [App\Controllers\AuthController::class, 'register']);

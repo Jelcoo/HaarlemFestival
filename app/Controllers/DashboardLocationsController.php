@@ -42,6 +42,55 @@ class DashboardLocationsController extends DashboardController
         ]);
     }
 
+    public function handleAction(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return;
+        }
+
+        $action = $_POST['action'] ?? null;
+        $locationId = $_POST['id'] ?? null;
+
+        match ($action) {
+            'delete' => $locationId ? $this->deleteLocation($locationId) : $this->redirectToLocations(false, 'Invalid location ID.'),
+            'update' => $locationId ? $this->updateLocation($locationId) : $this->redirectToLocations(false, 'Invalid Location ID.'),
+            // 'create' => $this->showCreateRestaurantForm(),
+            // 'createNewRestaurant' => $this->createNewRestaurant(),
+            default => $this->redirectToLocations(false, 'Invalid action.'),
+        };
+    }
+
+    private function deleteLocation(int $locationId): void
+    {
+        $success = $this->locationRepository->deleteLocation($locationId);
+        $this->redirectToLocations(!empty($success), $success ? 'Location deleted successfully.' : 'Failed to delete Location');
+    }
+
+    private function updateLocation(int $locationId): void
+    {
+        $existingLocation = $this->locationRepository->getLocationById($locationId);
+
+        if (!$existingLocation) {
+            $this->redirectToLocations(false, 'Location not found');
+            return;
+        }
+
+        $fieldsToUpdate = [
+            'name' => $_POST['name'] ?? $existingLocation->name,
+            'coordinates' => $_POST['coordinates'] ?? $existingLocation->coordinates,
+            'address' => $_POST['address'] ?? $existingLocation->address,
+            'preview_description' => $_POST['preview_description'] ?? $existingLocation->preview_description,
+            'main_description' => $_POST['main_description'] ?? $existingLocation->main_description,
+        ];
+
+        foreach ($fieldsToUpdate as $field => $value) {
+            $existingLocation->$field = $value;
+        }
+
+        $updatedLocation = $this->locationRepository->updateLocation($existingLocation);
+        $this->redirectToLocations(!empty($updatedLocation), $updatedLocation ? 'Location updated successfully.' : 'No changes were made.');
+    }
+
     private function getColumns(): array
     {
         return [
