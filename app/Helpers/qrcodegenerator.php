@@ -9,10 +9,6 @@ class Qrcodegenerator {
         $qrcode = new QrCode('Testing');
         $writer = new PngWriter();
         $result = $writer->write($qrcode);
-        
-        $filePath = __DIR__ . '/qrcode.png';
-        $result->saveToFile($filePath);
-        
         $dataUri = $result->getDataUri();
 
         return $dataUri;
