@@ -21,18 +21,16 @@ class DashboardLocationsController extends DashboardController
         $searchQuery = $_GET['search'] ?? '';
 
         if (isset($_GET['search']) && $searchQuery === '') {
-            $this->redirectToRestaurants();
+            $this->redirectToLocations();
         }
 
-        $locations = $this->locationRepository->getAllLocations();
+        // if (!empty($_SESSION['show_create_restaurant_form'])) {
+        //     unset($_SESSION['show_create_restaurant_form']);
 
-        if (!empty($_SESSION['show_create_restaurant_form'])) {
-            unset($_SESSION['show_create_restaurant_form']);
-
-            return $this->renderPage('restaurant_create', [
-                'locations' => $locations,
-            ]);
-        }
+        //     return $this->renderPage('restaurant_create', [
+        //         'locations' => $locations,
+        //     ]);
+        // }
 
         return $this->renderPage('locations', [
             'locations' => $this->locationRepository->getSortedLocations($searchQuery, $sortColumn, $sortDirection),

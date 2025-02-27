@@ -7,6 +7,17 @@
     </div>
 <?php } ?>
 
+<!-- Search Form -->
+<form method="GET" action="/dashboard/locations" class="mb-3 d-flex align-items-center">
+    <input type="text" name="search" placeholder="Search locations..."
+        value="<?php echo htmlspecialchars($searchQuery); ?>" class="form-control d-inline-block w-auto me-2">
+
+    <button type="submit" class="btn btn-primary me-2">Search</button>
+    <?php if (!empty($searchQuery)) { ?>
+        <a href="/dashboard/locations" class="btn btn-secondary text-white">Clear</a>
+    <?php } ?>
+</form>
+
 <table class="table table-bordered">
     <thead>
         <tr>
