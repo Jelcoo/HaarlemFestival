@@ -24,4 +24,28 @@ class LocationRepository extends Repository
 
         return $queryLocations ? array_map(fn($locationData) => new Location($locationData), $queryLocations) : [];
     }
+
+    public function getSortedLocations(string $searchQuery, string $sortColumn = 'id', string $sortDirection = 'asc'): array
+    {
+        $allowedColumns = ['id', 'name', 'address'];
+        if (!in_array($sortColumn, $allowedColumns)) {
+            $sortColumn = 'id';
+        }
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'asc';
+        }
+
+        $queryBuilder = new QueryBuilder($this->getConnection());
+        $query = $queryBuilder->table('locations');
+
+        if (!empty($searchQuery)) {
+            $query->where('name', 'LIKE', "%{$searchQuery}%")
+                ->orWhere('address', 'LIKE', "%{$searchQuery}%");
+        }
+
+        $queryLocations = $query->orderBy($sortColumn, $sortDirection)->get();
+
+        return $queryLocations ? array_map(fn($locationData) => new Location($locationData), $queryLocations) : [];
+    }
+
 }
