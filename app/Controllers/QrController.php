@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Helpers\Qrcodegenerator;
+use App\Helpers\QrCodeGenerator;
 
 class QrController extends Controller
 {
@@ -13,7 +13,8 @@ class QrController extends Controller
 
     public function index(): string
     {
-        $datauri = Qrcodegenerator::generateQRCode();
+        $datauri = QrCodeGenerator::generateQRCode();
+
         return $this->pageLoader->setPage('qrcode')->render(['dataUri' => $datauri]);
     }
 }
