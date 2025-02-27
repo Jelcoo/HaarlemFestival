@@ -12,6 +12,10 @@ $router->post('/checkout/create', [App\Controllers\StripeController::class, 'cre
 $router->get('/checkout/complete', [App\Controllers\StripeController::class, 'complete']);
 $router->post('/stripe/webhook', [App\Controllers\StripeController::class, 'webhook']);
 
+$router->get('/dashboard', [App\Controllers\DashboardController::class, 'index']);
+$router->get('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'index']);
+$router->post('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'handleAction']);
+
 
 $router->middleware(EnsureNotLoggedIn::class, function () use ($router) {
     $router->get('/register', [App\Controllers\AuthController::class, 'register']);

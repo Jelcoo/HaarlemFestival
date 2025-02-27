@@ -33,4 +33,16 @@ class User
         $this->stripe_customer_id = $collection['stripe_customer_id'];
         $this->created_at = Carbon::parse($collection['created_at']);
     }
+
+    public function __constructForUpdate(array $collection)
+    {
+        $this->id = $collection['id'];
+        $this->firstname = $collection['firstname'];
+        $this->lastname = $collection['lastname'];
+        $this->email = $collection['email'];
+        $this->role = UserRoleEnum::from($collection['role']);
+        $this->address = $collection['address'];
+        $this->city = $collection['city'];
+        $this->postal_code = $collection['postal_code'];
+    }
 }
