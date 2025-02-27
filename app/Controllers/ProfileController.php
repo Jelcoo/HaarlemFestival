@@ -16,11 +16,11 @@ class ProfileController extends Controller
         $this->userRepository = new UserRepository();
     }
 
-    public function index(): string
+    public function index(array $parameters = []): string
     {
         $user = $this->userRepository->getUserById($_SESSION['user_id']);
 
-        return $this->pageLoader->setPage('account/manage')->render(['user' => $user]);
+        return $this->pageLoader->setPage('account/manage')->render(array_merge($parameters, ['user' => $user]));
     }
 
     public function update(): string
@@ -28,7 +28,7 @@ class ProfileController extends Controller
         try {
             $user = $this->userRepository->getUserById($_SESSION['user_id']);
         } catch (\Exception $e) {
-            return $this->rerender([
+            return $this->index([
                 'error' => $e->getMessage(),
                 'fields' => $_POST,
             ]);
@@ -51,11 +51,12 @@ class ProfileController extends Controller
         $validation = $validator->validate($_POST, $rules);
 
         if ($validation->fails()) {
-            return $this->rerender([
+            return $this->index([
                 'error' => $validation->errors()->toArray(),
                 'fields' => $_POST,
             ]);
         }
+
         try {
             $user->firstname = $_POST['firstname'] ?? $user->firstname;
             $user->lastname = $_POST['lastname'] ?? $user->lastname;
@@ -66,17 +67,12 @@ class ProfileController extends Controller
 
             $this->userRepository->updateUser($user);
         } catch (\Exception $e) {
-            return $this->rerender([
+            return $this->index([
                 'error' => $e->getMessage(),
                 'fields' => $_POST,
             ]);
         }
 
         return $this->pageLoader->setPage('account/manage')->render(['user' => $user]);
-    }
-
-    private function rerender(array $parameters = []): string
-    {
-        return $this->pageLoader->setPage('account/manage')->render($parameters);
     }
 }
