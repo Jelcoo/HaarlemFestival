@@ -18,6 +18,10 @@
             <label for="password">Password</label>
             <input type="password" class="form-control" name="password" placeholder="Password" <?php echo isset($fields['password']) ? 'value="' . $fields['password'] . '"' : ''; ?>>
         </div>
+        <div class="form-group">
+            <label for="password_verify">Password verification</label>
+            <input type="password" class="form-control" name="password_verify" placeholder="Password (verification)" <?php echo isset($fields['password_verify']) ? 'value="' . $fields['password_verify'] . '"' : ''; ?>>
+        </div>
         <div class="checkbox mb-3">
             <div class="cf-turnstile" data-sitekey="<?php echo App\Config\Config::getKey('TURNSTILE_KEY'); ?>" data-theme="light"></div>
         </div>

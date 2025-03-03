@@ -21,9 +21,9 @@ class AuthController extends Controller
         $this->userRepository = new UserRepository();
     }
 
-    public function register(): string
+    public function register(array $parameters = []): string
     {
-        return $this->pageLoader->setPage('auth/register')->render();
+        return $this->pageLoader->setPage('auth/register')->render($parameters);
     }
 
     public function registerPost(): string
@@ -31,7 +31,7 @@ class AuthController extends Controller
         $token = $_POST['cf-turnstile-response'];
 
         if (TurnstileHelper::verify($token) === false) {
-            return $this->rerenderRegister([
+            return $this->register([
                 'error' => 'Turnstile verification failed',
                 'fields' => $_POST,
             ]);
@@ -44,10 +44,11 @@ class AuthController extends Controller
             'lastname' => 'required|max:255',
             'email' => 'required|email|unique:users,email|max:255',
             'password' => 'required|min:6',
+            'password_verify' => 'required|same:password',
         ]);
 
         if ($validation->fails()) {
-            return $this->rerenderRegister([
+            return $this->register([
                 'error' => $validation->errors()->toArray(),
                 'fields' => $_POST,
             ]);
@@ -69,18 +70,18 @@ class AuthController extends Controller
             $_SESSION['user_id'] = $createdUser->id;
             Response::redirect('/');
         } catch (\Exception $e) {
-            return $this->rerenderRegister([
+            return $this->register([
                 'error' => $e->getMessage(),
                 'fields' => $_POST,
             ]);
         }
 
-        return $this->pageLoader->setPage('auth/register')->render();
+        return $this->register();
     }
 
-    public function login(): string
+    public function login(array $parameters = []): string
     {
-        return $this->pageLoader->setPage('auth/login')->render();
+        return $this->pageLoader->setPage('auth/login')->render($parameters);
     }
 
     public function loginPost(): string
@@ -88,7 +89,7 @@ class AuthController extends Controller
         $token = $_POST['cf-turnstile-response'];
 
         if (TurnstileHelper::verify($token) === false) {
-            return $this->rerederLogin([
+            return $this->login([
                 'error' => 'Turnstile verification failed',
                 'fields' => $_POST,
             ]);
@@ -102,7 +103,7 @@ class AuthController extends Controller
         ]);
 
         if ($validation->fails()) {
-            return $this->rerederLogin([
+            return $this->login([
                 'error' => $validation->errors()->toArray(),
                 'fields' => $_POST,
             ]);
@@ -118,34 +119,24 @@ class AuthController extends Controller
                 $_SESSION['user_id'] = $user->id;
                 Response::redirect('/');
             } else {
-                return $this->rerederLogin([
+                return $this->login([
                     'error' => 'Invalid credentials',
                     'fields' => $_POST,
                 ]);
             }
         } catch (\Exception $e) {
-            return $this->rerederLogin([
+            return $this->login([
                 'error' => $e->getMessage(),
                 'fields' => $_POST,
             ]);
         }
 
-        return $this->pageLoader->setPage('auth/login')->render();
+        return $this->login();
     }
 
     public function logout(): void
     {
         Session::destroy();
         Response::redirect('/');
-    }
-
-    private function rerenderRegister(array $parameters = []): string
-    {
-        return $this->pageLoader->setPage('auth/register')->render($parameters);
-    }
-
-    private function rerederLogin(array $parameters = []): string
-    {
-        return $this->pageLoader->setPage('auth/login')->render($parameters);
     }
 }
