@@ -28,8 +28,13 @@ class DashboardUsersController extends DashboardController
         if (!empty($_SESSION['show_create_user_form'])) {
             unset($_SESSION['show_create_user_form']);
 
+            $formData = $_SESSION['form_data'] ?? [];
+            unset($_SESSION['form_data']);
+
             return $this->renderPage('users_create', [
                 'roles' => array_column(UserRoleEnum::cases(), 'value'),
+                'formData' => $formData,
+                'status' => $this->getStatus(),
             ]);
         }
 
@@ -153,6 +158,9 @@ class DashboardUsersController extends DashboardController
 
         $errors = $this->validateUserInput($user);
         if (!empty($errors)) {
+            $_SESSION['show_create_user_form'] = true;
+            $_SESSION['form_data'] = $user;
+
             $this->redirectToUsers(false, implode(' ', $errors));
             return;
         }
@@ -160,7 +168,11 @@ class DashboardUsersController extends DashboardController
         try {
             $this->userRepository->createUser($user);
         } catch (\Exception $e) {
-            $this->redirectToUsers(false, 'Failed to create user: ' . $e->getMessage());
+            $_SESSION['show_create_user_form'] = true;
+            $_SESSION['form_data'] = $user;
+            $_SESSION['form_errors'] = ['Failed to create user: ' . $e->getMessage()];
+
+            $this->redirectToUsers();
             return;
         }
 
