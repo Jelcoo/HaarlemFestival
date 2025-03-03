@@ -1,7 +1,7 @@
 <script src="https://cdn.jsdelivr.net/npm/tinymce@7.7.0/tinymce.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tinymce@7.7.0/skins/ui/oxide/content.min.css">
 
-<textarea id="editor"></textarea>
+<textarea id="editor"><?php echo $content ?? ''; ?></textarea>
 
 <script>
     tinymce.init({

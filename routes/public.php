@@ -13,6 +13,9 @@ $router->post('/dashboard/users', [App\Controllers\DashboardUsersController::cla
 
 $router->get('/qrcode', [App\Controllers\QrController::class, 'index']);
 
+$router->get('/editor', [App\Controllers\EditorController::class, 'index']);
+$router->post('/editor', [App\Controllers\EditorController::class, 'editPost']);
+
 $router->middleware(EnsureNotLoggedIn::class, function () use ($router) {
     $router->get('/register', [App\Controllers\AuthController::class, 'register']);
     $router->post('/register', [App\Controllers\AuthController::class, 'registerPost']);
