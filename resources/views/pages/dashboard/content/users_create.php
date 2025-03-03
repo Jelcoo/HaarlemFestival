@@ -2,9 +2,9 @@
 
 <!-- Status message -->
 <?php if (!empty($status)) { ?>
-    <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
-        <?php echo $status['message']; ?>
-    </div>
+<div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
+    <?php echo $status['message']; ?>
+</div>
 <?php } ?>
 
 <form action="/dashboard/users" method="POST">
@@ -26,10 +26,15 @@
     </div>
 
     <div class="form-group">
+        <label for="password">Password</label>
+        <input type="passowrd" id="password" name="password" class="form-control" required>
+    </div>
+
+    <div class="form-group">
         <label for="role">Role</label>
         <select id="role" name="role" class="form-control" required>
             <?php foreach ($roles as $role) { ?>
-                <option value="<?php echo $role; ?>"><?php echo ucfirst($role); ?></option>
+            <option value="<?php echo $role; ?>"><?php echo ucfirst($role); ?></option>
             <?php } ?>
         </select>
     </div>

@@ -35,7 +35,6 @@ class DashboardUsersController extends DashboardController
 
         return $this->renderPage('users', [
             'users' => $this->userRepository->getSortedUsers($searchQuery, $sortColumn, $sortDirection),
-            'roles' => array_column(UserRoleEnum::cases(), 'value'),
             'status' => $this->getStatus(),
             'columns' => $this->getColumns(),
             'sortColumn' => $sortColumn,
@@ -50,8 +49,8 @@ class DashboardUsersController extends DashboardController
             return;
         }
 
-        $action = $_POST['action'] ?? null;
-        $userId = $_POST['id'] ?? null;
+        $action = filter_input(INPUT_POST, 'action', FILTER_DEFAULT);
+        $userId = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 
         match ($action) {
             'delete' => $userId ? $this->deleteUser($userId) : $this->redirectToUsers(false, 'Invalid user ID.'),
@@ -60,6 +59,43 @@ class DashboardUsersController extends DashboardController
             'createNewUser' => $this->createNewUser(),
             default => $this->redirectToUsers(false, 'Invalid action.'),
         };
+    }
+
+    private function validateUserInput(array $input, bool $isUpdate = false): array
+    {
+        $errors = [];
+
+        if (!$isUpdate || isset($input['firstname'])) {
+            if (empty($input['firstname']) || !preg_match("/^[a-zA-Z-' ]*$/", $input['firstname'])) {
+                $errors[] = 'Invalid first name.';
+            }
+        }
+
+        if (!$isUpdate || isset($input['lastname'])) {
+            if (empty($input['lastname']) || !preg_match("/^[a-zA-Z-' ]*$/", $input['lastname'])) {
+                $errors[] = 'Invalid last name.';
+            }
+        }
+
+        if (!$isUpdate || isset($input['email'])) {
+            if (empty($input['email']) || !filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'Invalid email address.';
+            }
+        }
+
+        if (!$isUpdate || isset($input['role'])) {
+            $validRoles = array_column(UserRoleEnum::cases(), 'value');
+
+            $roleValue = $input['role'] instanceof UserRoleEnum
+                ? $input['role']->value
+                : $input['role'];
+
+            if (!in_array($roleValue, $validRoles, true)) {
+                $errors[] = 'Invalid role selected.';
+            }
+        }
+
+        return $errors;
     }
 
     private function deleteUser(int $userId): void
@@ -71,22 +107,26 @@ class DashboardUsersController extends DashboardController
     private function updateUser(int $userId): void
     {
         $existingUser = $this->userRepository->getUserById($userId);
-
         if (!$existingUser) {
             $this->redirectToUsers(false, 'User not found.');
-
             return;
         }
 
         $fieldsToUpdate = [
-            'firstname' => $_POST['firstname'] ?? $existingUser->firstname,
-            'lastname' => $_POST['lastname'] ?? $existingUser->lastname,
-            'email' => $_POST['email'] ?? $existingUser->email,
-            'role' => isset($_POST['role']) ? UserRoleEnum::from(strtolower($_POST['role'])) : $existingUser->role,
-            'address' => $_POST['address'] ?? $existingUser->address,
-            'city' => $_POST['city'] ?? $existingUser->city,
-            'postal_code' => $_POST['postal_code'] ?? $existingUser->postal_code,
+            'firstname' => filter_input(INPUT_POST, 'firstname', FILTER_DEFAULT) ?? $existingUser->firstname,
+            'lastname' => filter_input(INPUT_POST, 'lastname', FILTER_DEFAULT) ?? $existingUser->lastname,
+            'email' => filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL) ?? $existingUser->email,
+            'role' => UserRoleEnum::from(filter_input(INPUT_POST, 'role', FILTER_DEFAULT)) ?? $existingUser->role,
+            'address' => filter_input(INPUT_POST, 'address', FILTER_DEFAULT) ?? $existingUser->address,
+            'city' => filter_input(INPUT_POST, 'city', FILTER_DEFAULT) ?? $existingUser->city,
+            'postal_code' => filter_input(INPUT_POST, 'postal_code', FILTER_DEFAULT) ?? $existingUser->postal_code,
         ];
+
+        $errors = $this->validateUserInput($fieldsToUpdate, true);
+        if (!empty($errors)) {
+            $this->redirectToUsers(false, implode(' ', $errors));
+            return;
+        }
 
         foreach ($fieldsToUpdate as $field => $value) {
             $existingUser->$field = $value;
@@ -98,51 +138,109 @@ class DashboardUsersController extends DashboardController
 
     private function createNewUser(): void
     {
-        if (empty($_POST['firstname']) || empty($_POST['lastname']) || empty($_POST['email'])) {
-            $this->redirectToUsers(false, 'Please fill in all required fields.');
+        $user = [
+            'firstname' => filter_input(INPUT_POST, 'firstname', FILTER_DEFAULT),
+            'lastname' => filter_input(INPUT_POST, 'lastname', FILTER_DEFAULT),
+            'email' => filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL),
+            'password' => filter_input(INPUT_POST, 'password', FILTER_DEFAULT),
+            'role' => filter_input(INPUT_POST, 'role', FILTER_DEFAULT) ?? UserRoleEnum::USER->value,
+            'address' => filter_input(INPUT_POST, 'address', FILTER_DEFAULT) ?? '',
+            'city' => filter_input(INPUT_POST, 'city', FILTER_DEFAULT) ?? '',
+            'postal_code' => filter_input(INPUT_POST, 'postal_code', FILTER_DEFAULT) ?? '',
+            'stripe_customer_id' => filter_input(INPUT_POST, 'stripe_customer_id', FILTER_DEFAULT) ?? '',
+            'created_at' => date('Y-m-d H:i:s'),
+        ];
 
+        $errors = $this->validateUserInput($user);
+        if (!empty($errors)) {
+            $this->redirectToUsers(false, implode(' ', $errors));
             return;
         }
-
-        $user = [
-            'firstname' => $_POST['firstname'],
-            'lastname' => $_POST['lastname'],
-            'email' => $_POST['email'],
-            'password' => '', // TODO
-            'role' => $_POST['role'] ?? UserRoleEnum::USER->value,
-            'address' => $_POST['address'] ?? '',
-            'city' => $_POST['city'] ?? '',
-            'postal_code' => $_POST['postal_code'] ?? '',
-            'stripe_customer_id' => $_POST['stripe_customer_id'] ?? '',
-        ];
 
         try {
             $this->userRepository->createUser($user);
         } catch (\Exception $e) {
             $this->redirectToUsers(false, 'Failed to create user: ' . $e->getMessage());
-
             return;
         }
 
         $this->redirectToUsers(true, 'User created successfully.');
     }
 
+
     private function getColumns(): array
     {
+        $roles = array_column(UserRoleEnum::cases(), 'value');
+
         return [
-            'id' => ['label' => 'ID', 'sortable' => true],
-            'firstname' => ['label' => 'First Name', 'sortable' => true],
-            'lastname' => ['label' => 'Last Name', 'sortable' => true],
-            'email' => ['label' => 'Email', 'sortable' => true],
-            'role' => ['label' => 'Role', 'sortable' => true],
-            'address' => ['label' => 'Address', 'sortable' => false],
-            'city' => ['label' => 'City', 'sortable' => true],
-            'postal_code' => ['label' => 'Postal Code', 'sortable' => true],
-            'created_at' => ['label' => 'Created At', 'sortable' => true],
-            'stripe_customer_id' => ['label' => 'Stripe ID', 'sortable' => false],
-            'actions' => ['label' => 'Actions', 'sortable' => false],
+            'id' => [
+                'label' => 'ID',
+                'sortable' => true,
+                'editable' => false,
+                'editable_type' => null,
+                'required' => true,
+            ],
+            'firstname' => [
+                'label' => 'First Name',
+                'sortable' => true,
+                'editable' => true,
+                'editable_type' => 'text',
+                'required' => true,
+            ],
+            'lastname' => [
+                'label' => 'Last Name',
+                'sortable' => true,
+                'editable' => true,
+                'editable_type' => 'text',
+                'required' => true,
+            ],
+            'email' => [
+                'label' => 'Email',
+                'sortable' => true,
+                'editable' => true,
+                'editable_type' => 'email',
+                'required' => true,
+            ],
+            'role' => [
+                'label' => 'Role',
+                'sortable' => true,
+                'editable' => true,
+                'editable_type' => 'select',
+                'options' => $roles
+            ],
+            'address' => [
+                'label' => 'Address',
+                'sortable' => false,
+                'editable' => true,
+                'editable_type' => 'text'
+            ],
+            'city' => [
+                'label' => 'City',
+                'sortable' => true,
+                'editable' => true,
+                'editable_type' => 'text'
+            ],
+            'postal_code' => [
+                'label' => 'Postal Code',
+                'sortable' => true,
+                'editable' => true,
+                'editable_type' => 'text'
+            ],
+            'created_at' => [
+                'label' => 'Created At',
+                'sortable' => true,
+                'editable' => false,
+                'editable_type' => null
+            ],
+            'stripe_customer_id' => [
+                'label' => 'Stripe ID',
+                'sortable' => false,
+                'editable' => true,
+                'editable_type' => 'text'
+            ],
         ];
     }
+
 
     private function getStatus(): array
     {
