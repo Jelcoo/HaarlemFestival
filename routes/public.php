@@ -12,6 +12,7 @@ $router->get('/dashboard/users', [App\Controllers\DashboardUsersController::clas
 $router->post('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'handleAction']);
 
 $router->get('/qrcode', [App\Controllers\QrController::class, 'index']);
+$router->get('/cart', [App\Controllers\CartController::class, 'index']);
 
 $router->middleware(EnsureNotLoggedIn::class, function () use ($router) {
     $router->get('/register', [App\Controllers\AuthController::class, 'register']);
