@@ -41,7 +41,7 @@ class UserRepository extends Repository
 
         $queryUsers = $queryBuilder->table('users')->get();
 
-        return $queryUsers ? array_map(fn($userData) => new User($userData), $queryUsers) : [];
+        return $queryUsers ? array_map(fn ($userData) => new User($userData), $queryUsers) : [];
     }
 
     public function getSortedUsers(string $searchQuery, string $sortColumn = 'id', string $sortDirection = 'asc'): array
@@ -66,7 +66,7 @@ class UserRepository extends Repository
 
         $queryUsers = $query->orderBy($sortColumn, $sortDirection)->get();
 
-        return $queryUsers ? array_map(fn($userData) => new User($userData), $queryUsers) : [];
+        return $queryUsers ? array_map(fn ($userData) => new User($userData), $queryUsers) : [];
     }
 
     public function deleteUser(int $id): ?User
@@ -132,6 +132,7 @@ class UserRepository extends Repository
             'postal_code' => $user->postal_code,
         ]);
     }
+
     public function updatePassword(User $user): void
     {
         $queryBuilder = new QueryBuilder($this->getConnection());

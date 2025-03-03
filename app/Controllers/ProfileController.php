@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Application\Response;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
 use App\Repositories\UserRepository;
@@ -121,6 +120,7 @@ class ProfileController extends Controller
                 'fields' => $_POST,
             ]);
         }
+
         return $this->index();
     }
 }

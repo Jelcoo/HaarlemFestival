@@ -1,7 +1,7 @@
 <div class="container">
     <h1>Manage account</h1>
     <?php include __DIR__ . '/../../components/errordisplay.php'; ?>
-    <?php /** @var \App\Models\User $user  */ ?>
+    <?php /** @var App\Models\User $user */ ?>
     <div class="row">
         <div class="col-sm-12 col-md-6">
             <h3>Account details</h3>
