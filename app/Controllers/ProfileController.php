@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Application\Response;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
 use App\Repositories\UserRepository;
@@ -74,5 +75,52 @@ class ProfileController extends Controller
         }
 
         return $this->pageLoader->setPage('account/manage')->render(['user' => $user]);
+    }
+
+    public function updatePassword(): string
+    {
+        try {
+            $user = $this->userRepository->getUserById($_SESSION['user_id']);
+        } catch (\Exception $e) {
+            return $this->index([
+                'error' => $e->getMessage(),
+                'fields' => $_POST,
+            ]);
+        }
+
+        if (!password_verify($_POST['currentPassword'], $user->password)) {
+            return $this->index([
+                'error' => 'Incorrect password',
+                'fields' => $_POST,
+            ]);
+        }
+
+        $validator = new Validator();
+
+        $rules = [
+            'newPassword' => 'required|min:8',
+            'confirmNewPassword' => 'required|same:newPassword',
+        ];
+
+        $validation = $validator->validate($_POST, $rules);
+
+        if ($validation->fails()) {
+            return $this->index([
+                'error' => $validation->errors()->toArray(),
+                'fields' => $_POST,
+            ]);
+        }
+
+        try {
+            $encryptedPassword = password_hash($_POST['newPassword'], PASSWORD_DEFAULT);
+            $user->password = $encryptedPassword;
+            $this->userRepository->updatePassword($user);
+        } catch (\Exception $e) {
+            return $this->index([
+                'error' => $e->getMessage(),
+                'fields' => $_POST,
+            ]);
+        }
+        return $this->index();
     }
 }

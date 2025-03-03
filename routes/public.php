@@ -26,4 +26,5 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
 
     $router->get('/account/manage', [App\Controllers\ProfileController::class, 'index']);
     $router->post('/account/manage', [App\Controllers\ProfileController::class, 'update']);
+    $router->post('/account/manage/password', [App\Controllers\ProfileController::class, 'updatePassword']);
 });
