@@ -18,7 +18,7 @@ class AssetService
 
     /*
      * Returns an array of assets for a given model.
-     * 
+     *
      * @param mixed $model
      * @param ?string $collection The collection name of the assets to be returned.
      */
@@ -31,11 +31,11 @@ class AssetService
 
     /*
      * Saves an asset to the filesystem and database.
-     * 
+     *
      * @param array $file The file object from the request $_FILES.
      * @param string $collection The collection name the asset should belong to.
      * @param mixed $model The model the asset belongs to.
-     * 
+     *
      * @return Asset
      * @throws \Exception
      */
