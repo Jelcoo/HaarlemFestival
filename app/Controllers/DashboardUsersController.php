@@ -152,8 +152,6 @@ class DashboardUsersController extends DashboardController
             'address' => filter_input(INPUT_POST, 'address', FILTER_DEFAULT) ?? '',
             'city' => filter_input(INPUT_POST, 'city', FILTER_DEFAULT) ?? '',
             'postal_code' => filter_input(INPUT_POST, 'postal_code', FILTER_DEFAULT) ?? '',
-            'stripe_customer_id' => filter_input(INPUT_POST, 'stripe_customer_id', FILTER_DEFAULT) ?? '',
-            'created_at' => date('Y-m-d H:i:s'),
         ];
 
         $errors = $this->validateUserInput($user);
@@ -176,7 +174,7 @@ class DashboardUsersController extends DashboardController
             return;
         }
 
-        $this->redirectToUsers(true, 'User created successfully.');
+        $this->redirectToUsers(true, "User '{$user['firstname']} {$user['lastname']}' created successfully.");
     }
 
 
