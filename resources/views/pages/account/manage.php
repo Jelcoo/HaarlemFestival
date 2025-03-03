@@ -1,6 +1,7 @@
 <div class="container">
     <h1>Manage account</h1>
     <?php include __DIR__ . '/../../components/errordisplay.php'; ?>
+    <?php /** @var \App\Models\User $user  */ ?>
     <form action="/account/manage" method="POST">
         <div class="form-group">
             <label for="firstname">First name</label>
