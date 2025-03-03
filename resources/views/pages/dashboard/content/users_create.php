@@ -82,13 +82,6 @@
                     </div>
                 </div>
 
-                <!-- Stripe ID -->
-                <div class="form-group mt-3">
-                    <label for="stripe_customer_id">Stripe ID</label>
-                    <input type="text" id="stripe_customer_id" name="stripe_customer_id" class="form-control"
-                        value="<?php echo htmlspecialchars($formData['stripe_customer_id'] ?? ''); ?>">
-                </div>
-
                 <button type="submit" class="btn btn-primary mt-4">Create User</button>
             </form>
         </div>

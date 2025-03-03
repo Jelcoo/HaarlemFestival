@@ -244,12 +244,6 @@ class DashboardUsersController extends DashboardController
                 'editable' => false,
                 'editable_type' => null
             ],
-            'stripe_customer_id' => [
-                'label' => 'Stripe ID',
-                'sortable' => false,
-                'editable' => true,
-                'editable_type' => 'text'
-            ],
         ];
     }
 
