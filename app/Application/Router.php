@@ -57,7 +57,10 @@ class Router
         $method = $this->request->getMethod();
         $route = $this->resolveRoute($uri, $method);
 
-        if (is_null($route) || !$route->executeMiddleware($route->params)) {
+        if (is_null($route)) {
+            $this->response->setStatusCode(404);
+            $this->response->setContent((new ErrorController())->error404());
+        } else if (!$route->executeMiddleware($route->params)) {
             $this->response->setStatusCode(403);
             $this->response->setContent((new ErrorController())->error403());
         } else {
