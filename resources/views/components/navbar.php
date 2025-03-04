@@ -5,6 +5,7 @@ $pages = [
     '/dance' => 'Dance!',
     '/yummy' => 'Yummy!',
     '/history' => 'A stroll through history',
+    '/magic' => 'Magic@Tylers',
 ];
 ?>
 
