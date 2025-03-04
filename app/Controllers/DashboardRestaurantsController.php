@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use Rakit\Validation\Validator;
 use App\Repositories\LocationRepository;
 use App\Repositories\RestaurantRepository;
 
@@ -36,8 +37,13 @@ class DashboardRestaurantsController extends DashboardController
         if (!empty($_SESSION['show_create_restaurant_form'])) {
             unset($_SESSION['show_create_restaurant_form']);
 
+            $formData = $_SESSION['form_data'] ?? [];
+            unset($_SESSION['form_data']);
+
             return $this->renderPage('restaurant_create', [
-                'locations' => $locations,
+                'locations' => $this->locationRepository->getAllLocations(),
+                'formData' => $formData,
+                'status' => $this->getStatus(),
             ]);
         }
 
@@ -103,24 +109,42 @@ class DashboardRestaurantsController extends DashboardController
 
     private function createNewRestaurant(): void
     {
-        if (empty($_POST['name']) || empty($_POST['restaurant_type']) || empty($_POST['location_id'])) {
-            $this->redirectToRestaurants(false, 'Please fill in all required fields.');
+        try {
+            $validator = new Validator();
+            $validation = $validator->validate($_POST, [
+                'name' => 'required|alpha_spaces|max:255',
+                'restaurant_type' => 'nullable|alpha_spaces|max:100',
+                'rating' => 'nullable|numeric|min:0|max:5',
+                'location_id' => 'required|integer',
+                'preview_description' => 'nullable|max:500',
+                'main_description' => 'nullable|max:2000',
+                'menu' => 'nullable|max:5000',
+            ]);
 
-            return;
+            if ($validation->fails()) {
+                $_SESSION['show_create_restaurant_form'] = true;
+                $_SESSION['form_data'] = $_POST;
+                throw new \Exception(implode(' ', $validation->errors()->all()));
+            }
+
+            $restaurantData = array_intersect_key($_POST, array_flip([
+                'name',
+                'restaurant_type',
+                'rating',
+                'location_id',
+                'preview_description',
+                'main_description',
+                'menu'
+            ]));
+
+            $createdRestaurant = $this->restaurantRepository->createRestaurant($restaurantData);
+            $this->redirectToRestaurants(!empty($createdRestaurant), "Restaurant '{$restaurantData['name']}' created successfully.");
+        } catch (\Exception $e) {
+            $_SESSION['show_create_restaurant_form'] = true;
+            $_SESSION['form_data'] = $_POST;
+            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
+            $this->redirectToRestaurants(false, $e->getMessage());
         }
-
-        $restaurant = [
-            'name' => $_POST['name'],
-            'restaurant_type' => $_POST['restaurant_type'],
-            'rating' => isset($_POST['rating']) ? (int)$_POST['rating'] : null,
-            'location_id' => (int)$_POST['location_id'],
-            'preview_description' => $_POST['preview_description'] ?? '',
-            'main_description' => $_POST['main_description'] ?? '',
-            'menu' => $_POST['menu'] ?? '',
-        ];
-
-        $createdRestaurant = $this->restaurantRepository->createRestaurant($restaurant);
-        $this->redirectToRestaurants(!empty($createdRestaurant), $createdRestaurant ? 'Restaurant created successfully.' : 'Failed to create restaurant.');
     }
 
 
