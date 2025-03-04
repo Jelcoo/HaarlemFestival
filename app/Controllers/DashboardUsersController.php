@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use Rakit\Validation\Validator;
 use App\Enum\UserRoleEnum;
 use App\Repositories\UserRepository;
 
@@ -66,43 +67,6 @@ class DashboardUsersController extends DashboardController
         };
     }
 
-    private function validateUserInput(array $input, bool $isUpdate = false): array
-    {
-        $errors = [];
-
-        if (!$isUpdate || isset($input['firstname'])) {
-            if (empty($input['firstname']) || !preg_match("/^[a-zA-Z-' ]*$/", $input['firstname'])) {
-                $errors[] = 'Invalid first name.';
-            }
-        }
-
-        if (!$isUpdate || isset($input['lastname'])) {
-            if (empty($input['lastname']) || !preg_match("/^[a-zA-Z-' ]*$/", $input['lastname'])) {
-                $errors[] = 'Invalid last name.';
-            }
-        }
-
-        if (!$isUpdate || isset($input['email'])) {
-            if (empty($input['email']) || !filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
-                $errors[] = 'Invalid email address.';
-            }
-        }
-
-        if (!$isUpdate || isset($input['role'])) {
-            $validRoles = array_column(UserRoleEnum::cases(), 'value');
-
-            $roleValue = $input['role'] instanceof UserRoleEnum
-                ? $input['role']->value
-                : $input['role'];
-
-            if (!in_array($roleValue, $validRoles, true)) {
-                $errors[] = 'Invalid role selected.';
-            }
-        }
-
-        return $errors;
-    }
-
     private function deleteUser(int $userId): void
     {
         $success = $this->userRepository->deleteUser($userId);
@@ -111,72 +75,81 @@ class DashboardUsersController extends DashboardController
 
     private function updateUser(int $userId): void
     {
-        $existingUser = $this->userRepository->getUserById($userId);
-        if (!$existingUser) {
-            $this->redirectToUsers(false, 'User not found.');
-            return;
+        try {
+            $existingUser = $this->userRepository->getUserById($userId);
+
+            if (!$existingUser) {
+                throw new \Exception('User not found.');
+            }
+
+            $fieldsToUpdate = array_intersect_key($_POST, array_flip([
+                'firstname',
+                'lastname',
+                'email',
+                'role',
+                'address',
+                'city',
+                'postal_code'
+            ]));
+
+            if (isset($fieldsToUpdate['role'])) {
+                $fieldsToUpdate['role'] = UserRoleEnum::from(strtolower($fieldsToUpdate['role']));
+            }
+
+            foreach ($fieldsToUpdate as $field => $value) {
+                $existingUser->$field = $value;
+            }
+
+            $updatedUser = $this->userRepository->updateUserAdmin($existingUser);
+            $this->redirectToUsers(true, "User '{$_POST['firstname']} {$_POST['lastname']}' updated successfully.");
+        } catch (\Exception $e) {
+            $_SESSION['show_edit_user_form'] = true;
+            $_SESSION['form_data'] = $_POST;
+            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
+            $this->redirectToUsers(false, $e->getMessage());
         }
-
-        $fieldsToUpdate = [
-            'firstname' => filter_input(INPUT_POST, 'firstname', FILTER_DEFAULT) ?? $existingUser->firstname,
-            'lastname' => filter_input(INPUT_POST, 'lastname', FILTER_DEFAULT) ?? $existingUser->lastname,
-            'email' => filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL) ?? $existingUser->email,
-            'role' => UserRoleEnum::from(filter_input(INPUT_POST, 'role', FILTER_DEFAULT)) ?? $existingUser->role,
-            'address' => filter_input(INPUT_POST, 'address', FILTER_DEFAULT) ?? $existingUser->address,
-            'city' => filter_input(INPUT_POST, 'city', FILTER_DEFAULT) ?? $existingUser->city,
-            'postal_code' => filter_input(INPUT_POST, 'postal_code', FILTER_DEFAULT) ?? $existingUser->postal_code,
-        ];
-
-        $errors = $this->validateUserInput($fieldsToUpdate, true);
-        if (!empty($errors)) {
-            $this->redirectToUsers(false, implode(' ', $errors));
-            return;
-        }
-
-        foreach ($fieldsToUpdate as $field => $value) {
-            $existingUser->$field = $value;
-        }
-
-        $updatedUser = $this->userRepository->updateUserAdmin($existingUser);
-        $this->redirectToUsers(!empty($updatedUser), $updatedUser ? 'User updated successfully.' : 'No changes were made.');
     }
 
     private function createNewUser(): void
     {
-        $user = [
-            'firstname' => filter_input(INPUT_POST, 'firstname', FILTER_DEFAULT),
-            'lastname' => filter_input(INPUT_POST, 'lastname', FILTER_DEFAULT),
-            'email' => filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL),
-            'password' => filter_input(INPUT_POST, 'password', FILTER_DEFAULT),
-            'role' => filter_input(INPUT_POST, 'role', FILTER_DEFAULT) ?? UserRoleEnum::USER->value,
-            'address' => filter_input(INPUT_POST, 'address', FILTER_DEFAULT) ?? '',
-            'city' => filter_input(INPUT_POST, 'city', FILTER_DEFAULT) ?? '',
-            'postal_code' => filter_input(INPUT_POST, 'postal_code', FILTER_DEFAULT) ?? '',
-        ];
-
-        $errors = $this->validateUserInput($user);
-        if (!empty($errors)) {
-            $_SESSION['show_create_user_form'] = true;
-            $_SESSION['form_data'] = $user;
-
-            $this->redirectToUsers(false, implode(' ', $errors));
-            return;
-        }
-
         try {
-            $this->userRepository->createUser($user);
+            $validator = new Validator();
+            $validation = $validator->validate($_POST, [
+                'firstname' => 'required|alpha|max:255',
+                'lastname' => 'required|alpha|max:255',
+                'email' => 'required|email|max:255',
+                'role' => 'required|in:' . implode(',', array_column(UserRoleEnum::cases(), 'value')),
+                'address' => 'nullable|max:255',
+                'city' => 'nullable|max:255',
+                'postal_code' => 'nullable|max:20',
+            ]);
+
+            if ($validation->fails()) {
+                $_SESSION['show_create_user_form'] = true;
+                $_SESSION['form_data'] = $_POST;
+                throw new \Exception(implode(' ', $validation->errors()->all()));
+            }
+
+            $userData = array_intersect_key($_POST, array_flip([
+                'firstname',
+                'lastname',
+                'email',
+                'password',
+                'role',
+                'address',
+                'city',
+                'postal_code'
+            ]));
+
+            $this->userRepository->createUser($userData);
+            $this->redirectToUsers(true, "User '{$_POST['firstname']} {$_POST['lastname']}' created successfully.");
         } catch (\Exception $e) {
             $_SESSION['show_create_user_form'] = true;
-            $_SESSION['form_data'] = $user;
-            $_SESSION['form_errors'] = ['Failed to create user: ' . $e->getMessage()];
-
-            $this->redirectToUsers();
-            return;
+            $_SESSION['form_data'] = $_POST;
+            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
+            $this->redirectToUsers(false, $e->getMessage());
         }
-
-        $this->redirectToUsers(true, "User '{$user['firstname']} {$user['lastname']}' created successfully.");
     }
-
 
     private function getColumns(): array
     {
