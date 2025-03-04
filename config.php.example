@@ -13,8 +13,8 @@ return $config = [
     'DB_PASSWORD' => 'secret123',
     'DB_NAME' => 'festivaldb',
 
-    'TURNSTILE_KEY' => '',
-    'TURNSTILE_SECRET' => '',
+    'TURNSTILE_KEY' => '1x00000000000000000000AA',
+    'TURNSTILE_SECRET' => '1x0000000000000000000000000000000AA',
 
     'MAIL_HOST' => '',
     'MAIL_USER' => '',

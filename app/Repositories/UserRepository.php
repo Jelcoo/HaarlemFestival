@@ -46,14 +46,6 @@ class UserRepository extends Repository
 
     public function getSortedUsers(string $searchQuery, string $sortColumn = 'id', string $sortDirection = 'asc'): array
     {
-        $allowedColumns = ['id', 'firstname', 'lastname', 'email', 'role', 'city', 'postal_code', 'created_at'];
-        if (!in_array($sortColumn, $allowedColumns)) {
-            $sortColumn = 'id';
-        }
-        if (!in_array($sortDirection, ['asc', 'desc'])) {
-            $sortDirection = 'asc';
-        }
-
         $queryBuilder = new QueryBuilder($this->getConnection());
         $query = $queryBuilder->table('users');
 
@@ -84,7 +76,7 @@ class UserRepository extends Repository
         return null;
     }
 
-    public function updateUser(User $user): ?User
+    public function updateUserAdmin(User $user): ?User
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
 
@@ -118,5 +110,18 @@ class UserRepository extends Repository
         }
 
         return $existingUser;
+    }
+
+    public function updateUser(User $user): void
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+        $queryBuilder->table('users')->where('id', '=', $user->id)->update([
+            'firstname' => $user->firstname,
+            'lastname' => $user->lastname,
+            'email' => $user->email,
+            'address' => $user->address,
+            'city' => $user->city,
+            'postal_code' => $user->postal_code,
+        ]);
     }
 }

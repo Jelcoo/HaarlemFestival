@@ -1,11 +1,11 @@
 <h2>User Management</h2>
 
 <!-- Status message -->
-<?php if (!empty($status['message'])) { ?>
+<?php if (!empty($status['message'])): ?>
     <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
-        <?php echo $status['message']; ?>
+        <?php echo htmlspecialchars($status['message']); ?>
     </div>
-<?php } ?>
+<?php endif; ?>
 
 <!-- Create Button -->
 <form action="/dashboard/users" method="POST">
@@ -16,140 +16,114 @@
 <form method="GET" action="/dashboard/users" class="mb-3 d-flex align-items-center">
     <input type="text" name="search" placeholder="Search users..." value="<?php echo htmlspecialchars($searchQuery); ?>"
         class="form-control d-inline-block w-auto me-2">
-
     <button type="submit" class="btn btn-primary me-2">Search</button>
-    <?php if (!empty($searchQuery)) { ?>
+    <?php if (!empty($searchQuery)): ?>
         <a href="/dashboard/users" class="btn btn-secondary text-white">Clear</a>
-    <?php } ?>
+    <?php endif; ?>
 </form>
 
 <table class="table table-bordered">
     <thead>
         <tr>
-            <?php foreach ($columns as $column => $data) { ?>
-                <?php if ($data['sortable']) { ?>
-                    <?php
-                    $newDirection = ($sortColumn == $column && $sortDirection == 'asc') ? 'desc' : 'asc';
-                    $sortUrl = "?sort={$column}&direction={$newDirection}";
-                    if (!empty($searchQuery)) {
-                        $sortUrl .= '&search=' . htmlspecialchars($searchQuery);
-                    }
-                    ?>
-                    <th>
+            <?php foreach ($columns as $column => $data): ?>
+                <?php
+                $newDirection = ($sortColumn == $column && $sortDirection == 'asc') ? 'desc' : 'asc';
+                $sortUrl = "?sort={$column}&direction={$newDirection}";
+                if (!empty($searchQuery)) {
+                    $sortUrl .= '&search=' . htmlspecialchars($searchQuery);
+                }
+                ?>
+                <th>
+                    <?php if ($data['sortable']): ?>
                         <a href="<?php echo $sortUrl; ?>">
-                            <?php echo $data['label']; ?>
+                            <?php echo htmlspecialchars($data['label']); ?>
                         </a>
-                    </th>
-                <?php } else { ?>
-                    <th><?php echo $data['label']; ?></th>
-                <?php } ?>
-            <?php } ?>
+                    <?php else: ?>
+                        <?php echo htmlspecialchars($data['label']); ?>
+                    <?php endif; ?>
+                </th>
+            <?php endforeach; ?>
+
+            <th>Actions</th>
         </tr>
     </thead>
 
     <tbody>
-        <?php if (!empty($users)) { ?>
-            <?php foreach ($users as $user) { ?>
-                <tr id="user-row-<?php echo $user->id; ?>">
+        <?php if (!empty($users)): ?>
+            <?php foreach ($users as $user): ?>
+                <tr id="user-row-<?php echo htmlspecialchars($user->id); ?>">
                     <form action="/dashboard/users" method="POST">
-                        <input type="hidden" name="id" value="<?php echo $user->id; ?>">
+                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($user->id); ?>">
 
-                        <td><?php echo $user->id; ?></td>
+                        <?php
+                        $isEditing = isset($_GET['edit']) && $_GET['edit'] == $user->id;
 
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <input type="text" name="firstname" value="<?php echo htmlspecialchars($user->firstname); ?>"
-                                    class="form-control w-100" required>
-                            <?php } else { ?>
-                                <?php echo htmlspecialchars($user->firstname); ?>
-                            <?php } ?>
-                        </td>
+                        foreach ($columns as $columnKey => $columnData): ?>
+                            <td>
+                                <?php if ($columnData['editable'] && $isEditing): ?>
 
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <input type="text" name="lastname" value="<?php echo htmlspecialchars($user->lastname); ?>"
-                                    class="form-control w-100" required>
-                            <?php } else { ?>
-                                <?php echo htmlspecialchars($user->lastname); ?>
-                            <?php } ?>
-                        </td>
+                                    <!-- Editable Input Fields -->
+                                    <?php if (in_array($columnData['editable_type'], ['text', 'email'])): ?>
+                                        <input type="<?php echo htmlspecialchars($columnData['editable_type']); ?>"
+                                            name="<?php echo htmlspecialchars($columnKey); ?>"
+                                            value="<?php echo htmlspecialchars($user->$columnKey); ?>" class="form-control w-100"
+                                            <?php echo (!empty($columnData['required']) && $columnData['required']) ? 'required' : '' ?>>
 
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <input type="email" name="email" value="<?php echo htmlspecialchars($user->email); ?>"
-                                    class="form-control w-100" required>
-                            <?php } else { ?>
-                                <?php echo htmlspecialchars($user->email); ?>
-                            <?php } ?>
-                        </td>
+                                        <!-- Role Select Dropdown -->
+                                    <?php elseif ($columnData['editable_type'] === 'select'): ?>
+                                        <select name="<?php echo htmlspecialchars($columnKey); ?>" class="form-control">
+                                            <?php foreach ($columnData['options'] as $option): ?>
+                                                <?php
+                                                $userValue = $user->$columnKey instanceof \BackedEnum
+                                                    ? $user->$columnKey->value
+                                                    : $user->$columnKey;
+                                                ?>
+                                                <option value="<?php echo htmlspecialchars($option); ?>"
+                                                    <?php echo ($userValue == $option) ? 'selected' : ''; ?>>
+                                                    <?php echo htmlspecialchars(ucfirst($option)); ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    <?php endif; ?>
 
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <select name="role" required>
-                                    <option value="ADMIN" <?php echo $user->role->value == 'ADMIN' ? 'selected' : ''; ?>>Admin</option>
-                                    <option value="USER" <?php echo $user->role->value == 'USER' ? 'selected' : ''; ?>>User</option>
-                                </select>
-                            <?php } else { ?>
-                                <?php echo $user->role->value; ?>
-                            <?php } ?>
-                        </td>
+                                <?php else: ?>
+                                    <!-- Enum Display -->
+                                    <?php
+                                    $displayValue = $user->$columnKey instanceof \BackedEnum
+                                        ? $user->$columnKey->value
+                                        : (string) $user->$columnKey;
+                                    ?>
+                                    <?php echo htmlspecialchars(ucfirst($displayValue)); ?>
+                                <?php endif; ?>
+                            </td>
+                        <?php endforeach; ?>
 
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <input type="text" name="address" value="<?php echo htmlspecialchars($user->address); ?>"
-                                    class="form-control w-100" required>
-                            <?php } else { ?>
-                                <?php echo htmlspecialchars($user->address); ?>
-                            <?php } ?>
-                        </td>
-
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <input type="text" name="city" value="<?php echo htmlspecialchars($user->city); ?>"
-                                    class="form-control w-100" required>
-                            <?php } else { ?>
-                                <?php echo htmlspecialchars($user->city); ?>
-                            <?php } ?>
-                        </td>
-
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <input type="text" name="postal_code" value="<?php echo htmlspecialchars($user->postal_code); ?>"
-                                    class="form-control w-100" required>
-                            <?php } else { ?>
-                                <?php echo htmlspecialchars($user->postal_code); ?>
-                            <?php } ?>
-                        </td>
-
-                        <td class="text-nowrap"><?php echo $user->created_at; ?></td>
-
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <input type="text" name="stripe_customer_id"
-                                    value="<?php echo htmlspecialchars($user->stripe_customer_id); ?>" class="form-control w-100" required>
-                            <?php } else { ?>
-                                <?php echo htmlspecialchars($user->stripe_customer_id); ?>
-                            <?php } ?>
-                        </td>
-
-                        <td>
-                            <!-- Edit/Update Button -->
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <button type="submit" class="btn btn-success btn-sm" name="action" value="update">Update</button>
-                            <?php } else { ?>
-                                <a href="/dashboard/users?edit=<?php echo $user->id; ?>" class="btn btn-warning btn-sm">Edit</a>
-                            <?php } ?>
-
-                            <!-- Delete Button -->
-                            <button type="submit" class="btn btn-danger btn-sm" name="action" value="delete">Delete</button>
+                        <!-- Actions -->
+                        <td class="d-flex gap-2">
+                            <?php if ($isEditing): ?>
+                                <button type="submit" class="btn btn-success btn-sm" name="action" value="update">
+                                    Confirm
+                                </button>
+                                <a href="/dashboard/users" class="btn btn-secondary btn-sm">
+                                    Cancel
+                                </a>
+                            <?php else: ?>
+                                <a href="/dashboard/users?edit=<?php echo htmlspecialchars($user->id); ?>"
+                                    class="btn btn-warning btn-sm">
+                                    Edit
+                                </a>
+                                <button type="submit" class="btn btn-danger btn-sm" name="action" value="delete">
+                                    Delete
+                                </button>
+                            <?php endif; ?>
                         </td>
                     </form>
                 </tr>
-            <?php } ?>
-        <?php } else { ?>
+            <?php endforeach; ?>
+        <?php else: ?>
             <tr>
                 <td colspan="<?php echo count($columns); ?>">No users found.</td>
             </tr>
-        <?php } ?>
+        <?php endif; ?>
     </tbody>
 </table>
