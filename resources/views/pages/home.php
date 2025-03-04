@@ -108,32 +108,34 @@ $events = [
     <?php } ?>
 </div>
 
-<!-- <div class="event-section" style="background-image: url('/assets/img/yummy.png');">
-    <div class="overlay">
-        <h3>Yummy!</h3>
-        <p>Treat your taste buds to a culinary adventure with exclusive dishes.</p>
-        <button class="btn btn-warning">Visit</button>
-    </div>
-</div>
-<div class="event-section" style="background-image: url('/assets/img/dance.png');">
-    <div class="overlay">
-        <h3>DANCE!</h3>
-        <p>Lose yourself in the rhythm at DANCE!</p>
-        <button class="btn btn-warning">Visit</button>
-    </div>
-</div>
-
 <h2 class="text-center mt-5">Schedule</h2>
-<div class="container">
-    <div class="schedule-bar">Haarlem Jazz</div>
-    <div class="schedule-bar">Yummy!</div>
-    <div class="schedule-bar">DANCE!</div>
-    <div class="schedule-bar">A Stroll through History</div>
-    <div class="schedule-bar">Magic@Teylers</div>
-    <div class="schedule-bar">Stories in Haarlem</div>
+<div class="container schedule-container">
+    <div class="row">
+        <div class="col-md-3 schedule-day">
+            <div class="schedule-day-header">Thursday 24 July</div>
+            <div class="event-bar">Haarlem Jazz</div>
+        </div>
+
+        <div class="col-md-3 schedule-day">
+            <div class="schedule-day-header">Friday 25 July</div>
+            <div class="event-bar">Yummy!</div>
+            <div class="event-bar">DANCE!</div>
+        </div>
+
+        <div class="col-md-3 schedule-day">
+            <div class="schedule-day-header">Saturday 26 July</div>
+            <div class="event-bar">A Stroll through History</div>
+            <div class="event-bar">Magic@Teylers</div>
+        </div>
+
+        <div class="col-md-3 schedule-day">
+            <div class="schedule-day-header">Sunday 27 July</div>
+            <div class="event-bar">Stories in Haarlem</div>
+        </div>
+    </div>
 </div>
 
-<h2 class="text-center mt-5">Map</h2>
+<!-- <h2 class="text-center mt-5">Map</h2>
 <div class="container map-container bg-light">
     <p class="text-center">[Interactive Map Placeholder]</p>
 </div> -->
@@ -208,5 +210,32 @@ const swiper = new Swiper('.swiper', {
 .visit-btn {
     background-color: #ffc107;
     color: black;
+}
+
+.schedule-container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+.schedule-header {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+}
+.schedule-day {
+    margin-bottom: 15px;
+}
+.schedule-day-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.event-bar {
+    background-color: #2c3e50;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    text-align: center;
 }
 </style>
