@@ -1,10 +1,10 @@
 <footer class="bg-light py-3 mt-4">
     <div class="container d-flex justify-content-between align-items-center">
         <div>
-            <a href="#" class="me-2"><i class="fab fa-tiktok fa-lg"></i></a>
-            <a href="#" class="me-2"><i class="fab fa-facebook fa-lg"></i></a>
-            <a href="#" class="me-2"><i class="fab fa-instagram fa-lg"></i></a>
-            <a href="#"><i class="fab fa-spotify fa-lg"></i></a>
+            <a href="#" class="me-2"><i class="fab fa-tiktok fa-2xl"></i></a>
+            <a href="#" class="me-2"><i class="fab fa-facebook fa-2xl"></i></a>
+            <a href="#" class="me-2"><i class="fab fa-instagram fa-2xl"></i></a>
+            <a href="#"><i class="fab fa-spotify fa-2xl"></i></a>
         </div>
 
         <div>
