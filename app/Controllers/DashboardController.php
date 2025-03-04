@@ -43,14 +43,6 @@ class DashboardController extends Controller
         return ob_get_clean();
     }
 
-    protected function getStatus(): array
-    {
-        $status = $_SESSION['status'] ?? ['status' => false, 'message' => ''];
-        unset($_SESSION['status']);
-
-        return $status;
-    }
-
     protected function redirectTo(string $redirect, bool $success = false, string $message = ''): void
     {
         $_SESSION['status'] = ['status' => $success, 'message' => $message];

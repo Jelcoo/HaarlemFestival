@@ -139,6 +139,14 @@ class DashboardRestaurantsController extends DashboardController
         ];
     }
 
+    private function getStatus(): array
+    {
+        $status = $_SESSION['status'] ?? ['status' => false, 'message' => ''];
+        unset($_SESSION['status']);
+
+        return $status;
+    }
+
     private function redirectToRestaurants(bool $success = false, string $message = ''): void
     {
         $this->redirectTo('restaurants', $success, $message);
