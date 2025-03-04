@@ -88,13 +88,11 @@ class ProfileController extends Controller
         }
 
         $validator = new Validator();
-
-        $rules = [
+        $validation = $validator->validate($_POST, [
+            'currentPassword' => 'required',
             'newPassword' => 'required|min:8',
             'confirmNewPassword' => 'required|same:newPassword',
-        ];
-
-        $validation = $validator->validate($_POST, $rules);
+        ]);
 
         if ($validation->fails()) {
             return $this->index([
