@@ -324,9 +324,6 @@ setTimeout(() => map.invalidateSize(), 100);
     height: 400px;
     transition: transform 0.3s ease;
 }
-.event-card:hover {
-    transform: scale(1.02);
-}
 .event-card .overlay {
     position: absolute;
     top: 0;
