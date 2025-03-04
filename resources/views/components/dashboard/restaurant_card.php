@@ -5,6 +5,9 @@ if (!isset($restaurant)) {
 
 $showDetails = isset($_GET['details']) && $_GET['details'] == $restaurant->id;
 $showEditForm = isset($_GET['edit']) && $_GET['edit'] == $restaurant->id;
+
+$locationMatch = array_filter($locations, fn($loc) => $loc->id == $restaurant->location_id);
+$location = !empty($locationMatch) ? reset($locationMatch) : ['name' => 'Unknown Location', 'address' => 'Unknown Address'];
 ?>
 
 <div class="col-md-4">
@@ -13,11 +16,12 @@ $showEditForm = isset($_GET['edit']) && $_GET['edit'] == $restaurant->id;
             <h5 class="card-title"><?php echo htmlspecialchars($restaurant->name); ?></h5>
 
             <?php if (!$showEditForm) { ?>
-                <!-- Show Type and Rating only when not in edit mode -->
+                <!-- Type and Rating and location -->
                 <p class="card-text"><strong>Type:</strong> <?php echo htmlspecialchars($restaurant->restaurant_type); ?>
                 </p>
                 <p class="card-text"><strong>Rating:</strong> <?php echo htmlspecialchars($restaurant->rating); ?>/5</p>
-                <p><strong>Location:</strong> <?php echo htmlspecialchars($restaurant->location_id); ?></p>
+                <p><strong>Location:</strong>
+                    <?php echo htmlspecialchars($location->name) . ' - ' . htmlspecialchars($location->address); ?></p>
             <?php } ?>
 
             <?php if (!$showDetails) { ?>
@@ -70,8 +74,15 @@ $showEditForm = isset($_GET['edit']) && $_GET['edit'] == $restaurant->id;
                             </div>
                             <div class="mb-2">
                                 <label class="form-label">Location</label>
-                                <input type="text" name="location_id" class="form-control"
-                                    value="<?php echo htmlspecialchars($restaurant->location_id); ?>" required>
+                                <select name="location_id" class="form-control" required>
+                                    <option value="">Select a location</option>
+                                    <?php foreach ($locations as $loc) { ?>
+                                        <option value="<?php echo $loc->id; ?>"
+                                            <?php echo ($restaurant->location_id == $loc->id) ? 'selected' : ''; ?>>
+                                            <?php echo htmlspecialchars($loc->name) . ' - ' . htmlspecialchars($loc->address); ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
                             </div>
                             <div class="mb-2">
                                 <label class="form-label">Preview Description</label>

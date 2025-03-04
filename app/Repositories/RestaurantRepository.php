@@ -86,6 +86,7 @@ class RestaurantRepository extends Repository
             'name' => $restaurant->name,
             'restaurant_type' => $restaurant->restaurant_type,
             'rating' => $restaurant->rating,
+            'location_id' => $restaurant->location_id,
             'preview_description' => $restaurant->preview_description,
             'main_description' => $restaurant->main_description,
             'menu' => $restaurant->menu,

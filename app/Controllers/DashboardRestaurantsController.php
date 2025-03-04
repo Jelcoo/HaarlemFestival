@@ -32,8 +32,6 @@ class DashboardRestaurantsController extends DashboardController
             $this->redirectToRestaurants();
         }
 
-        $locations = $this->locationRepository->getAllLocations();
-
         if (!empty($_SESSION['show_create_restaurant_form'])) {
             unset($_SESSION['show_create_restaurant_form']);
 
@@ -49,6 +47,7 @@ class DashboardRestaurantsController extends DashboardController
 
         return $this->renderPage('restaurants', [
             'restaurants' => $this->restaurantRepository->getSortedRestaurants($searchQuery, $sortColumn, $sortDirection),
+            'locations' => $this->locationRepository->getAllLocations(),
             'status' => $this->getStatus(),
             'columns' => $this->getColumns(),
             'sortColumn' => $sortColumn,
@@ -83,28 +82,50 @@ class DashboardRestaurantsController extends DashboardController
 
     private function updateRestaurant(int $restaurantId): void
     {
-        $existingRestaurant = $this->restaurantRepository->getRestaurantById($restaurantId);
+        try {
+            $existingRestaurant = $this->restaurantRepository->getRestaurantById($restaurantId);
 
-        if (!$existingRestaurant) {
-            $this->redirectToRestaurants(false, 'Restaurant not found');
-            return;
+            if (!$existingRestaurant) {
+                throw new \Exception('Restaurant not found.');
+            }
+
+            $validator = new Validator();
+            $validation = $validator->validate($_POST, [
+                'name' => 'required|alpha_spaces|max:255',
+                'restaurant_type' => 'nullable|alpha_spaces|max:100',
+                'rating' => 'nullable|numeric|min:0|max:5',
+                'location_id' => 'required|integer',
+                'preview_description' => 'nullable|max:500',
+                'main_description' => 'nullable|max:2000',
+                'menu' => 'nullable|max:5000',
+            ]);
+
+            if ($validation->fails()) {
+                $_SESSION['form_data'] = $_POST;
+                throw new \Exception(implode(' ', $validation->errors()->all()));
+            }
+
+            $fieldsToUpdate = [
+                'name' => $_POST['name'] ?? $existingRestaurant->name,
+                'restaurant_type' => $_POST['restaurant_type'] ?? $existingRestaurant->restaurant_type,
+                'rating' => isset($_POST['rating']) ? (float)$_POST['rating'] : $existingRestaurant->rating,
+                'location_id' => (int)$_POST['location_id'],
+                'preview_description' => $_POST['preview_description'] ?? $existingRestaurant->preview_description,
+                'main_description' => $_POST['main_description'] ?? $existingRestaurant->main_description,
+                'menu' => $_POST['menu'] ?? $existingRestaurant->menu,
+            ];
+
+            foreach ($fieldsToUpdate as $field => $value) {
+                $existingRestaurant->$field = $value;
+            }
+
+            $updatedRestaurant = $this->restaurantRepository->updateRestaurant($existingRestaurant);
+            $this->redirectTo("restaurants?details=$restaurantId", !empty($updatedRestaurant), 'Restaurant updated successfully.');
+        } catch (\Exception $e) {
+            $_SESSION['form_data'] = $_POST;
+            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
+            $this->redirectTo("restaurants?details=$restaurantId", false, $e->getMessage());
         }
-
-        $fieldsToUpdate = [
-            'name' => $_POST['name'] ?? $existingRestaurant->name,
-            'restaurant_type' => $_POST['restaurant_type'] ?? $existingRestaurant->restaurant_type,
-            'rating' => isset($_POST['rating']) ? (int)$_POST['rating'] : $existingRestaurant->rating,
-            'preview_description' => $_POST['preview_description'] ?? $existingRestaurant->preview_description,
-            'main_description' => $_POST['main_description'] ?? $existingRestaurant->main_description,
-            'menu' => $_POST['menu'] ?? $existingRestaurant->menu,
-        ];
-
-        foreach ($fieldsToUpdate as $field => $value) {
-            $existingRestaurant->$field = $value;
-        }
-
-        $updatedRestaurant = $this->restaurantRepository->updateRestaurant($existingRestaurant);
-        $this->redirectToRestaurants(!empty($updatedRestaurant), $updatedRestaurant ? 'Restaurant updated successfully.' : 'No changes were made.');
     }
 
     private function createNewRestaurant(): void
