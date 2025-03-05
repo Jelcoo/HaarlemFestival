@@ -26,8 +26,11 @@ $pages = [
                     </li>
                 <?php } ?>
             </ul>
-            <a href="#" class="btn program-btn ms-3">
+            <a href="#" class="btn btn-custom-yellow ms-3">
                 <i class="fa-solid fa-calendar-days"></i> Program
+            </a>
+            <a href="/login" class="btn btn-custom-yellow ms-3">
+                <i class="fa-solid fa-user"></i> Login
             </a>
         </div>
     </div>
@@ -47,15 +50,5 @@ $pages = [
         color: #0C2D57; /* Dark blue */
         font-weight: bold;
         text-decoration: underline;
-    }
-    .program-btn {
-        background-color: #E6A545; /* Golden yellow */
-        color: black;
-        font-weight: bold;
-        border-radius: 8px;
-        padding: 6px 12px;
-    }
-    .program-btn:hover {
-        background-color: #C68642; /* Gold */
     }
 </style>

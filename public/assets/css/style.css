@@ -1,8 +1,21 @@
-html,
-body {
-    height: 100%;
-}
-
 body {
     font-family: "Arial", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.full-container {
+    display: contents;
+}
+
+.btn-custom-yellow {
+    background-color: #E6A545;
+    color: black;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+.btn-custom-yellow:hover {
+    background-color: #C68642;
 }

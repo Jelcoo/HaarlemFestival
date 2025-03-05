@@ -36,16 +36,18 @@ $loggedIn = Session::isValidSession();
 </head>
 
 <body>
-    <?php include __DIR__ . '/../components/navbar.php'; ?>
-    <div>
-        {{content}}
+    <div class="full-container">
+        <?php include __DIR__ . '/../components/navbar.php'; ?>
+        <div>
+            {{content}}
+        </div>
+        <?php include __DIR__ . '/../components/footer.php'; ?>
+        <?php
+            if (App\Config\Config::getKey('APP_ENV') === 'development') {
+                $endtime = microtime(true);
+                printf('Page loaded in %f seconds', $endtime - $GLOBALS['APP_START_TIME']);
+            } ?>
     </div>
-    <?php include __DIR__ . '/../components/footer.php'; ?>
-    <?php
-        if (App\Config\Config::getKey('APP_ENV') === 'development') {
-            $endtime = microtime(true);
-            printf('Page loaded in %f seconds', $endtime - $GLOBALS['APP_START_TIME']);
-        } ?>
 </body>
 
 </html>
