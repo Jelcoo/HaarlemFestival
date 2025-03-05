@@ -74,6 +74,195 @@ $locations = [
         'image' => '/assets/img/locations/stbavo.png'
     ],
 ];
+
+$schedules = [
+    [
+        'date' => 'Thursday July 24',
+        'location' => 'Bavo Church',
+        'seats_per_tour' => 12,
+        'prices' => [
+            'single' => 17.50,
+            'family' => 60.00
+        ],
+        'guides' => [
+            [
+                'language' => 'Dutch',
+                'names' => ['Jan-Willem']
+            ],
+            [
+                'language' => 'English',
+                'names' => ['Frederic']
+            ]
+        ],
+        'start' => [
+            [
+                'time' => '10:00',
+                'tours' => [
+                    'Dutch' => 1,
+                    'English' => 1
+                ]
+            ],
+            [
+                'time' => '13:00',
+                'tours' => [
+                    'Dutch' => 1,
+                    'English' => 1
+                ]
+            ],
+            [
+                'time' => '16:00',
+                'tours' => [
+                    'Dutch' => 1,
+                    'English' => 1
+                ]
+            ]
+        ]
+    ],
+    [
+        'date' => 'Friday July 25',
+        'location' => 'Bavo Church',
+        'seats_per_tour' => 12,
+        'prices' => [
+            'single' => 17.50,
+            'family' => 60.00
+        ],
+        'guides' => [
+            [
+                'language' => 'Dutch',
+                'names' => ['Annet']
+            ],
+            [
+                'language' => 'English',
+                'names' => ['William']
+            ],
+            [
+                'language' => 'Chinese',
+                'names' => ['Kim']
+            ]
+        ],
+        'start' => [
+            [
+                'time' => '10:00',
+                'tours' => [
+                    'Dutch' => 1,
+                    'English' => 1
+                ]
+            ],
+            [
+                'time' => '13:00',
+                'tours' => [
+                    'Dutch' => 1,
+                    'English' => 1,
+                    'Chinese' => 1
+                ]
+            ],
+            [
+                'time' => '16:00',
+                'tours' => [
+                    'Dutch' => 1,
+                    'English' => 1,
+                    'Chinese' => 1
+                ]
+            ]
+        ]
+    ],
+    [
+        'date' => 'Saturday July 26',
+        'location' => 'Bavo Church',
+        'seats_per_tour' => 12,
+        'prices' => [
+            'single' => 17.50,
+            'family' => 60.00
+        ],
+        'guides' => [
+            [
+                'language' => 'Dutch',
+                'names' => ['Annet', 'Jan-Willem']
+            ],
+            [
+                'language' => 'English',
+                'names' => ['Frederic', 'William']
+            ],
+            [
+                'language' => 'Chinese',
+                'names' => ['Kim']
+            ]
+        ],
+        'start' => [
+            [
+                'time' => '10:00',
+                'tours' => [
+                    'Dutch' => 2,
+                    'English' => 2
+                ]
+            ],
+            [
+                'time' => '13:00',
+                'tours' => [
+                    'Dutch' => 2,
+                    'English' => 2,
+                    'Chinese' => 1
+                ]
+            ],
+            [
+                'time' => '16:00',
+                'tours' => [
+                    'Dutch' => 1,
+                    'English' => 1,
+                    'Chinese' => 1
+                ]
+            ]
+        ]
+    ],
+    [
+        'date' => 'Sunday July 27',
+        'location' => 'Bavo Church',
+        'seats_per_tour' => 12,
+        'prices' => [
+            'single' => 17.50,
+            'family' => 60.00
+        ],
+        'guides' => [
+            [
+                'language' => 'Dutch',
+                'names' => ['Annet', 'Jan-Willem', 'Lisa']
+            ],
+            [
+                'language' => 'English',
+                'names' => ['Deirdre', 'Frederic', 'William']
+            ],
+            [
+                'language' => 'Chinese',
+                'names' => ['Kim', 'Susan']
+            ]
+        ],
+        'start' => [
+            [
+                'time' => '10:00',
+                'tours' => [
+                    'Dutch' => 2,
+                    'English' => 2,
+                    'Chinese' => 1
+                ]
+            ],
+            [
+                'time' => '13:00',
+                'tours' => [
+                    'Dutch' => 3,
+                    'English' => 3,
+                    'Chinese' => 2
+                ]
+            ],
+            [
+                'time' => '16:00',
+                'tours' => [
+                    'Dutch' => 1,
+                    'English' => 1
+                ]
+            ]
+        ]
+    ]
+]
 ?>
 
 <?php
@@ -108,6 +297,78 @@ include_once __DIR__.'/../components/header.php';
 <h2 class="text-center mt-5">Map</h2>
 <div class="container map-container">
     <div id="map" class="h-100"></div>
+</div>
+
+<h2 class="text-center mt-5">Schedule</h2>
+<div class="container p-0">
+    <?php $scheduleCount = 0; ?>
+    <?php foreach ($schedules as $schedule) { ?>
+        <?php if ($scheduleCount % 4 == 0) { ?>
+            <div class="row g-0 gap-2">
+        <?php } ?>
+
+        <div class="tour-ticket-card card shadow-sm">
+            <div class="card-header text-center">
+                <h5 class="card-title mb-0"><?php echo $schedule['date']; ?></h5>
+            </div>
+            <div class="card-body">
+                <div class="tour-detail">
+                <div class="row mb-2">
+                    <div class="col-5 text-muted">Start Location</div>
+                    <div class="col-7 text-end"><?php echo $schedule['location']; ?></div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5 text-muted">Seats per Tour</div>
+                    <div class="col-7 text-end"><?php echo $schedule['seats_per_tour']; ?></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-5 text-muted">Prices</div>
+                    <div class="col-7 text-end">
+                        <div>Single: €<?php echo $schedule['prices']['single']; ?></div>
+                        <div>Family: €<?php echo $schedule['prices']['family']; ?> *</div>
+                    </div>
+                </div>
+
+                <div class="guides-section mb-3">
+                    <h6 class="text-center mb-2">Guides</h6>
+                    <?php foreach ($schedule['guides'] as $guide) { ?>
+                        <div class="row mb-1">
+                            <div class="col-5 text-muted"><?php echo $guide['language']; ?></div>
+                            <div class="col-7 text-end"><?php echo implode(', ', $guide['names']); ?></div>
+                        </div>
+                    <?php } ?>
+                </div>
+
+                <div class="starting-times">
+                    <h6 class="text-center mb-2">Starting Time</h6>
+                    <div class="time-slots">
+                        <?php foreach ($schedule['start'] as $start) { ?>
+                            <div class="row mb-1">
+                                <div class="col-6"><?php echo $start['time']; ?></div>
+                                <div class="col-6 text-end">
+                                    <?php
+                                        $tours = array_map(function ($lang, $count) {
+                                            return "{$count}x $lang";
+                                        }, array_keys($start['tours']), array_values($start['tours']));
+                                        echo implode('<br>', $tours);
+                                    ?>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-custom-yellow w-100"><i class="fa-solid fa-ticket"></i> Buy Ticket</button>
+            </div>
+        </div>
+
+        <?php $scheduleCount++; ?>
+        <?php if ($scheduleCount % 4 == 0 || $scheduleCount == count($locations)) { ?>
+            </div>
+        <?php } ?>
+    <?php } ?>
 </div>
 
 <script>
@@ -174,5 +435,27 @@ include_once __DIR__.'/../components/header.php';
     padding: 20px;
     border-radius: 10px;
     max-width: 80%;
+}
+
+.tour-ticket-card {
+    max-width: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tour-ticket-card .card-header {
+    background-color: #f8f9fa;
+    padding: 10px;
+}
+
+.tour-ticket-card .card-body {
+    padding: 15px;
+}
+
+.tour-ticket-card .guides-section,
+.tour-ticket-card .starting-times {
+    border-top: 1px solid #e9ecef;
+    padding-top: 10px;
+    margin-top: 10px;
 }
 </style>
