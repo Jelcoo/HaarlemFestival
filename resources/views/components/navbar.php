@@ -29,7 +29,7 @@ $pages = [
             <a href="#" class="btn btn-custom-yellow ms-3">
                 <i class="fa-solid fa-calendar-days"></i> Program
             </a>
-            <?php if (\App\Application\Session::isValidSession()) { ?>
+            <?php if (App\Application\Session::isValidSession()) { ?>
                 <a href="/account/manage" class="btn btn-custom-yellow ms-3">
                     <i class="fa-solid fa-user"></i> Account
                 </a>

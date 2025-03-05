@@ -7,7 +7,7 @@ $locations = [
         'lat' => 0,
         'description' => '',
         'address' => '',
-        'image' => '/assets/img/locations/grotemarkt.png'
+        'image' => '/assets/img/locations/grotemarkt.png',
     ],
     [
         'name' => 'De Hallen',
@@ -15,7 +15,7 @@ $locations = [
         'lat' => 0,
         'description' => '',
         'address' => '',
-        'image' => '/assets/img/locations/dehallen.png'
+        'image' => '/assets/img/locations/dehallen.png',
     ],
     [
         'name' => 'Proveniershof',
@@ -23,7 +23,7 @@ $locations = [
         'lat' => 0,
         'description' => '',
         'address' => '',
-        'image' => '/assets/img/locations/proveniershof.png'
+        'image' => '/assets/img/locations/proveniershof.png',
     ],
     [
         'name' => 'Jopenkerk',
@@ -31,7 +31,7 @@ $locations = [
         'lat' => 0,
         'description' => '',
         'address' => '',
-        'image' => '/assets/img/locations/jopenkerk-2.png'
+        'image' => '/assets/img/locations/jopenkerk-2.png',
     ],
     [
         'name' => 'Waalse Kerk Haarlem',
@@ -39,7 +39,7 @@ $locations = [
         'lat' => 0,
         'description' => '',
         'address' => '',
-        'image' => '/assets/img/locations/waalsekerk.png'
+        'image' => '/assets/img/locations/waalsekerk.png',
     ],
     [
         'name' => 'Molen de Adriaan',
@@ -47,7 +47,7 @@ $locations = [
         'lat' => 0,
         'description' => '',
         'address' => '',
-        'image' => '/assets/img/locations/molendeadriaan.png'
+        'image' => '/assets/img/locations/molendeadriaan.png',
     ],
     [
         'name' => 'Amsterdamse Poort',
@@ -55,7 +55,7 @@ $locations = [
         'lat' => 0,
         'description' => '',
         'address' => '',
-        'image' => '/assets/img/locations/amsterdamsepoort.png'
+        'image' => '/assets/img/locations/amsterdamsepoort.png',
     ],
     [
         'name' => 'Hof van Bakenes',
@@ -63,7 +63,7 @@ $locations = [
         'lat' => 0,
         'description' => '',
         'address' => '',
-        'image' => '/assets/img/locations/hofvanbakenes.png'
+        'image' => '/assets/img/locations/hofvanbakenes.png',
     ],
     [
         'name' => 'Church of St. Bavo',
@@ -71,7 +71,7 @@ $locations = [
         'lat' => 0,
         'description' => '',
         'address' => '',
-        'image' => '/assets/img/locations/stbavo.png'
+        'image' => '/assets/img/locations/stbavo.png',
     ],
 ];
 
@@ -82,41 +82,41 @@ $schedules = [
         'seats_per_tour' => 12,
         'prices' => [
             'single' => 17.50,
-            'family' => 60.00
+            'family' => 60.00,
         ],
         'guides' => [
             [
                 'language' => 'Dutch',
-                'names' => ['Jan-Willem']
+                'names' => ['Jan-Willem'],
             ],
             [
                 'language' => 'English',
-                'names' => ['Frederic']
-            ]
+                'names' => ['Frederic'],
+            ],
         ],
         'start' => [
             [
                 'time' => '10:00',
                 'tours' => [
                     'Dutch' => 1,
-                    'English' => 1
-                ]
+                    'English' => 1,
+                ],
             ],
             [
                 'time' => '13:00',
                 'tours' => [
                     'Dutch' => 1,
-                    'English' => 1
-                ]
+                    'English' => 1,
+                ],
             ],
             [
                 'time' => '16:00',
                 'tours' => [
                     'Dutch' => 1,
-                    'English' => 1
-                ]
-            ]
-        ]
+                    'English' => 1,
+                ],
+            ],
+        ],
     ],
     [
         'date' => 'Friday July 25',
@@ -124,47 +124,47 @@ $schedules = [
         'seats_per_tour' => 12,
         'prices' => [
             'single' => 17.50,
-            'family' => 60.00
+            'family' => 60.00,
         ],
         'guides' => [
             [
                 'language' => 'Dutch',
-                'names' => ['Annet']
+                'names' => ['Annet'],
             ],
             [
                 'language' => 'English',
-                'names' => ['William']
+                'names' => ['William'],
             ],
             [
                 'language' => 'Chinese',
-                'names' => ['Kim']
-            ]
+                'names' => ['Kim'],
+            ],
         ],
         'start' => [
             [
                 'time' => '10:00',
                 'tours' => [
                     'Dutch' => 1,
-                    'English' => 1
-                ]
+                    'English' => 1,
+                ],
             ],
             [
                 'time' => '13:00',
                 'tours' => [
                     'Dutch' => 1,
                     'English' => 1,
-                    'Chinese' => 1
-                ]
+                    'Chinese' => 1,
+                ],
             ],
             [
                 'time' => '16:00',
                 'tours' => [
                     'Dutch' => 1,
                     'English' => 1,
-                    'Chinese' => 1
-                ]
-            ]
-        ]
+                    'Chinese' => 1,
+                ],
+            ],
+        ],
     ],
     [
         'date' => 'Saturday July 26',
@@ -172,47 +172,47 @@ $schedules = [
         'seats_per_tour' => 12,
         'prices' => [
             'single' => 17.50,
-            'family' => 60.00
+            'family' => 60.00,
         ],
         'guides' => [
             [
                 'language' => 'Dutch',
-                'names' => ['Annet', 'Jan-Willem']
+                'names' => ['Annet', 'Jan-Willem'],
             ],
             [
                 'language' => 'English',
-                'names' => ['Frederic', 'William']
+                'names' => ['Frederic', 'William'],
             ],
             [
                 'language' => 'Chinese',
-                'names' => ['Kim']
-            ]
+                'names' => ['Kim'],
+            ],
         ],
         'start' => [
             [
                 'time' => '10:00',
                 'tours' => [
                     'Dutch' => 2,
-                    'English' => 2
-                ]
+                    'English' => 2,
+                ],
             ],
             [
                 'time' => '13:00',
                 'tours' => [
                     'Dutch' => 2,
                     'English' => 2,
-                    'Chinese' => 1
-                ]
+                    'Chinese' => 1,
+                ],
             ],
             [
                 'time' => '16:00',
                 'tours' => [
                     'Dutch' => 1,
                     'English' => 1,
-                    'Chinese' => 1
-                ]
-            ]
-        ]
+                    'Chinese' => 1,
+                ],
+            ],
+        ],
     ],
     [
         'date' => 'Sunday July 27',
@@ -220,21 +220,21 @@ $schedules = [
         'seats_per_tour' => 12,
         'prices' => [
             'single' => 17.50,
-            'family' => 60.00
+            'family' => 60.00,
         ],
         'guides' => [
             [
                 'language' => 'Dutch',
-                'names' => ['Annet', 'Jan-Willem', 'Lisa']
+                'names' => ['Annet', 'Jan-Willem', 'Lisa'],
             ],
             [
                 'language' => 'English',
-                'names' => ['Deirdre', 'Frederic', 'William']
+                'names' => ['Deirdre', 'Frederic', 'William'],
             ],
             [
                 'language' => 'Chinese',
-                'names' => ['Kim', 'Susan']
-            ]
+                'names' => ['Kim', 'Susan'],
+            ],
         ],
         'start' => [
             [
@@ -242,27 +242,27 @@ $schedules = [
                 'tours' => [
                     'Dutch' => 2,
                     'English' => 2,
-                    'Chinese' => 1
-                ]
+                    'Chinese' => 1,
+                ],
             ],
             [
                 'time' => '13:00',
                 'tours' => [
                     'Dutch' => 3,
                     'English' => 3,
-                    'Chinese' => 2
-                ]
+                    'Chinese' => 2,
+                ],
             ],
             [
                 'time' => '16:00',
                 'tours' => [
                     'Dutch' => 1,
-                    'English' => 1
-                ]
-            ]
-        ]
-    ]
-]
+                    'English' => 1,
+                ],
+            ],
+        ],
+    ],
+];
 ?>
 
 <?php
@@ -271,7 +271,7 @@ $header_description = 'Discover the rich history of Haarlem on a captivating gui
 $header_dates = 'July 24 - 27, 2025';
 $header_image = '/assets/img/events/slider/history.png';
 
-include_once __DIR__.'/../components/header.php';
+include_once __DIR__ . '/../components/header.php';
 ?>
 
 <h2 class="text-center mt-5">Locations</h2>
@@ -350,8 +350,8 @@ include_once __DIR__.'/../components/header.php';
                                         $tours = array_map(function ($lang, $count) {
                                             return "{$count}x $lang";
                                         }, array_keys($start['tours']), array_values($start['tours']));
-                                        echo implode('<br>', $tours);
-                                    ?>
+                            echo implode('<br>', $tours);
+                            ?>
                                 </div>
                             </div>
                         <?php } ?>
@@ -364,7 +364,7 @@ include_once __DIR__.'/../components/header.php';
             </div>
         </div>
 
-        <?php $scheduleCount++; ?>
+        <?php ++$scheduleCount; ?>
         <?php if ($scheduleCount % 4 == 0 || $scheduleCount == count($locations)) { ?>
             </div>
         <?php } ?>

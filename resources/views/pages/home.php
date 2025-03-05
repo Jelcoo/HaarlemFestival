@@ -8,7 +8,7 @@ $events = [
         'slider_image' => '/assets/img/events/slider/dance.png',
         'image' => '/assets/img/events/dance.png',
         'button_text' => 'Visit',
-        'button_link' => '/dance'
+        'button_link' => '/dance',
     ],
     [
         'name' => 'Yummy!',
@@ -17,7 +17,7 @@ $events = [
         'slider_image' => '/assets/img/events/slider/yummy.png',
         'image' => '/assets/img/events/yummy.png',
         'button_text' => 'Visit',
-        'button_link' => '/yummy'
+        'button_link' => '/yummy',
     ],
     [
         'name' => 'A stroll through history',
@@ -26,7 +26,7 @@ $events = [
         'slider_image' => '/assets/img/events/slider/history.png',
         'image' => '/assets/img/events/history.png',
         'button_text' => 'Visit',
-        'button_link' => '/history'
+        'button_link' => '/history',
     ],
     [
         'name' => 'Magic@Tylers',
@@ -35,8 +35,8 @@ $events = [
         'slider_image' => '/assets/img/events/slider/teylers.png',
         'image' => '/assets/img/events/teylers.png',
         'button_text' => 'Visit',
-        'button_link' => '/magic'
-    ]
+        'button_link' => '/magic',
+    ],
 ];
 
 $locations = [
@@ -45,106 +45,106 @@ $locations = [
         'lng' => 4.652396828291449,
         'lat' => 52.38645594265725,
         'description' => 'Located in a historic power station, Lichtfabriek exudes industrial charm and creative energy. Its spacious interiors and captivating ambiance make it an ideal venue for large-scale performances and immersive musical experiences.',
-        'address' => 'Minckelersweg 2, 2031 EM Haarlem'
+        'address' => 'Minckelersweg 2, 2031 EM Haarlem',
     ],
     [
         'name' => 'Teylers Museum',
         'lng' => 4.640666663222274,
         'lat' => 52.38046240594111,
         'description' => 'Discover the Magic@Teylers! Dive into an interactive adventure at Teylers Museum, where kids solve science puzzles and riddles to uncover The Secret of Professor Teyler. From cracking \"The Egg Problem\" to fixing circuits, this hands-on experience combines fun with learning, making science magical for the whole family!',
-        'address' => 'Spaarne 16, 2011 CH Haarlem'
+        'address' => 'Spaarne 16, 2011 CH Haarlem',
     ],
     [
         'name' => 'Ratatouille',
         'lng' => 4.638285403154393,
         'lat' => 52.378793560839426,
         'description' => 'Ratatouille Food and Wine in Haarlem, led by chef Jozua Jaring, offers a refined dining experience with dishes like Holstein tartar and Langoustine, paired with exclusive wines Perfect for any occasion, the restaurant combines innovative flavors and exceptional hospitality for a memorable culinary journey.',
-        'address' => 'Spaarne 96, 2011 CL Haarlem'
+        'address' => 'Spaarne 96, 2011 CL Haarlem',
     ],
     [
         'name' => 'Restaurant ML',
         'lng' => 4.638821749729203,
         'lat' => 52.381106249162436,
         'description' => 'Restaurant ML in Haarlem, awarded a Michelin star, offers bold dishes by chef Mark Gratama in a modern setting with an open kitchen The menu blends French and international flavors, complemented by a curated wine list from sommelier Tim Jesse.',
-        'address' => 'Kleine Houtstraat 70, 2011 DR Haarlem'
+        'address' => 'Kleine Houtstraat 70, 2011 DR Haarlem',
     ],
     [
         'name' => 'Jopenkerk',
         'lng' => 4.630664906853303,
         'lat' => 52.38129960808681,
         'description' => 'A stunning fusion of history and modernity, Jopenkerk is a former church turned brewery and event space With its vibrant atmosphere and excellent acoustics, this venue offers a unique blend of sacred architecture and pulsating beats.',
-        'address' => 'Gedempte Voldersgracht 2, 2011 WD Haarlem'
+        'address' => 'Gedempte Voldersgracht 2, 2011 WD Haarlem',
     ],
     [
         'name' => 'Café de Roemer',
         'lng' => 4.632473312948718,
         'lat' => 52.37999475625204,
         'description' => 'A Haarlem favorite for over 30 years, Café de Roemer offers a menu with both classic and innovative dishes Relax on the sunny terrace or in the cozy glass conservatory, perfect for any weather Whether for lunch, dinner, or drinks, enjoy great food and warm hospitality!',
-        'address' => 'Botermarkt 17, 2011 XL Haarlem'
+        'address' => 'Botermarkt 17, 2011 XL Haarlem',
     ],
     [
         'name' => 'Kerk van St Bavo',
         'lng' => 4.637140628644744,
         'lat' => 52.38109342362912,
         'description' => 'A true icon of Haarlem, the Church of St. Bavo is a masterpiece of Gothic architecture and a treasure trove of history. Its towering spire dominates the skyline, while the interior houses the world-famous Müller organ, once played by Mozart. Step inside to admire stunning stained glass, intricate woodwork, and centuries-old gravestones. A must-visit for history buffs and architecture lovers alike!',
-        'address' => 'Grote Markt 22, 2011 RD Haarlem'
+        'address' => 'Grote Markt 22, 2011 RD Haarlem',
     ],
     [
         'name' => 'Toujours',
         'lng' => 4.637127512245723,
         'lat' => 52.38069416997164,
         'description' => 'Toujours in Haarlem offers a luxurious private dining experience with a menu featuring truffle, Wagyu, caviar, and sushi. Enjoy cocktails, wine, and beer on the cozy terrace, perfect for an unforgettable meal. Open daily, Toujours is the ideal spot for refined dining with family or friends.',
-        'address' => 'Oude Groenmarkt 10-12, 2011 HL Haarlem'
+        'address' => 'Oude Groenmarkt 10-12, 2011 HL Haarlem',
     ],
     [
         'name' => 'Brinkmann',
         'lng' => 4.636664682263708,
         'lat' => 52.38175525381166,
         'description' => 'Grand Café Brinkmann offers a cozy and welcoming atmosphere in Haarlem, where guests can enjoy delicious dishes and a relaxed ambiance With a varied menu and the option to rent rooms for special events, it is the perfect place for both a casual meal and a special occasion.',
-        'address' => 'Grote Markt 13, 2011 RC Haarlem'
+        'address' => 'Grote Markt 13, 2011 RC Haarlem',
     ],
     [
         'name' => 'Puncher Comedy Club',
         'lng' => 4.636189360825715,
         'lat' => 52.38161714749561,
         'description' => 'Situated in the heart of Haarlem, Puncher Comedy Club combines a cozy setting with electric energy While known for its comedy, it transforms into an intimate and vibrant space for special performances during the festival.',
-        'address' => 'Grote Markt 10, 2011 RD Haarlem'
+        'address' => 'Grote Markt 10, 2011 RD Haarlem',
     ],
     [
         'name' => 'XO the Club',
         'lng' => 4.635662793907391,
         'lat' => 52.38133860159797,
         'description' => 'XO the Club is a chic and modern nightlife destination where style meets sound Its sleek interiors and state-of-the-art lighting set the stage for a night of high-energy dance and unforgettable moments.',
-        'address' => 'Grote Markt 8, 2011 RD Haarlem'
+        'address' => 'Grote Markt 8, 2011 RD Haarlem',
     ],
     [
         'name' => 'New Vegas',
         'lng' => 4.635499955277471,
         'lat' => 52.38124729975244,
         'description' => 'New Vegas, Haarlem\'s first vegan restaurant, offers creative twists on familiar dishes using seasonal, plant-based ingredients. Known for its 3D-printed steak and innovative menu, it provides a unique dining experience with vegan sides and bites in a welcoming atmosphere for all to enjoy sustainable, delicious food.',
-        'address' => 'Koningstraat 5, 2011 TB Haarlem'
+        'address' => 'Koningstraat 5, 2011 TB Haarlem',
     ],
     [
         'name' => 'Restaurant Fris',
         'lng' => 4.636171303909209,
         'lat' => 52.37250830667803,
         'description' => 'Restaurant Fris in Haarlem offers a relaxed fine-dining experience, blending French and Asian cuisines The menu is a playful exploration of bold flavors, with a team dedicated to surprising guests with fresh, innovative dishes Enjoy a high-quality dining experience in a welcoming atmosphere.',
-        'address' => 'Twijnderslaan 7, 2012 BG Haarlem'
+        'address' => 'Twijnderslaan 7, 2012 BG Haarlem',
     ],
     [
         'name' => 'Slachthuisterrein Haarlem',
         'lng' => 4.652610803909189,
         'lat' => 52.373695600646585,
         'description' => 'Once an industrial slaughterhouse, Slachthuis has been transformed into a dynamic cultural hotspot Known for its edgy and raw atmosphere, this venue is a favorite for high-energy performances and underground vibes Its unique architecture creates an unforgettable experience for music lovers.',
-        'address' => 'Rockplein 6, 2033 KK Haarlem'
+        'address' => 'Rockplein 6, 2033 KK Haarlem',
     ],
     [
         'name' => 'Caprera Openluchttheater',
         'lng' => 4.610049563362403,
         'lat' => 52.41182985649083,
         'description' => 'Nestled amidst lush greenery, Caprera Openluchttheater is an enchanting open-air venue perfect for unforgettable performances under the stars Its natural acoustics and scenic beauty make it an iconic spot for electronic music and cultural events alike.',
-        'address' => 'Hoge Duin en Daalseweg 2, 2061 AG Bloemendaal'
-    ]
+        'address' => 'Hoge Duin en Daalseweg 2, 2061 AG Bloemendaal',
+    ],
 ];
 ?>
 
@@ -208,7 +208,7 @@ $locations = [
             </div>
         </div>
 
-        <?php $count++; ?>
+        <?php ++$count; ?>
         <?php if ($count % 2 == 0 || $count == count($events)) { ?>
             </div>
         <?php } ?>
