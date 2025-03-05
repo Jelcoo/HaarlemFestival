@@ -9,6 +9,10 @@ body {
     display: contents;
 }
 
+.btn {
+    width: fit-content;
+}
+
 .btn-custom-yellow {
     background-color: #E6A545;
     color: black;
