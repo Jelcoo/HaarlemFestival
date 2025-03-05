@@ -193,7 +193,7 @@ $locations = [
         <?php if ($count % 2 == 0) { ?>
             <div class="row g-0">
         <?php } ?>
-        
+
         <div class="col-md-6 col-lg-6 event-card" style="background-image: url('<?php echo $event['image']; ?>');">
             <div class="overlay">
                 <div>
@@ -207,9 +207,8 @@ $locations = [
                 </div>
             </div>
         </div>
-        
+
         <?php $count++; ?>
-        
         <?php if ($count % 2 == 0 || $count == count($events)) { ?>
             </div>
         <?php } ?>
