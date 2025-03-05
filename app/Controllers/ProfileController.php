@@ -18,7 +18,7 @@ class ProfileController extends Controller
 
     public function index(array $parameters = []): string
     {
-        $user = $this->userRepository->getUserById($_SESSION['user_id']);
+        $user = $this->getAuthUser();
 
         return $this->pageLoader->setPage('account/manage')->render(array_merge($parameters, ['user' => $user]));
     }
@@ -26,7 +26,7 @@ class ProfileController extends Controller
     public function update(): string
     {
         try {
-            $user = $this->userRepository->getUserById($_SESSION['user_id']);
+            $user = $this->getAuthUser();
         } catch (\Exception $e) {
             return $this->index([
                 'error' => $e->getMessage(),
@@ -74,5 +74,51 @@ class ProfileController extends Controller
         }
 
         return $this->pageLoader->setPage('account/manage')->render(['user' => $user]);
+    }
+
+    public function updatePassword(): string
+    {
+        try {
+            $user = $this->getAuthUser();
+        } catch (\Exception $e) {
+            return $this->index([
+                'error' => $e->getMessage(),
+                'fields' => $_POST,
+            ]);
+        }
+
+        $validator = new Validator();
+        $validation = $validator->validate($_POST, [
+            'currentPassword' => 'required',
+            'newPassword' => 'required|min:8',
+            'confirmNewPassword' => 'required|same:newPassword',
+        ]);
+
+        if ($validation->fails()) {
+            return $this->index([
+                'error' => $validation->errors()->toArray(),
+                'fields' => $_POST,
+            ]);
+        }
+
+        if (!password_verify($_POST['currentPassword'], $user->password)) {
+            return $this->index([
+                'error' => 'Incorrect password',
+                'fields' => $_POST,
+            ]);
+        }
+
+        try {
+            $encryptedPassword = password_hash($_POST['newPassword'], PASSWORD_DEFAULT);
+            $user->password = $encryptedPassword;
+            $this->userRepository->updatePassword($user->id, $encryptedPassword);
+        } catch (\Exception $e) {
+            return $this->index([
+                'error' => $e->getMessage(),
+                'fields' => $_POST,
+            ]);
+        }
+
+        return $this->index();
     }
 }
