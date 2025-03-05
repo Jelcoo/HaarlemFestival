@@ -15,4 +15,10 @@
         </div>
         <button type="submit" class="btn btn-custom-yellow">Login</button>
     </form>
+
+    <div class="text-center mt-3">
+        <p>
+            Don't have an account? <a href="/register">Register</a>
+        </p>
+    </div>
 </div>
