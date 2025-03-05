@@ -105,6 +105,11 @@ include_once __DIR__.'/../components/header.php';
     </div>
 </div>
 
+<h2 class="text-center mt-5">Map</h2>
+<div class="container map-container">
+    <div id="map" class="h-100"></div>
+</div>
+
 <script>
     const swiper = new Swiper('.swiper', {
         direction: 'horizontal',
@@ -126,6 +131,27 @@ include_once __DIR__.'/../components/header.php';
             disableOnInteraction: false,
         }
     });
+
+    const map = L.map('map').setView([52.39330619537042, 4.635887145996095], 14);
+
+    L.tileLayer(`https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png`, {
+        minZoom: 12,
+        maxZoom: 18,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    const locations = <?php echo json_encode($locations); ?>;
+
+    locations.forEach(location => {
+        L.marker([location.lat, location.lng]).addTo(map)
+            .bindPopup(`
+                <h4>${location.name}</h4>
+                <p>${location.description}</p>
+                <p><em>Address: ${location.address}</em></p>
+            `);
+    });
+
+    setTimeout(() => map.invalidateSize(), 100);
 </script>
 
 <style>

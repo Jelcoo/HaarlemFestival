@@ -33,3 +33,7 @@ body {
 .btn-custom-green:hover {
     background-color: #599563;
 }
+
+.map-container {
+    height: 800px;
+}

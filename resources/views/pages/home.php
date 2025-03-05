@@ -247,9 +247,6 @@ $locations = [
     <div id="map" class="h-100"></div>
 </div>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
 <script>
 const swiper = new Swiper('.swiper', {
     direction: 'horizontal',
@@ -365,9 +362,5 @@ setTimeout(() => map.invalidateSize(), 100);
     border-radius: 5px;
     margin-bottom: 10px;
     text-align: center;
-}
-
-.map-container {
-    height: 800px;
 }
 </style>
