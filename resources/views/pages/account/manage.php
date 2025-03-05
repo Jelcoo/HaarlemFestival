@@ -2,7 +2,7 @@
 /** @var App\Models\User $user */
 ?>
 
-<div class="container col-md-4 mt-auto mx-auto">
+<div class="container col-md-8 mt-auto mx-auto">
     <h1>Manage account</h1>
     <?php include __DIR__ . '/../../components/errordisplay.php'; ?>
     <div class="row">
@@ -37,7 +37,7 @@
                         placeholder="Enter postal code example: 1111AA" <?php echo isset($fields['postal_code']) ? 'value="' . $fields['postal_code'] . '"' : 'value="' . $user->postal_code . '"'; ?>>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-50 align-self-center">Update account</button>
+                <button type="submit" class="btn btn-custom-yellow">Update account</button>
             </form>
         </div>
         <div class="col-sm-12 col-md-6">
@@ -58,7 +58,7 @@
                         <?php echo isset($fields['confirmNewPassword']) ? 'value="' . $fields['confirmNewPassword'] . '"' : 'value=""'; ?>>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-50 align-self-center">Update password</button>
+                <button type="submit" class="btn btn-custom-yellow">Update password</button>
             </form>
         </div>
     </div>
