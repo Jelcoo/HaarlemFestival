@@ -1,10 +1,20 @@
 <?php
 /** @var App\Models\User $user */
+
+use App\Enum\UserRoleEnum;
+
 ?>
 
 <div class="container col-md-8 mt-auto mx-auto">
     <h1>Manage account</h1>
     <?php include __DIR__ . '/../../components/errordisplay.php'; ?>
+    <a href="/logout" class="btn btn-custom-yellow"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    <?php if ($user->role == UserRoleEnum::EMPLOYEE|| $user->role == UserRoleEnum::ADMIN) { ?>
+        <a href="/qrcode" class="btn btn-custom-yellow"><i class="fa-solid fa-qrcode"></i> QR Scanner</a>
+    <?php } ?>
+    <?php if ($user->role == UserRoleEnum::ADMIN) { ?>
+        <a href="/admin/dashboard" class="btn btn-custom-yellow"><i class="fa-solid fa-gear"></i> Admin dashboard</a>
+    <?php } ?>
     <div class="row">
         <div class="col-sm-12 col-md-6">
             <h3>Account details</h3>
