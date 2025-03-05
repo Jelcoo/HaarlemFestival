@@ -132,4 +132,12 @@ class UserRepository extends Repository
             'postal_code' => $user->postal_code,
         ]);
     }
+
+    public function updatePassword(int $userId, string $newPassword): void
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+        $queryBuilder->table('users')->where('id', '=', $userId)->update([
+            'password' => $newPassword,
+        ]);
+    }
 }
