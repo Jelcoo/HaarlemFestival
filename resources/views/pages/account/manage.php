@@ -13,7 +13,7 @@ use App\Enum\UserRoleEnum;
         <a href="/qrcode" class="btn btn-custom-yellow"><i class="fa-solid fa-qrcode"></i> QR Scanner</a>
     <?php } ?>
     <?php if ($user->role == UserRoleEnum::ADMIN) { ?>
-        <a href="/admin/dashboard" class="btn btn-custom-yellow"><i class="fa-solid fa-gear"></i> Admin dashboard</a>
+        <a href="/dashboard" class="btn btn-custom-yellow"><i class="fa-solid fa-gear"></i> Admin dashboard</a>
     <?php } ?>
     <div class="row">
         <div class="col-sm-12 col-md-6">
