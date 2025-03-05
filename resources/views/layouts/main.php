@@ -38,9 +38,7 @@ $loggedIn = Session::isValidSession();
 <body>
     <div class="full-container">
         <?php include __DIR__ . '/../components/navbar.php'; ?>
-        <div>
-            {{content}}
-        </div>
+        {{content}}
         <?php include __DIR__ . '/../components/footer.php'; ?>
         <?php
             if (App\Config\Config::getKey('APP_ENV') === 'development') {
