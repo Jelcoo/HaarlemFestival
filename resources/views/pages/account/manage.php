@@ -2,10 +2,10 @@
 /** @var App\Models\User $user */
 ?>
 
-<div class="container">
+<div class="container col-md-4 mt-auto mx-auto">
     <h1>Manage account</h1>
     <?php include __DIR__ . '/../../components/errordisplay.php'; ?>
-    <form action="/account/manage" method="POST">
+    <form action="/account/manage" method="POST" class="d-flex flex-column gap-2">
         <div class="form-group">
             <label for="firstname">First name</label>
             <input type="text" class="form-control" name="firstname" placeholder="Enter first name" <?php echo isset($fields['firstname']) ? 'value="' . $fields['firstname'] . '"' : 'value="' . $user->firstname . '"'; ?>>
