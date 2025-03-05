@@ -1,3 +1,7 @@
+<?php
+/** @var App\Models\User $user */
+?>
+
 <div class="container">
     <h1>Manage account</h1>
     <?php include __DIR__ . '/../../components/errordisplay.php'; ?>

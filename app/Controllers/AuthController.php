@@ -44,6 +44,7 @@ class AuthController extends Controller
             'lastname' => 'required|max:255',
             'email' => 'required|email|unique:users,email|max:255',
             'password' => 'required|min:6',
+            'password_verify' => 'required|same:password',
         ]);
 
         if ($validation->fails()) {
