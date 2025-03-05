@@ -2,7 +2,7 @@
 
 $pages = [
     '/' => 'Home',
-    '/dance' => 'Dance!',
+    '/dance' => 'DANCE!',
     '/yummy' => 'Yummy!',
     '/history' => 'A stroll through history',
     '/magic' => 'Magic@Tylers',

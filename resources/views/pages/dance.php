@@ -256,7 +256,7 @@ $schedules = [
 ?>
 
 <?php
-$header_name = 'DANCE! - OVERVIEW';
+$header_name = 'DANCE!';
 $header_description = 'Get ready to experience the electrifying pulse of Haarlem\'s dance scene! From world-renowned DJs in spectacular Back2Back sets to intimate experimental sessions in iconic venues, <strong>DANCE!</strong> is your ultimate destination for house, techno, and trance. This is more than music – it’s a celebration of rhythm, energy, and connection.';
 $header_dates = 'July 25 - 27, 2025';
 $header_image = '/assets/img/events/slider/dance.png';
@@ -275,7 +275,7 @@ include_once __DIR__ . '/../components/header.php';
             <img src="<?php echo $artist['image']; ?>" alt="<?php echo $artist['name']; ?>">
             <h3><?php echo $artist['name']; ?></h3>
             <p><?php echo $artist['description']; ?></p>
-            <a href="<?php echo $artist['link']; ?>" class="btn btn-custom-yellow">Visit website</a>
+            <a href="<?php echo $artist['link']; ?>" class="btn btn-custom-yellow"><i class="fa-solid fa-ticket"></i> Tickets</a>
         </div>
 
         <?php ++$artistCount; ?>
