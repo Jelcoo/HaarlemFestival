@@ -255,16 +255,14 @@ $schedules = [
 ];
 ?>
 
-<div class="container-fluid">
-    <div class="row header-section">
-        <div class="col-md-6 header-content">
-            <h1>DANCE! - OVERVIEW</h1>
-            <p>Get ready to experience the electrifying pulse of Haarlem's dance scene! From world-renowned DJs in spectacular Back2Back sets to intimate experimental sessions in iconic venues, <strong>DANCE!</strong> is your ultimate destination for house, techno, and trance. This is more than music – it’s a celebration of rhythm, energy, and connection.</p>
-            <p><strong>Dates:</strong> July 25 - 27, 2025</p>
-        </div>
-        <div class="col-md-6 header-image"></div>
-    </div>
-</div>
+<?php
+$header_name = 'DANCE! - OVERVIEW';
+$header_description = 'Get ready to experience the electrifying pulse of Haarlem\'s dance scene! From world-renowned DJs in spectacular Back2Back sets to intimate experimental sessions in iconic venues, <strong>DANCE!</strong> is your ultimate destination for house, techno, and trance. This is more than music – it’s a celebration of rhythm, energy, and connection.';
+$header_dates = 'July 25 - 27, 2025';
+$header_image = '/assets/img/events/slider/dance.png';
+
+include_once __DIR__.'/../components/header.php';
+?>
 
 <div class="container artist-grid">
     <?php $artistCount = 0; ?>
