@@ -38,6 +38,221 @@ $artists = [
         'link' => '/dance/afrojack'
     ]
 ];
+
+$locations = [
+    [
+        'name' => 'Slachthuis',
+        'image' => '/assets/img/locations/slachthuis.png',
+        'description' => 'Once an industrial slaughterhouse, Slachthuis has been transformed into a dynamic cultural hotspot. Known for its edgy and raw atmosphere, this venue is a favorite for high-energy performances and underground vibes. Its unique architecture creates an unforgettable experience for music lovers.',
+        'address' => 'Rockplein 6, 2033 KK Haarlem'
+    ],
+    [
+        'name' => 'Caprera Openluchttheater',
+        'image' => '/assets/img/locations/caprera.png',
+        'description' => 'Nestled amidst lush greenery, Caprera Openluchttheater is an enchanting open-air venue perfect for unforgettable performances under the stars. Its natural acoustics and scenic beauty make it an iconic spot for electronic music and cultural events alike.',
+        'address' => 'Hoge Duin en Daalseweg 2, 2061 AG Bloemendaal'
+    ],
+    [
+        'name' => 'Jopenkerk',
+        'image' => '/assets/img/locations/jopenkerk.png',
+        'description' => 'A stunning fusion of history and modernity, Jopenkerk is a former church turned brewery and event space. With its vibrant atmosphere and excellent acoustics, this venue offers a unique blend of sacred architecture and pulsating beats.',
+        'address' => 'Gedempte Voldersgracht 2, 2011 WD Haarlem'
+    ],
+    [
+        'name' => 'Lichtfabriek',
+        'image' => '/assets/img/locations/lichtfabriek.png',
+        'description' => 'Located in a historic power station, Lichtfabriek exudes industrial charm and creative energy. Its spacious interiors and captivating ambiance make it an ideal venue for large-scale performances and immersive musical experiences.',
+        'address' => 'Minckelersweg 2, 2031 EM Haarlem'
+    ],
+    [
+        'name' => 'Puncher Comedy Club',
+        'image' => '/assets/img/locations/puncher.png',
+        'description' => 'Situated in the heart of Haarlem, Puncher Comedy Club combines a cozy setting with electric energy. While known for its comedy, it transforms into an intimate and vibrant space for special performances during the festival.',
+        'address' => 'Grote Markt 10, 2011 RD Haarlem'
+    ],
+    [
+        'name' => 'XO the club',
+        'image' => '/assets/img/locations/xo.png',
+        'description' => 'XO the Club is a chic and modern nightlife destination where style meets sound. Its sleek interiors and state-of-the-art lighting set the stage for a night of high-energy dance and unforgettable moments.',
+        'address' => 'Grote Markt 8, 2011 RD Haarlem'
+    ]
+];
+
+$schedules = [
+    [
+        'date' => 'Friday July 25',
+        'rows' => [
+            [
+                'start' => '20:00',
+                'venue' => 'Lichtfabriek',
+                'artists' => [
+                    'Nicky Romero',
+                    'Afrojack'
+                ],
+                'session' => 'Back2Back',
+                'duration' => 360,
+                'tickets_available' => 1500,
+                'price' => 75.00
+            ],
+            [
+                'start' => '22:00',
+                'venue' => 'Slachthuis',
+                'artists' => [
+                    'Tiësto'
+                ],
+                'session' => 'Club',
+                'duration' => 90,
+                'tickets_available' => 200,
+                'price' => 60.00
+            ],
+            [
+                'start' => '20:00',
+                'venue' => 'Jopenwerk',
+                'artists' => [
+                    'Hardwell'
+                ],
+                'session' => 'Club',
+                'duration' => 90,
+                'tickets_available' => 300,
+                'price' => 60.00
+            ],
+            [
+                'start' => '20:00',
+                'venue' => 'XO the club',
+                'artists' => [
+                    'Armin van Buuren'
+                ],
+                'session' => 'Club',
+                'duration' => 90,
+                'tickets_available' => 200,
+                'price' => 60.00
+            ],
+            [
+                'start' => '20:00',
+                'venue' => 'Puncher comedy club',
+                'artists' => [
+                    'Martin Garrix'
+                ],
+                'session' => 'Club',
+                'duration' => 90,
+                'tickets_available' => 200,
+                'price' => 60.00
+            ]
+        ],
+        'notes' => [
+            '* All-Access pass for this day €150,00, All-Access pass for Fri, Sat,Sun: €250,00.<br>The capacity of the Club sessions is very limited. Availability for All-Access pas holders can not be garanteed due to safety regulations.<br>Tickets available represents total capacity. (90% is sold as single tickets. 10% of total capacity is left for Walk ins/All-Acces passholders.',
+        ]
+    ],
+    [
+        'date' => 'Saturday July 26',
+        'rows' => [
+            [
+                'start' => '14:00',
+                'venue' => 'Caprera Openluchttheater',
+                'artists' => [
+                    'Hardwell',
+                    'Martin Garrix',
+                    'Armin van Buuren'
+                ],
+                'session' => 'Back2Back',
+                'duration' => 540,
+                'tickets_available' => 2000,
+                'price' => 110.00
+            ],
+            [
+                'start' => '22:00',
+                'venue' => 'Jopenwerk',
+                'artists' => [
+                    'Afrojack'
+                ],
+                'session' => 'Club',
+                'duration' => 90,
+                'tickets_available' => 300,
+                'price' => 60.00
+            ],
+            [
+                'start' => '21:00',
+                'venue' => 'Lichtfabriek',
+                'artists' => [
+                    'Tiësto'
+                ],
+                'session' => 'TiëstoWorld',
+                'duration' => 240,
+                'tickets_available' => 1500,
+                'price' => 75.00
+            ],
+            [
+                'start' => '23:00',
+                'venue' => 'Slachthuis',
+                'artists' => [
+                    'Nicky Romero'
+                ],
+                'session' => 'Club',
+                'duration' => 90,
+                'tickets_available' => 200,
+                'price' => 60.00
+            ]
+        ],
+        'notes' => [
+            '* All-Access pass for this day €150,00, All-Access pass for Fri, Sat,Sun: €250,00.<br>The capacity of the Club sessions is very limited. Availability for All-Access pas holders can not be garanteed due to safety regulations.<br>Tickets available represents total capacity. (90% is sold as single tickets. 10% of total capacity is left for Walk ins/All-Acces passholders.',
+            '** TiëstoWorld is a special session spanning his careers work. There will also be some special guests.'
+        ]
+    ],
+    [
+        'date' => 'Sunday July 27',
+        'rows' => [
+            [
+                'start' => '14:00',
+                'venue' => 'Caprera Openluchttheater',
+                'artists' => [
+                    'Afrojack',
+                    'Tiësto',
+                    'Nicky Romero'
+                ],
+                'session' => 'Back2Back',
+                'duration' => 540,
+                'tickets_available' => 2000,
+                'price' => 110.00
+            ],
+            [
+                'start' => '19:00',
+                'venue' => 'Jopenwerk',
+                'artists' => [
+                    'Armin van Buuren'
+                ],
+                'session' => 'Club',
+                'duration' => 90,
+                'tickets_available' => 300,
+                'price' => 60.00
+            ],
+            [
+                'start' => '21:00',
+                'venue' => 'XO the Club',
+                'artists' => [
+                    'Hardwell'
+                ],
+                'session' => 'Club',
+                'duration' => 90,
+                'tickets_available' => 1500,
+                'price' => 90.00
+            ],
+            [
+                'start' => '18:00',
+                'venue' => 'Slachthuis',
+                'artists' => [
+                    'Martin Garrix'
+                ],
+                'session' => 'Club',
+                'duration' => 90,
+                'tickets_available' => 200,
+                'price' => 60.00
+            ]
+        ],
+        'notes' => [
+            '* All-Access pass for this day €150,00, All-Access pass for Fri, Sat,Sun: €250,00.<br>The capacity of the Club sessions is very limited. Availability for All-Access pas holders can not be garanteed due to safety regulations.<br>Tickets available represents total capacity. (90% is sold as single tickets. 10% of total capacity is left for Walk ins/All-Acces passholders.',
+        ]
+    ]
+];
 ?>
 
 <div class="container-fluid">
@@ -45,7 +260,7 @@ $artists = [
         <div class="col-md-6 header-content">
             <h1>DANCE! - OVERVIEW</h1>
             <p>Get ready to experience the electrifying pulse of Haarlem's dance scene! From world-renowned DJs in spectacular Back2Back sets to intimate experimental sessions in iconic venues, <strong>DANCE!</strong> is your ultimate destination for house, techno, and trance. This is more than music – it’s a celebration of rhythm, energy, and connection.</p>
-            <p><strong>Dates:</strong> July 25 – 27, 2025</p>
+            <p><strong>Dates:</strong> July 25 - 27, 2025</p>
         </div>
         <div class="col-md-6 header-image"></div>
     </div>
@@ -71,6 +286,44 @@ $artists = [
         <?php } ?>
     <?php } ?>
 </div>
+
+<h2 class="text-center mt-5">The Schedule</h2>
+<?php foreach ($schedules as $schedule) { ?>
+    <div class="container table-container">
+        <h2 class="text-center"><?php echo $schedule['date']; ?></h2>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Starting Time</th>
+                    <th>Venue</th>
+                    <th>Artists</th>
+                    <th>Session</th>
+                    <th>Duration</th>
+                    <th>Tickets Available</th>
+                    <th>Price</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($schedule['rows'] as $row) { ?>
+                    <tr>
+                        <td><?php echo $row['start']; ?></td>
+                        <td><?php echo $row['venue']; ?></td>
+                        <td><?php echo implode(', ', $row['artists']); ?></td>
+                        <td><?php echo $row['session']; ?></td>
+                        <td><?php echo $row['duration']; ?> min</td>
+                        <td><?php echo $row['tickets_available']; ?></td>
+                        <td>&euro;<?php echo $row['price']; ?></td>
+                        <td><button class="btn btn-custom-yellow"><i class="fa fa-ticket"></i> Buy now</button></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <p class="text-center text-light small">
+            <?php echo implode('<br>', $schedule['notes']); ?>
+        </p>
+    </div>
+<?php } ?>
 
 <style>
     .header-section {
@@ -99,6 +352,7 @@ $artists = [
     .header-content strong {
         font-weight: bold;
     }
+
     .artist-grid {
         padding: 50px 0;
     }
@@ -118,5 +372,19 @@ $artists = [
         padding: 10px 20px;
         border-radius: 5px;
         font-weight: bold;
+    }
+    
+    .table-container {
+        margin: 30px auto;
+        width: 90%;
+        background: #226C92;
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+    }
+    th, td {
+        text-align: center;
+        vertical-align: middle;
+        color: white;
     }
 </style>
