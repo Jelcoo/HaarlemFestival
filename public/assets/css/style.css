@@ -14,12 +14,22 @@ body {
 }
 
 .btn-custom-yellow {
-    background-color: #E6A545;
+    background-color: #E6A640;
     color: black;
     font-weight: bold;
     border-radius: 8px;
     padding: 6px 12px;
 }
 .btn-custom-yellow:hover {
-    background-color: #C68642;
+    background-color: #CC9439;
+}
+.btn-custom-green {
+    background-color: #3F835C;
+    color: black;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+.btn-custom-green:hover {
+    background-color: #599563;
 }
