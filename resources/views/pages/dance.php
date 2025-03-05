@@ -42,37 +42,37 @@ $artists = [
 $locations = [
     [
         'name' => 'Slachthuis',
-        'image' => '/assets/img/locations/slachthuis.png',
+        'image' => '/assets/img/locations/slachthuis.jpg',
         'description' => 'Once an industrial slaughterhouse, Slachthuis has been transformed into a dynamic cultural hotspot. Known for its edgy and raw atmosphere, this venue is a favorite for high-energy performances and underground vibes. Its unique architecture creates an unforgettable experience for music lovers.',
         'address' => 'Rockplein 6, 2033 KK Haarlem'
     ],
     [
         'name' => 'Caprera Openluchttheater',
-        'image' => '/assets/img/locations/caprera.png',
+        'image' => '/assets/img/locations/caprera.jpg',
         'description' => 'Nestled amidst lush greenery, Caprera Openluchttheater is an enchanting open-air venue perfect for unforgettable performances under the stars. Its natural acoustics and scenic beauty make it an iconic spot for electronic music and cultural events alike.',
         'address' => 'Hoge Duin en Daalseweg 2, 2061 AG Bloemendaal'
     ],
     [
         'name' => 'Jopenkerk',
-        'image' => '/assets/img/locations/jopenkerk.png',
+        'image' => '/assets/img/locations/jopenkerk.jpg',
         'description' => 'A stunning fusion of history and modernity, Jopenkerk is a former church turned brewery and event space. With its vibrant atmosphere and excellent acoustics, this venue offers a unique blend of sacred architecture and pulsating beats.',
         'address' => 'Gedempte Voldersgracht 2, 2011 WD Haarlem'
     ],
     [
         'name' => 'Lichtfabriek',
-        'image' => '/assets/img/locations/lichtfabriek.png',
+        'image' => '/assets/img/locations/lichtfabriek.jpg',
         'description' => 'Located in a historic power station, Lichtfabriek exudes industrial charm and creative energy. Its spacious interiors and captivating ambiance make it an ideal venue for large-scale performances and immersive musical experiences.',
         'address' => 'Minckelersweg 2, 2031 EM Haarlem'
     ],
     [
         'name' => 'Puncher Comedy Club',
-        'image' => '/assets/img/locations/puncher.png',
+        'image' => '/assets/img/locations/puncher.jpg',
         'description' => 'Situated in the heart of Haarlem, Puncher Comedy Club combines a cozy setting with electric energy. While known for its comedy, it transforms into an intimate and vibrant space for special performances during the festival.',
         'address' => 'Grote Markt 10, 2011 RD Haarlem'
     ],
     [
         'name' => 'XO the club',
-        'image' => '/assets/img/locations/xo.png',
+        'image' => '/assets/img/locations/xo.jpg',
         'description' => 'XO the Club is a chic and modern nightlife destination where style meets sound. Its sleek interiors and state-of-the-art lighting set the stage for a night of high-energy dance and unforgettable moments.',
         'address' => 'Grote Markt 8, 2011 RD Haarlem'
     ]
@@ -267,9 +267,9 @@ $schedules = [
 </div>
 
 <div class="container artist-grid">
-    <?php $count = 0; ?>
+    <?php $artistCount = 0; ?>
     <?php foreach ($artists as $artist) { ?>
-        <?php if ($count % 3 == 0) { ?>
+        <?php if ($artistCount % 3 == 0) { ?>
             <div class="row">
         <?php } ?>
 
@@ -280,8 +280,34 @@ $schedules = [
             <a href="<?php echo $artist['link']; ?>" class="btn btn-custom-yellow">Visit website</a>
         </div>
 
-        <?php $count++; ?>
-        <?php if ($count % 3 == 0 || $count == count($artists)) { ?>
+        <?php $artistCount++; ?>
+        <?php if ($artistCount % 3 == 0 || $artistCount == count($artists)) { ?>
+            </div>
+        <?php } ?>
+    <?php } ?>
+</div>
+
+<h2 class="text-center mt-5">Locations</h2>
+<div class="container-fluid p-0">
+    <?php $locationCount = 0; ?>
+    <?php foreach ($locations as $location) { ?>
+        <?php if ($locationCount % 2 == 0) { ?>
+            <div class="row g-0">
+        <?php } ?>
+        <div class="col-md-6 location-card" style="background-image: url('<?php echo $location['image']; ?>');">
+            <div class="location-overlay">
+                <div class="location-title"><?php echo $location['name']; ?></div>
+                <div class="location-description">
+                    <?php echo $location['description']; ?>
+                </div>
+                <div class="location-address">
+                    <em>Address: <?php echo $location['address']; ?></em> 
+                </div>
+            </div>
+        </div>
+
+        <?php $locationCount++; ?>
+        <?php if ($locationCount % 2 == 0 || $locationCount == count($locations)) { ?>
             </div>
         <?php } ?>
     <?php } ?>
@@ -373,7 +399,38 @@ $schedules = [
         border-radius: 5px;
         font-weight: bold;
     }
-    
+
+    .location-card {
+        position: relative;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+        min-height: 400px;
+    }
+    .location-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 20px;
+    }
+    .location-title {
+        color: white;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .location-description {
+        color: white;
+        font-size: 1rem;
+    }
+    .location-address {
+        color: white;
+        margin-top: 10px;
+        font-size: 0.9rem;
+    }
+
     .table-container {
         margin: 30px auto;
         width: 90%;
