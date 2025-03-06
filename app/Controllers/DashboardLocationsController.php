@@ -31,7 +31,7 @@ class DashboardLocationsController extends DashboardController
             $formData = $_SESSION['form_data'] ?? [];
             unset($_SESSION['form_data']);
 
-            return $this->renderPage('location_create', [
+            return $this->renderPage('location_form', [
                 'formData' => $formData,
                 'status' => $this->getStatus(),
             ]);
