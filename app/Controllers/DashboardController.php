@@ -49,4 +49,12 @@ class DashboardController extends Controller
         header('Location: /dashboard/' . $redirect);
         exit;
     }
+
+    protected function getStatus(): array
+    {
+        $status = $_SESSION['status'] ?? ['status' => false, 'message' => ''];
+        unset($_SESSION['status']);
+
+        return $status;
+    }
 }

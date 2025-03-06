@@ -218,15 +218,6 @@ class DashboardUsersController extends DashboardController
         ];
     }
 
-
-    private function getStatus(): array
-    {
-        $status = $_SESSION['status'] ?? ['status' => false, 'message' => ''];
-        unset($_SESSION['status']);
-
-        return $status;
-    }
-
     private function redirectToUsers(bool $success = false, string $message = ''): void
     {
         $this->redirectTo('users', $success, $message);

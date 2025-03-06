@@ -108,8 +108,8 @@ class DashboardRestaurantsController extends DashboardController
             $fieldsToUpdate = [
                 'name' => $_POST['name'] ?? $existingRestaurant->name,
                 'restaurant_type' => $_POST['restaurant_type'] ?? $existingRestaurant->restaurant_type,
-                'rating' => isset($_POST['rating']) ? (float)$_POST['rating'] : $existingRestaurant->rating,
-                'location_id' => (int)$_POST['location_id'],
+                'rating' => isset($_POST['rating']) ? (float) $_POST['rating'] : $existingRestaurant->rating,
+                'location_id' => (int) $_POST['location_id'],
                 'preview_description' => $_POST['preview_description'] ?? $existingRestaurant->preview_description,
                 'main_description' => $_POST['main_description'] ?? $existingRestaurant->main_description,
                 'menu' => $_POST['menu'] ?? $existingRestaurant->menu,
@@ -182,14 +182,6 @@ class DashboardRestaurantsController extends DashboardController
             'menu' => ['label' => 'Menu', 'sortable' => false],
             'actions' => ['label' => 'Actions', 'sortable' => false],
         ];
-    }
-
-    private function getStatus(): array
-    {
-        $status = $_SESSION['status'] ?? ['status' => false, 'message' => ''];
-        unset($_SESSION['status']);
-
-        return $status;
     }
 
     private function redirectToRestaurants(bool $success = false, string $message = ''): void
