@@ -30,6 +30,7 @@ class DashboardController extends Controller
             'users' => ['label' => 'Users', 'url' => '/dashboard/users'],
             'restaurants' => ['label' => 'Restaurants', 'url' => '/dashboard/restaurants'],
             'locations' => ['label' => 'Locations', 'url' => '/dashboard/locations'],
+            'artists' => ['label' => 'Artists', 'url' => '/dashboard/artists'],
         ];
     }
 
