@@ -45,7 +45,7 @@ $pages = [
 <style>
     .festival-logo {
         font-weight: bold;
-        color: #C68642; /* Gold */
+        color: var(--buttons); /* Gold */
     }
     .nav-item a {
         color: green;
@@ -53,7 +53,7 @@ $pages = [
         text-decoration: none;
     }
     .nav-item .active {
-        color: #0C2D57; /* Dark blue */
+        color: var(--secondary); /* Dark blue */
         font-weight: bold;
         text-decoration: underline;
     }

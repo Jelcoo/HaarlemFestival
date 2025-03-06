@@ -1,3 +1,13 @@
+:root {
+    --primary: #3F835C;
+    --secondary: #1F4E66;
+    --secondary-accent: #226C92;
+    --buttons: #E6A640;
+    --buttons-accent: #CC9439;
+    --link: #4D5AEB;
+    --error: #CD4747;
+}
+
 body {
     font-family: "Arial", sans-serif;
     min-height: 100vh;
@@ -15,17 +25,17 @@ body {
 
 /* Button styles are !important to force override Bootstrap */
 .btn-custom-yellow {
-    background-color: #E6A640 !important;
+    background-color: var(--buttons) !important;
     color: black !important;
     font-weight: bold !important;
     border-radius: 8px !important;
     padding: 6px 12px !important;
 }
 .btn-custom-yellow:hover {
-    background-color: #CC9439 !important;
+    background-color: var(--buttons-accent) !important;
 }
 .btn-custom-green {
-    background-color: #3F835C !important;
+    background-color: var(--primary) !important;
     color: black !important;
     font-weight: bold !important;
     border-radius: 8px !important;
