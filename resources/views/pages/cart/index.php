@@ -1,3 +1,101 @@
+<style>
+    .eventCard {
+        background-color: var(--secondary);
+        color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        position: relative;
+        margin-bottom: 15px;
+    }
+
+    .eventCard h4 {
+        padding: 12px 16px;
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 600;
+    }
+
+    .eventCard>div:nth-child(2) {
+        display: flex;
+        padding: 0 16px 10px;
+    }
+
+    .eventCard img {
+        width: 150px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-right: 15px;
+    }
+
+    .eventCard .d-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+    }
+
+    .eventCard p {
+        margin-bottom: 4px;
+        font-size: 0.9rem;
+    }
+
+    .counter {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        border-radius: 50px;
+        padding: 4px 8px;
+        margin: 0 10px;
+    }
+
+    .counter button {
+        width: 28px;
+        height: 28px;
+        border: none;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #555;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .counter span {
+        width: 30px;
+        text-align: center;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .counter>div {
+        display: flex;
+        align-items: center;
+        margin: 4px 0;
+    }
+
+    .counter>div>span:first-child {
+        color: #333;
+        margin-right: 8px;
+        width: auto;
+    }
+
+    .remove-btn {
+        width: 36px;
+        height: 36px;
+        background-color: var(--error);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+</style>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-6">
@@ -138,14 +236,14 @@
             return `
         <h4>${event.name ? event.name : 'Event'}</h4>
         <div>
-            <img width="100%" src="/assets/${event.image}" alt="image of the event">
+                    <img src="/assets/img/${event.image}" alt="image of the event">
             <div>
                 <p>Duration: ${startTime}-${endTime}</p>
                 <p>Artists: <br> ${event.artist ? event.artist.name : 'N/A'}</p>
             </div>
         </div>
         <div class="d-flex">
-            <p>${event.quantity} x ${formatPrice(event.price)} = ${formatPrice(event.quantity * event.price)}</p>
+            <p>${event.quantity} x €${formatPrice(event.price)} = €${formatPrice(event.quantity * event.price)}</p>
             <div class="counter">
                 <button type="button" class="decrease-btn" data-type="dance" data-id="${event.event_id}">
                     <i class="fa-solid fa-minus"></i>
@@ -170,42 +268,41 @@
             return `
         <h4>${event.restaurant ? event.restaurant.name : 'Restaurant'}</h4>
         <div>
-            <img width="100%" src="/assets/${event.image}" alt="image of the restaurant">
+                    <img src="/assets/img/${event.image}" alt="image of the restaurant">
             <div>
                 <p>Duration: ${startTime}-${endTime}</p>
-                <p>Restaurant: ${event.restaurant ? event.restaurant.name : 'N/A'}</p>
+                <p>Reservation cost: €${event.reservationcost ? event.reservationcost : 'N/A'}</p>
                 ${event.notes ? `<p>Notes: ${event.notes}</p>` : ''}
             </div>
         </div>
         <div class="d-flex">
-            <div>
-                <p>Adults: ${event.adult_quantity} x ${formatPrice(event.adult_price)} = ${formatPrice(totalAdultPrice)}</p>
-                <p>Children: ${event.children_quantity} x ${formatPrice(event.children_price)} = ${formatPrice(totalChildrenPrice)}</p>
-                <p>Total: ${formatPrice(totalPrice)}</p>
-            </div>
-            <div class="counter">
-                <div>
-                    <span>Adults:</span>
-                    <button type="button" class="decrease-btn" data-type="yummy" data-id="${event.event_id}" data-category="adult">
-                        <i class="fa-solid fa-minus"></i>
-                    </button>
-                    <span>${event.adult_quantity}</span>
-                    <button type="button" class="increase-btn" data-type="yummy" data-id="${event.event_id}" data-category="adult">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
+            <div class="d-flex flex-column align-items-stretch p-0 gap-2 justify-content-between" style="flex-grow: 0.5">
+                <div class="d-flex justify-content-between p-0">
+                    <p>Adults: ${event.adult_quantity}</p>
+                    <div class="counter">
+                        <button type="button" class="decrease-btn" data-type="yummy" data-id="${event.event_id}" data-category="adult">
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
+                        <span>${event.adult_quantity}</span>
+                        <button type="button" class="increase-btn" data-type="yummy" data-id="${event.event_id}" data-category="adult">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <span>Children:</span>
-                    <button type="button" class="decrease-btn" data-type="yummy" data-id="${event.event_id}" data-category="children">
-                        <i class="fa-solid fa-minus"></i>
-                    </button>
-                    <span>${event.children_quantity}</span>
-                    <button type="button" class="increase-btn" data-type="yummy" data-id="${event.event_id}" data-category="children">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
+                <div class="d-flex justify-content-between p-0">
+                    <p>Children: ${event.children_quantity}</p>
+                    <div class="counter">
+                        <button type="button" class="decrease-btn" data-type="yummy" data-id="${event.event_id}" data-category="children">
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
+                        <span>${event.children_quantity}</span>
+                        <button type="button" class="increase-btn" data-type="yummy" data-id="${event.event_id}" data-category="children">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
-            <button type="button" class="remove-btn" data-type="yummy" data-id="${event.event_id}">
+            <button type="button" class="remove-btn align-self-end" data-type="yummy" data-id="${event.event_id}">
                 <i class="fa-solid fa-trash"></i>
             </button>
         </div>
@@ -216,13 +313,13 @@
             return `
         <h4>${event.name}</h4>
         <div>
-            <img width="100%" src="/assets/${event.image}" alt="image of the history tour">
+                    <img src="/assets/img/${event.image}" alt="image of the history tour">
             <div>
                 <p>Duration: ${startTime}-${endTime}</p>
             </div>
         </div>
         <div class="d-flex">
-            <p>${event.quantity} x ${formatPrice(event.price)} = ${formatPrice(event.quantity * event.price)}</p>
+            <p>${event.quantity} x €${formatPrice(event.price)} = €${formatPrice(event.quantity * event.price)}</p>
             <div class="counter">
                 <button type="button" class="decrease-btn" data-type="history" data-id="${event.event_id}">
                     <i class="fa-solid fa-minus"></i>
@@ -317,8 +414,12 @@
             // Update quantity based on type
             if (type === 'yummy' && category) {
                 const quantityField = category === 'adult' ? 'adult_quantity' : 'children_quantity';
-                const newQuantity = Math.max(1, item[quantityField] + change);
-                item[quantityField] = newQuantity;
+                const newQuantity = item[quantityField] + change;
+                if (newQuantity <= 0 && quantityField === 'children_quantity') {
+                    item[quantityField] = 0;
+                } else {
+                    item[quantityField] = Math.max(1, newQuantity);
+                }
             } else {
                 const newQuantity = Math.max(1, item.quantity + change);
                 item.quantity = newQuantity;

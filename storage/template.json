@@ -40,8 +40,7 @@
             },
             "starttime": "2025-03-03T18:00+00:00",
             "endtime": "2025-03-03T20:00+00:00",
-            "adult_price": 29.99,
-            "children_price": 19.99,
+            "reservationcost": 10.00,
             "adult_quantity": 2,
             "children_quantity": 1,
             "notes": "some notes"
