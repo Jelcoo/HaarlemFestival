@@ -1,4 +1,4 @@
-<div class="col-md-12 text-center">
+<div class="col-md-12 text-center mt-auto mb-auto">
 	<h1>500</h1>
 	<h2>Something went wrong</h2>
 	<div class="alert alert-danger" role="alert">
