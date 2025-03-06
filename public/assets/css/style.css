@@ -1,8 +1,40 @@
-html,
-body {
-    height: 100%;
-}
-
 body {
     font-family: "Arial", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.full-container {
+    display: contents;
+}
+
+.btn {
+    width: fit-content;
+}
+
+/* Button styles are !important to force override Bootstrap */
+.btn-custom-yellow {
+    background-color: #E6A640 !important;
+    color: black !important;
+    font-weight: bold !important;
+    border-radius: 8px !important;
+    padding: 6px 12px !important;
+}
+.btn-custom-yellow:hover {
+    background-color: #CC9439 !important;
+}
+.btn-custom-green {
+    background-color: #3F835C !important;
+    color: black !important;
+    font-weight: bold !important;
+    border-radius: 8px !important;
+    padding: 6px 12px !important;
+}
+.btn-custom-green:hover {
+    background-color: #599563 !important;
+}
+
+.map-container {
+    height: 800px;
 }
