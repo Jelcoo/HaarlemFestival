@@ -31,6 +31,7 @@ class DashboardController extends Controller
         return [
             'home' => ['label' => 'Home', 'url' => '/dashboard'],
             'users' => ['label' => 'Users', 'url' => '/dashboard/users'],
+            'orders' => ['label' => 'Orders', 'url' => '/dashboard/orders']
         ];
     }
 
