@@ -201,7 +201,7 @@ $locations = [
                     <p><?php echo $event['description']; ?></p>
                 </div>
                 <div>
-                    <a href="<?php echo $event['button_link']; ?>" class="btn visit-btn">
+                    <a href="<?php echo $event['button_link']; ?>" class="btn btn-custom-yellow">
                         <i class="fa fa-arrow-right me-2"></i><?php echo $event['button_text']; ?>
                     </a>
                 </div>
@@ -331,10 +331,6 @@ setTimeout(() => map.invalidateSize(), 100);
     flex-direction: column;
     justify-content: space-between;
     padding: 20px;
-}
-.visit-btn {
-    background-color: var(--buttons);
-    color: black;
 }
 
 .schedule-container {
