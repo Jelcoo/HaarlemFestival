@@ -9,7 +9,7 @@ use App\Enum\UserRoleEnum;
     <h1>Manage account</h1>
     <?php include __DIR__ . '/../../components/errordisplay.php'; ?>
     <a href="/logout" class="btn btn-custom-yellow"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-    <?php if ($user->role == UserRoleEnum::EMPLOYEE|| $user->role == UserRoleEnum::ADMIN) { ?>
+    <?php if ($user->role == UserRoleEnum::EMPLOYEE || $user->role == UserRoleEnum::ADMIN) { ?>
         <a href="/qrcode" class="btn btn-custom-yellow"><i class="fa-solid fa-qrcode"></i> QR Scanner</a>
     <?php } ?>
     <?php if ($user->role == UserRoleEnum::ADMIN) { ?>

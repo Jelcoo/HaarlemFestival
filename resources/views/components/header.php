@@ -1,9 +1,9 @@
 <div class="container-fluid">
     <div class="row header-section">
         <div class="col-md-6 header-content">
-            <h1><?php echo $header_name ?></h1>
-            <p><?php echo $header_description ?></p>
-            <p><strong>Dates:</strong> <?php echo $header_dates ?></p>
+            <h1><?php echo $header_name; ?></h1>
+            <p><?php echo $header_description; ?></p>
+            <p><strong>Dates:</strong> <?php echo $header_dates; ?></p>
         </div>
         <div class="col-md-6 header-image"></div>
     </div>
@@ -23,7 +23,7 @@
     }
     .header-image {
         flex: 1;
-        background: url('<?php echo $header_image ?>') no-repeat center center;
+        background: url('<?php echo $header_image; ?>') no-repeat center center;
         background-size: cover;
         min-height: 400px;
     }

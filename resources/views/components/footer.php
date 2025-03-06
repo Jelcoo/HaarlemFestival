@@ -1,4 +1,4 @@
-<footer class="bg-light py-3 mt-4">
+<footer class="bg-light py-3">
     <div class="container d-flex justify-content-between align-items-center">
         <div>
             <a href="#" class="me-2"><i class="fab fa-tiktok fa-2xl"></i></a>
