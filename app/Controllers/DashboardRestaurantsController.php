@@ -133,7 +133,7 @@ class DashboardRestaurantsController extends DashboardController
         try {
             $validator = new Validator();
             $validation = $validator->validate($_POST, [
-                'name' => 'required|alpha_spaces|max:255',
+                'name' => 'required|max:255',
                 'restaurant_type' => 'nullable|alpha_spaces|max:100',
                 'rating' => 'nullable|numeric|min:0|max:5',
                 'location_id' => 'required|integer',
