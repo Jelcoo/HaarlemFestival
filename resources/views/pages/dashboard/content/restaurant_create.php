@@ -18,13 +18,15 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="name">Restaurant Name</label>
-                            <input type="text" id="name" name="name" class="form-control" required>
+                            <input type="text" id="name" name="name" class="form-control" required
+                                value="<?php echo htmlspecialchars($formData['name'] ?? ''); ?>">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="restaurant_type">Restaurant Type</label>
-                            <input type="text" id="restaurant_type" name="restaurant_type" class="form-control">
+                            <input type="text" id="restaurant_type" name="restaurant_type" class="form-control"
+                                value="<?php echo htmlspecialchars($formData['restaurant_type'] ?? ''); ?>">
                         </div>
                     </div>
                 </div>
@@ -35,17 +37,21 @@
                         <div class="form-group">
                             <label for="rating">Rating (0-5)</label>
                             <input type="number" id="rating" name="rating" class="form-control" min="0" max="5"
-                                step="0.5" value="0">
+                                step="0.5" value="<?php echo htmlspecialchars($formData['rating'] ?? '0'); ?>">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="location_id">Location</label>
                             <select id="location_id" name="location_id" class="form-control" required>
-                                <option value="">Select a location</option>
+                                <?php if (empty($formData['location_id'])): ?>
+                                    <option value="">Select a location</option>
+                                <?php endif; ?>
+
                                 <?php foreach ($locations as $location) { ?>
-                                    <option value="<?php echo $location->id; ?>">
-                                        <?php echo htmlspecialchars($location->name); ?></option>
+                                    <option value="<?php echo $location->id; ?>" <?php echo (!empty($formData['location_id']) && $formData['location_id'] == $location->id) ? 'selected' : ''; ?>>
+                                        <?php echo htmlspecialchars($location->name); ?>
+                                    </option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -55,19 +61,22 @@
                 <!-- Preview -->
                 <div class="form-group mt-3">
                     <label for="preview_description">Preview Description</label>
-                    <textarea id="preview_description" name="preview_description" class="form-control"></textarea>
+                    <textarea id="preview_description" name="preview_description"
+                        class="form-control"><?php echo htmlspecialchars($formData['preview_description'] ?? ''); ?></textarea>
                 </div>
 
                 <!-- Main Description -->
                 <div class="form-group mt-3">
                     <label for="main_description">Main Description</label>
-                    <textarea id="main_description" name="main_description" class="form-control"></textarea>
+                    <textarea id="main_description" name="main_description"
+                        class="form-control"><?php echo htmlspecialchars($formData['preview_description'] ?? ''); ?></textarea>
                 </div>
 
                 <!-- Menu -->
-                <div class="form-group mt-3">
+                <div class=" form-group mt-3">
                     <label for="menu">Menu</label>
-                    <textarea id="menu" name="menu" class="form-control"></textarea>
+                    <textarea id="menu" name="menu"
+                        class="form-control"><?php echo htmlspecialchars($formData['preview_description'] ?? ''); ?></textarea>
                 </div>
 
                 <button type="submit" class="btn btn-primary mt-4">Create Restaurant</button>
