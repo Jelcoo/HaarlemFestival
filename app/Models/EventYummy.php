@@ -8,6 +8,7 @@ class EventYummy extends Event
     public int $total_seats;
     public float $kids_price;
     public float $adult_price;
+    public float $reservation_cost;
 
     public function __construct(array $collection)
     {
@@ -17,5 +18,6 @@ class EventYummy extends Event
         $this->total_seats = $collection['total_seats'];
         $this->kids_price = $collection['kids_price'];
         $this->adult_price = $collection['adult_price'];
+        $this->reservation_cost = $collection['reservation_cost'];
     }
 }
