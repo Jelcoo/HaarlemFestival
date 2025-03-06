@@ -96,7 +96,7 @@
         cursor: pointer;
     }
 </style>
-<div class="container">
+<div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-6">
             <h1>Cart - Overview</h1>
