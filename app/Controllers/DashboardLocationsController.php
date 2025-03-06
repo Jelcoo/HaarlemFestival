@@ -104,14 +104,6 @@ class DashboardLocationsController extends DashboardController
         ];
     }
 
-    private function getStatus(): array
-    {
-        $status = $_SESSION['status'] ?? ['status' => false, 'message' => ''];
-        unset($_SESSION['status']);
-
-        return $status;
-    }
-
     private function redirectToLocations(bool $success = false, string $message = ''): void
     {
         $this->redirectTo('locations', $success, $message);
