@@ -353,7 +353,7 @@ include_once __DIR__ . '/../components/header.php';
     .header-section {
         display: flex;
         align-items: center;
-        background-color: #3D6F4D;
+        background-color: var(--primary);
         color: white;
         padding: 50px;
     }
@@ -391,7 +391,7 @@ include_once __DIR__ . '/../components/header.php';
     }
     .artist-card button {
         margin-top: 10px;
-        background-color: #D4A055;
+        background-color: var(--buttons);
         border: none;
         padding: 10px 20px;
         border-radius: 5px;

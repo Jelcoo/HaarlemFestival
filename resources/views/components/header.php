@@ -13,7 +13,7 @@
     .header-section {
         display: flex;
         align-items: center;
-        background-color: #3D6F4D;
+        background-color: var(--primary);
         color: white;
         padding: 50px;
     }

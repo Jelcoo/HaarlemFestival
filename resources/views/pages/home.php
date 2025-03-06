@@ -333,7 +333,7 @@ setTimeout(() => map.invalidateSize(), 100);
     padding: 20px;
 }
 .visit-btn {
-    background-color: #ffc107;
+    background-color: var(--buttons);
     color: black;
 }
 
@@ -356,7 +356,7 @@ setTimeout(() => map.invalidateSize(), 100);
     margin-bottom: 10px;
 }
 .event-bar {
-    background-color: #2c3e50;
+    background-color: var(--secondary);
     color: white;
     padding: 12px 15px;
     border-radius: 5px;
