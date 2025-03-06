@@ -1,5 +1,6 @@
 :root {
     --primary: #3F835C;
+    --primary-accent: #599563;
     --secondary: #1F4E66;
     --secondary-accent: #226C92;
     --buttons: #E6A640;
@@ -42,7 +43,7 @@ body {
     padding: 6px 12px !important;
 }
 .btn-custom-green:hover {
-    background-color: #599563 !important;
+    background-color: var(--primary-accent) !important;
 }
 
 .map-container {
