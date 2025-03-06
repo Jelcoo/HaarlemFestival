@@ -42,18 +42,14 @@ CREATE TABLE artists (
 CREATE TABLE restaurants (
     id INT PRIMARY KEY AUTO_INCREMENT,
     location_id INT NOT NULL,
-    name VARCHAR(255) NOT NULL,
     restaurant_type VARCHAR(255),
     rating INT,
-    preview_description TEXT,
-    main_description TEXT,
     menu TEXT,
     FOREIGN KEY (location_id) REFERENCES locations(id)
 );
 
 CREATE TABLE dance_events (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    artist_id INT NOT NULL,
     location_id INT NOT NULL,
     total_tickets INT NOT NULL,
     session VARCHAR(255),
@@ -63,8 +59,15 @@ CREATE TABLE dance_events (
     start_date DATE NOT NULL,
     end_time TIME NOT NULL,
     end_date DATE NOT NULL,
-    FOREIGN KEY (artist_id) REFERENCES artists(id),
     FOREIGN KEY (location_id) REFERENCES locations(id)
+);
+
+CREATE TABLE dance_event_artists (
+    event_id INT,
+    artist_id INT,
+    PRIMARY KEY (event_id, artist_id),
+    FOREIGN KEY (event_id) REFERENCES dance_events(id),
+    FOREIGN KEY (artist_id) REFERENCES artists(id)
 );
 
 CREATE TABLE yummy_events (
@@ -73,6 +76,7 @@ CREATE TABLE yummy_events (
     total_seats INT NOT NULL,
     kids_price DECIMAL(10,2) NOT NULL,
     adult_price DECIMAL(10,2) NOT NULL,
+    reservation_cost DECIMAL(10,2) NOT NULL,
     vat DECIMAL(10,2) NOT NULL,
     start_time TIME NOT NULL,
     start_date DATE NOT NULL,
@@ -94,14 +98,6 @@ CREATE TABLE history_events (
     start_date DATE NOT NULL,
     end_time TIME NOT NULL,
     end_date DATE NOT NULL
-);
-
-CREATE TABLE history_event_locations (
-    history_id INT,
-    location_id INT,
-    PRIMARY KEY (history_id, location_id),
-    FOREIGN KEY (history_id) REFERENCES history_events(id),
-    FOREIGN KEY (location_id) REFERENCES locations(id)
 );
 
 CREATE TABLE dance_tickets (
