@@ -7,6 +7,16 @@ use App\Models\Location;
 
 class LocationRepository extends Repository
 {
+    public function createLocation(array $data): Location
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $locationId = $queryBuilder->table('locations')->insert($data);
+        $location = $this->getLocationById((int) $locationId);
+
+        return $location;
+    }
+
     public function getLocationById(int $id): ?Location
     {
         $queryBuilder = new QueryBuilder($this->getConnection());

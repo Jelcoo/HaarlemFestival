@@ -1,11 +1,16 @@
 <h2>Locations Management</h2>
 
 <!-- Status message -->
-<?php if (!empty($status['message'])) { ?>
+<?php if (!empty($status['message'])): ?>
     <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
-        <?php echo $status['message']; ?>
+        <?php echo htmlspecialchars($status['message']); ?>
     </div>
-<?php } ?>
+<?php endif; ?>
+
+<!-- Create New Location Button -->
+<form action="/dashboard/locations" method="POST">
+    <button type="submit" class="btn btn-primary mb-3" name="action" value="create">Create New Location</button>
+</form>
 
 <!-- Search Form -->
 <form method="GET" action="/dashboard/locations" class="mb-3 d-flex align-items-center">

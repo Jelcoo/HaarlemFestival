@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use Rakit\Validation\Validator;
 use App\Repositories\LocationRepository;
 
 class DashboardLocationsController extends DashboardController
@@ -24,13 +25,17 @@ class DashboardLocationsController extends DashboardController
             $this->redirectToLocations();
         }
 
-        // if (!empty($_SESSION['show_create_restaurant_form'])) {
-        //     unset($_SESSION['show_create_restaurant_form']);
+        if (!empty($_SESSION['show_create_location_form'])) {
+            unset($_SESSION['show_create_location_form']);
 
-        //     return $this->renderPage('restaurant_create', [
-        //         'locations' => $locations,
-        //     ]);
-        // }
+            $formData = $_SESSION['form_data'] ?? [];
+            unset($_SESSION['form_data']);
+
+            return $this->renderPage('location_create', [
+                'formData' => $formData,
+                'status' => $this->getStatus(),
+            ]);
+        }
 
         return $this->renderPage('locations', [
             'locations' => $this->locationRepository->getSortedLocations($searchQuery, $sortColumn, $sortDirection),
@@ -54,8 +59,8 @@ class DashboardLocationsController extends DashboardController
         match ($action) {
             'delete' => $locationId ? $this->deleteLocation($locationId) : $this->redirectToLocations(false, 'Invalid location ID.'),
             'update' => $locationId ? $this->updateLocation($locationId) : $this->redirectToLocations(false, 'Invalid Location ID.'),
-            // 'create' => $this->showCreateRestaurantForm(),
-            // 'createNewRestaurant' => $this->createNewRestaurant(),
+            'create' => $this->showCreateLocationForm(),
+            'createNewLocation' => $this->createNewLocation(),
             default => $this->redirectToLocations(false, 'Invalid action.'),
         };
     }
@@ -91,6 +96,42 @@ class DashboardLocationsController extends DashboardController
         $this->redirectToLocations(!empty($updatedLocation), $updatedLocation ? 'Location updated successfully.' : 'No changes were made.');
     }
 
+    private function createNewLocation(): void
+    {
+        try {
+            $validator = new Validator();
+            $validation = $validator->validate($_POST, [
+                'name' => 'required|max:255',
+                'address' => 'required|max:255',
+                'coordinates' => 'nullable|regex:/^-?\d{1,3}\.\d+,\s*-?\d{1,3}\.\d+$/',
+                'preview_description' => 'nullable|max:500',
+                'main_description' => 'nullable|max:2000',
+            ]);
+
+            if ($validation->fails()) {
+                $_SESSION['show_create_location_form'] = true;
+                $_SESSION['form_data'] = $_POST;
+                throw new \Exception(implode(' ', $validation->errors()->all()));
+            }
+
+            $locationData = array_intersect_key($_POST, array_flip([
+                'name',
+                'address',
+                'coordinates',
+                'preview_description',
+                'main_description'
+            ]));
+
+            $createdLocation = $this->locationRepository->createLocation($locationData);
+            $this->redirectToLocations(!empty($createdLocation), "Location '{$locationData['name']}' created successfully.");
+        } catch (\Exception $e) {
+            $_SESSION['show_create_location_form'] = true;
+            $_SESSION['form_data'] = $_POST;
+            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
+            $this->redirectToLocations(false, $e->getMessage());
+        }
+    }
+
     private function getColumns(): array
     {
         return [
@@ -107,5 +148,11 @@ class DashboardLocationsController extends DashboardController
     private function redirectToLocations(bool $success = false, string $message = ''): void
     {
         $this->redirectTo('locations', $success, $message);
+    }
+
+    private function showCreateLocationForm(): void
+    {
+        $_SESSION['show_create_location_form'] = true;
+        $this->redirectToLocations();
     }
 }
