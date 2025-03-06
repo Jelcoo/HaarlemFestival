@@ -1,13 +1,15 @@
-<?php
-if (!isset($restaurant)) {
+<?php if (!isset($restaurant)) {
     return;
 }
-
 $showDetails = isset($_GET['details']) && $_GET['details'] == $restaurant->id;
 $showEditForm = isset($_GET['edit']) && $_GET['edit'] == $restaurant->id;
 
 $locationMatch = array_filter($locations, fn($loc) => $loc->id == $restaurant->location_id);
-$location = !empty($locationMatch) ? reset($locationMatch) : ['name' => 'Unknown Location', 'address' => 'Unknown Address'];
+$location = !empty($locationMatch) ? reset($locationMatch) : [
+    'name' => 'Unknown Location',
+    'address' => 'Unknown
+    Address'
+];
 ?>
 
 <div class="col-md-4">
@@ -17,11 +19,14 @@ $location = !empty($locationMatch) ? reset($locationMatch) : ['name' => 'Unknown
 
             <?php if (!$showEditForm) { ?>
                 <!-- Type and Rating and location -->
-                <p class="card-text"><strong>Type:</strong> <?php echo htmlspecialchars($restaurant->restaurant_type); ?>
+                <p class="card-text"><strong>Type:</strong>
+                    <?php echo htmlspecialchars($restaurant->restaurant_type); ?>
                 </p>
                 <p class="card-text"><strong>Rating:</strong> <?php echo htmlspecialchars($restaurant->rating); ?>/5</p>
                 <p><strong>Location:</strong>
-                    <?php echo htmlspecialchars($location->name) . ' - ' . htmlspecialchars($location->address); ?></p>
+                    <?php echo htmlspecialchars($location->name) ?> </br>
+                    <?php echo htmlspecialchars($location->address); ?>
+                </p>
             <?php } ?>
 
             <?php if (!$showDetails) { ?>
@@ -37,7 +42,8 @@ $location = !empty($locationMatch) ? reset($locationMatch) : ['name' => 'Unknown
                     <?php if (!$showEditForm) { ?>
                         <!-- Detail info -->
                         <p><strong>Preview:</strong> <?php echo htmlspecialchars($restaurant->preview_description); ?></p>
-                        <p><strong>Main Description:</strong> <?php echo htmlspecialchars($restaurant->main_description); ?></p>
+                        <p><strong>Main Description:</strong> <?php echo htmlspecialchars($restaurant->main_description); ?>
+                        </p>
                         <p><strong>Menu:</strong> <?php echo htmlspecialchars($restaurant->menu); ?></p>
 
                         <!-- Less Info, Edit, and Delete buttons -->
@@ -77,8 +83,7 @@ $location = !empty($locationMatch) ? reset($locationMatch) : ['name' => 'Unknown
                                 <select name="location_id" class="form-control" required>
                                     <option value="">Select a location</option>
                                     <?php foreach ($locations as $loc) { ?>
-                                        <option value="<?php echo $loc->id; ?>"
-                                            <?php echo ($restaurant->location_id == $loc->id) ? 'selected' : ''; ?>>
+                                        <option value="<?php echo $loc->id; ?>" <?php echo ($restaurant->location_id == $loc->id) ? 'selected' : ''; ?>>
                                             <?php echo htmlspecialchars($loc->name) . ' - ' . htmlspecialchars($loc->address); ?>
                                         </option>
                                     <?php } ?>
