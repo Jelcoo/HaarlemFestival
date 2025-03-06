@@ -6,20 +6,9 @@ use App\Config\Config;
 
 class FileService
 {
-    public function saveBase64File($base64String, $outputFile)
+    public function saveFile($inputFile, $outputFile)
     {
-        $base64String = preg_replace('/^data:(.*?);base64,/', '', $base64String);
-
-        $decodedData = base64_decode($base64String);
-        if ($decodedData == false) {
-            return false;
-        }
-
-        if (file_put_contents($outputFile, $decodedData) !== false) {
-            return $outputFile;
-        }
-
-        return false;
+        return move_uploaded_file($inputFile['tmp_name'], $outputFile);
     }
 
     public function deleteFile($filePath)

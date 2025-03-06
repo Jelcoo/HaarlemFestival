@@ -4,6 +4,11 @@ namespace App\Controllers;
 
 class ErrorController extends Controller
 {
+    public function error403(): string
+    {
+        return $this->pageLoader->setPage('_403')->render();
+    }
+
     public function error404(): string
     {
         return $this->pageLoader->setPage('_404')->render();
