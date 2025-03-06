@@ -1,4 +1,4 @@
-<h2>Create New Location</h2>
+<h2><?php echo isset($formData['id']) ? 'Update Location' : 'Create Location' ?></h2>
 
 <!-- Status message -->
 <?php if (!empty($status['message'])): ?>
@@ -11,7 +11,12 @@
     <div class="row">
         <div class="col-md-8">
             <form action="/dashboard/locations" method="POST">
-                <input type="hidden" name="action" value="createNewLocation">
+                <input type="hidden" name="action"
+                    value="<?php echo isset($formData['id']) ? 'update' : 'createLocation'; ?>">
+
+                <?php if (isset($formData['id'])): ?>
+                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($formData['id']); ?>">
+                <?php endif; ?>
 
                 <!-- Location Name -->
                 <div class="form-group">
@@ -49,7 +54,8 @@
                         class="form-control"><?php echo htmlspecialchars($formData['main_description'] ?? ''); ?></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-primary mt-4">Create Location</button>
+                <button type="submit"
+                    class="btn btn-primary mt-4"><?php echo isset($formData['id']) ? 'Update Location' : 'Create Location' ?></button>
             </form>
         </div>
     </div>
