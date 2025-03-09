@@ -330,9 +330,7 @@ include_once __DIR__ . '/../components/header.php';
             </thead>
             <tbody>
                 <?php foreach ($schedule['rows'] as $row) { ?>
-                    <tr data-start="<?php echo $row['start']; ?>" data-venue="<?php echo $row['venue']; ?>"
-                        data-artists="<?php echo implode(', ', $row['artists']); ?>" data-price="<?php echo $row['price']; ?>"
-                        data-day="<?php echo $schedule['date']; ?>" data-duration="<?php echo $row['duration']; ?>">
+                    <tr>
                         <td><?php echo $row['start']; ?></td>
                         <td><?php echo $row['venue']; ?></td>
                         <td><?php echo implode(', ', $row['artists']); ?></td>
@@ -340,7 +338,11 @@ include_once __DIR__ . '/../components/header.php';
                         <td><?php echo $row['duration']; ?> min</td>
                         <td><?php echo $row['tickets_available']; ?></td>
                         <td>&euro;<?php echo $row['price']; ?></td>
-                        <td><button class="btn btn-custom-yellow" onclick="openModal()"><i class="fa fa-ticket"></i> Buy
+                        <td><button class="btn btn-custom-yellow" onclick="openModal()"
+                                data-start="<?php echo $row['start']; ?>" data-venue="<?php echo $row['venue']; ?>"
+                                data-artists="<?php echo implode(', ', $row['artists']); ?>"
+                                data-price="<?php echo $row['price']; ?>" data-day="<?php echo $schedule['date']; ?>"
+                                data-duration="<?php echo $row['duration']; ?>"><i class="fa fa-ticket"></i> Buy
                                 now</button></td>
                     </tr>
                 <?php } ?>
@@ -387,6 +389,7 @@ include_once __DIR__ . '/../components/header.php';
     const increaseBtn = document.querySelector('.increase-btn');
     const quantityDisplay = document.querySelector('.quantity-display');
     const priceText = document.querySelector('.price-text');
+    let eventData;
     let basePrice = 0;
 
     let quantity = 1;
@@ -412,7 +415,11 @@ include_once __DIR__ . '/../components/header.php';
         if (!modalInstance) {
             modalInstance = new bootstrap.Modal(document.getElementById('ticketModal'));
         }
-        let dateString = `${event.target.parentNode.parentNode.dataset.day} 2025 ${event.target.parentNode.parentNode.dataset.start}`;
+        eventData = event.target.dataset;
+        if (eventData.start === undefined) {
+            eventData = event.target.parentElement.dataset;
+        }
+        let dateString = `${eventData.day} 2025 ${eventData.start}`;
         let date = new Date(dateString + ' UTC');
         let future = new Date(new Date(dateString + ' UTC').setMinutes(date.getMinutes() + parseInt(event.target.parentNode.parentNode.dataset.duration)));
         document.getElementById('modal-time').textContent = `${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')} - ${future.getUTCHours().toString().padStart(2, '0')}:${future.getUTCMinutes().toString().padStart(2, '0')}`;
