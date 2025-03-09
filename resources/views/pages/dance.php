@@ -377,7 +377,7 @@ include_once __DIR__ . '/../components/header.php';
 
                 <div class="price-text">Total price: €110</div>
 
-                <button class="book-btn">
+                <button class="book-btn" onclick="bookTickets()">
                     <i class="bi bi-cart"></i> Book Tickets
                 </button>
             </div>
@@ -421,12 +421,33 @@ include_once __DIR__ . '/../components/header.php';
         }
         let dateString = `${eventData.day} 2025 ${eventData.start}`;
         let date = new Date(dateString + ' UTC');
-        let future = new Date(new Date(dateString + ' UTC').setMinutes(date.getMinutes() + parseInt(event.target.parentNode.parentNode.dataset.duration)));
+        let future = new Date(new Date(dateString + ' UTC').setUTCMinutes(date.getUTCMinutes() + parseInt(eventData.duration)));
         document.getElementById('modal-time').textContent = `${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')} - ${future.getUTCHours().toString().padStart(2, '0')}:${future.getUTCMinutes().toString().padStart(2, '0')}`;
-        document.getElementById('modal-artists').innerHTML = event.target.parentNode.parentNode.dataset.artists.replace(', ', ' <br> ');
-        basePrice = parseInt(event.target.parentNode.parentNode.dataset.price);
+        document.getElementById('modal-artists').innerHTML = eventData.artists.replaceAll(', ', ' <br> ');
+        basePrice = parseInt(eventData.price);
         updateDisplay();
         modalInstance.show();
+    }
+    function bookTickets() {
+        let dateString = `${eventData.day} 2025 ${eventData.start}`;
+        let date = new Date(dateString + ' UTC');
+        let json = {
+            "event_id": 1,
+            "date": new Date(new Date(dateString + ' UTC').setUTCHours(0, 0, 0, 0)).toISOString(),
+            "image": "placeholder.png",
+            "name": eventData.venue,
+            "artist": [],
+            "starttime": date.toISOString(),
+            "endtime": new Date(date.setUTCMinutes(date.getUTCMinutes() + parseInt(eventData.duration))).toISOString(),
+            "price": basePrice,
+            "quantity": quantity
+        };
+        const items = localStorage.getItem('orderedItems');
+        if (items) {
+            const orderedItems = JSON.parse(items);
+            orderedItems.dance.push(json);
+            localStorage.setItem('orderedItems', JSON.stringify(orderedItems));
+        }
     }
 </script>
 
