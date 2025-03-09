@@ -109,7 +109,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function createDanceCardHTML(event, startTime, endTime) {
-        console.log(event.artist);
         const artists =
             event.artist.length > 0
                 ? event.artist
