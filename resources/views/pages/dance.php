@@ -442,6 +442,12 @@ include_once __DIR__ . '/../components/header.php';
             "price": basePrice,
             "quantity": quantity
         };
+        const artists = eventData.artists.split(', ');
+        for (let i = 0; i < artists.length; i++) {
+            json.artist.push({
+                "name": artists[i]
+            });
+        }
         const items = localStorage.getItem('orderedItems');
         if (items) {
             const orderedItems = JSON.parse(items);
