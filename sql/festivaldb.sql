@@ -35,7 +35,7 @@ CREATE TABLE locations (
     preview_description TEXT,
     main_description TEXT
 );
-INSERT INTO `locations` (`id`, `name`, `event_type`, `coordinates`, `adress`, `preview_description`, `main_description`) VALUES
+INSERT INTO `locations` (`id`, `name`, `event_type`, `coordinates`, `address`, `preview_description`, `main_description`) VALUES
 (1, 'Café de Roemer', 'yummy', '52.37999475625204,4.632473312948718', 'Botermarkt 17, 2011 XL Haarlem', 'A Haarlem favorite for over 30 years, Café de Roemer offers a menu with both classic and innovative dishes Relax on the sunny terrace or in the cozy glass conservatory, perfect for any weather Whether for lunch, dinner, or drinks, enjoy great food and warm hospitality!', NULL),
 (2, 'Ratatouille', 'yummy', '52.378793560839426,4.638285403154393', 'Spaarne 96, 2011 CL Haarlem', 'Ratatouille Food and Wine in Haarlem, led by chef Jozua Jaring, offers a refined dining experience with dishes like Holstein tartar and Langoustine, paired with exclusive wines Perfect for any occasion, the restaurant combines innovative flavors and exceptional hospitality for a memorable culinary journey.', NULL),
 (3, 'Restaurant ML', 'yummy', '52.381106249162436,4.638821749729203', 'Kleine Houtstraat 70, 2011 DR Haarlem', 'Restaurant ML in Haarlem, awarded a Michelin star, offers bold dishes by chef Mark Gratama in a modern setting with an open kitchen The menu blends French and international flavors, complemented by a curated wine list from sommelier Tim Jesse.', NULL),
