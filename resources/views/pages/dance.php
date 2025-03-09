@@ -311,9 +311,6 @@ include_once __DIR__ . '/../components/header.php';
         <?php } ?>
     <?php } ?>
 </div>
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ticketModal">
-    Open Ticket Modal
-</button>
 <h2 class="text-center mt-5">The Schedule</h2>
 <?php foreach ($schedules as $schedule) { ?>
     <div class="container table-container">
@@ -334,8 +331,8 @@ include_once __DIR__ . '/../components/header.php';
             <tbody>
                 <?php foreach ($schedule['rows'] as $row) { ?>
                     <tr data-start="<?php echo $row['start']; ?>" data-venue="<?php echo $row['venue']; ?>"
-                        data-artists="<?php echo implode(',', $row['artists']); ?>" data-price="<?php echo $row['price']; ?>"
-                        data-day="<?php echo $schedule['date']; ?>">
+                        data-artists="<?php echo implode(', ', $row['artists']); ?>" data-price="<?php echo $row['price']; ?>"
+                        data-day="<?php echo $schedule['date']; ?>" data-duration="<?php echo $row['duration']; ?>">
                         <td><?php echo $row['start']; ?></td>
                         <td><?php echo $row['venue']; ?></td>
                         <td><?php echo implode(', ', $row['artists']); ?></td>
@@ -415,8 +412,11 @@ include_once __DIR__ . '/../components/header.php';
         if (!modalInstance) {
             modalInstance = new bootstrap.Modal(document.getElementById('ticketModal'));
         }
-        document.getElementById('modal-time').textContent = event.target.parentNode.parentNode.dataset.start;
-        document.getElementById('modal-artists').textContent = event.target.parentNode.parentNode.dataset.artists;
+        let dateString = `${event.target.parentNode.parentNode.dataset.day} 2025 ${event.target.parentNode.parentNode.dataset.start}`;
+        let date = new Date(dateString + ' UTC');
+        let future = new Date(new Date(dateString + ' UTC').setMinutes(date.getMinutes() + parseInt(event.target.parentNode.parentNode.dataset.duration)));
+        document.getElementById('modal-time').textContent = `${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')} - ${future.getUTCHours().toString().padStart(2, '0')}:${future.getUTCMinutes().toString().padStart(2, '0')}`;
+        document.getElementById('modal-artists').innerHTML = event.target.parentNode.parentNode.dataset.artists.replace(', ', ' <br> ');
         basePrice = parseInt(event.target.parentNode.parentNode.dataset.price);
         updateDisplay();
         modalInstance.show();
