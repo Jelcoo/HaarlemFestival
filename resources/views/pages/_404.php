@@ -1,4 +1,4 @@
-<div class="col-md-12 text-center">
+<div class="col-md-12 text-center mt-auto mb-auto">
 	<h1>404</h1>
 	<h2>Page Not Found</h2>
 	<p>

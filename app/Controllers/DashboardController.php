@@ -16,11 +16,14 @@ class DashboardController extends Controller
 
     protected function renderPage(string $page, array $data): string
     {
-        return $this->pageLoader->setPage('dashboard/index')->render([
-            'activePage' => $page,
-            'sidebarItems' => $this->getSidebarItems(),
-            'content' => $this->loadContent($page, $data),
-        ]);
+        return $this->pageLoader
+            ->setLayout('dashboard')
+            ->setPage('dashboard/index')
+            ->render([
+                'activePage' => $page,
+                'sidebarItems' => $this->getSidebarItems(),
+                'content' => $this->loadContent($page, $data),
+            ]);
     }
 
     protected function getSidebarItems(): array
