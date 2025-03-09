@@ -85,18 +85,13 @@ class DashboardRestaurantsController extends DashboardController
         try {
             $existingRestaurant = $this->restaurantRepository->getRestaurantById($restaurantId);
 
-            if (!$existingRestaurant) {
-                throw new \Exception('Restaurant not found.');
-            }
+            if (!$existingRestaurant) throw new \Exception('Restaurant not found.');
 
             $validator = new Validator();
             $validation = $validator->validate($_POST, [
-                'name' => 'required|alpha_spaces|max:255',
-                'restaurant_type' => 'nullable|alpha_spaces|max:100',
+                'restaurant_type' => 'nullable|max:100',
                 'rating' => 'nullable|numeric|min:0|max:5',
                 'location_id' => 'required|integer',
-                'preview_description' => 'nullable|max:500',
-                'main_description' => 'nullable|max:2000',
                 'menu' => 'nullable|max:5000',
             ]);
 
@@ -105,22 +100,13 @@ class DashboardRestaurantsController extends DashboardController
                 throw new \Exception(implode(' ', $validation->errors()->all()));
             }
 
-            $fieldsToUpdate = [
-                'name' => $_POST['name'] ?? $existingRestaurant->name,
-                'restaurant_type' => $_POST['restaurant_type'] ?? $existingRestaurant->restaurant_type,
-                'rating' => isset($_POST['rating']) ? (float) $_POST['rating'] : $existingRestaurant->rating,
-                'location_id' => (int) $_POST['location_id'],
-                'preview_description' => $_POST['preview_description'] ?? $existingRestaurant->preview_description,
-                'main_description' => $_POST['main_description'] ?? $existingRestaurant->main_description,
-                'menu' => $_POST['menu'] ?? $existingRestaurant->menu,
-            ];
+            $existingRestaurant->restaurant_type = $_POST['restaurant_type'] ?? null;
+            $existingRestaurant->rating = $_POST['rating'] ?? null;
+            $existingRestaurant->location_id = (int) $_POST['location_id'];
+            $existingRestaurant->menu = $_POST['menu'] ?? null;
 
-            foreach ($fieldsToUpdate as $field => $value) {
-                $existingRestaurant->$field = $value;
-            }
-
-            $updatedRestaurant = $this->restaurantRepository->updateRestaurant($existingRestaurant);
-            $this->redirectTo("restaurants?details=$restaurantId", !empty($updatedRestaurant), 'Restaurant updated successfully.');
+            $this->restaurantRepository->updateRestaurant($existingRestaurant);
+            $this->redirectTo("restaurants?details=$restaurantId", true, 'Restaurant updated successfully.');
         } catch (\Exception $e) {
             $_SESSION['form_data'] = $_POST;
             $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];

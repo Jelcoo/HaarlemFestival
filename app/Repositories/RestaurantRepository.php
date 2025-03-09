@@ -73,39 +73,47 @@ class RestaurantRepository extends Repository
         return null;
     }
 
-    public function updateRestaurant(Restaurant $restaurant): ?Restaurant
+    public function updateRestaurant(Restaurant $restaurant): void
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
-
-        $existingRestaurant = $this->getRestaurantById($restaurant->id);
-        if (!$existingRestaurant) {
-            return null;
-        }
-
-        $fieldsToCompare = [
-            'name' => $restaurant->name,
+        $queryBuilder->table('restaurants')->where('id', '=', $restaurant->id)->update([
+            'location_id' => $restaurant->location_id,
             'restaurant_type' => $restaurant->restaurant_type,
             'rating' => $restaurant->rating,
-            'location_id' => $restaurant->location_id,
-            'preview_description' => $restaurant->preview_description,
-            'main_description' => $restaurant->main_description,
             'menu' => $restaurant->menu,
-        ];
-
-        $updatedFields = [];
-
-        foreach ($fieldsToCompare as $field => $newValue) {
-            if ($newValue !== $existingRestaurant->$field) {
-                $updatedFields[$field] = $newValue;
-            }
-        }
-
-        if (!empty($updatedFields)) {
-            $queryBuilder->table('restaurants')->where('id', '=', $restaurant->id)->update($updatedFields);
-
-            return $this->getRestaurantById($restaurant->id);
-        }
-
-        return $existingRestaurant;
+        ]);
     }
+
+    // public function updateRestaurant(Restaurant $restaurant): ?Restaurant {
+    //     $queryBuilder = new QueryBuilder($this->getConnection());
+
+    //     $existingRestaurant = $this->getRestaurantById($restaurant->id);
+    //     if (!$existingRestaurant) {
+    //         return null;
+    //     }
+
+    //     $fieldsToCompare = [
+    //         'name' => $restaurant->name,
+    //         'restaurant_type' => $restaurant->restaurant_type,
+    //         'rating' => $restaurant->rating,
+    //         'location_id' => $restaurant->location_id,
+    //         'menu' => $restaurant->menu,
+    //     ];
+
+    //     $updatedFields = [];
+
+    //     foreach ($fieldsToCompare as $field => $newValue) {
+    //         if ($newValue !== $existingRestaurant->$field) {
+    //             $updatedFields[$field] = $newValue;
+    //         }
+    //     }
+
+    //     if (!empty($updatedFields)) {
+    //         $queryBuilder->table('restaurants')->where('id', '=', $restaurant->id)->update($updatedFields);
+
+    //         return $this->getRestaurantById($restaurant->id);
+    //     }
+
+    //     return $existingRestaurant;
+    // }
 }
