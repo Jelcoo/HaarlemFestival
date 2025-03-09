@@ -1,3 +1,8 @@
+<?php
+
+use App\Enum\EventTypeEnum;
+?>
+
 <h2><?php echo isset($formData['id']) ? 'Update Location' : 'Create Location' ?></h2>
 
 <!-- Status message -->
@@ -23,6 +28,20 @@
                     <label for="name">Location Name</label>
                     <input type="text" id="name" name="name" class="form-control" required
                         value="<?php echo htmlspecialchars($formData['name'] ?? ''); ?>">
+                </div>
+
+                <!-- Event Type Dropdown -->
+                <div class="form-group mt-3">
+                    <label for="event_type">Event Type</label>
+                    <select id="event_type" name="event_type" class="form-control" required>
+                        <option value="">Select an event type</option>
+                        <?php foreach (EventTypeEnum::cases() as $eventType) { ?>
+                            <option value="<?php echo $eventType->value; ?>"
+                                <?php echo (isset($formData['event_type']) && $formData['event_type'] === $eventType->value) ? 'selected' : ''; ?>>
+                                <?php echo ucfirst($eventType->name); ?>
+                            </option>
+                        <?php } ?>
+                    </select>
                 </div>
 
                 <!-- Address -->

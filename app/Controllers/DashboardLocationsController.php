@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Enum\EventTypeEnum;
 use Rakit\Validation\Validator;
 use App\Repositories\LocationRepository;
 
@@ -49,6 +50,9 @@ class DashboardLocationsController extends DashboardController
 
     public function handleAction(): void
     {
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return;
         }
@@ -72,7 +76,7 @@ class DashboardLocationsController extends DashboardController
         $this->redirectToLocations(!empty($success), $success ? 'Location deleted successfully.' : 'Failed to delete Location');
     }
 
-    private function editLocation(): string
+    private function editLocation(): void
     {
         try {
             $locationId = $_POST['id'] ?? null;
@@ -89,6 +93,7 @@ class DashboardLocationsController extends DashboardController
             $_SESSION['form_data'] = [
                 'id' => $existingLocation->id,
                 'name' => $existingLocation->name,
+                'event_type' => $existingLocation->event_type->value,
                 'address' => $existingLocation->address,
                 'coordinates' => $existingLocation->coordinates,
                 'preview_description' => $existingLocation->preview_description,
@@ -116,6 +121,7 @@ class DashboardLocationsController extends DashboardController
             $validator = new Validator();
             $validation = $validator->validate($_POST, [
                 'name' => 'required|max:255',
+                'event_type' => 'required|in:dance,yummy,history,teylers',
                 'address' => 'required|max:255',
                 'coordinates' => 'nullable|regex:/^-?\d{1,3}\.\d+,\s*-?\d{1,3}\.\d+$/',
                 'preview_description' => 'nullable|max:500',
@@ -128,20 +134,19 @@ class DashboardLocationsController extends DashboardController
                 throw new \Exception(implode(' ', $validation->errors()->all()));
             }
 
-            $fieldsToUpdate = [
-                'name' => $_POST['name'] ?? $existingLocation->name,
-                'coordinates' => $_POST['coordinates'] ?? $existingLocation->coordinates,
-                'address' => $_POST['address'] ?? $existingLocation->address,
-                'preview_description' => $_POST['preview_description'] ?? $existingLocation->preview_description,
-                'main_description' => $_POST['main_description'] ?? $existingLocation->main_description,
-            ];
-
-            foreach ($fieldsToUpdate as $field => $value) {
-                $existingLocation->$field = $value;
+            if (!isset($_POST['event_type']) || !in_array($_POST['event_type'], array_column(EventTypeEnum::cases(), 'value'))) {
+                throw new \Exception('Invalid or missing event type.');
             }
 
-            $updatedLocation = $this->locationRepository->updateLocation($existingLocation);
-            $this->redirectToLocations(!empty($updatedLocation), $updatedLocation ? 'Location updated successfully.' : 'No changes were made.');
+            $existingLocation->name = $_POST['name'];
+            $existingLocation->event_type = EventTypeEnum::from($_POST['event_type']);
+            $existingLocation->coordinates = $_POST['coordinates'] ?? null;
+            $existingLocation->address = $_POST['address'] ?? null;
+            $existingLocation->preview_description = $_POST['preview_description'] ?? null;
+            $existingLocation->main_description = $_POST['main_description'] ?? null;
+
+            $this->locationRepository->updateLocation($existingLocation);
+            $this->redirectTo("locations?details=$locationId", true, 'Location updated successfully');
         } catch (\Exception $e) {
             $_SESSION['form_data'] = $_POST;
             $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
