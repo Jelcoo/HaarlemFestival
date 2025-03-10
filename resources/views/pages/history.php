@@ -98,22 +98,22 @@ $schedules = [
             [
                 'time' => '10:00',
                 'tours' => [
-                    'Dutch' => 1,
-                    'English' => 1,
+                    'Dutch' => [1],
+                    'English' => [2],
                 ],
             ],
             [
                 'time' => '13:00',
                 'tours' => [
-                    'Dutch' => 1,
-                    'English' => 1,
+                    'Dutch' => [3],
+                    'English' => [4],
                 ],
             ],
             [
                 'time' => '16:00',
                 'tours' => [
-                    'Dutch' => 1,
-                    'English' => 1,
+                    'Dutch' => [6],
+                    'English' => [5],
                 ],
             ],
         ],
@@ -144,24 +144,24 @@ $schedules = [
             [
                 'time' => '10:00',
                 'tours' => [
-                    'Dutch' => 1,
-                    'English' => 1,
+                    'Dutch' => [7],
+                    'English' => [10],
                 ],
             ],
             [
                 'time' => '13:00',
                 'tours' => [
-                    'Dutch' => 1,
-                    'English' => 1,
-                    'Chinese' => 1,
+                    'Dutch' => [8],
+                    'English' => [11],
+                    'Chinese' => [13],
                 ],
             ],
             [
                 'time' => '16:00',
                 'tours' => [
-                    'Dutch' => 1,
-                    'English' => 1,
-                    'Chinese' => 1,
+                    'Dutch' => [9],
+                    'English' => [12],
+                    'Chinese' => [14],
                 ],
             ],
         ],
@@ -192,24 +192,24 @@ $schedules = [
             [
                 'time' => '10:00',
                 'tours' => [
-                    'Dutch' => 2,
-                    'English' => 2,
+                    'Dutch' => [15, 16],
+                    'English' => [20, 21],
                 ],
             ],
             [
                 'time' => '13:00',
                 'tours' => [
-                    'Dutch' => 2,
-                    'English' => 2,
-                    'Chinese' => 1,
+                    'Dutch' => [17, 18],
+                    'English' => [22, 23],
+                    'Chinese' => [25],
                 ],
             ],
             [
                 'time' => '16:00',
                 'tours' => [
-                    'Dutch' => 1,
-                    'English' => 1,
-                    'Chinese' => 1,
+                    'Dutch' => [19],
+                    'English' => [24],
+                    'Chinese' => [26],
                 ],
             ],
         ],
@@ -240,24 +240,24 @@ $schedules = [
             [
                 'time' => '10:00',
                 'tours' => [
-                    'Dutch' => 2,
-                    'English' => 2,
-                    'Chinese' => 1,
+                    'Dutch' => [27, 28],
+                    'English' => [33, 34],
+                    'Chinese' => [39],
                 ],
             ],
             [
                 'time' => '13:00',
                 'tours' => [
-                    'Dutch' => 3,
-                    'English' => 3,
-                    'Chinese' => 2,
+                    'Dutch' => [29, 30, 31],
+                    'English' => [35, 36, 37],
+                    'Chinese' => [40, 41],
                 ],
             ],
             [
                 'time' => '16:00',
                 'tours' => [
-                    'Dutch' => 1,
-                    'English' => 1,
+                    'Dutch' => [32],
+                    'English' => [38],
                 ],
             ],
         ],
@@ -305,67 +305,83 @@ include_once __DIR__ . '/../components/header.php';
     <?php foreach ($schedules as $schedule) { ?>
         <?php if ($scheduleCount % 4 == 0) { ?>
             <div class="row g-0 gap-2">
-        <?php } ?>
+            <?php } ?>
 
-        <div class="tour-ticket-card card shadow-sm">
-            <div class="card-header text-center">
-                <h5 class="card-title mb-0"><?php echo $schedule['date']; ?></h5>
-            </div>
-            <div class="card-body">
-                <div class="tour-detail">
-                <div class="row mb-2">
-                    <div class="col-5 text-muted">Start Location</div>
-                    <div class="col-7 text-end"><?php echo $schedule['location']; ?></div>
+            <div class="tour-ticket-card card shadow-sm">
+                <div class="card-header text-center">
+                    <h5 class="card-title mb-0"><?php echo $schedule['date']; ?></h5>
                 </div>
-                <div class="row mb-2">
-                    <div class="col-5 text-muted">Seats per Tour</div>
-                    <div class="col-7 text-end"><?php echo $schedule['seats_per_tour']; ?></div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-5 text-muted">Prices</div>
-                    <div class="col-7 text-end">
-                        <div>Single: €<?php echo $schedule['prices']['single']; ?></div>
-                        <div>Family: €<?php echo $schedule['prices']['family']; ?> *</div>
-                    </div>
-                </div>
-
-                <div class="guides-section mb-3">
-                    <h6 class="text-center mb-2">Guides</h6>
-                    <?php foreach ($schedule['guides'] as $guide) { ?>
-                        <div class="row mb-1">
-                            <div class="col-5 text-muted"><?php echo $guide['language']; ?></div>
-                            <div class="col-7 text-end"><?php echo implode(', ', $guide['names']); ?></div>
+                <div class="card-body">
+                    <div class="tour-detail">
+                        <div class="row mb-2">
+                            <div class="col-5 text-muted">Start Location</div>
+                            <div class="col-7 text-end"><?php echo $schedule['location']; ?></div>
                         </div>
-                    <?php } ?>
-                </div>
-
-                <div class="starting-times">
-                    <h6 class="text-center mb-2">Starting Time</h6>
-                    <div class="time-slots">
-                        <?php foreach ($schedule['start'] as $start) { ?>
-                            <div class="row mb-1">
-                                <div class="col-6"><?php echo $start['time']; ?></div>
-                                <div class="col-6 text-end">
-                                    <?php
-                                        $tours = array_map(function ($lang, $count) {
-                                            return "{$count}x $lang";
-                                        }, array_keys($start['tours']), array_values($start['tours']));
-                            echo implode('<br>', $tours);
-                            ?>
-                                </div>
+                        <div class="row mb-2">
+                            <div class="col-5 text-muted">Seats per Tour</div>
+                            <div class="col-7 text-end"><?php echo $schedule['seats_per_tour']; ?></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-5 text-muted">Prices</div>
+                            <div class="col-7 text-end">
+                                <div>Single: €<?php echo $schedule['prices']['single']; ?></div>
+                                <div>Family: €<?php echo $schedule['prices']['family']; ?> *</div>
                             </div>
-                        <?php } ?>
+                        </div>
+
+                        <div class="guides-section mb-3">
+                            <h6 class="text-center mb-2">Guides</h6>
+                            <?php foreach ($schedule['guides'] as $guide) { ?>
+                                <div class="row mb-1">
+                                    <div class="col-5 text-muted"><?php echo $guide['language']; ?></div>
+                                    <div class="col-7 text-end"><?php echo implode(', ', $guide['names']); ?></div>
+                                </div>
+                            <?php } ?>
+                        </div>
+
+                        <div class="starting-times">
+                            <h6 class="text-center mb-2">Starting Time</h6>
+                            <div class="time-slots">
+                                <?php foreach ($schedule['start'] as $start) { ?>
+                                    <div class="row mb-1">
+                                        <div class="col-6"><?php echo $start['time']; ?></div>
+                                        <div class="col-6 text-end">
+                                            <?php
+                                            $tours = array_map(function ($lang, $count) {
+                                                return count($count) . "x $lang";
+                                            }, array_keys($start['tours']), array_values($start['tours']));
+                                    echo implode('<br>', $tours);
+                                    ?>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <div class="card-footer">
+                    <button class="btn btn-custom-yellow w-100"
+                        data-price-family="<?php echo $schedule['prices']['family']; ?>"
+                        data-price-single="<?php echo $schedule['prices']['single']; ?>" data-tours="<?php foreach ($schedule['start'] as $start) {
+                            // Start with the time followed by a dot
+                            echo $start['time'] . '.';
+
+                            $langStrings = [];
+                            // Loop through each language and its array of tour IDs
+                            foreach ($start['tours'] as $lang => $ids) {
+                                // Build a string in the format "Language:id1,id2"
+                                $langStrings[] = $lang . ':' . implode(',', $ids);
+                            }
+
+                            // Join all language strings with a "?" delimiter, and end with a semicolon
+                            echo implode('?', $langStrings) . ';';
+                        } ?>" onclick="parseData()"><i class="fa-solid fa-ticket"></i>
+                        Buy Ticket</button>
                 </div>
             </div>
-            <div class="card-footer">
-                <button class="btn btn-custom-yellow w-100"><i class="fa-solid fa-ticket"></i> Buy Ticket</button>
-            </div>
-        </div>
 
-        <?php ++$scheduleCount; ?>
-        <?php if ($scheduleCount % 4 == 0 || $scheduleCount == count($locations)) { ?>
+            <?php ++$scheduleCount; ?>
+            <?php if ($scheduleCount % 4 == 0 || $scheduleCount == count($locations)) { ?>
             </div>
         <?php } ?>
     <?php } ?>
