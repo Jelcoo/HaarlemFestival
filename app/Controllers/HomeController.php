@@ -2,16 +2,26 @@
 
 namespace App\Controllers;
 
+use App\Repositories\LocationRepository;
+
 class HomeController extends Controller
 {
+    private LocationRepository $locationRepository;
+
     public function __construct()
     {
         parent::__construct();
+
+        $this->locationRepository = new LocationRepository();
     }
 
     public function index(): string
     {
-        return $this->pageLoader->setPage('home')->render();
+        $locations = $this->locationRepository->getAllLocations();
+
+        return $this->pageLoader->setPage('home')->render([
+            'locations' => $locations,
+        ]);
     }
 
     public function dance(): string

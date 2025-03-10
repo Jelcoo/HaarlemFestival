@@ -300,7 +300,7 @@ include_once __DIR__ . '/../components/header.php';
 </div>
 
 <h2 class="text-center mt-5">Schedule</h2>
-<div class="container p-0">
+<div class="container p-0 mb-5">
     <?php $scheduleCount = 0; ?>
     <?php foreach ($schedules as $schedule) { ?>
         <?php if ($scheduleCount % 4 == 0) { ?>
@@ -432,6 +432,7 @@ include_once __DIR__ . '/../components/header.php';
         </div>
     </div>
 </div>
+
 <script src="/assets/js/utils.js"></script>
 <script>
     const swiper = new Swiper('.swiper', {
