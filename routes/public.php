@@ -8,6 +8,10 @@ use App\Middleware\EnsureNotLoggedIn;
 $router = App\Application\Router::getInstance();
 
 $router->get('/', [App\Controllers\HomeController::class, 'index']);
+$router->get('/dance', [App\Controllers\HomeController::class, 'dance']);
+$router->get('/yummy', [App\Controllers\HomeController::class, 'yummy']);
+$router->get('/history', [App\Controllers\HomeController::class, 'history']);
+$router->get('/magic', [App\Controllers\HomeController::class, 'magic']);
 
 $router->get('/editor', [App\Controllers\EditorController::class, 'index']);
 $router->post('/editor', [App\Controllers\EditorController::class, 'editPost']);
@@ -25,6 +29,7 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
 
     $router->get('/account/manage', [App\Controllers\ProfileController::class, 'index']);
     $router->post('/account/manage', [App\Controllers\ProfileController::class, 'update']);
+    $router->post('/account/manage/password', [App\Controllers\ProfileController::class, 'updatePassword']);
 
     $router->middleware(EnsureEmployee::class, function () use ($router) {
         $router->get('/qrcode', [App\Controllers\QrController::class, 'index']);

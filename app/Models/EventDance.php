@@ -6,7 +6,6 @@ use App\Enum\DanceSessionEnum;
 
 class EventDance extends Event
 {
-    public int $artist_id;
     public int $location_id;
     public int $total_tickets;
     public DanceSessionEnum $session;
@@ -16,7 +15,6 @@ class EventDance extends Event
     {
         parent::__construct($collection);
 
-        $this->artist_id = $collection['artist_id'];
         $this->location_id = $collection['location'];
         $this->total_tickets = $collection['total_tickets'];
         $this->session = DanceSessionEnum::from($collection['session']);
