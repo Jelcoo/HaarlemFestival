@@ -98,22 +98,22 @@ $schedules = [
             [
                 'time' => '10:00',
                 'tours' => [
-                    'Dutch' => 1,
-                    'English' => 1,
+                    'Dutch' => [1],
+                    'English' => [2],
                 ],
             ],
             [
                 'time' => '13:00',
                 'tours' => [
-                    'Dutch' => 1,
-                    'English' => 1,
+                    'Dutch' => [3],
+                    'English' => [4],
                 ],
             ],
             [
                 'time' => '16:00',
                 'tours' => [
-                    'Dutch' => 1,
-                    'English' => 1,
+                    'Dutch' => [6],
+                    'English' => [5],
                 ],
             ],
         ],
@@ -144,24 +144,24 @@ $schedules = [
             [
                 'time' => '10:00',
                 'tours' => [
-                    'Dutch' => 1,
-                    'English' => 1,
+                    'Dutch' => [7],
+                    'English' => [10],
                 ],
             ],
             [
                 'time' => '13:00',
                 'tours' => [
-                    'Dutch' => 1,
-                    'English' => 1,
-                    'Chinese' => 1,
+                    'Dutch' => [8],
+                    'English' => [11],
+                    'Chinese' => [13],
                 ],
             ],
             [
                 'time' => '16:00',
                 'tours' => [
-                    'Dutch' => 1,
-                    'English' => 1,
-                    'Chinese' => 1,
+                    'Dutch' => [9],
+                    'English' => [12],
+                    'Chinese' => [14],
                 ],
             ],
         ],
@@ -192,24 +192,24 @@ $schedules = [
             [
                 'time' => '10:00',
                 'tours' => [
-                    'Dutch' => 2,
-                    'English' => 2,
+                    'Dutch' => [15, 16],
+                    'English' => [20, 21],
                 ],
             ],
             [
                 'time' => '13:00',
                 'tours' => [
-                    'Dutch' => 2,
-                    'English' => 2,
-                    'Chinese' => 1,
+                    'Dutch' => [17, 18],
+                    'English' => [22, 23],
+                    'Chinese' => [25],
                 ],
             ],
             [
                 'time' => '16:00',
                 'tours' => [
-                    'Dutch' => 1,
-                    'English' => 1,
-                    'Chinese' => 1,
+                    'Dutch' => [19],
+                    'English' => [24],
+                    'Chinese' => [26],
                 ],
             ],
         ],
@@ -240,24 +240,24 @@ $schedules = [
             [
                 'time' => '10:00',
                 'tours' => [
-                    'Dutch' => 2,
-                    'English' => 2,
-                    'Chinese' => 1,
+                    'Dutch' => [27, 28],
+                    'English' => [33, 34],
+                    'Chinese' => [39],
                 ],
             ],
             [
                 'time' => '13:00',
                 'tours' => [
-                    'Dutch' => 3,
-                    'English' => 3,
-                    'Chinese' => 2,
+                    'Dutch' => [29, 30, 31],
+                    'English' => [35, 36, 37],
+                    'Chinese' => [40, 41],
                 ],
             ],
             [
                 'time' => '16:00',
                 'tours' => [
-                    'Dutch' => 1,
-                    'English' => 1,
+                    'Dutch' => [32],
+                    'English' => [38],
                 ],
             ],
         ],
@@ -305,72 +305,134 @@ include_once __DIR__ . '/../components/header.php';
     <?php foreach ($schedules as $schedule) { ?>
         <?php if ($scheduleCount % 4 == 0) { ?>
             <div class="row g-0 gap-2">
-        <?php } ?>
+            <?php } ?>
 
-        <div class="tour-ticket-card card shadow-sm">
-            <div class="card-header text-center">
-                <h5 class="card-title mb-0"><?php echo $schedule['date']; ?></h5>
-            </div>
-            <div class="card-body">
-                <div class="tour-detail">
-                <div class="row mb-2">
-                    <div class="col-5 text-muted">Start Location</div>
-                    <div class="col-7 text-end"><?php echo $schedule['location']; ?></div>
+            <div class="tour-ticket-card card shadow-sm">
+                <div class="card-header text-center">
+                    <h5 class="card-title mb-0"><?php echo $schedule['date']; ?></h5>
                 </div>
-                <div class="row mb-2">
-                    <div class="col-5 text-muted">Seats per Tour</div>
-                    <div class="col-7 text-end"><?php echo $schedule['seats_per_tour']; ?></div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-5 text-muted">Prices</div>
-                    <div class="col-7 text-end">
-                        <div>Single: €<?php echo $schedule['prices']['single']; ?></div>
-                        <div>Family: €<?php echo $schedule['prices']['family']; ?> *</div>
-                    </div>
-                </div>
-
-                <div class="guides-section mb-3">
-                    <h6 class="text-center mb-2">Guides</h6>
-                    <?php foreach ($schedule['guides'] as $guide) { ?>
-                        <div class="row mb-1">
-                            <div class="col-5 text-muted"><?php echo $guide['language']; ?></div>
-                            <div class="col-7 text-end"><?php echo implode(', ', $guide['names']); ?></div>
+                <div class="card-body">
+                    <div class="tour-detail">
+                        <div class="row mb-2">
+                            <div class="col-5 text-muted">Start Location</div>
+                            <div class="col-7 text-end"><?php echo $schedule['location']; ?></div>
                         </div>
-                    <?php } ?>
-                </div>
-
-                <div class="starting-times">
-                    <h6 class="text-center mb-2">Starting Time</h6>
-                    <div class="time-slots">
-                        <?php foreach ($schedule['start'] as $start) { ?>
-                            <div class="row mb-1">
-                                <div class="col-6"><?php echo $start['time']; ?></div>
-                                <div class="col-6 text-end">
-                                    <?php
-                                        $tours = array_map(function ($lang, $count) {
-                                            return "{$count}x $lang";
-                                        }, array_keys($start['tours']), array_values($start['tours']));
-                            echo implode('<br>', $tours);
-                            ?>
-                                </div>
+                        <div class="row mb-2">
+                            <div class="col-5 text-muted">Seats per Tour</div>
+                            <div class="col-7 text-end"><?php echo $schedule['seats_per_tour']; ?></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-5 text-muted">Prices</div>
+                            <div class="col-7 text-end">
+                                <div>Single: €<?php echo $schedule['prices']['single']; ?></div>
+                                <div>Family: €<?php echo $schedule['prices']['family']; ?> *</div>
                             </div>
-                        <?php } ?>
+                        </div>
+
+                        <div class="guides-section mb-3">
+                            <h6 class="text-center mb-2">Guides</h6>
+                            <?php foreach ($schedule['guides'] as $guide) { ?>
+                                <div class="row mb-1">
+                                    <div class="col-5 text-muted"><?php echo $guide['language']; ?></div>
+                                    <div class="col-7 text-end"><?php echo implode(', ', $guide['names']); ?></div>
+                                </div>
+                            <?php } ?>
+                        </div>
+
+                        <div class="starting-times">
+                            <h6 class="text-center mb-2">Starting Time</h6>
+                            <div class="time-slots">
+                                <?php foreach ($schedule['start'] as $start) { ?>
+                                    <div class="row mb-1">
+                                        <div class="col-6"><?php echo $start['time']; ?></div>
+                                        <div class="col-6 text-end">
+                                            <?php
+                                            $tours = array_map(function ($lang, $count) {
+                                                return count($count) . "x $lang";
+                                            }, array_keys($start['tours']), array_values($start['tours']));
+                                    echo implode('<br>', $tours);
+                                    ?>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <div class="card-footer">
+                    <button class="btn btn-custom-yellow w-100"
+                        data-price-family="<?php echo $schedule['prices']['family']; ?>"
+                        data-price-single="<?php echo $schedule['prices']['single']; ?>" data-tours="<?php foreach ($schedule['start'] as $start) {
+                            // Start with the time followed by a dot
+                            echo $start['time'] . '.';
+
+                            $langStrings = [];
+                            // Loop through each language and its array of tour IDs
+                            foreach ($start['tours'] as $lang => $ids) {
+                                // Build a string in the format "Language:id1,id2"
+                                $langStrings[] = $lang . ':' . implode(',', $ids);
+                            }
+
+                            // Join all language strings with a "?" delimiter, and end with a semicolon
+                            echo implode('?', $langStrings) . ';';
+                        } ?>" data-date="<?php echo $schedule['date']; ?>" onclick="openModal()"><i
+                            class="fa-solid fa-ticket"></i>
+                        Buy Ticket</button>
                 </div>
             </div>
-            <div class="card-footer">
-                <button class="btn btn-custom-yellow w-100"><i class="fa-solid fa-ticket"></i> Buy Ticket</button>
-            </div>
-        </div>
 
-        <?php ++$scheduleCount; ?>
-        <?php if ($scheduleCount % 4 == 0 || $scheduleCount == count($locations)) { ?>
+            <?php ++$scheduleCount; ?>
+            <?php if ($scheduleCount % 4 == 0 || $scheduleCount == count($locations)) { ?>
             </div>
         <?php } ?>
     <?php } ?>
 </div>
+<div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="booking-container">
+                    <div class="section-title" id="date">Date</div>
 
+                    <div class="field-label">Language:</div>
+                    <select class="form-select dropdown-select" id="languageSelect">
+                        <option value="" selected>Select Language</option>
+                        <!-- Will be populated via the data keys -->
+                    </select>
+
+                    <div class="field-label">Session:</div>
+                    <select class="form-select dropdown-select" id="sessionSelect" disabled>
+                        <option value="" selected>Select Session</option>
+                        <!-- Will be populated via the data keys -->
+                    </select>
+
+                    <div class="field-label">Ticket Type:</div>
+                    <select class="form-select dropdown-select" id="ticketSelect" disabled>
+                        <option value="" selected>Select Ticket</option>
+                        <option value="single" data-price="<?php echo $schedule['prices']['single']; ?>">Single
+                            (€<?php echo $schedule['prices']['single']; ?>)
+                        </option>
+                        <option value="family" data-price="<?php echo $schedule['prices']['family']; ?>">Family
+                            (€<?php echo $schedule['prices']['family']; ?>)</option>
+                    </select>
+
+                    <div class="quantity-control">
+                        <button class="quantity-btn decrease-btn">−</button>
+                        <span class="quantity-display">1</span>
+                        <button class="quantity-btn increase-btn">+</button>
+                    </div>
+
+                    <div class="price-text">Total price: €0</div>
+
+                    <button class="book-btn" disabled onclick="bookTour()">
+                        <i class="bi bi-cart"></i> Book Tickets
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/js/utils.js"></script>
 <script>
     const swiper = new Swiper('.swiper', {
         direction: 'horizontal',
@@ -413,49 +475,403 @@ include_once __DIR__ . '/../components/header.php';
     });
 
     setTimeout(() => map.invalidateSize(), 100);
+
+    // DOM elements
+    const dateElement = document.getElementById('date');
+    const languageSelect = document.getElementById('languageSelect');
+    const sessionSelect = document.getElementById('sessionSelect');
+    const ticketSelect = document.getElementById('ticketSelect');
+    const decreaseBtn = document.querySelector('.decrease-btn');
+    const increaseBtn = document.querySelector('.increase-btn');
+    const quantityDisplay = document.querySelector('.quantity-display');
+    const priceText = document.querySelector('.price-text');
+    const bookBtn = document.querySelector('.book-btn');
+
+    let quantity = 1;
+    let ticketPrice = 0;
+    let selectedTourId = null;
+    let tourData;
+    let eventData;
+
+    function openModal() {
+        let modalInstance = bootstrap.Modal.getInstance(document.getElementById('ticketModal'));
+        if (!modalInstance) {
+            modalInstance = new bootstrap.Modal(document.getElementById('ticketModal'));
+        }
+        eventData = event.target.dataset;
+        dateElement.textContent = eventData.date;
+
+        tourData = parseData(event);
+
+        // Reset the modal
+        resetModal();
+
+        initializeLanguageDropdown();
+        modalInstance.show();
+    }
+
+    function closeModal() {
+        let modalInstance = bootstrap.Modal.getInstance(document.getElementById('ticketModal'));
+        if (!modalInstance) {
+            modalInstance = new bootstrap.Modal(document.getElementById('ticketModal'));
+        }
+        modalInstance.hide();
+    }
+
+    // Function to reset modal when it opens again
+    function resetModal() {
+        while (languageSelect.options.length > 1) {
+            languageSelect.remove(1);
+        }
+        languageSelect.selectedIndex = 0;
+
+        while (sessionSelect.options.length > 1) {
+            sessionSelect.remove(1);
+        }
+        sessionSelect.selectedIndex = 0;
+        sessionSelect.disabled = true;
+
+        if (ticketSelect) {
+            ticketSelect.selectedIndex = 0;
+            ticketSelect.disabled = true;
+        }
+
+        quantity = 1;
+        quantityDisplay.textContent = quantity;
+
+        ticketPrice = 0;
+        priceText.textContent = `Total price: €0`;
+
+        bookBtn.disabled = true;
+
+        selectedTourId = null;
+    }
+
+    // Initialize the language dropdown
+    function initializeLanguageDropdown() {
+        // Get unique languages from the data
+        const languages = new Set();
+        tourData.forEach(timeSlot => {
+            Object.keys(timeSlot.tours).forEach(lang => {
+                languages.add(lang);
+            });
+        });
+
+        // Add languages to dropdown
+        languages.forEach(lang => {
+            const option = document.createElement('option');
+            option.value = lang;
+            option.textContent = lang;
+            languageSelect.appendChild(option);
+        });
+    }
+
+    // Update session dropdown based on selected language
+    function updateSessionDropdown() {
+        // Clear previous options except the first one
+        while (sessionSelect.options.length > 1) {
+            sessionSelect.remove(1);
+        }
+
+        // Disable if no language is selected
+        if (!languageSelect.value) {
+            sessionSelect.disabled = true;
+            return;
+        }
+
+        // Enable and populate with new options
+        sessionSelect.disabled = false;
+
+        // Add time slots that have the selected language
+        tourData.forEach(timeSlot => {
+            if (timeSlot.tours[languageSelect.value]) {
+                const option = document.createElement('option');
+                option.value = timeSlot.time;
+                option.textContent = timeSlot.time;
+                option.dataset.tourIds = JSON.stringify(timeSlot.tours[languageSelect.value]);
+                sessionSelect.appendChild(option);
+            }
+        });
+    }
+
+    // Update ticket selection based on session
+    function updateTicketDropdown() {
+        // Enable ticket selection if session is selected
+        ticketSelect.disabled = !sessionSelect.value;
+
+        if (sessionSelect.value) {
+            // Get tour IDs for the selected time and language
+            const selectedOption = sessionSelect.options[sessionSelect.selectedIndex];
+            if (selectedOption.dataset.tourIds) {
+                const tourIds = JSON.parse(selectedOption.dataset.tourIds);
+                selectedTourId = tourIds[0]; // Take the first tour ID
+            }
+        } else {
+            selectedTourId = null;
+        }
+    }
+
+    // Update price display
+    function updatePriceDisplay() {
+        if (!ticketSelect.value) {
+            ticketPrice = 0;
+            bookBtn.disabled = true;
+        } else {
+            const selectedOption = ticketSelect.options[ticketSelect.selectedIndex];
+            ticketPrice = selectedOption.dataset.price ? parseFloat(selectedOption.dataset.price) : 0;
+            bookBtn.disabled = false;
+        }
+        if (ticketSelect.value == 'family') {
+            if (quantity > 4) {
+                quantity = 4;
+                quantityDisplay.textContent = quantity;
+            }
+            priceText.textContent = `Total price: €${ticketPrice}`;
+        } else {
+            priceText.textContent = `Total price: €${ticketPrice * quantity}`;
+        }
+    }
+
+    // Quantity control
+    decreaseBtn.addEventListener('click', function () {
+        if (quantity > 1) {
+            quantity--;
+            quantityDisplay.textContent = quantity;
+            updatePriceDisplay();
+        }
+    });
+
+    increaseBtn.addEventListener('click', function () {
+        if (ticketSelect.value == 'family' && quantity < 4) {
+            quantity++;
+        } else if (ticketSelect.value == 'single') {
+            quantity++
+        }
+        quantityDisplay.textContent = quantity;
+        updatePriceDisplay();
+    });
+
+    // Event listeners for dropdowns
+    languageSelect.addEventListener('change', function () {
+        updateSessionDropdown();
+        updateTicketDropdown();
+        updatePriceDisplay();
+    });
+
+    sessionSelect.addEventListener('change', function () {
+        updateTicketDropdown();
+        updatePriceDisplay();
+    });
+
+    ticketSelect.addEventListener('change', function () {
+        updatePriceDisplay();
+    });
+
+    // Book tickets button
+    function bookTour() {
+        if (selectedTourId && ticketSelect.value) {
+            let dateString = `${eventData.date} ${getNextOccurrence(`${eventData.date} ${sessionSelect.value}`)} ${sessionSelect.value}`;
+            let date = new Date(dateString + ' UTC');
+            const json = {
+                event_id: selectedTourId,
+                date: new Date(new Date(dateString + ' UTC').setUTCHours(0, 0, 0, 0)).toISOString(),
+                image: "placeholder.png",
+                name: `History tour (${languageSelect.value})`,
+                starttime: date.toISOString(),
+                // TODO: make time dynamic from db
+                endtime: new Date(date.setUTCMinutes(date.getUTCMinutes() + parseInt(120))).toISOString(),
+                price: ticketSelect.options[ticketSelect.selectedIndex].dataset.price,
+                type: ticketSelect.value,
+                seats: quantity
+            };
+
+            const items = localStorage.getItem('orderedItems');
+            if (items) {
+                const orderedItems = JSON.parse(items);
+                orderedItems.history.push(json);
+                localStorage.setItem('orderedItems', JSON.stringify(orderedItems));
+            }
+            closeModal();
+        }
+    };
+
+    function parseData(event) {
+        let eventData = event.target.dataset;
+        if (eventData.tours === undefined) {
+            eventData = event.target.parentElement.dataset;
+        }
+
+        let dataStr = eventData.tours;
+        // Spliting the different timesschedules
+        const entries = dataStr.split(";").filter(entry => entry.trim() !== "");
+
+        const schedule = entries.map(entry => {
+            // Split by . to get the time
+            const [time, toursStr] = entry.split(".");
+
+            // Split the tours string by "?" to get each language entry
+            const tourEntries = toursStr.split("?");
+
+            // Loop through each language to build the object
+            const tours = tourEntries.reduce((acc, tourEntry) => {
+                const [language, idsStr] = tourEntry.split(":");
+                if (language && idsStr) {
+                    // Convert ids to an array of numbers
+                    acc[language] = idsStr.split(",").map(id => parseInt(id, 10));
+                }
+                return acc;
+            }, {});
+
+            return { time, tours };
+        });
+
+        return schedule;
+    }
 </script>
 
 <style>
-.swiper {
-    width: 100%;
-    height: 500px;
-}
-.swiper-slide {
-    position: relative;
-    background-repeat: no-repeat;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.slide-content {
-    text-align: center;
-    color: white;
-    background: rgba(0,0,0,0.5);
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 80%;
-}
+    .swiper {
+        width: 100%;
+        height: 500px;
+    }
 
-.tour-ticket-card {
-    max-width: 300px;
-    border-radius: 10px;
-    overflow: hidden;
-}
+    .swiper-slide {
+        position: relative;
+        background-repeat: no-repeat;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-.tour-ticket-card .card-header {
-    background-color: #f8f9fa;
-    padding: 10px;
-}
+    .slide-content {
+        text-align: center;
+        color: white;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+    }
 
-.tour-ticket-card .card-body {
-    padding: 15px;
-}
+    .tour-ticket-card {
+        max-width: 300px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
 
-.tour-ticket-card .guides-section,
-.tour-ticket-card .starting-times {
-    border-top: 1px solid #e9ecef;
-    padding-top: 10px;
-    margin-top: 10px;
-}
+    .tour-ticket-card .card-header {
+        background-color: #f8f9fa;
+        padding: 10px;
+    }
+
+    .tour-ticket-card .card-body {
+        padding: 15px;
+    }
+
+    .tour-ticket-card .guides-section,
+    .tour-ticket-card .starting-times {
+        border-top: 1px solid #e9ecef;
+        padding-top: 10px;
+        margin-top: 10px;
+    }
+
+    .booking-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 500;
+        margin-bottom: 30px;
+    }
+
+    .field-label {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .dropdown-select {
+        width: 100%;
+        background-color: white;
+        border-radius: 5px;
+        padding: 10px 15px;
+        margin-bottom: 20px;
+        color: black;
+        text-align: left;
+        position: relative;
+    }
+
+    .dropdown-select::after {
+        content: "";
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .modal-content {
+        background-color: var(--secondary-accent);
+        color: white;
+        border-radius: 10px;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+        font-weight: 500;
+        margin-bottom: 10px;
+    }
+
+    .section-content {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
+
+    .quantity-control {
+        background-color: white;
+        border-radius: 5px;
+        padding: 5px 15px;
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .quantity-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+        cursor: pointer;
+        padding: 0 10px;
+    }
+
+    .quantity-display {
+        font-size: 1.2rem;
+        margin: 0 15px;
+        color: #333;
+    }
+
+    .book-btn {
+        background-color: var(--buttons);
+        border: none;
+        color: black;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 5px;
+        width: 100%;
+        font-size: 1.2rem;
+    }
+
+    .book-btn:hover {
+        background-color: var(--buttons-accent);
+    }
+
+    .modal-body {
+        padding: 30px;
+        text-align: center;
+    }
 </style>

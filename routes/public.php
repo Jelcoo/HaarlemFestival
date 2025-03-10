@@ -12,6 +12,7 @@ $router->get('/dance', [App\Controllers\HomeController::class, 'dance']);
 $router->get('/yummy', [App\Controllers\HomeController::class, 'yummy']);
 $router->get('/history', [App\Controllers\HomeController::class, 'history']);
 $router->get('/magic', [App\Controllers\HomeController::class, 'magic']);
+$router->get('/cart', [App\Controllers\CartController::class, 'index']);
 
 $router->middleware(EnsureNotLoggedIn::class, function () use ($router) {
     $router->get('/register', [App\Controllers\AuthController::class, 'register']);

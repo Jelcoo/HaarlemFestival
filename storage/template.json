@@ -1,0 +1,61 @@
+{
+    "dance": [
+        {
+            "event_id": 1,
+            "date": "2025-03-03T00:00:00+00:00",
+            "image": "placeholder.png",
+            "name": "Caprera openluchtheater",
+            "artist": [
+                {
+                    "name": "artistName"
+                }
+            ],
+            "starttime": "2025-03-03T14:00+00:00",
+            "endtime": "2025-03-03T23:00+00:00",
+            "price": 29.00,
+            "quantity": 1
+        },
+        {
+            "event_id": 2,
+            "date": "2025-03-03T00:00:00+00:00",
+            "image": "placeholder.png",
+            "name": "XO club",
+            "artist": {
+                "name": "artistName"
+            },
+            "starttime": "2025-03-03T14:00+00:00",
+            "endtime": "2025-03-03T23:00+00:00",
+            "price": 29.99,
+            "quantity": 1
+        }
+    ],
+    "yummy": [
+        {
+            "event_id": 1,
+            "date": "2025-03-03T00:00:00+00:00",
+            "image": "placeholder.png",
+            "restaurant": {
+                "name": "restaurantName"
+            },
+            "starttime": "2025-03-03T18:00+00:00",
+            "endtime": "2025-03-03T20:00+00:00",
+            "reservationcost": 10.00,
+            "adult_quantity": 2,
+            "children_quantity": 1,
+            "notes": "some notes"
+        }
+    ],
+    "history": [
+        {
+            "event_id": 1,
+            "date": "2025-03-03T00:00:00+00:00",
+            "image": "placeholder.png",
+            "name": "Family tour",
+            "starttime": "2025-03-03T14:00+00:00",
+            "endtime": "2025-03-03T23:00+00:00",
+            "price": 69.99,
+            "type": "family",
+            "seats": 1
+        }
+    ]
+}
