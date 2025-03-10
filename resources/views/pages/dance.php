@@ -275,8 +275,9 @@ include_once __DIR__ . '/../components/header.php';
                 <img src="<?php echo $artist['image']; ?>" alt="<?php echo $artist['name']; ?>">
                 <h3><?php echo $artist['name']; ?></h3>
                 <p><?php echo $artist['description']; ?></p>
-                <a href="<?php echo $artist['link']; ?>" class="btn btn-custom-yellow"><i class="fa-solid fa-ticket"></i>
-                    Tickets</a>
+                <a href="<?php echo $artist['link']; ?>" class="btn btn-custom-yellow"><i
+                        class="fa-solid fa-arrow-up-right-from-square"></i>
+                    More information</a>
             </div>
 
             <?php ++$artistCount; ?>
