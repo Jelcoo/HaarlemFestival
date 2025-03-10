@@ -31,7 +31,7 @@ class DashboardArtistsController extends DashboardController
             $formData = $_SESSION['form_data'] ?? [];
             unset($_SESSION['form_data']);
 
-            return $this->renderPage('artist_form', [
+            return $this->renderPage('/../../../components/dashboard/forms/artist_form', [
                 'formData' => $formData,
                 'status' => $this->getStatus(),
             ]);

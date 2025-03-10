@@ -34,7 +34,7 @@ class DashboardRestaurantsController extends DashboardController
             $formData = $_SESSION['form_data'] ?? [];
             unset($_SESSION['form_data']);
 
-            return $this->renderPage('restaurant_form', [
+            return $this->renderPage('/../../../components/dashboard/forms/restaurant_form', [
                 'locations' => $this->locationRepository->getAllLocations(),
                 'formData' => $formData,
                 'status' => $this->getStatus(),
