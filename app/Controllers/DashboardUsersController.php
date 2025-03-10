@@ -32,7 +32,7 @@ class DashboardUsersController extends DashboardController
             $formData = $_SESSION['form_data'] ?? [];
             unset($_SESSION['form_data']);
 
-            return $this->renderPage('users_create', [
+            return $this->renderPage('/../../../components/dashboard/forms/users_form', [
                 'roles' => array_column(UserRoleEnum::cases(), 'value'),
                 'formData' => $formData,
                 'status' => $this->getStatus(),

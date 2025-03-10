@@ -82,7 +82,15 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary mt-4">Create User</button>
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="<?php echo isset($formData['id']) ? "/dashboard/users?details=" . $formData['id'] : "/dashboard/users"; ?>"
+                        class="btn btn-outline-secondary">Cancel</a>
+
+                    <button type="submit" class="btn btn-primary">
+                        <?php echo isset($formData['id']) ? 'Update' : 'Create' ?> User
+                    </button>
+                </div>
             </form>
         </div>
     </div>
