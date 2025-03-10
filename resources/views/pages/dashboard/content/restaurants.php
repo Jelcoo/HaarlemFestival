@@ -2,9 +2,9 @@
 
 <!-- Status Message -->
 <?php if (!empty($status['message'])) { ?>
-<div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
-    <?php echo $status['message']; ?>
-</div>
+    <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
+        <?php echo $status['message']; ?>
+    </div>
 <?php } ?>
 
 <!-- Create New Restaurant Button -->
@@ -21,7 +21,7 @@
             style="max-width: 200px;">
         <button type="submit" class="btn btn-primary">Search</button>
         <?php if (!empty($searchQuery)) { ?>
-        <a href="/dashboard/restaurants" class="btn btn-secondary text-white">Clear</a>
+            <a href="/dashboard/restaurants" class="btn btn-secondary text-white">Clear</a>
         <?php } ?>
     </div>
 
@@ -43,32 +43,32 @@
 
 <div class="row">
     <?php if (!empty($restaurants)) { ?>
-    <?php foreach ($restaurants as $restaurant) { ?>
-    <?php include __DIR__ . '/../../../components/dashboard/restaurant_card.php'; ?>
-    <?php } ?>
+        <?php foreach ($restaurants as $restaurant) { ?>
+            <?php include __DIR__ . '/../../../components/dashboard/restaurant_card.php'; ?>
+        <?php } ?>
     <?php } else { ?>
-    <p>No restaurants found.</p>
+        <p>No restaurants found.</p>
     <?php } ?>
 </div>
 
 <script>
-function updateURL() {
-    let sort = document.getElementById('sortSelect').value;
-    let direction = document.getElementById('directionSelect').value;
-    let searchParams = new URLSearchParams(window.location.search);
+    function updateURL() {
+        let sort = document.getElementById('sortSelect').value;
+        let direction = document.getElementById('directionSelect').value;
+        let searchParams = new URLSearchParams(window.location.search);
 
-    if (sort) {
-        searchParams.set('sort', sort);
-    } else {
-        searchParams.delete('sort');
+        if (sort) {
+            searchParams.set('sort', sort);
+        } else {
+            searchParams.delete('sort');
+        }
+
+        if (direction) {
+            searchParams.set('direction', direction);
+        } else {
+            searchParams.delete('direction');
+        }
+
+        window.location.href = window.location.pathname + '?' + searchParams.toString();
     }
-
-    if (direction) {
-        searchParams.set('direction', direction);
-    } else {
-        searchParams.delete('direction');
-    }
-
-    window.location.href = window.location.pathname + '?' + searchParams.toString();
-}
 </script>

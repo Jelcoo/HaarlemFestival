@@ -142,13 +142,10 @@ class DashboardRestaurantsController extends DashboardController
         try {
             $validator = new Validator();
             $validation = $validator->validate($_POST, [
-                'name' => 'required|max:255',
-                'restaurant_type' => 'nullable|alpha_spaces|max:100',
-                'rating' => 'nullable|numeric|min:0|max:5',
                 'location_id' => 'required|integer',
-                'preview_description' => 'nullable|max:500',
-                'main_description' => 'nullable|max:2000',
-                'menu' => 'nullable|max:5000',
+                'rating' => 'nullable|numeric|min:0|max:5',
+                'restaurant_type' => 'nullable|max:100',
+                'menu' => 'nullable',
             ]);
 
             if ($validation->fails()) {
@@ -200,7 +197,7 @@ class DashboardRestaurantsController extends DashboardController
 
     private function showForm(): void
     {
-        $_SESSION['show_rstaurantForm'] = true;
+        $_SESSION['show_restaurant_form'] = true;
         $this->redirectToRestaurants();
     }
 }
