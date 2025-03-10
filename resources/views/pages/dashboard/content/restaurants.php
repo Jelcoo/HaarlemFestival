@@ -30,7 +30,8 @@
     <div class="d-flex align-items-center gap-2">
         <select name="sort" id="sortSelect" class="form-select" style="width: 150px;">
             <option value="" disabled selected>Sort by...</option>
-            <option value="event_type" <?php echo ($sortColumn == 'event_type') ? 'selected' : ''; ?>>Type</option>
+            <option value="restaurant_type" <?php echo ($sortColumn == 'restaurant_type') ? 'selected' : ''; ?>>Type
+            </option>
         </select>
 
         <select name="direction" id="directionSelect" class="form-select" style="width: 150px;">

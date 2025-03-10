@@ -37,7 +37,7 @@ class RestaurantRepository extends Repository
 
     public function getSortedRestaurants(string $searchQuery, string $sortColumn = 'id', string $sortDirection = 'asc'): array
     {
-        $allowedColumns = ['id', 'restaurant_type', 'rating'];
+        $allowedColumns = ['id', 'restaurant_type', 'address'];
         if (!in_array($sortColumn, $allowedColumns)) {
             $sortColumn = 'id';
         }
@@ -49,9 +49,10 @@ class RestaurantRepository extends Repository
         $query = $queryBuilder->table('restaurants');
 
         if (!empty($searchQuery)) {
-            $query->where('name', 'LIKE', "%{$searchQuery}%")
-                ->orWhere('restaurant_type', 'LIKE', "%{$searchQuery}%")
-                ->orWhere('address', 'LIKE', "%{$searchQuery}%");
+            $query->Where('restaurant_type', 'LIKE', "%{$searchQuery}%"); // TODO: join tables
+            // $query->where('name', 'LIKE', "%{$searchQuery}%")
+            //     ->orWhere('restaurant_type', 'LIKE', "%{$searchQuery}%")
+            //     ->orWhere('address', 'LIKE', "%{$searchQuery}%");
         }
 
         $queryRestaurants = $query->orderBy($sortColumn, $sortDirection)->get();
