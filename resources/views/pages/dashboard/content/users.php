@@ -29,9 +29,16 @@
     <div class="d-flex align-items-center gap-2">
         <select name="sort" id="sortSelect" class="form-select" style="width: 150px;">
             <option value="" disabled selected>Sort by...</option>
-            <option value="name" <?php echo ($sortColumn == 'name') ? 'selected' : ''; ?>>Name</option>
+            <option value="firstname" <?php echo ($sortColumn == 'firstname') ? 'selected' : ''; ?>>First Name</option>
+            <option value="lastname" <?php echo ($sortColumn == 'lastname') ? 'selected' : ''; ?>>Last Name</option>
             <option value="email" <?php echo ($sortColumn == 'email') ? 'selected' : ''; ?>>Email</option>
             <option value="role" <?php echo ($sortColumn == 'role') ? 'selected' : ''; ?>>Role</option>
+            <option value="address" <?php echo ($sortColumn == 'address') ? 'selected' : ''; ?>>Address</option>
+            <option value="city" <?php echo ($sortColumn == 'city') ? 'selected' : ''; ?>>City</option>
+            <option value="postal_code" <?php echo ($sortColumn == 'postal_code') ? 'selected' : ''; ?>>Postal Code
+            </option>
+            <option value="created_at" <?php echo ($sortColumn == 'created_at') ? 'selected' : ''; ?>>Creation Date
+            </option>
         </select>
 
         <select name="direction" id="directionSelect" class="form-select" style="width: 150px;">
@@ -40,6 +47,7 @@
         </select>
 
         <button type="button" class="btn btn-primary" onclick="updateURL()">Apply</button>
+        <a href="/dashboard/users" class="btn btn-secondary">Reset</a>
     </div>
 </form>
 
