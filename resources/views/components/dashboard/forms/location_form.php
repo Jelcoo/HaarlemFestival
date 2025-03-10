@@ -78,8 +78,9 @@ use App\Enum\EventTypeEnum;
                 <a href="<?php echo isset($formData['id']) ? "/dashboard/locations?details=" . $formData['id'] : "/dashboard/locations"; ?>"
                     class="btn btn-outline-secondary">Cancel</a>
 
-                <button type="submit"
-                    class="btn btn-primary"><?php echo isset($formData['id']) ? 'Update Location' : 'Create Location' ?></button>
+                <button type="submit" class="btn btn-primary">
+                    <?php echo isset($formData['id']) ? 'Update' : 'Create' ?> Location
+                </button>
             </div>
         </form>
     </div>

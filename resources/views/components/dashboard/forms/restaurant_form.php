@@ -60,10 +60,15 @@
                         class="form-control"><?php echo htmlspecialchars($formData['menu'] ?? ''); ?></textarea>
                 </div>
 
-                <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary mt-4">
-                    <?php echo isset($formData['id']) ? 'Update Restaurant' : 'Create Restaurant' ?>
-                </button>
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="<?php echo isset($formData['id']) ? "/dashboard/restaurants?details=" . $formData['id'] : "/dashboard/restaurants"; ?>"
+                        class="btn btn-outline-secondary">Cancel</a>
+
+                    <button type="submit" class="btn btn-primary">
+                        <?php echo isset($formData['id']) ? 'Update' : 'Create' ?> Restaurant
+                    </button>
+                </div>
             </form>
         </div>
     </div>
