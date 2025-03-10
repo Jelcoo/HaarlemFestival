@@ -186,9 +186,9 @@ class DashboardArtistsController extends DashboardController
         return [
             'id' => ['label' => 'ID', 'sortable' => true],
             'name' => ['label' => 'Artist Name', 'sortable' => true],
-            'preview_description' => ['label' => 'Preview Description', 'sortable' => false],
-            'main_description' => ['label' => 'Main Description', 'sortable' => false],
-            'iconic_albums' => ['label' => 'Iconic Albums', 'sortable' => false],
+            'preview_description' => ['label' => 'Preview Description', 'sortable' => true],
+            'main_description' => ['label' => 'Main Description', 'sortable' => true],
+            'iconic_albums' => ['label' => 'Iconic Albums', 'sortable' => true],
             'actions' => ['label' => 'Actions', 'sortable' => false],
         ];
     }

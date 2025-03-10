@@ -37,7 +37,7 @@ class ArtistRepository extends Repository
 
     public function getSortedArtists(string $searchQuery, string $sortColumn = 'id', string $sortDirection = 'asc'): array
     {
-        $allowedColumns = ['id', 'name'];
+        $allowedColumns = ['id', 'name', 'preview_description', 'main_description', 'iconic_albums'];
         if (!in_array($sortColumn, $allowedColumns)) {
             $sortColumn = 'id';
         }
@@ -49,7 +49,10 @@ class ArtistRepository extends Repository
         $query = $queryBuilder->table('artists');
 
         if (!empty($searchQuery)) {
-            $query->where('name', 'LIKE', "%{$searchQuery}%");
+            $query->where('name', 'LIKE', "%{$searchQuery}%")
+                ->orWhere('preview_description', 'LIKE', "%{$searchQuery}%")
+                ->orWhere('main_description', 'LIKE', "%{$searchQuery}%")
+                ->orWhere('iconic_albums', 'LIKE', "%{$searchQuery}%");
         }
 
         $queryArtists = $query->orderBy($sortColumn, $sortDirection)->get();
@@ -104,5 +107,4 @@ class ArtistRepository extends Repository
 
         return $existingArtist;
     }
-
 }
