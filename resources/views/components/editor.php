@@ -25,11 +25,11 @@
                 progress(e.loaded / e.total);
             };
             xhr.onload = () => {
+                const json = JSON.parse(xhr.responseText);
                 if (xhr.status < 200 || xhr.status >= 300) {
-                    reject({ message: xhr.statusText, remove: true });
+                    reject({ message: json.error, remove: true });
                     return;
                 }
-                const json = JSON.parse(xhr.responseText);
                 resolve(json.location);
             };
             const formData = new FormData();
