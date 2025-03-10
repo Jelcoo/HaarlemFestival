@@ -184,7 +184,7 @@ class DashboardLocationsController extends DashboardController
             ]));
 
             $createdLocation = $this->locationRepository->createLocation($locationData);
-            $this->redirectToLocations(!empty($createdLocation), "Location '{$locationData['name']}' created successfully.");
+            $this->redirectToLocations(!empty($createdLocation), "Location created successfully.");
         } catch (\Exception $e) {
             $_SESSION['show_location_form'] = true;
             $_SESSION['form_data'] = $_POST;

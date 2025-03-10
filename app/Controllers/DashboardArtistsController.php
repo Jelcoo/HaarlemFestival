@@ -171,7 +171,7 @@ class DashboardArtistsController extends DashboardController
             ]));
 
             $createdArtist = $this->artistRepository->createArtist($artistData);
-            $this->redirectToArtists(!empty($createdArtist), "Artist '{$artistData['name']}' created successfully.");
+            $this->redirectToArtists(!empty($createdArtist), "Artist created successfully.");
         } catch (\Exception $e) {
             $_SESSION['show_artist_form'] = true;
             $_SESSION['form_data'] = $_POST;

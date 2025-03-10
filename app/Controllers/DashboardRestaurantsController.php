@@ -155,17 +155,14 @@ class DashboardRestaurantsController extends DashboardController
             }
 
             $restaurantData = array_intersect_key($_POST, array_flip([
-                'name',
-                'restaurant_type',
-                'rating',
                 'location_id',
-                'preview_description',
-                'main_description',
+                'rating',
+                'restaurant_type',
                 'menu'
             ]));
 
             $createdRestaurant = $this->restaurantRepository->createRestaurant($restaurantData);
-            $this->redirectToRestaurants(!empty($createdRestaurant), "Restaurant '{$restaurantData['name']}' created successfully.");
+            $this->redirectToRestaurants(!empty($createdRestaurant), "Restaurant created successfully.");
         } catch (\Exception $e) {
             $_SESSION['show_restaurant_form'] = true;
             $_SESSION['form_data'] = $_POST;
