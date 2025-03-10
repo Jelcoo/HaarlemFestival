@@ -157,6 +157,7 @@ class DashboardLocationsController extends DashboardController
             $validator = new Validator();
             $validation = $validator->validate($_POST, [
                 'name' => 'required|max:255',
+                'event_type' => 'required',
                 'address' => 'required|max:255',
                 'coordinates' => 'nullable|regex:/^-?\d{1,3}\.\d+,\s*-?\d{1,3}\.\d+$/',
                 'preview_description' => 'nullable|max:500',
@@ -169,8 +170,13 @@ class DashboardLocationsController extends DashboardController
                 throw new \Exception(implode(' ', $validation->errors()->all()));
             }
 
+            if (!isset($_POST['event_type']) || !in_array($_POST['event_type'], array_column(EventTypeEnum::cases(), 'value'))) {
+                throw new \Exception('Invalid or missing event type.');
+            }
+
             $locationData = array_intersect_key($_POST, array_flip([
                 'name',
+                'event_type',
                 'address',
                 'coordinates',
                 'preview_description',
@@ -192,8 +198,9 @@ class DashboardLocationsController extends DashboardController
         return [
             'id' => ['label' => 'ID', 'sortable' => true],
             'name' => ['label' => 'Location Name', 'sortable' => true],
+            'event_type' => ['label' => 'Event Type', 'sortable' => true],
             'coordinates' => ['label' => 'Coordinates', 'sortable' => false],
-            'address' => ['label' => 'Address', 'sortable' => true],
+            'address' => ['label' => 'Address', 'sortable' => false],
             'preview_description' => ['label' => 'Preview Description', 'sortable' => false],
             'main_description' => ['label' => 'Main Description', 'sortable' => false],
             'actions' => ['label' => 'Actions', 'sortable' => false],

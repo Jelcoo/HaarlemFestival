@@ -37,7 +37,7 @@ class LocationRepository extends Repository
 
     public function getSortedLocations(string $searchQuery, string $sortColumn = 'id', string $sortDirection = 'asc'): array
     {
-        $allowedColumns = ['id', 'name', 'address'];
+        $allowedColumns = ['id', 'name', 'address', 'event_type'];
         if (!in_array($sortColumn, $allowedColumns)) {
             $sortColumn = 'id';
         }
@@ -50,7 +50,8 @@ class LocationRepository extends Repository
 
         if (!empty($searchQuery)) {
             $query->where('name', 'LIKE', "%{$searchQuery}%")
-                ->orWhere('address', 'LIKE', "%{$searchQuery}%");
+                ->orWhere('address', 'LIKE', "%{$searchQuery}%")
+                ->orWhere('event_type', 'LIKE', "%{$searchQuery}%");
         }
 
         $queryLocations = $query->orderBy($sortColumn, $sortDirection)->get();
