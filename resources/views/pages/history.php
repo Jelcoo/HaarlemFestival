@@ -1,80 +1,5 @@
 <?php
 
-$locations = [
-    [
-        'name' => 'Grote Markt',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/grotemarkt.png',
-    ],
-    [
-        'name' => 'De Hallen',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/dehallen.png',
-    ],
-    [
-        'name' => 'Proveniershof',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/proveniershof.png',
-    ],
-    [
-        'name' => 'Jopenkerk',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/jopenkerk-2.png',
-    ],
-    [
-        'name' => 'Waalse Kerk Haarlem',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/waalsekerk.png',
-    ],
-    [
-        'name' => 'Molen de Adriaan',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/molendeadriaan.png',
-    ],
-    [
-        'name' => 'Amsterdamse Poort',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/amsterdamsepoort.png',
-    ],
-    [
-        'name' => 'Hof van Bakenes',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/hofvanbakenes.png',
-    ],
-    [
-        'name' => 'Church of St. Bavo',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/stbavo.png',
-    ],
-];
-
 $schedules = [
     [
         'date' => 'Thursday July 24',
@@ -279,9 +204,9 @@ include_once __DIR__ . '/../components/header.php';
     <div class="swiper">
         <div class="swiper-wrapper">
             <?php foreach ($locations as $location) { ?>
-                <div class="swiper-slide" style="background-image: url('<?php echo $location['image']; ?>');">
+                <div class="swiper-slide" style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');">
                     <div class="slide-content">
-                        <h2><?php echo $location['name']; ?></h2>
+                        <h2><?php echo $location->name; ?></h2>
                     </div>
                 </div>
             <?php } ?>
@@ -467,10 +392,10 @@ include_once __DIR__ . '/../components/header.php';
     const locations = <?php echo json_encode($locations); ?>;
 
     locations.forEach(location => {
-        L.marker([location.lat, location.lng]).addTo(map)
+        const coords = location.coordinates.split(',');
+        L.marker(coords).addTo(map)
             .bindPopup(`
                 <h4>${location.name}</h4>
-                <p>${location.description}</p>
                 <p><em>Address: ${location.address}</em></p>
             `);
     });

@@ -17,7 +17,7 @@ class HomeController extends Controller
 
     public function index(): string
     {
-        $locations = $this->locationRepository->getAllLocations();
+        $locations = $this->locationRepository->getHomeLocations();
 
         return $this->pageLoader->setPage('home')->render([
             'locations' => $locations,
@@ -36,7 +36,11 @@ class HomeController extends Controller
 
     public function history(): string
     {
-        return $this->pageLoader->setPage('history')->render();
+        $locations = $this->locationRepository->getSpecificLocations('history');
+
+        return $this->pageLoader->setPage('history')->render([
+            'locations' => $locations,
+        ]);
     }
 
     public function magic(): string
