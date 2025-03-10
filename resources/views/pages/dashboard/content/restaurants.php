@@ -1,4 +1,10 @@
-<h2>Restaurant Management</h2>
+<!-- Title and Create Button -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Restaurant Management</h2>
+    <form action="/dashboard/restaurants" method="POST">
+        <button type="submit" class="btn btn-primary" name="action" value="create">Create New Restaurant</button>
+    </form>
+</div>
 
 <!-- Status Message -->
 <?php if (!empty($status['message'])) { ?>
@@ -6,11 +12,6 @@
         <?php echo $status['message']; ?>
     </div>
 <?php } ?>
-
-<!-- Create New Restaurant Button -->
-<form action="/dashboard/restaurants" method="POST">
-    <button type="submit" class="btn btn-primary mb-3" name="action" value="create">Create New Restaurant</button>
-</form>
 
 <!-- Sort -->
 <form method="GET" action="/dashboard/restaurants" class="mb-3 d-flex justify-content-between align-items-center">

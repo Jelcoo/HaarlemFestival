@@ -1,4 +1,10 @@
-<h2>Artists Management</h2>
+<!-- Title and Create Button -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Artist Management</h2>
+    <form action="/dashboard/artists" method="POST">
+        <button type="submit" class="btn btn-primary" name="action" value="create">Create New Artist</button>
+    </form>
+</div>
 
 <!-- Status message -->
 <?php if (!empty($status['message'])): ?>
@@ -6,11 +12,6 @@
         <?php echo htmlspecialchars($status['message']); ?>
     </div>
 <?php endif; ?>
-
-<!-- Create New Artist Button -->
-<form action="/dashboard/artists" method="POST">
-    <button type="submit" class="btn btn-primary mb-3" name="action" value="create">Create New Artist</button>
-</form>
 
 <!-- Sort -->
 <form method="GET" action="/dashboard/artists" class="mb-3 d-flex justify-content-between align-items-center">

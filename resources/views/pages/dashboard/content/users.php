@@ -1,4 +1,10 @@
-<h2>User Management</h2>
+<!-- Title and Create Button -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>User Management</h2>
+    <form action="/dashboard/users" method="POST">
+        <button type="submit" class="btn btn-primary" name="action" value="create">Create New User</button>
+    </form>
+</div>
 
 <!-- Status message -->
 <?php if (!empty($status['message'])): ?>
@@ -6,11 +12,6 @@
         <?php echo htmlspecialchars($status['message']); ?>
     </div>
 <?php endif; ?>
-
-<!-- Create Button -->
-<form action="/dashboard/users" method="POST">
-    <button type="submit" class="btn btn-primary mb-3" name="action" value="create">Create New User</button>
-</form>
 
 <!-- Search and Sort -->
 <form method="GET" action="/dashboard/users" class="mb-3 d-flex justify-content-between align-items-center">
