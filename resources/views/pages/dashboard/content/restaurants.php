@@ -40,6 +40,7 @@
         </select>
 
         <button type="button" class="btn btn-primary" onclick="updateURL()">Apply</button>
+        <a href="/dashboard/restaurants" class="btn btn-secondary">Reset</a>
     </div>
 </form>
 

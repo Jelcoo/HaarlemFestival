@@ -39,6 +39,7 @@
         </select>
 
         <button type="button" class="btn btn-primary" onclick="updateURL()">Apply</button>
+        <a href="/dashboard/artists" class="btn btn-secondary">Reset</a>
     </div>
 </form>
 
