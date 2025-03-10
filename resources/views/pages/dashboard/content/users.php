@@ -12,14 +12,35 @@
     <button type="submit" class="btn btn-primary mb-3" name="action" value="create">Create New User</button>
 </form>
 
-<!-- Search Form -->
-<form method="GET" action="/dashboard/users" class="mb-3 d-flex align-items-center">
-    <input type="text" name="search" placeholder="Search users..." value="<?php echo htmlspecialchars($searchQuery); ?>"
-        class="form-control d-inline-block w-auto me-2">
-    <button type="submit" class="btn btn-primary me-2">Search</button>
-    <?php if (!empty($searchQuery)): ?>
-        <a href="/dashboard/users" class="btn btn-secondary text-white">Clear</a>
-    <?php endif; ?>
+<!-- Search and Sort -->
+<form method="GET" action="/dashboard/users" class="mb-3 d-flex justify-content-between align-items-center">
+    <!-- Search -->
+    <div class="d-flex align-items-center gap-2">
+        <input type="text" name="search" placeholder="Search users..."
+            value="<?php echo htmlspecialchars($searchQuery); ?>" class="form-control d-inline-block w-auto"
+            style="max-width: 200px;">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <?php if (!empty($searchQuery)) { ?>
+            <a href="/dashboard/users" class="btn btn-secondary text-white">Clear</a>
+        <?php } ?>
+    </div>
+
+    <!-- Sort -->
+    <div class="d-flex align-items-center gap-2">
+        <select name="sort" id="sortSelect" class="form-select" style="width: 150px;">
+            <option value="" disabled selected>Sort by...</option>
+            <option value="name" <?php echo ($sortColumn == 'name') ? 'selected' : ''; ?>>Name</option>
+            <option value="email" <?php echo ($sortColumn == 'email') ? 'selected' : ''; ?>>Email</option>
+            <option value="role" <?php echo ($sortColumn == 'role') ? 'selected' : ''; ?>>Role</option>
+        </select>
+
+        <select name="direction" id="directionSelect" class="form-select" style="width: 150px;">
+            <option value="asc" <?php echo ($sortDirection == 'asc') ? 'selected' : ''; ?>>Ascending</option>
+            <option value="desc" <?php echo ($sortDirection == 'desc') ? 'selected' : ''; ?>>Descending</option>
+        </select>
+
+        <button type="button" class="btn btn-primary" onclick="updateURL()">Apply</button>
+    </div>
 </form>
 
 <table class="table table-bordered">
@@ -127,3 +148,25 @@
         <?php endif; ?>
     </tbody>
 </table>
+
+<script>
+    function updateURL() {
+        let sort = document.getElementById('sortSelect').value;
+        let direction = document.getElementById('directionSelect').value;
+        let searchParams = new URLSearchParams(window.location.search);
+
+        if (sort) {
+            searchParams.set('sort', sort);
+        } else {
+            searchParams.delete('sort');
+        }
+
+        if (direction) {
+            searchParams.set('direction', direction);
+        } else {
+            searchParams.delete('direction');
+        }
+
+        window.location.href = window.location.pathname + '?' + searchParams.toString();
+    }
+</script>
