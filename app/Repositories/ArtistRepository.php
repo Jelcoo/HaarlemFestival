@@ -75,36 +75,14 @@ class ArtistRepository extends Repository
         return null;
     }
 
-    public function updateArtist(Artist $artist): ?Artist
+    public function updateArtist(Artist $artist): void
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
-
-        $existingArtist = $this->getArtistById($artist->id);
-        if (!$existingArtist) {
-            return null;
-        }
-
-        $fieldsToCompare = [
+        $queryBuilder->table('artists')->where('id', '=', $artist->id)->update([
             'name' => $artist->name,
             'preview_description' => $artist->preview_description,
             'main_description' => $artist->main_description,
             'iconic_albums' => $artist->iconic_albums,
-        ];
-
-        $updatedFields = [];
-
-        foreach ($fieldsToCompare as $field => $newValue) {
-            if ($newValue !== $existingArtist->$field) {
-                $updatedFields[$field] = $newValue;
-            }
-        }
-
-        if (!empty($updatedFields)) {
-            $queryBuilder->table('artists')->where('id', '=', $artist->id)->update($updatedFields);
-
-            return $this->getArtistById($artist->id);
-        }
-
-        return $existingArtist;
+        ]);
     }
 }

@@ -126,18 +126,13 @@ class DashboardArtistsController extends DashboardController
                 throw new \Exception(implode(' ', $validation->errors()->all()));
             }
 
-            $fieldsToUpdate = [
-                'name' => $_POST['name'] ?? $existingArtist->name,
-                'preview_description' => $_POST['preview_description'] ?? $existingArtist->preview_description,
-                'main_description' => $_POST['main_description'] ?? $existingArtist->main_description,
-                'iconic_albums' => $_POST['iconic_albums'] ?? $existingArtist->iconic_albums,
-            ];
-
-            foreach ($fieldsToUpdate as $field => $value) {
-                $existingArtist->$field = $value;
-            }
+            $existingArtist->name = $_POST['name'];
+            $existingArtist->preview_description = $_POST['preview_description'] ?? null;
+            $existingArtist->main_description = $_POST['main_description'] ?? null;
+            $existingArtist->iconic_albums = $_POST['iconic_albums'] ?? null;
 
             $updatedArtist = $this->artistRepository->updateArtist($existingArtist);
+            $this->redirectTo("artists?details=$artistId", true, 'Artist updated successfully');
             $this->redirectToArtists(!empty($updatedArtist), $updatedArtist ? 'Artist updated successfully.' : 'No changes were made.');
         } catch (\Exception $e) {
             $_SESSION['form_data'] = $_POST;
