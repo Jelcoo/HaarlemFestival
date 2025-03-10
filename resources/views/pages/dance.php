@@ -419,7 +419,7 @@ include_once __DIR__ . '/../components/header.php';
         if (eventData.start === undefined) {
             eventData = event.target.parentElement.dataset;
         }
-        let dateString = `${eventData.day} 2025 ${eventData.start}`;
+        let dateString = `${eventData.day} ${getNextOccurrence(`${eventData.day} ${eventData.start}`)} ${eventData.start}`;
         let date = new Date(dateString + ' UTC');
         let future = new Date(new Date(dateString + ' UTC').setUTCMinutes(date.getUTCMinutes() + parseInt(eventData.duration)));
         document.getElementById('modal-time').textContent = `${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')} - ${future.getUTCHours().toString().padStart(2, '0')}:${future.getUTCMinutes().toString().padStart(2, '0')}`;
@@ -429,7 +429,7 @@ include_once __DIR__ . '/../components/header.php';
         modalInstance.show();
     }
     function bookTickets() {
-        let dateString = `${eventData.day} 2025 ${eventData.start}`;
+        let dateString = `${eventData.day} ${getNextOccurrence(`${eventData.day} ${eventData.start}`)} ${eventData.start}`;
         let date = new Date(dateString + ' UTC');
         let json = {
             "event_id": 1,
