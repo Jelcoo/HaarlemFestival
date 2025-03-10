@@ -429,6 +429,13 @@ include_once __DIR__ . '/../components/header.php';
         updateDisplay();
         modalInstance.show();
     }
+    function closeModal() {
+        let modalInstance = bootstrap.Modal.getInstance(document.getElementById('ticketModal'));
+        if (!modalInstance) {
+            modalInstance = new bootstrap.Modal(document.getElementById('ticketModal'));
+        }
+        modalInstance.hide();
+    }
     function bookTickets() {
         let dateString = `${eventData.day} ${getNextOccurrence(`${eventData.day} ${eventData.start}`)} ${eventData.start}`;
         let date = new Date(dateString + ' UTC');
@@ -454,6 +461,7 @@ include_once __DIR__ . '/../components/header.php';
             const orderedItems = JSON.parse(items);
             orderedItems.dance.push(json);
             localStorage.setItem('orderedItems', JSON.stringify(orderedItems));
+            closeModal();
         }
     }
 </script>
