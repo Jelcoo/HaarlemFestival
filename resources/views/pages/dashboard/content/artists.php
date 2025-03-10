@@ -27,17 +27,17 @@
 
     <!-- Sort -->
     <div class="d-flex align-items-center gap-2">
-        <select name="sort" id="sortSelect" class="form-select" style="max-width: 150px;">
+        <select name="sort" id="sortSelect" class="form-select" style="width: 150px;">
             <option value="" disabled selected>Sort by...</option>
             <option value="name" <?php echo ($sortColumn == 'name') ? 'selected' : ''; ?>>Name</option>
         </select>
 
-        <select name="direction" id="directionSelect" class="form-select" style="max-width: 120px;">
+        <select name="direction" id="directionSelect" class="form-select" style="width: 150px;">
             <option value="asc" <?php echo ($sortDirection == 'asc') ? 'selected' : ''; ?>>Ascending</option>
             <option value="desc" <?php echo ($sortDirection == 'desc') ? 'selected' : ''; ?>>Descending</option>
         </select>
 
-        <button type="button" class="btn btn-secondary" onclick="updateURL()">Apply</button>
+        <button type="button" class="btn btn-primary" onclick="updateURL()">Apply</button>
     </div>
 </form>
 

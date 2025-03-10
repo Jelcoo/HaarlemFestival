@@ -37,7 +37,7 @@
             <option value="desc" <?php echo ($sortDirection == 'desc') ? 'selected' : ''; ?>>Descending</option>
         </select>
 
-        <button type="button" class="btn btn-secondary" onclick="updateURL()">Apply</button>
+        <button type="button" class="btn btn-primary" onclick="updateURL()">Apply</button>
     </div>
 </form>
 
