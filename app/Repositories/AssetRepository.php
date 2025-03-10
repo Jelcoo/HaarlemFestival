@@ -53,8 +53,8 @@ class AssetRepository extends Repository
             'filename' => $asset->filename,
             'mimetype' => $asset->mimetype,
             'size' => $asset->size,
-            'model' => $asset->model,
-            'model_id' => $asset->model_id,
+            'model' => $asset->model ?? null,
+            'model_id' => $asset->model_id ?? null,
         ]);
         $asset = $this->getAssetById((int) $assetId);
 

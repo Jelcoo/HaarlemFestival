@@ -11,8 +11,8 @@ class Asset
     public string $filename;
     public string $mimetype;
     public int $size;
-    public string $model;
-    public int $model_id;
+    public string|null $model;
+    public int|null $model_id;
     public string $created_at;
 
     public function __construct()
@@ -38,6 +38,6 @@ class Asset
 
     public function getUrl(): string
     {
-        return Config::getKey('APP_URL') . '/assets/' . $this->filename;
+        return Config::getKey('APP_URL') . '/storage/' . $this->filename;
     }
 }

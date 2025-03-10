@@ -325,7 +325,7 @@ CREATE TABLE assets (
     filename VARCHAR(255) NOT NULL,
     mimetype VARCHAR(255) NOT NULL,
     size INT NOT NULL,
-    model VARCHAR(255) NOT NULL,
-    model_id INT NOT NULL,
+    model VARCHAR(255),
+    model_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

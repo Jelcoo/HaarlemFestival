@@ -36,6 +36,8 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
     });
 
     $router->middleware(EnsureAdmin::class, function () use ($router) {
+        $router->post('/upload', [App\Controllers\UploadController::class, 'index']);
+
         $router->get('/dashboard', [App\Controllers\DashboardController::class, 'index']);
         $router->get('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'index']);
         $router->post('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'handleAction']);
