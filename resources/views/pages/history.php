@@ -350,8 +350,8 @@ include_once __DIR__ . '/../components/header.php';
                                             $tours = array_map(function ($lang, $count) {
                                                 return count($count) . "x $lang";
                                             }, array_keys($start['tours']), array_values($start['tours']));
-                                            echo implode('<br>', $tours);
-                                            ?>
+                                    echo implode('<br>', $tours);
+                                    ?>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -363,19 +363,19 @@ include_once __DIR__ . '/../components/header.php';
                     <button class="btn btn-custom-yellow w-100"
                         data-price-family="<?php echo $schedule['prices']['family']; ?>"
                         data-price-single="<?php echo $schedule['prices']['single']; ?>" data-tours="<?php foreach ($schedule['start'] as $start) {
-                               // Start with the time followed by a dot
-                               echo $start['time'] . '.';
+                            // Start with the time followed by a dot
+                            echo $start['time'] . '.';
 
-                               $langStrings = [];
-                               // Loop through each language and its array of tour IDs
-                               foreach ($start['tours'] as $lang => $ids) {
-                                   // Build a string in the format "Language:id1,id2"
-                                   $langStrings[] = $lang . ':' . implode(',', $ids);
-                               }
+                            $langStrings = [];
+                            // Loop through each language and its array of tour IDs
+                            foreach ($start['tours'] as $lang => $ids) {
+                                // Build a string in the format "Language:id1,id2"
+                                $langStrings[] = $lang . ':' . implode(',', $ids);
+                            }
 
-                               // Join all language strings with a "?" delimiter, and end with a semicolon
-                               echo implode('?', $langStrings) . ';';
-                           } ?>" data-date="<?php echo $schedule['date']; ?>" onclick="openModal()"><i
+                            // Join all language strings with a "?" delimiter, and end with a semicolon
+                            echo implode('?', $langStrings) . ';';
+                        } ?>" data-date="<?php echo $schedule['date']; ?>" onclick="openModal()"><i
                             class="fa-solid fa-ticket"></i>
                         Buy Ticket</button>
                 </div>
