@@ -84,52 +84,21 @@
                     <form action="/dashboard/users" method="POST">
                         <input type="hidden" name="id" value="<?php echo htmlspecialchars($user->id); ?>">
 
-                        <?php
-                        $isEditing = isset($_GET['edit']) && $_GET['edit'] == $user->id;
-
-                        foreach ($columns as $columnKey => $columnData): ?>
+                        <?php foreach ($columns as $columnKey => $columnData): ?>
                             <td>
-                                <?php if ($columnData['editable'] && $isEditing): ?>
-
-                                    <!-- Editable Input Fields -->
-                                    <?php if (in_array($columnData['editable_type'], ['text', 'email'])): ?>
-                                        <input type="<?php echo htmlspecialchars($columnData['editable_type']); ?>"
-                                            name="<?php echo htmlspecialchars($columnKey); ?>"
-                                            value="<?php echo htmlspecialchars($user->$columnKey); ?>" class="form-control w-100"
-                                            <?php echo (!empty($columnData['required']) && $columnData['required']) ? 'required' : '' ?>>
-
-                                        <!-- Role Select Dropdown -->
-                                    <?php elseif ($columnData['editable_type'] === 'select'): ?>
-                                        <select name="<?php echo htmlspecialchars($columnKey); ?>" class="form-control">
-                                            <?php foreach ($columnData['options'] as $option): ?>
-                                                <?php
-                                                $userValue = $user->$columnKey instanceof \BackedEnum
-                                                    ? $user->$columnKey->value
-                                                    : $user->$columnKey;
-                                                ?>
-                                                <option value="<?php echo htmlspecialchars($option); ?>"
-                                                    <?php echo ($userValue == $option) ? 'selected' : ''; ?>>
-                                                    <?php echo htmlspecialchars(ucfirst($option)); ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    <?php endif; ?>
-
-                                <?php else: ?>
-                                    <!-- Enum Display -->
-                                    <?php
-                                    $displayValue = $user->$columnKey instanceof \BackedEnum
-                                        ? $user->$columnKey->value
-                                        : (string) $user->$columnKey;
-                                    ?>
-                                    <?php echo htmlspecialchars(ucfirst($displayValue)); ?>
-                                <?php endif; ?>
+                                <!-- Display Values -->
+                                <?php
+                                $displayValue = $user->$columnKey instanceof \BackedEnum
+                                    ? $user->$columnKey->value
+                                    : (string) $user->$columnKey;
+                                ?>
+                                <?php echo htmlspecialchars(ucfirst($displayValue)); ?>
                             </td>
                         <?php endforeach; ?>
 
                         <!-- Actions -->
                         <td class="d-flex gap-2">
-                            <form action="/dashboard/locations" method="POST" class="d-inline">
+                            <form action="/dashboard/users" method="POST" class="d-inline">
                                 <input type="hidden" name="id" value="<?php echo $user->id; ?>">
                                 <button type="submit" class="btn btn-warning btn-sm" name="action" value="edit">Edit</button>
                                 <button type="submit" class="btn btn-danger btn-sm ms-2" name="action"
@@ -145,6 +114,7 @@
             </tr>
         <?php endif; ?>
     </tbody>
+
 </table>
 
 <script>
