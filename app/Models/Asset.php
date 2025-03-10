@@ -11,8 +11,8 @@ class Asset
     public string $filename;
     public string $mimetype;
     public int $size;
-    public string|null $model;
-    public int|null $model_id;
+    public ?string $model;
+    public ?int $model_id;
     public string $created_at;
 
     public function __construct()
