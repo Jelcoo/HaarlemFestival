@@ -20,10 +20,6 @@ class DashboardRestaurantsController extends DashboardController
 
     public function index(): string
     {
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
-
         $sortColumn = $_GET['sort'] ?? 'id';
         $sortDirection = $_GET['direction'] ?? 'asc';
         $searchQuery = $_GET['search'] ?? '';
@@ -32,13 +28,13 @@ class DashboardRestaurantsController extends DashboardController
             $this->redirectToRestaurants();
         }
 
-        if (!empty($_SESSION['show_create_restaurant_form'])) {
-            unset($_SESSION['show_create_restaurant_form']);
+        if (!empty($_SESSION['show_restaurant_form'])) {
+            unset($_SESSION['show_restaurant_form']);
 
             $formData = $_SESSION['form_data'] ?? [];
             unset($_SESSION['form_data']);
 
-            return $this->renderPage('restaurant_create', [
+            return $this->renderPage('restaurant_form', [
                 'locations' => $this->locationRepository->getAllLocations(),
                 'formData' => $formData,
                 'status' => $this->getStatus(),
@@ -68,7 +64,8 @@ class DashboardRestaurantsController extends DashboardController
         match ($action) {
             'delete' => $restaurantId ? $this->deleteRestaurant($restaurantId) : $this->redirectToRestaurants(false, 'Invalid restaurant ID.'),
             'update' => $restaurantId ? $this->updateRestaurant($restaurantId) : $this->redirectToRestaurants(false, 'Invalid restaurant ID.'),
-            'create' => $this->showCreateRestaurantForm(),
+            'edit' => $restaurantId ? $this->editRestaurant() : $this->redirectToRestaurants(false, 'Invalid restaurant ID.'),
+            'create' => $this->showForm(),
             'createNewRestaurant' => $this->createNewRestaurant(),
             default => $this->redirectToRestaurants(false, 'Invalid action.'),
         };
@@ -78,6 +75,32 @@ class DashboardRestaurantsController extends DashboardController
     {
         $success = $this->restaurantRepository->deleteRestaurant($restaurantId);
         $this->redirectToRestaurants(!empty($success), $success ? 'Restaurant deleted successfully.' : 'Failed to delete Restaurant');
+    }
+
+    private function editRestaurant(): void
+    {
+        try {
+            $restaurantId = $_POST['id'] ?? null;
+            if (!$restaurantId) throw new \Exception('Invalid location ID');
+
+            $existingRestaurant = $this->restaurantRepository->getRestaurantById($restaurantId);
+            if (!$existingRestaurant) throw new \Exception('Restaurant not found.');
+
+            $_SESSION['show_restaurant_form'] = true;
+            $_SESSION['form_data'] = [
+                'id' => $existingRestaurant->id,
+                'restaurant_type' => $existingRestaurant->restaurant_type,
+                'rating' => $existingRestaurant->rating,
+                'location_id' => $existingRestaurant->location_id,
+                'menu' => $existingRestaurant->menu,
+            ];
+
+            $this->redirectToRestaurants();
+        } catch (\Exception $e) {
+            $_SESSION['form_data'] = $_POST;
+            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
+            $this->redirectToRestaurants(false, $e->getMessage());
+        }
     }
 
     private function updateRestaurant(int $restaurantId): void
@@ -129,7 +152,7 @@ class DashboardRestaurantsController extends DashboardController
             ]);
 
             if ($validation->fails()) {
-                $_SESSION['show_create_restaurant_form'] = true;
+                $_SESSION['show_restaurant_form'] = true;
                 $_SESSION['form_data'] = $_POST;
                 throw new \Exception(implode(' ', $validation->errors()->all()));
             }
@@ -147,7 +170,7 @@ class DashboardRestaurantsController extends DashboardController
             $createdRestaurant = $this->restaurantRepository->createRestaurant($restaurantData);
             $this->redirectToRestaurants(!empty($createdRestaurant), "Restaurant '{$restaurantData['name']}' created successfully.");
         } catch (\Exception $e) {
-            $_SESSION['show_create_restaurant_form'] = true;
+            $_SESSION['show_restaurant_form'] = true;
             $_SESSION['form_data'] = $_POST;
             $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
             $this->redirectToRestaurants(false, $e->getMessage());
@@ -175,9 +198,9 @@ class DashboardRestaurantsController extends DashboardController
         $this->redirectTo('restaurants', $success, $message);
     }
 
-    private function showCreateRestaurantForm(): void
+    private function showForm(): void
     {
-        $_SESSION['show_create_restaurant_form'] = true;
-        $this->redirectToRestaurants(false, '');
+        $_SESSION['show_rstaurantForm'] = true;
+        $this->redirectToRestaurants();
     }
 }
