@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
 use App\Enum\UserRoleEnum;
 use App\Repositories\UserRepository;
@@ -26,8 +27,8 @@ class DashboardUsersController extends DashboardController
             $this->redirectToUsers();
         }
 
-        if (!empty($_SESSION['show_create_user_form'])) {
-            unset($_SESSION['show_create_user_form']);
+        if (!empty($_SESSION['show_user_form'])) {
+            unset($_SESSION['show_user_form']);
 
             $formData = $_SESSION['form_data'] ?? [];
             unset($_SESSION['form_data']);
@@ -55,14 +56,15 @@ class DashboardUsersController extends DashboardController
             return;
         }
 
-        $action = filter_input(INPUT_POST, 'action', FILTER_DEFAULT);
-        $userId = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $action = $_POST['action'] ?? null;
+        $userId = $_POST['id'] ?? null;
 
         match ($action) {
             'delete' => $userId ? $this->deleteUser($userId) : $this->redirectToUsers(false, 'Invalid user ID.'),
             'update' => $userId ? $this->updateUser($userId) : $this->redirectToUsers(false, 'Invalid user ID.'),
-            'create' => $this->showCreateUserForm(),
-            'createNewUser' => $this->createNewUser(),
+            'edit' => $userId ? $this->editUser() : $this->redirectToUsers(false, 'Invalid user ID.'),
+            'create' => $this->showForm(),
+            'createUser' => $this->createNewUser(),
             default => $this->redirectToUsers(false, 'Invalid action.'),
         };
     }
@@ -73,35 +75,80 @@ class DashboardUsersController extends DashboardController
         $this->redirectToUsers(!empty($success), $success ? 'User deleted successfully.' : 'Failed to delete user.');
     }
 
+    private function editUser(): void
+    {
+        try {
+            $userId = $_POST['id'] ?? null;
+            if (!$userId) throw new \Exception('Invalid user ID.');
+
+            $existingUser = $this->userRepository->getUserById($userId);
+            if (!$existingUser) throw new \Exception('User not found.');
+
+            $_SESSION['show_user_form'] = true;
+            $_SESSION['form_data'] = [
+                'id' => $existingUser->id,
+                'firstname' => $existingUser->firstname,
+                'lastname' => $existingUser->lastname,
+                'email' => $existingUser->email,
+                'password' => $existingUser->password,
+                'role' => $existingUser->role->value,
+                'address' => $existingUser->address,
+                'city' => $existingUser->city,
+                'postal_code' => $existingUser->postal_code,
+            ];
+
+            $this->redirectToUsers();
+        } catch (\Exception $e) {
+            $_SESSION['form_data'] = $_POST;
+            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
+            $this->redirectToUsers(false, $e->getMessage());
+        }
+    }
+
     private function updateUser(int $userId): void
     {
         try {
             $existingUser = $this->userRepository->getUserById($userId);
 
-            if (!$existingUser) {
-                throw new \Exception('User not found.');
+            if (!$existingUser) throw new \Exception('User not found.');
+
+            $validator = new Validator();
+            $validator->addValidator('unique', new UniqueRule());
+
+            $rules = [
+                'firstname' => 'required|max:255',
+                'lastname' => 'required|max:255',
+                'address' => 'max:255',
+                'city' => 'max:255',
+                'postal_code' => 'max:255',
+            ];
+            if ($existingUser->email !== $_POST['email']) {
+                $rules['email'] = 'required|email|unique:users,email|max:255';
             }
 
-            $fieldsToUpdate = array_intersect_key($_POST, array_flip([
-                'firstname',
-                'lastname',
-                'email',
-                'role',
-                'address',
-                'city',
-                'postal_code'
-            ]));
+            $validation = $validator->validate($_POST, $rules);
 
-            if (isset($fieldsToUpdate['role'])) {
-                $fieldsToUpdate['role'] = UserRoleEnum::from(strtolower($fieldsToUpdate['role']));
+            if ($validation->fails()) {
+                $_SESSION['show_user_form'] = true;
+                $_SESSION['form_data'] = $_POST;
+                throw new \Exception(implode(' ', $validation->errors()->all()));
             }
 
-            foreach ($fieldsToUpdate as $field => $value) {
-                $existingUser->$field = $value;
+            if (!isset($_POST['role']) || !in_array($_POST['role'], array_column(UserRoleEnum::cases(), 'value'))) {
+                throw new \Exception('Invalid or missing role');
             }
 
-            $updatedUser = $this->userRepository->updateUserAdmin($existingUser);
-            $this->redirectToUsers(true, "User '{$_POST['firstname']} {$_POST['lastname']}' updated successfully.");
+            $existingUser->id = $_POST['id'];
+            $existingUser->firstname = $_POST['firstname'];
+            $existingUser->lastname = $_POST['lastname'];
+            $existingUser->email = $_POST['email'];
+            $existingUser->role = UserRoleEnum::from(strtolower($_POST['role']));
+            $existingUser->address = $_POST['address'] ?? null;
+            $existingUser->city = $_POST['city'] ?? null;
+            $existingUser->postal_code = $_POST['postal_code'] ?? null;
+
+            $this->userRepository->updateUser($existingUser);
+            $this->redirectToUsers(true, 'User updated successfully.');
         } catch (\Exception $e) {
             $_SESSION['show_edit_user_form'] = true;
             $_SESSION['form_data'] = $_POST;
@@ -153,68 +200,16 @@ class DashboardUsersController extends DashboardController
 
     private function getColumns(): array
     {
-        $roles = array_column(UserRoleEnum::cases(), 'value');
-
         return [
-            'id' => [
-                'label' => 'ID',
-                'sortable' => true,
-                'editable' => false,
-                'editable_type' => null,
-                'required' => true,
-            ],
-            'firstname' => [
-                'label' => 'First Name',
-                'sortable' => true,
-                'editable' => true,
-                'editable_type' => 'text',
-                'required' => true,
-            ],
-            'lastname' => [
-                'label' => 'Last Name',
-                'sortable' => true,
-                'editable' => true,
-                'editable_type' => 'text',
-                'required' => true,
-            ],
-            'email' => [
-                'label' => 'Email',
-                'sortable' => true,
-                'editable' => true,
-                'editable_type' => 'email',
-                'required' => true,
-            ],
-            'role' => [
-                'label' => 'Role',
-                'sortable' => true,
-                'editable' => true,
-                'editable_type' => 'select',
-                'options' => $roles
-            ],
-            'address' => [
-                'label' => 'Address',
-                'sortable' => false,
-                'editable' => true,
-                'editable_type' => 'text'
-            ],
-            'city' => [
-                'label' => 'City',
-                'sortable' => true,
-                'editable' => true,
-                'editable_type' => 'text'
-            ],
-            'postal_code' => [
-                'label' => 'Postal Code',
-                'sortable' => true,
-                'editable' => true,
-                'editable_type' => 'text'
-            ],
-            'created_at' => [
-                'label' => 'Created At',
-                'sortable' => true,
-                'editable' => false,
-                'editable_type' => null
-            ],
+            'id' => ['label' => 'ID', 'sortable' => true],
+            'firstname' => ['label' => 'First Name', 'sortable' => true],
+            'lastname' => ['label' => 'Last Name', 'sortable' => true],
+            'email' => ['label' => 'Email', 'sortable' => true],
+            'role' => ['label' => 'Role', 'sortable' => true],
+            'address' => ['label' => 'Address', 'sortable' => true],
+            'city' => ['label' => 'City', 'sortable' => true],
+            'postal_code' => ['label' => 'Postal Code', 'sortable' => true],
+            'created_at' => ['label' => 'Created At', 'sortable' => true],
         ];
     }
 
@@ -223,9 +218,9 @@ class DashboardUsersController extends DashboardController
         $this->redirectTo('users', $success, $message);
     }
 
-    private function showCreateUserForm(): void
+    private function showForm(): void
     {
-        $_SESSION['show_create_user_form'] = true;
-        $this->redirectToUsers(false, '');
+        $_SESSION['show_user_form'] = true;
+        $this->redirectToUsers();
     }
 }

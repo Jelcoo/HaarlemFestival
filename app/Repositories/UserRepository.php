@@ -115,14 +115,21 @@ class UserRepository extends Repository
     public function updateUser(User $user): void
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
-        $queryBuilder->table('users')->where('id', '=', $user->id)->update([
+
+        $updateFields = [
             'firstname' => $user->firstname,
             'lastname' => $user->lastname,
             'email' => $user->email,
             'address' => $user->address,
             'city' => $user->city,
             'postal_code' => $user->postal_code,
-        ]);
+        ];
+
+        if (isset($user->role)) {
+            $updateFields['role'] = $user->role->value;
+        }
+
+        $queryBuilder->table('users')->where('id', '=', $user->id)->update($updateFields);
     }
 
     public function updatePassword(int $userId, string $newPassword): void

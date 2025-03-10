@@ -126,7 +126,7 @@ class DashboardLocationsController extends DashboardController
             ]);
 
             if ($validation->fails()) {
-                $_SESSION['show_create_location_form'] = true;
+                $_SESSION['show_location_form'] = true;
                 $_SESSION['form_data'] = $_POST;
                 throw new \Exception(implode(' ', $validation->errors()->all()));
             }

@@ -121,22 +121,12 @@
 
                         <!-- Actions -->
                         <td class="d-flex gap-2">
-                            <?php if ($isEditing): ?>
-                                <button type="submit" class="btn btn-success btn-sm" name="action" value="update">
-                                    Confirm
-                                </button>
-                                <a href="/dashboard/users" class="btn btn-secondary btn-sm">
-                                    Cancel
-                                </a>
-                            <?php else: ?>
-                                <a href="/dashboard/users?edit=<?php echo htmlspecialchars($user->id); ?>"
-                                    class="btn btn-warning btn-sm">
-                                    Edit
-                                </a>
-                                <button type="submit" class="btn btn-danger btn-sm" name="action" value="delete">
-                                    Delete
-                                </button>
-                            <?php endif; ?>
+                            <form action="/dashboard/locations" method="POST" class="d-inline">
+                                <input type="hidden" name="id" value="<?php echo $user->id; ?>">
+                                <button type="submit" class="btn btn-warning btn-sm" name="action" value="edit">Edit</button>
+                                <button type="submit" class="btn btn-danger btn-sm ms-2" name="action"
+                                    value="delete">Delete</button>
+                            </form>
                         </td>
                     </form>
                 </tr>
