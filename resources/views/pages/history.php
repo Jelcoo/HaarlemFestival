@@ -429,6 +429,39 @@ include_once __DIR__ . '/../components/header.php';
     });
 
     setTimeout(() => map.invalidateSize(), 100);
+
+    function parseData() {
+        let eventData = event.target.dataset;
+        if (eventData.tours === undefined) {
+            eventData = event.target.parentElement.dataset;
+        }
+
+        let dataStr = eventData.tours;
+        // Spliting the different timesschedules
+        const entries = dataStr.split(";").filter(entry => entry.trim() !== "");
+
+        const schedule = entries.map(entry => {
+            // Split by . to get the time
+            const [time, toursStr] = entry.split(".");
+
+            // Split the tours string by "?" to get each language entry
+            const tourEntries = toursStr.split("?");
+
+            // Loop through each language to build the object
+            const tours = tourEntries.reduce((acc, tourEntry) => {
+                const [language, idsStr] = tourEntry.split(":");
+                if (language && idsStr) {
+                    // Convert ids to an array of numbers
+                    acc[language] = idsStr.split(",").map(id => parseInt(id, 10));
+                }
+                return acc;
+            }, {});
+
+            return { time, tours };
+        });
+
+        console.log(schedule);
+    }
 </script>
 
 <style>
