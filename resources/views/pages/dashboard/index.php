@@ -1,3 +1,5 @@
+<?php include_once __DIR__ . '/../../components/navbar.php'; ?>
+
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
