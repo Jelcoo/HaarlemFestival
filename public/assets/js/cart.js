@@ -64,6 +64,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     // Update total count
                     if (sectionType === "yummy") {
                         totalCount += event.adult_quantity + event.children_quantity;
+                    } else if (sectionType === "history") {
+                        totalCount += event.seats;
                     } else {
                         totalCount += event.quantity;
                     }
@@ -200,31 +202,35 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function createHistoryCardHTML(event, startTime, endTime) {
+        let priceString;
+        if (event.type === "family") {
+            priceString = `${event.seats} seat(s) = €${formatPrice(event.price)}`;
+        } else {
+            priceString = `${event.seats} x €${formatPrice(
+                event.price
+            )} = €${formatPrice(event.seats * event.price)}`;
+        }
         return `
     <h4>${event.name}</h4>
     <div>
-                <img src="/assets/img/${event.image
-            }" alt="image of the history tour">
+                <img src="/assets/img/${event.image}" alt="image of the history tour">
         <div>
             <p>Duration: ${startTime}-${endTime}</p>
+            <p>Ticket type: ${event.type}</p>
         </div>
     </div>
     <div class="d-flex">
-        <p>${event.quantity
-            } x €${formatPrice(event.price)} = €${formatPrice(event.quantity * event.price)}</p>
+        <p>${priceString}</p>
         <div class="counter">
-            <button type="button" class="decrease-btn" data-type="history" data-id="${event.event_id
-            }">
+            <button type="button" class="decrease-btn" data-type="history" data-category="${event.type}" data-id="${event.event_id}">
                 <i class="fa-solid fa-minus"></i>
             </button>
-            <span>${event.quantity}</span>
-            <button type="button" class="increase-btn" data-type="history" data-id="${event.event_id
-            }">
+            <span>${event.seats}</span>
+            <button type="button" class="increase-btn" data-type="history" data-category="${event.type}" data-id="${event.event_id}">
                 <i class="fa-solid fa-plus"></i>
             </button>
         </div>
-        <button type="button" class="remove-btn" data-type="history" data-id="${event.event_id
-            }">
+        <button type="button" class="remove-btn" data-type="history" data-category="${event.type}" data-id="${event.event_id}">
             <i class="fa-solid fa-trash"></i>
         </button>
     </div>
@@ -290,7 +296,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function formatPrice(price) {
-        const formattedPrice = price.toFixed(2);
+        const formattedPrice = parseFloat(price).toFixed(2);
         // Check if the price has no cents (ends with .00)
         return formattedPrice.endsWith(".00")
             ? Math.floor(price) + ",-"
@@ -341,6 +347,14 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 item[quantityField] = Math.max(1, newQuantity);
             }
+        } else if (type === "history" && category == "family") {
+            if (item.seats + change <= 4) {
+                const newQuantity = Math.max(1, item.seats + change);
+                item.seats = newQuantity;
+            }
+        } else if (type === "history" && category == "single") {
+            const newQuantity = Math.max(1, item.seats + change);
+            item.seats = newQuantity;
         } else {
             const newQuantity = Math.max(1, item.quantity + change);
             item.quantity = newQuantity;
@@ -348,7 +362,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Save to localStorage
         localStorage.setItem("orderedItems", JSON.stringify(orderedItems));
-        console.log("quantity change");
         // Refresh the display
         refreshDisplay();
     }
