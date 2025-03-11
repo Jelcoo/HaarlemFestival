@@ -50,6 +50,7 @@ class AssetRepository extends Repository
 
         $assetId = $queryBuilder->table('assets')->insert([
             'collection' => $asset->collection,
+            'filepath' => $asset->filepath,
             'filename' => $asset->filename,
             'mimetype' => $asset->mimetype,
             'size' => $asset->size,
