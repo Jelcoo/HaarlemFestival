@@ -22,16 +22,15 @@ class ScheduleService
         $dates = $this->getScheduleDates($querySchedule);
         foreach ($dates as $date) {
             $todayEvents = $this->getScheduleByDate($querySchedule, $date);
-            $formattedDate = date('l F j', strtotime($date));
             $todaySchedule = [
-                'date' => $formattedDate,
+                'date' => date('l F j', strtotime($date)),
                 'rows' => [],
             ];
 
             foreach ($todayEvents as $event) {
                 $todaySchedule['rows'][] = [
                     'event_id' => $event['event_id'],
-                    'start' => $event['start_time'],
+                    'start' => date('H:i', strtotime($event['start_time'])),
                     'venue' => $event['location_name'],
                     'artists' => explode(', ', $event['artist_names']),
                     'session' => match (DanceSessionEnum::from($event['session'])) {
