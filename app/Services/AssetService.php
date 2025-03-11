@@ -34,7 +34,7 @@ class AssetService
      *
      * @param array $file The file object from the request $_FILES.
      * @param string $collection The collection name the asset should belong to.
-     * @param mixed $model The model the asset belongs to.
+     * @param mixed|null $model The model the asset belongs to. Set to null if not applicable.
      *
      * @return Asset
      * @throws \Exception
@@ -61,8 +61,10 @@ class AssetService
         $asset->filename = $fileName;
         $asset->mimetype = $mimeType;
         $asset->size = $file['size'];
-        $asset->model = get_class($model);
-        $asset->model_id = $model->id;
+        if (!is_null($model)) {
+            $asset->model = get_class($model);
+            $asset->model_id = $model->id;
+        }
 
         return $this->assetRepository->saveAsset($asset);
     }

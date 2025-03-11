@@ -14,6 +14,9 @@ $router->get('/history', [App\Controllers\HomeController::class, 'history']);
 $router->get('/magic', [App\Controllers\HomeController::class, 'magic']);
 $router->get('/cart', [App\Controllers\CartController::class, 'index']);
 
+$router->get('/editor', [App\Controllers\EditorController::class, 'index']);
+$router->post('/editor', [App\Controllers\EditorController::class, 'editPost']);
+
 $router->middleware(EnsureNotLoggedIn::class, function () use ($router) {
     $router->get('/register', [App\Controllers\AuthController::class, 'register']);
     $router->post('/register', [App\Controllers\AuthController::class, 'registerPost']);
@@ -34,6 +37,8 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
     });
 
     $router->middleware(EnsureAdmin::class, function () use ($router) {
+        $router->post('/upload', [App\Controllers\UploadController::class, 'index']);
+
         $router->get('/dashboard', [App\Controllers\DashboardController::class, 'index']);
         $router->get('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'index']);
         $router->post('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'handleAction']);
