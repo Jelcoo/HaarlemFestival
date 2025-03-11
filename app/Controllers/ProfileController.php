@@ -5,15 +5,19 @@ namespace App\Controllers;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
 use App\Repositories\UserRepository;
+use App\Services\EmailService;
+use App\Services\EmailWriterService;
 
 class ProfileController extends Controller
 {
     private UserRepository $userRepository;
+    private EmailWriterService $emailWriterService;
 
     public function __construct()
     {
         parent::__construct();
         $this->userRepository = new UserRepository();
+        $this->emailWriterService = new EmailWriterService();
     }
 
     public function index(array $parameters = []): string
@@ -26,7 +30,8 @@ class ProfileController extends Controller
     public function update(): string
     {
         try {
-            $user = $this->getAuthUser();
+            $oldUser = $this->getAuthUser();
+            $user = $oldUser;
         } catch (\Exception $e) {
             return $this->index([
                 'error' => $e->getMessage(),
@@ -66,6 +71,12 @@ class ProfileController extends Controller
             $user->postal_code = $_POST['postal_code'] ?: $user->postal_code;
 
             $this->userRepository->updateUser($user);
+
+            if ($user->email !== $oldUser->email) {
+                $this->emailWriterService->sendEmailUpdate($oldUser);
+            } else {
+                $this->emailWriterService->sendAccountUpdate($user);
+            }
         } catch (\Exception $e) {
             return $this->index([
                 'error' => $e->getMessage(),
@@ -112,6 +123,8 @@ class ProfileController extends Controller
             $encryptedPassword = password_hash($_POST['newPassword'], PASSWORD_DEFAULT);
             $user->password = $encryptedPassword;
             $this->userRepository->updatePassword($user->id, $encryptedPassword);
+
+            $this->emailWriterService->sendPasswordUpdate($user);
         } catch (\Exception $e) {
             return $this->index([
                 'error' => $e->getMessage(),

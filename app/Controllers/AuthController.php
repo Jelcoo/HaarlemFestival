@@ -9,16 +9,20 @@ use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
 use App\Helpers\TurnstileHelper;
 use App\Repositories\UserRepository;
+use App\Services\EmailService;
+use App\Services\EmailWriterService;
 
 class AuthController extends Controller
 {
     private UserRepository $userRepository;
+    private EmailWriterService $emailWriterService;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->userRepository = new UserRepository();
+        $this->emailWriterService = new EmailWriterService();
     }
 
     public function register(array $parameters = []): string
@@ -66,6 +70,8 @@ class AuthController extends Controller
                 'email' => $email,
                 'password' => password_hash($password, PASSWORD_DEFAULT),
             ]);
+
+            $this->emailWriterService->sendWelcomeEmail($createdUser);
 
             $_SESSION['user_id'] = $createdUser->id;
             Response::redirect('/');
