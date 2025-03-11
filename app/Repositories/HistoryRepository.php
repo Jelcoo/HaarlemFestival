@@ -13,7 +13,7 @@ class HistoryRepository extends Repository
     {
         $query = $this->getConnection()->prepare("
 SELECT
-    he.id AS history_id,
+    he.id AS tour_id,
     he.start_location AS start_location,
     he.seats_per_tour AS seats_per_tour,
     ROUND(he.family_price * (he.vat + 1), 2) AS family_price,
