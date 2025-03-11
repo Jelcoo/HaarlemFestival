@@ -43,7 +43,7 @@ class LocationRepository extends Repository
     {
         return array_map(function ($location) {
             $location = new Location($location);
-            $location->assets = $this->assetService->resolveAssets($location);
+            $location->assets = $this->assetService->resolveAssets($location, 'cover');
 
             return $location;
         }, $locations);
