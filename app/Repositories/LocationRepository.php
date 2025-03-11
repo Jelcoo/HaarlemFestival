@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Location;
 use App\Helpers\QueryBuilder;
+use App\Models\Restaurant;
 use App\Services\AssetService;
 
 class LocationRepository extends Repository
@@ -110,6 +111,42 @@ class LocationRepository extends Repository
             ->get();
 
         return $this->mapLocations($queryLocations);
+    }
+
+    public function getYummyLocations(): array
+    {
+        $query = $this->getConnection()->prepare("
+SELECT 
+    r.id AS id,
+    l.id AS location_id,
+    r.restaurant_type,
+    r.rating,
+    r.menu,
+    l.id AS location_id,
+    l.name AS name,
+    l.event_type,
+    l.coordinates,
+    l.address,
+    l.preview_description,
+    l.main_description
+FROM restaurants r
+INNER JOIN locations l ON r.location_id = l.id");
+
+        $query->execute();
+        $queryRestaurants = $query->fetchAll();
+
+        return array_map(function ($restaurant) {
+            $restaurantModel = new Restaurant($restaurant);
+            $restaurantModel->location = new Location($restaurant);
+            $restaurantModel->location->id = $restaurant['location_id'];
+            $restaurantModel->assets = array_merge(
+                $restaurantModel->assets,
+                $this->assetService->resolveAssets($restaurantModel, 'cover'),
+                $this->assetService->resolveAssets($restaurantModel, 'icon')
+            );
+
+            return $restaurantModel;
+        },$queryRestaurants);
     }
 
     public function getSpecificLocations(string $type): array

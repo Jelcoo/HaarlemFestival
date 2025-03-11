@@ -45,7 +45,11 @@ class HomeController extends Controller
 
     public function yummy(): string
     {
-        return $this->pageLoader->setPage('yummy')->render();
+        $restaurants = $this->locationRepository->getYummyLocations();
+
+        return $this->pageLoader->setPage('yummy')->render([
+            'restaurants' => $restaurants,
+        ]);
     }
 
     public function history(): string

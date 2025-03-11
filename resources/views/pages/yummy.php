@@ -6,65 +6,6 @@ $header_dates = 'July 25 - 27, 2025';
 $header_image = '/assets/img/events/slider/yummy.png';
 
 include_once __DIR__ . '/../components/header.php';
-
-$restaurants = [
-    [
-        'name' => 'Café de Roemer',
-        'rating' => 4,
-        'description' => 'A Haarlem favorite for over 30 years, Café de Roemer offers a menu with both classic and innovative dishes. Relax on the sunny terrace or in the cozy glass conservatory, perfect for any weather. Whether for lunch, dinner, or drinks, enjoy great food and warm hospitality!',
-        'cuisine' => 'Dutch, Fish and Seafood, European',
-        'image' => '/assets/img/restaurants/roemer.png',
-        'icon' => 'icon1.png',
-    ],
-    [
-        'name' => 'Ratatouille',
-        'rating' => 4,
-        'description' => 'Ratatouille Food and Wine in Haarlem, led by chef Jozua Jaring, offers a refined dining experience with dishes like Holstein tartar and Langoustine, paired with exclusive wines. Perfect for any occasion, the restaurant combines innovative flavors and exceptional hospitality for a memorable culinary journey.',
-        'cuisine' => 'French, Fish and Seafood, European',
-        'image' => '/assets/img/restaurants/ratatouille.png',
-        'icon' => 'icon2.png',
-    ],
-    [
-        'name' => 'Restaurant ML',
-        'rating' => 4,
-        'description' => 'Restaurant ML in Haarlem, awarded a Michelin star, offers bold dishes by chef Mark Gratama in a modern setting with an open kitchen. The menu blends French and international flavors, complemented by a focused wine list in an elegant ambiance.',
-        'cuisine' => 'Dutch, Fish and Seafood, European',
-        'image' => '/assets/img/restaurants/ml.png',
-        'icon' => 'icon3.png',
-    ],
-    [
-        'name' => 'Restaurant Fris',
-        'rating' => 4,
-        'description' => 'Restaurant Fris in Haarlem offers a refined dining experience, blending French and Asian influences in a creative interpretation of local ingredients. Chef Rick Swinkels welcomes guests with fresh, innovative dishes. Enjoy a high-quality dining experience in a welcoming atmosphere.',
-        'cuisine' => 'Dutch, French, European',
-        'image' => '/assets/img/restaurants/fris.png',
-        'icon' => 'icon4.png',
-    ],
-    [
-        'name' => 'New Vegas',
-        'rating' => 3,
-        'description' => 'New Vegas, Haarlem\'s first vegan restaurant, offers creative twists on familiar dishes using seasonal, plant-based ingredients. Known for its 3D-printed steak and innovative menu, it provides a unique dining experience with vegan sides and bites in a casual atmosphere, perfect for adventurous food lovers.',
-        'cuisine' => 'Vegan',
-        'image' => '/assets/img/restaurants/newvegas.png',
-        'icon' => 'icon5.png',
-    ],
-    [
-        'name' => 'Grand Cafe Brinkmann',
-        'rating' => 3,
-        'description' => 'Grand Café Brinkmann offers a cozy and welcoming atmosphere in Haarlem, where guests can enjoy delicious drinks and a relaxed ambiance. With a varied menu and the option to rent rooms for special events, it is the perfect place for both a casual meal and a special occasion.',
-        'cuisine' => 'Dutch, European, Modern',
-        'image' => '/assets/img/restaurants/brinkmann.png',
-        'icon' => 'icon6.png',
-    ],
-    [
-        'name' => 'Urban Frenchy Bistro Toujours',
-        'rating' => 3,
-        'description' => 'Toujours in Haarlem offers a luxurious private dining experience with a menu featuring truffle, wagyu, caviar and sushi. Enjoy cocktails, wine, and beer on the cozy terrace, perfect for an unforgettable meal. Open daily, Toujours is the ideal spot for refined dining with family or friends.',
-        'cuisine' => 'Dutch, fish and seafood, European',
-        'image' => '/assets/img/restaurants/toujours.png',
-        'icon' => 'icon7.png',
-    ],
-];
 ?>
 
 <!-- Festival Information Banner -->
@@ -88,7 +29,7 @@ $restaurants = [
                 <!-- Icon section outside the card -->
                 <div class="icon-wrapper <?php echo $isEven ? 'icon-left' : 'icon-right'; ?>">
                     <div class="restaurant-icon">
-                        <img src="/assets/img/icons/<?php echo $restaurant['icon']; ?>" alt="<?php echo $restaurant['name']; ?> Icon">
+                        <img src="<?php echo $restaurant->assets[1]->getUrl(); ?>" alt="<?php echo $restaurant->location->name; ?> Icon">
                     </div>
                 </div>
                 
@@ -97,27 +38,27 @@ $restaurants = [
                     <?php if ($isEven) { ?>
                         <div class="restaurant-image">
                             <div class="image-wrapper">
-                                <img src="<?php echo $restaurant['image']; ?>" alt="<?php echo $restaurant['name']; ?>">
+                                <img src="<?php echo $restaurant->assets[0]->getUrl(); ?>" alt="<?php echo $restaurant->location->name; ?>">
                             </div>
                         </div>
                         <div class="restaurant-content">
                             <div class="restaurant-header">
-                                <h3><?php echo $restaurant['name']; ?></h3>
+                                <h3><?php echo $restaurant->location->name; ?></h3>
                                 <div class="stars">
-                                    <?php for ($i = 0; $i < $restaurant['rating']; ++$i) { ?>
+                                    <?php for ($i = 0; $i < $restaurant->rating; ++$i) { ?>
                                         <span>&#9733;</span>
                                     <?php } ?>
                                 </div>
                             </div>
-                            <p><?php echo $restaurant['description']; ?></p>
+                            <p><?php echo $restaurant->location->preview_description; ?></p>
                             <div class="restaurant-footer">
                                 <div class="cuisine-container">
                                     <div class="cuisine">
-                                        <em><?php echo $restaurant['cuisine']; ?></em>
+                                        <em><?php echo $restaurant->restaurant_type; ?></em>
                                     </div>
                                 </div>
                                 <div class="button-container">
-                                    <button class="btn btn-primary visit-btn">Visit <i class="arrow-icon"></i></button>
+                                    <button class="btn btn-primary visit-btn">Visit <i class="fa-solid fa-arrow-up-right-from-square"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -125,27 +66,27 @@ $restaurants = [
                         <div class="restaurant-content">
                             <div class="restaurant-header">
                                 <div class="stars">
-                                    <?php for ($i = 0; $i < $restaurant['rating']; ++$i) { ?>
+                                    <?php for ($i = 0; $i < $restaurant->rating; ++$i) { ?>
                                         <span>&#9733;</span>
                                     <?php } ?>
                                 </div>
-                                <h3><?php echo $restaurant['name']; ?></h3>
+                                <h3><?php echo $restaurant->location->name; ?></h3>
                             </div>
-                            <p><?php echo $restaurant['description']; ?></p>
+                            <p><?php echo $restaurant->location->preview_description; ?></p>
                             <div class="restaurant-footer">
                                 <div class="cuisine-container">
                                     <div class="cuisine">
-                                        <em><?php echo $restaurant['cuisine']; ?></em>
+                                    <em><?php echo $restaurant->restaurant_type; ?></em>
                                     </div>
                                 </div>
                                 <div class="button-container">
-                                    <button class="btn btn-primary visit-btn">Visit <i class="arrow-icon"></i></button>
+                                    <button class="btn btn-primary visit-btn">Visit <i class="fa-solid fa-arrow-up-right-from-square"></i></button>
                                 </div>
                             </div>
                         </div>
                         <div class="restaurant-image">
                             <div class="image-wrapper">
-                                <img src="<?php echo $restaurant['image']; ?>" alt="<?php echo $restaurant['name']; ?>">
+                                <img src="<?php echo $restaurant->assets[0]->getUrl(); ?>" alt="<?php echo $restaurant->location->name; ?>">
                             </div>
                         </div>
                     <?php } ?>
@@ -156,8 +97,6 @@ $restaurants = [
 </div>
 
 <style>
-/* Existing Styles */
-
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -334,15 +273,6 @@ body {
 .visit-btn:hover {
     background-color: #CC9439;
     color: black;
-}
-.arrow-icon {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    background-image: url('/assets/img/icons/arrow-right.ico');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 /* Alternating left-right icons and content */
