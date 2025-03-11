@@ -189,6 +189,8 @@ class DashboardUsersController extends DashboardController
                 'postal_code'
             ]));
 
+            $userData['password'] = password_hash($_POST['password'] ?? '', PASSWORD_DEFAULT);
+
             $this->userRepository->createUser($userData);
             $this->redirectToUsers(true, "User '{$_POST['firstname']} {$_POST['lastname']}' created successfully.");
         } catch (\Exception $e) {

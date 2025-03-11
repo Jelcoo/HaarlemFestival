@@ -33,6 +33,8 @@
             <option value="" disabled selected>Sort by...</option>
             <option value="restaurant_type" <?php echo ($sortColumn == 'restaurant_type') ? 'selected' : ''; ?>>Type
             </option>
+            <option value="rating" <?php echo ($sortColumn == 'rating') ? 'selected' : ''; ?>>Rating</option>
+            <option value="address" <?php echo ($sortColumn == 'address') ? 'selected' : ''; ?>>Address</option>
         </select>
 
         <select name="direction" id="directionSelect" class="form-select" style="width: 150px;">
