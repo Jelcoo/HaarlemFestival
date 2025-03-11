@@ -127,6 +127,7 @@ class UserRepository extends Repository
             'firstname' => $user->firstname,
             'lastname' => $user->lastname,
             'email' => $user->email,
+            'phone_number' => $user->phone_number,
             'address' => $user->address,
             'city' => $user->city,
             'postal_code' => $user->postal_code,

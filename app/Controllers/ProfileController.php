@@ -45,6 +45,7 @@ class ProfileController extends Controller
         $rules = [
             'firstname' => 'required|max:255',
             'lastname' => 'required|max:255',
+            'phone_number' => 'max:255',
             'address' => 'max:255',
             'city' => 'max:255',
             'postal_code' => 'max:255',
@@ -66,9 +67,10 @@ class ProfileController extends Controller
             $user->firstname = $_POST['firstname'] ?? $user->firstname;
             $user->lastname = $_POST['lastname'] ?? $user->lastname;
             $user->email = $_POST['email'] ?? $user->email;
-            $user->address = $_POST['address'] ?: $user->address;
-            $user->city = $_POST['city'] ?: $user->city;
-            $user->postal_code = $_POST['postal_code'] ?: $user->postal_code;
+            $user->phone_number = $_POST['phone_number'] ?: null;
+            $user->address = $_POST['address'] ?: null;
+            $user->city = $_POST['city'] ?: null;
+            $user->postal_code = $_POST['postal_code'] ?: null;
 
             $this->userRepository->updateUser($user);
 

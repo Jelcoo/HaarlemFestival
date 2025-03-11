@@ -32,6 +32,10 @@ use App\Enum\UserRoleEnum;
                     <input type="email" class="form-control" name="email" placeholder="Enter email" <?php echo isset($fields['email']) ? 'value="' . $fields['email'] . '"' : 'value="' . $user->email . '"'; ?>>
                 </div>
                 <div class="form-group">
+                    <label for="phone_number">Phone number</label>
+                    <input type="text" class="form-control" name="phone_number" placeholder="Enter phone number" <?php echo isset($fields['phone_number']) ? 'value="' . $fields['phone_number'] . '"' : 'value="' . $user->phone_number . '"'; ?>>
+                </div>
+                <div class="form-group">
                     <label for="address">Address</label>
                     <input type="text" class="form-control" name="address" placeholder="Enter address example: Street 1"
                         <?php echo isset($fields['address']) ? 'value="' . $fields['address'] . '"' : 'value="' . $user->address . '"'; ?>>
