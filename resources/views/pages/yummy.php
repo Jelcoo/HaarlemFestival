@@ -81,39 +81,39 @@ $restaurants = [
 <div class="container">
     <h2 class="text-center restaurants-title">Our Restaurants</h2>
     <div class="restaurant-container">
-        <?php foreach ($restaurants as $key => $restaurant) : 
+        <?php foreach ($restaurants as $key => $restaurant) {
             $isEven = $key % 2 == 0;
-        ?>
-            <div class="restaurant-row <?= $isEven ? 'even-row' : 'odd-row' ?>">
+            ?>
+            <div class="restaurant-row <?php echo $isEven ? 'even-row' : 'odd-row'; ?>">
                 <!-- Icon section outside the card -->
-                <div class="icon-wrapper <?= $isEven ? 'icon-left' : 'icon-right' ?>">
+                <div class="icon-wrapper <?php echo $isEven ? 'icon-left' : 'icon-right'; ?>">
                     <div class="restaurant-icon">
-                        <img src="/assets/img/icons/<?= $restaurant['icon']; ?>" alt="<?= $restaurant['name']; ?> Icon">
+                        <img src="/assets/img/icons/<?php echo $restaurant['icon']; ?>" alt="<?php echo $restaurant['name']; ?> Icon">
                     </div>
                 </div>
                 
                 <!-- Restaurant card -->
-                <div class="restaurant-card <?= $isEven ? 'card-right' : 'card-left' ?>">
-                    <?php if ($isEven) : ?>
+                <div class="restaurant-card <?php echo $isEven ? 'card-right' : 'card-left'; ?>">
+                    <?php if ($isEven) { ?>
                         <div class="restaurant-image">
                             <div class="image-wrapper">
-                                <img src="<?= $restaurant['image']; ?>" alt="<?= $restaurant['name']; ?>">
+                                <img src="<?php echo $restaurant['image']; ?>" alt="<?php echo $restaurant['name']; ?>">
                             </div>
                         </div>
                         <div class="restaurant-content">
                             <div class="restaurant-header">
-                                <h3><?= $restaurant['name']; ?></h3>
+                                <h3><?php echo $restaurant['name']; ?></h3>
                                 <div class="stars">
-                                    <?php for ($i = 0; $i < $restaurant['rating']; $i++) : ?>
+                                    <?php for ($i = 0; $i < $restaurant['rating']; ++$i) { ?>
                                         <span>&#9733;</span>
-                                    <?php endfor; ?>
+                                    <?php } ?>
                                 </div>
                             </div>
-                            <p><?= $restaurant['description']; ?></p>
+                            <p><?php echo $restaurant['description']; ?></p>
                             <div class="restaurant-footer">
                                 <div class="cuisine-container">
                                     <div class="cuisine">
-                                        <em><?= $restaurant['cuisine']; ?></em>
+                                        <em><?php echo $restaurant['cuisine']; ?></em>
                                     </div>
                                 </div>
                                 <div class="button-container">
@@ -121,21 +121,21 @@ $restaurants = [
                                 </div>
                             </div>
                         </div>
-                    <?php else : ?>
+                    <?php } else { ?>
                         <div class="restaurant-content">
                             <div class="restaurant-header">
                                 <div class="stars">
-                                    <?php for ($i = 0; $i < $restaurant['rating']; $i++) : ?>
+                                    <?php for ($i = 0; $i < $restaurant['rating']; ++$i) { ?>
                                         <span>&#9733;</span>
-                                    <?php endfor; ?>
+                                    <?php } ?>
                                 </div>
-                                <h3><?= $restaurant['name']; ?></h3>
+                                <h3><?php echo $restaurant['name']; ?></h3>
                             </div>
-                            <p><?= $restaurant['description']; ?></p>
+                            <p><?php echo $restaurant['description']; ?></p>
                             <div class="restaurant-footer">
                                 <div class="cuisine-container">
                                     <div class="cuisine">
-                                        <em><?= $restaurant['cuisine']; ?></em>
+                                        <em><?php echo $restaurant['cuisine']; ?></em>
                                     </div>
                                 </div>
                                 <div class="button-container">
@@ -145,13 +145,13 @@ $restaurants = [
                         </div>
                         <div class="restaurant-image">
                             <div class="image-wrapper">
-                                <img src="<?= $restaurant['image']; ?>" alt="<?= $restaurant['name']; ?>">
+                                <img src="<?php echo $restaurant['image']; ?>" alt="<?php echo $restaurant['name']; ?>">
                             </div>
                         </div>
-                    <?php endif; ?>
+                    <?php } ?>
                 </div>
             </div>
-        <?php endforeach; ?>
+        <?php } ?>
     </div>
 </div>
 
