@@ -30,6 +30,7 @@ class ScheduleService
 
             foreach ($todayEvents as $event) {
                 $todaySchedule['rows'][] = [
+                    'event_id' => $event['event_id'],
                     'start' => $event['start_time'],
                     'venue' => $event['location_name'],
                     'artists' => explode(', ', $event['artist_names']),

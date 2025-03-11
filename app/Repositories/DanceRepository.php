@@ -13,6 +13,7 @@ class DanceRepository extends Repository
     {
         $query = $this->getConnection()->prepare("
 SELECT
+    de.id AS event_id,
     de.start_date AS start_date,
     de.start_time AS start_time,
     l.name AS location_name,
