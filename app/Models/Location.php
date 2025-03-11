@@ -13,6 +13,7 @@ class Location
     public ?string $address;
     public ?string $preview_description;
     public ?string $main_description;
+    public ?array $assets;
 
     public function __construct(array $collection)
     {

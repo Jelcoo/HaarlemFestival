@@ -1,271 +1,4 @@
 <?php
-
-$locations = [
-    [
-        'name' => 'Grote Markt',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/grotemarkt.png',
-    ],
-    [
-        'name' => 'De Hallen',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/dehallen.png',
-    ],
-    [
-        'name' => 'Proveniershof',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/proveniershof.png',
-    ],
-    [
-        'name' => 'Jopenkerk',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/jopenkerk-2.png',
-    ],
-    [
-        'name' => 'Waalse Kerk Haarlem',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/waalsekerk.png',
-    ],
-    [
-        'name' => 'Molen de Adriaan',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/molendeadriaan.png',
-    ],
-    [
-        'name' => 'Amsterdamse Poort',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/amsterdamsepoort.png',
-    ],
-    [
-        'name' => 'Hof van Bakenes',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/hofvanbakenes.png',
-    ],
-    [
-        'name' => 'Church of St. Bavo',
-        'lng' => 0,
-        'lat' => 0,
-        'description' => '',
-        'address' => '',
-        'image' => '/assets/img/locations/stbavo.png',
-    ],
-];
-
-$schedules = [
-    [
-        'date' => 'Thursday July 24',
-        'location' => 'Bavo Church',
-        'seats_per_tour' => 12,
-        'prices' => [
-            'single' => 17.50,
-            'family' => 60.00,
-        ],
-        'guides' => [
-            [
-                'language' => 'Dutch',
-                'names' => ['Jan-Willem'],
-            ],
-            [
-                'language' => 'English',
-                'names' => ['Frederic'],
-            ],
-        ],
-        'start' => [
-            [
-                'time' => '10:00',
-                'tours' => [
-                    'Dutch' => [1],
-                    'English' => [2],
-                ],
-            ],
-            [
-                'time' => '13:00',
-                'tours' => [
-                    'Dutch' => [3],
-                    'English' => [4],
-                ],
-            ],
-            [
-                'time' => '16:00',
-                'tours' => [
-                    'Dutch' => [6],
-                    'English' => [5],
-                ],
-            ],
-        ],
-    ],
-    [
-        'date' => 'Friday July 25',
-        'location' => 'Bavo Church',
-        'seats_per_tour' => 12,
-        'prices' => [
-            'single' => 17.50,
-            'family' => 60.00,
-        ],
-        'guides' => [
-            [
-                'language' => 'Dutch',
-                'names' => ['Annet'],
-            ],
-            [
-                'language' => 'English',
-                'names' => ['William'],
-            ],
-            [
-                'language' => 'Chinese',
-                'names' => ['Kim'],
-            ],
-        ],
-        'start' => [
-            [
-                'time' => '10:00',
-                'tours' => [
-                    'Dutch' => [7],
-                    'English' => [10],
-                ],
-            ],
-            [
-                'time' => '13:00',
-                'tours' => [
-                    'Dutch' => [8],
-                    'English' => [11],
-                    'Chinese' => [13],
-                ],
-            ],
-            [
-                'time' => '16:00',
-                'tours' => [
-                    'Dutch' => [9],
-                    'English' => [12],
-                    'Chinese' => [14],
-                ],
-            ],
-        ],
-    ],
-    [
-        'date' => 'Saturday July 26',
-        'location' => 'Bavo Church',
-        'seats_per_tour' => 12,
-        'prices' => [
-            'single' => 17.50,
-            'family' => 60.00,
-        ],
-        'guides' => [
-            [
-                'language' => 'Dutch',
-                'names' => ['Annet', 'Jan-Willem'],
-            ],
-            [
-                'language' => 'English',
-                'names' => ['Frederic', 'William'],
-            ],
-            [
-                'language' => 'Chinese',
-                'names' => ['Kim'],
-            ],
-        ],
-        'start' => [
-            [
-                'time' => '10:00',
-                'tours' => [
-                    'Dutch' => [15, 16],
-                    'English' => [20, 21],
-                ],
-            ],
-            [
-                'time' => '13:00',
-                'tours' => [
-                    'Dutch' => [17, 18],
-                    'English' => [22, 23],
-                    'Chinese' => [25],
-                ],
-            ],
-            [
-                'time' => '16:00',
-                'tours' => [
-                    'Dutch' => [19],
-                    'English' => [24],
-                    'Chinese' => [26],
-                ],
-            ],
-        ],
-    ],
-    [
-        'date' => 'Sunday July 27',
-        'location' => 'Bavo Church',
-        'seats_per_tour' => 12,
-        'prices' => [
-            'single' => 17.50,
-            'family' => 60.00,
-        ],
-        'guides' => [
-            [
-                'language' => 'Dutch',
-                'names' => ['Annet', 'Jan-Willem', 'Lisa'],
-            ],
-            [
-                'language' => 'English',
-                'names' => ['Deirdre', 'Frederic', 'William'],
-            ],
-            [
-                'language' => 'Chinese',
-                'names' => ['Kim', 'Susan'],
-            ],
-        ],
-        'start' => [
-            [
-                'time' => '10:00',
-                'tours' => [
-                    'Dutch' => [27, 28],
-                    'English' => [33, 34],
-                    'Chinese' => [39],
-                ],
-            ],
-            [
-                'time' => '13:00',
-                'tours' => [
-                    'Dutch' => [29, 30, 31],
-                    'English' => [35, 36, 37],
-                    'Chinese' => [40, 41],
-                ],
-            ],
-            [
-                'time' => '16:00',
-                'tours' => [
-                    'Dutch' => [32],
-                    'English' => [38],
-                ],
-            ],
-        ],
-    ],
-];
-?>
-
-<?php
 $header_name = 'A stroll through History';
 $header_description = 'Discover the rich history of Haarlem on a captivating guided walking tour. From the grandeur of the Church of St. Bavo to the charm of the Amsterdamse Poort, A Stroll Through History invites you to explore the city\'s most iconic landmarks. This 2.5-hour tour, complete with a refreshing break, is your chance to step into Haarlem’s past and uncover its stories of resilience, culture, and innovation.';
 $header_dates = 'July 24 - 27, 2025';
@@ -279,9 +12,9 @@ include_once __DIR__ . '/../components/header.php';
     <div class="swiper">
         <div class="swiper-wrapper">
             <?php foreach ($locations as $location) { ?>
-                <div class="swiper-slide" style="background-image: url('<?php echo $location['image']; ?>');">
+                <div class="swiper-slide" style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');">
                     <div class="slide-content">
-                        <h2><?php echo $location['name']; ?></h2>
+                        <h2><?php echo $location->name; ?></h2>
                     </div>
                 </div>
             <?php } ?>
@@ -300,7 +33,7 @@ include_once __DIR__ . '/../components/header.php';
 </div>
 
 <h2 class="text-center mt-5">Schedule</h2>
-<div class="container p-0">
+<div class="container p-0 mb-5">
     <?php $scheduleCount = 0; ?>
     <?php foreach ($schedules as $schedule) { ?>
         <?php if ($scheduleCount % 4 == 0) { ?>
@@ -432,6 +165,7 @@ include_once __DIR__ . '/../components/header.php';
         </div>
     </div>
 </div>
+
 <script src="/assets/js/utils.js"></script>
 <script>
     const swiper = new Swiper('.swiper', {
@@ -466,10 +200,10 @@ include_once __DIR__ . '/../components/header.php';
     const locations = <?php echo json_encode($locations); ?>;
 
     locations.forEach(location => {
-        L.marker([location.lat, location.lng]).addTo(map)
+        const coords = location.coordinates.split(',');
+        L.marker(coords).addTo(map)
             .bindPopup(`
                 <h4>${location.name}</h4>
-                <p>${location.description}</p>
                 <p><em>Address: ${location.address}</em></p>
             `);
     });
@@ -685,12 +419,9 @@ include_once __DIR__ . '/../components/header.php';
                 seats: quantity
             };
 
-            const items = localStorage.getItem('orderedItems');
-            if (items) {
-                const orderedItems = JSON.parse(items);
-                orderedItems.history.push(json);
-                localStorage.setItem('orderedItems', JSON.stringify(orderedItems));
-            }
+            const items = getStoredItems();
+            items.history.push(json);
+            localStorage.setItem('orderedItems', JSON.stringify(items));
             closeModal();
         }
     };

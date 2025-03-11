@@ -46,9 +46,10 @@ class AssetService
         }
 
         $mimeType = $this->getMimeType($file['tmp_name']);
+        $filePath = $this->fileService->getFilePath();
         $fileName = $this->generateUuid() . '.' . FileService::getExtension($mimeType);
 
-        $savedFile = $this->fileService->saveFile($file, $this->fileService->getFilePath($fileName));
+        $savedFile = $this->fileService->saveFile($file, $this->fileService->assembleFilePath($filePath, $fileName));
 
         if (!$savedFile) {
             throw new \Exception('Failed to save file');
@@ -56,6 +57,7 @@ class AssetService
 
         $asset = new Asset();
         $asset->collection = $collection;
+        $asset->filepath = $filePath;
         $asset->filename = $fileName;
         $asset->mimetype = $mimeType;
         $asset->size = $file['size'];
@@ -70,7 +72,7 @@ class AssetService
      */
     public function deleteAsset(Asset $asset): void
     {
-        $this->fileService->deleteFile($this->fileService->getFilePath($asset->filename));
+        $this->fileService->deleteFile($this->fileService->assembleFilePath($asset->filepath, $asset->filename));
 
         $this->assetRepository->deleteAsset($asset->id);
     }
