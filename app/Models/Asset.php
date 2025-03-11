@@ -40,6 +40,6 @@ class Asset
 
     public function getUrl(): string
     {
-        return Config::getKey('APP_URL') . '/' . $this->filepath . '/' . $this->filename;
+        return '/' . $this->filepath . '/' . $this->filename;
     }
 }
