@@ -20,6 +20,9 @@ class DashboardRestaurantsController extends DashboardController
 
     public function index(): string
     {
+        ini_set('display_startup_errors', 1);
+        ini_set('display_errors', 1);
+        error_reporting(-1);
         $sortColumn = $_GET['sort'] ?? 'id';
         $sortDirection = $_GET['direction'] ?? 'asc';
         $searchQuery = $_GET['search'] ?? '';

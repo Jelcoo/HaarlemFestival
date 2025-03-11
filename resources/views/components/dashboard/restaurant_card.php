@@ -2,15 +2,13 @@
 if (!isset($restaurant)) {
     return;
 }
-$locationMatch = array_filter($locations, fn($loc) => $loc->id == $restaurant->location_id);
-$location = !empty($locationMatch) ? reset($locationMatch) : null;
 ?>
 
 <div class="col-md-4">
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="card-title">
-                <?php echo $location ? htmlspecialchars($location->name) : 'Unknown Restaurant'; ?>
+                <?php echo isset($restaurant->location->name) ? htmlspecialchars($restaurant->location->name) : 'Unknown Restaurant'; ?>
             </h5>
 
             <!-- Type -->
@@ -25,7 +23,7 @@ $location = !empty($locationMatch) ? reset($locationMatch) : null;
             </p>
             <!-- Address -->
             <p><strong>Address:</strong>
-                <?php echo $location ? htmlspecialchars($location->address ?? 'No Address Provided') : 'No Address Available'; ?>
+                <?php echo isset($restaurant->location->address) ? htmlspecialchars($restaurant->location->address ?? 'No Address Provided') : 'No Address Available'; ?>
             </p>
             <!-- Menu -->
             <p><strong>Menu:</strong>
