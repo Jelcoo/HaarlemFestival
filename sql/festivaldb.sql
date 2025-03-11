@@ -3,6 +3,7 @@ CREATE TABLE users (
     firstname VARCHAR(255) NOT NULL,
     lastname VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
+    phone_number VARCHAR(255),
     password VARCHAR(255) NOT NULL,
     role VARCHAR(255) NOT NULL DEFAULT 'user',
     address VARCHAR(255),
@@ -11,8 +12,8 @@ CREATE TABLE users (
     stripe_customer_id VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `role`, `address`, `city`, `postal_code`, `stripe_customer_id`) VALUES
-(1, 'John', 'Doe', 'johndoe@example.com', '$2a$12$I03L/LUh1SntONPFOVwz3eivdVa1O.hna9GFmfDbbGO/22imeOoR.', 'admin', NULL, NULL, NULL, NULL);
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `phone_number`, `password`, `role`, `address`, `city`, `postal_code`, `stripe_customer_id`) VALUES
+(1, 'John', 'Doe', 'johndoe@example.com', NULL, '$2a$12$I03L/LUh1SntONPFOVwz3eivdVa1O.hna9GFmfDbbGO/22imeOoR.', 'admin', NULL, NULL, NULL, NULL);
 
 CREATE TABLE invoices (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -36,21 +37,29 @@ CREATE TABLE locations (
     main_description TEXT
 );
 INSERT INTO `locations` (`id`, `name`, `event_type`, `coordinates`, `address`, `preview_description`, `main_description`) VALUES
-(1, 'Café de Roemer', 'yummy', '52.37999475625204,4.632473312948718', 'Botermarkt 17, 2011 XL Haarlem', 'A Haarlem favorite for over 30 years, Café de Roemer offers a menu with both classic and innovative dishes Relax on the sunny terrace or in the cozy glass conservatory, perfect for any weather Whether for lunch, dinner, or drinks, enjoy great food and warm hospitality!', NULL),
-(2, 'Ratatouille', 'yummy', '52.378793560839426,4.638285403154393', 'Spaarne 96, 2011 CL Haarlem', 'Ratatouille Food and Wine in Haarlem, led by chef Jozua Jaring, offers a refined dining experience with dishes like Holstein tartar and Langoustine, paired with exclusive wines Perfect for any occasion, the restaurant combines innovative flavors and exceptional hospitality for a memorable culinary journey.', NULL),
-(3, 'Restaurant ML', 'yummy', '52.381106249162436,4.638821749729203', 'Kleine Houtstraat 70, 2011 DR Haarlem', 'Restaurant ML in Haarlem, awarded a Michelin star, offers bold dishes by chef Mark Gratama in a modern setting with an open kitchen The menu blends French and international flavors, complemented by a curated wine list from sommelier Tim Jesse.', NULL),
-(4, 'Restaurant Fris', 'yummy', '52.37250830667803,4.636171303909209', 'Twijnderslaan 7, 2012 BG Haarlem', 'Restaurant Fris in Haarlem offers a relaxed fine-dining experience, blending French and Asian cuisines The menu is a playful exploration of bold flavors, with a team dedicated to surprising guests with fresh, innovative dishes Enjoy a high-quality dining experience in a welcoming atmosphere.', NULL),
-(5, 'New Vegas', 'yummy', '52.38124729975244,4.635499955277471', 'Koningstraat 5, 2011 TB Haarlem', 'New Vegas, Haarlem\'s first vegan restaurant, offers creative twists on familiar dishes using seasonal, plant-based ingredients. Known for its 3D-printed steak and innovative menu, it provides a unique dining experience with vegan sides and bites in a welcoming atmosphere for all to enjoy sustainable, delicious food.', NULL),
-(6, 'Grand Cafe Brinkmann', 'yummy', '52.38175525381166,4.636664682263708', 'Grote Markt 13, 2011 RC Haarlem', 'Grand Café Brinkmann offers a cozy and welcoming atmosphere in Haarlem, where guests can enjoy delicious dishes and a relaxed ambiance With a varied menu and the option to rent rooms for special events, it is the perfect place for both a casual meal and a special occasion.', NULL),
-(7, 'Urban Frenchy Bistro Toujours', 'yummy', '52.38069416997164,4.637127512245723', 'Oude Groenmarkt 10-12, 2011 HL Haarlem, Nederland', 'Toujours in Haarlem offers a luxurious private dining experience with a menu featuring truffle, Wagyu, caviar, and sushi. Enjoy cocktails, wine, and beer on the cozy terrace, perfect for an unforgettable meal. Open daily, Toujours is the ideal spot for refined dining with family or friends.', NULL),
-(8, 'Lichtfabriek', 'dance', '52.38645594265725,4.652396828291449', 'Minckelersweg 2, 2031 EM Haarlem', 'Located in a historic power station, Lichtfabriek exudes industrial charm and creative energy. Its spacious interiors and captivating ambiance make it an ideal venue for large-scale performances and immersive musical experiences.', NULL),
-(9, 'Teylers Museum', 'teylers', '52.38046240594111,4.640666663222274', 'Spaarne 16, 2011 CH Haarlem', 'Discover the Magic@Teylers! Dive into an interactive adventure at Teylers Museum, where kids solve science puzzles and riddles to uncover The Secret of Professor Teyler. From cracking \\\"The Egg Problem\\\" to fixing circuits, this hands-on experience combines fun with learning, making science magical for the whole family!', NULL),
-(10, 'Kerk van St Bavo', 'history', '52.38109342362912,4.637140628644744', 'Grote Markt 22, 2011 RD Haarlem', 'A true icon of Haarlem, the Church of St. Bavo is a masterpiece of Gothic architecture and a treasure trove of history. Its towering spire dominates the skyline, while the interior houses the world-famous Müller organ, once played by Mozart. Step inside to admire stunning stained glass, intricate woodwork, and centuries-old gravestones. A must-visit for history buffs and architecture lovers alike!', NULL),
-(11, 'Slachthuis Haarlem', 'dance', '52.373695600646585,4.652610803909189', 'Rockplein 6, 2033 KK Haarlem', 'Once an industrial slaughterhouse, Slachthuis has been transformed into a dynamic cultural hotspot Known for its edgy and raw atmosphere, this venue is a favorite for high-energy performances and underground vibes Its unique architecture creates an unforgettable experience for music lovers.', NULL),
-(12, 'Caprera Openluchttheater', 'dance', '52.41182985649083,4.610049563362403', 'Hoge Duin en Daalseweg 2, 2061 AG Bloemendaal', 'Nestled amidst lush greenery, Caprera Openluchttheater is an enchanting open-air venue perfect for unforgettable performances under the stars Its natural acoustics and scenic beauty make it an iconic spot for electronic music and cultural events alike.', NULL),
-(13, 'Jopenkerk', 'dance', '52.38129960808681,4.630664906853303', 'Gedempte Voldersgracht 2, 2011 WD Haarlem', 'A stunning fusion of history and modernity, Jopenkerk is a former church turned brewery and event space With its vibrant atmosphere and excellent acoustics, this venue offers a unique blend of sacred architecture and pulsating beats.', NULL),
-(14, 'Puncher Comedy Club', 'dance', '52.38161714749561,4.636189360825715', 'Grote Markt 10, 2011 RD Haarlem', 'Situated in the heart of Haarlem, Puncher Comedy Club combines a cozy setting with electric energy While known for its comedy, it transforms into an intimate and vibrant space for special performances during the festival.', NULL),
-(15, 'XO the Club', 'dance', '52.38133860159797,4.635662793907391', 'Grote Markt 8, 2011 RD Haarlem', 'XO the Club is a chic and modern nightlife destination where style meets sound Its sleek interiors and state-of-the-art lighting set the stage for a night of high-energy dance and unforgettable moments.', NULL);
+(1, 'Café de Roemer', 'yummy', '52.379876689846675,4.631872280758655', 'Botermarkt 17, 2011 XL Haarlem', 'A Haarlem favorite for over 30 years, Café de Roemer offers a menu with both classic and innovative dishes Relax on the sunny terrace or in the cozy glass conservatory, perfect for any weather Whether for lunch, dinner, or drinks, enjoy great food and warm hospitality!', NULL),
+(2, 'Ratatouille', 'yummy', '52.37868858869996,4.63750189518844', 'Spaarne 96, 2011 CL Haarlem', 'Ratatouille Food and Wine in Haarlem, led by chef Jozua Jaring, offers a refined dining experience with dishes like Holstein tartar and Langoustine, paired with exclusive wines Perfect for any occasion, the restaurant combines innovative flavors and exceptional hospitality for a memorable culinary journey.', NULL),
+(3, 'Restaurant ML', 'yummy', '52.380961905388105,4.638467714257977', 'Kleine Houtstraat 70, 2011 DR Haarlem', 'Restaurant ML in Haarlem, awarded a Michelin star, offers bold dishes by chef Mark Gratama in a modern setting with an open kitchen The menu blends French and international flavors, complemented by a curated wine list from sommelier Tim Jesse.', NULL),
+(4, 'Restaurant Fris', 'yummy', '52.37224930133032,4.634197557490366', 'Twijnderslaan 7, 2012 BG Haarlem', 'Restaurant Fris in Haarlem offers a relaxed fine-dining experience, blending French and Asian cuisines The menu is a playful exploration of bold flavors, with a team dedicated to surprising guests with fresh, innovative dishes Enjoy a high-quality dining experience in a welcoming atmosphere.', NULL),
+(5, 'New Vegas', 'yummy', '52.3811093974921,4.634921260543867', 'Koningstraat 5, 2011 TB Haarlem', 'New Vegas, Haarlem\'s first vegan restaurant, offers creative twists on familiar dishes using seasonal, plant-based ingredients. Known for its 3D-printed steak and innovative menu, it provides a unique dining experience with vegan sides and bites in a welcoming atmosphere for all to enjoy sustainable, delicious food.', NULL),
+(6, 'Grand Cafe Brinkmann', 'yummy', '52.381650756067195,4.636149155178292', 'Grote Markt 13, 2011 RC Haarlem', 'Grand Café Brinkmann offers a cozy and welcoming atmosphere in Haarlem, where guests can enjoy delicious dishes and a relaxed ambiance With a varied menu and the option to rent rooms for special events, it is the perfect place for both a casual meal and a special occasion.', NULL),
+(7, 'Urban Frenchy Bistro Toujours', 'yummy', '52.380669602787556,4.637055187351411', 'Oude Groenmarkt 10-12, 2011 HL Haarlem, Nederland', 'Toujours in Haarlem offers a luxurious private dining experience with a menu featuring truffle, Wagyu, caviar, and sushi. Enjoy cocktails, wine, and beer on the cozy terrace, perfect for an unforgettable meal. Open daily, Toujours is the ideal spot for refined dining with family or friends.', NULL),
+(8, 'Lichtfabriek', 'dance', '52.38635032209866,4.651753794055413', 'Minckelersweg 2, 2031 EM Haarlem', 'Located in a historic power station, Lichtfabriek exudes industrial charm and creative energy. Its spacious interiors and captivating ambiance make it an ideal venue for large-scale performances and immersive musical experiences.', NULL),
+(9, 'Teylers Museum', 'teylers', '52.380350236629766,4.640344133818465', 'Spaarne 16, 2011 CH Haarlem', 'Discover the Magic@Teylers! Dive into an interactive adventure at Teylers Museum, where kids solve science puzzles and riddles to uncover The Secret of Professor Teyler. From cracking \\\"The Egg Problem\\\" to fixing circuits, this hands-on experience combines fun with learning, making science magical for the whole family!', NULL),
+(10, 'Kerk van St Bavo', 'history', '52.38107259154299,4.637333412667616', 'Grote Markt 22, 2011 RD Haarlem', 'A true icon of Haarlem, the Church of St. Bavo is a masterpiece of Gothic architecture and a treasure trove of history. Its towering spire dominates the skyline, while the interior houses the world-famous Müller organ, once played by Mozart. Step inside to admire stunning stained glass, intricate woodwork, and centuries-old gravestones. A must-visit for history buffs and architecture lovers alike!', NULL),
+(11, 'Slachthuis Haarlem', 'dance', '52.373484207668476,4.650625813936793', 'Rockplein 6, 2033 KK Haarlem', 'Once an industrial slaughterhouse, Slachthuis has been transformed into a dynamic cultural hotspot Known for its edgy and raw atmosphere, this venue is a favorite for high-energy performances and underground vibes Its unique architecture creates an unforgettable experience for music lovers.', NULL),
+(12, 'Caprera Openluchttheater', 'dance', '52.41115015210989,4.608279150557901', 'Hoge Duin en Daalseweg 2, 2061 AG Bloemendaal', 'Nestled amidst lush greenery, Caprera Openluchttheater is an enchanting open-air venue perfect for unforgettable performances under the stars Its natural acoustics and scenic beauty make it an iconic spot for electronic music and cultural events alike.', NULL),
+(13, 'Jopenkerk', 'dance', '52.38121361696195,4.629730994681502', 'Gedempte Voldersgracht 2, 2011 WD Haarlem', 'A stunning fusion of history and modernity, Jopenkerk is a former church turned brewery and event space With its vibrant atmosphere and excellent acoustics, this venue offers a unique blend of sacred architecture and pulsating beats.', NULL),
+(14, 'Puncher Comedy Club', 'dance', '52.38147256162246,4.635383633505596', 'Grote Markt 10, 2011 RD Haarlem', 'Situated in the heart of Haarlem, Puncher Comedy Club combines a cozy setting with electric energy While known for its comedy, it transforms into an intimate and vibrant space for special performances during the festival.', NULL),
+(15, 'XO the Club', 'dance', '52.38121402679863,4.635255348119989', 'Grote Markt 8, 2011 RD Haarlem', 'XO the Club is a chic and modern nightlife destination where style meets sound Its sleek interiors and state-of-the-art lighting set the stage for a night of high-energy dance and unforgettable moments.', NULL),
+(16, 'Grote Markt', 'history', '52.381330914584794,4.636316340973041', '2011 RD Haarlem', NULL, NULL),
+(17, 'De Hallen', 'history', '52.3811512364665,4.63603884377743', 'Grote Markt 16, 2011 RD Haarlem', NULL, NULL),
+(18, 'Proveniershof', 'history', '52.37738423023927,4.631011950297312', 'Grote Houtstraat 142D, 2011 SV Haarlem', NULL, NULL),
+(19, 'Jopenkerk', 'history', '52.381345450512335,4.630589805003887', 'Gedempte Voldersgracht 2, 2011 WD Haarlem', NULL, NULL),
+(20, 'Waalse Kerk Haarlem', 'history', '52.38248697950012,4.639153299903443', 'Begijnhof 28, 2011 HE Haarlem', NULL, NULL),
+(21, 'Molen de Adriaan', 'history', '52.38377593049064,4.642761929374879', 'Papentorenvest 1A, 2011 AV Haarlem', NULL, NULL),
+(22, 'Amsterdamse Poort', 'history', '52.38051738005276,4.646598531624926', '2011 BZ Haarlem', NULL, NULL),
+(23, 'Hof van Bakenes', 'history', '52.38248911248071,4.640292785411666', '2011 JN Haarlem', NULL, NULL);
 
 CREATE TABLE artists (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -245,31 +254,33 @@ INSERT INTO `history_events` (`id`, `seats_per_tour`, `language`, `guide`, `fami
 (12, 12, 'English', 'William', 49.59, 14.46, 0.21, 'Bavo Church', '16:00:00', '2025-07-25', '18:00:00', '2025-07-25'),
 (13, 12, 'Chinese', 'Kim', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-25', '15:00:00', '2025-07-25'),
 (14, 12, 'Chinese', 'Kim', 49.59, 14.46, 0.21, 'Bavo Church', '16:00:00', '2025-07-25', '18:00:00', '2025-07-25'),
-(15, 12, 'Dutch', 'Annet, Jan Willem', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-26', '12:00:00', '2025-07-26'),
-(16, 12, 'Dutch', 'Annet, Jan Willem', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-26', '12:00:00', '2025-07-26'),
-(17, 12, 'Dutch', 'Annet, Jan Willem', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-26', '15:00:00', '2025-07-26'),
-(18, 12, 'Dutch', 'Annet, Jan Willem', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-26', '15:00:00', '2025-07-26'),
-(19, 12, 'Dutch', 'Annet, Jan Willem', 49.59, 14.46, 0.21, 'Bavo Church', '16:00:00', '2025-07-26', '18:00:00', '2025-07-26'),
-(20, 12, 'English', 'Frederic, William', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-26', '12:00:00', '2025-07-26'),
-(21, 12, 'English', 'Frederic, William', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-26', '15:00:00', '2025-07-26'),
-(22, 12, 'English', 'Frederic, William', 49.59, 14.46, 0.21, 'Bavo Church', '16:00:00', '2025-07-26', '18:00:00', '2025-07-26'),
-(23, 12, 'Chinese', 'Kim', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-26', '15:00:00', '2025-07-26'),
-(24, 12, 'Chinese', 'Kim', 49.59, 14.46, 0.21, 'Bavo Church', '16:00:00', '2025-07-26', '18:00:00', '2025-07-26'),
-(25, 12, 'Dutch', 'Annet, Jan Willem, Lisa', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-27', '12:00:00', '2025-07-27'),
-(26, 12, 'Dutch', 'Annet, Jan Willem, Lisa', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-27', '12:00:00', '2025-07-27'),
-(27, 12, 'Dutch', 'Annet, Jan Willem, Lisa', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-27', '15:00:00', '2025-07-27'),
-(28, 12, 'Dutch', 'Annet, Jan Willem, Lisa', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-27', '15:00:00', '2025-07-27'),
-(29, 12, 'Dutch', 'Annet, Jan Willem, Lisa', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-27', '15:00:00', '2025-07-27'),
-(30, 12, 'Dutch', 'Annet, Jan Willem, Lisa', 49.59, 14.46, 0.21, 'Bavo Church', '16:00:00', '2025-07-27', '18:00:00', '2025-07-27'),
-(31, 12, 'English', 'Deirdre, Frederic, William', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-27', '12:00:00', '2025-07-27'),
-(32, 12, 'English', 'Deirdre, Frederic, William', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-27', '12:00:00', '2025-07-27'),
-(33, 12, 'English', 'Deirdre, Frederic, William', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-27', '15:00:00', '2025-07-27'),
-(34, 12, 'English', 'Deirdre, Frederic, William', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-27', '15:00:00', '2025-07-27'),
-(35, 12, 'English', 'Deirdre, Frederic, William', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-27', '15:00:00', '2025-07-27'),
-(36, 12, 'English', 'Deirdre, Frederic, William', 49.59, 14.46, 0.21, 'Bavo Church', '16:00:00', '2025-07-27', '18:00:00', '2025-07-27'),
-(37, 12, 'Chinese', 'Kim, Susan', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-27', '12:00:00', '2025-07-27'),
-(38, 12, 'Chinese', 'Kim, Susan', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-27', '15:00:00', '2025-07-27'),
-(39, 12, 'Chinese', 'Kim, Susan', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-27', '15:00:00', '2025-07-27');
+(15, 12, 'Dutch', 'Annet', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-26', '12:00:00', '2025-07-26'),
+(16, 12, 'Dutch', 'Jan Willem', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-26', '12:00:00', '2025-07-26'),
+(17, 12, 'Dutch', 'Annet', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-26', '15:00:00', '2025-07-26'),
+(18, 12, 'Dutch', 'Jan Willem', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-26', '15:00:00', '2025-07-26'),
+(19, 12, 'Dutch', 'Annet', 49.59, 14.46, 0.21, 'Bavo Church', '16:00:00', '2025-07-26', '18:00:00', '2025-07-26'),
+(20, 12, 'English', 'Frederic', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-26', '12:00:00', '2025-07-26'),
+(21, 12, 'English', 'William', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-26', '12:00:00', '2025-07-26'),
+(22, 12, 'English', 'Frederic', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-26', '15:00:00', '2025-07-26'),
+(23, 12, 'English', 'William', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-26', '15:00:00', '2025-07-26'),
+(24, 12, 'English', 'Frederic', 49.59, 14.46, 0.21, 'Bavo Church', '16:00:00', '2025-07-26', '18:00:00', '2025-07-26'),
+(25, 12, 'Chinese', 'Kim', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-26', '15:00:00', '2025-07-26'),
+(26, 12, 'Chinese', 'Kim', 49.59, 14.46, 0.21, 'Bavo Church', '16:00:00', '2025-07-26', '18:00:00', '2025-07-26'),
+(27, 12, 'Dutch', 'Annet', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-27', '12:00:00', '2025-07-27'),
+(28, 12, 'Dutch', 'Jan Willem', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-27', '12:00:00', '2025-07-27'),
+(29, 12, 'Dutch', 'Annet', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-27', '15:00:00', '2025-07-27'),
+(30, 12, 'Dutch', 'Jan Willem', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-27', '15:00:00', '2025-07-27'),
+(31, 12, 'Dutch', 'Lisa', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-27', '15:00:00', '2025-07-27'),
+(32, 12, 'Dutch', 'Annet', 49.59, 14.46, 0.21, 'Bavo Church', '16:00:00', '2025-07-27', '18:00:00', '2025-07-27'),
+(33, 12, 'English', 'Deirdre', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-27', '12:00:00', '2025-07-27'),
+(34, 12, 'English', 'Frederic', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-27', '12:00:00', '2025-07-27'),
+(35, 12, 'English', 'Deirdrem', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-27', '15:00:00', '2025-07-27'),
+(36, 12, 'English', 'Frederic', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-27', '15:00:00', '2025-07-27'),
+(37, 12, 'English', 'William', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-27', '15:00:00', '2025-07-27'),
+(38, 12, 'English', 'Deirdre', 49.59, 14.46, 0.21, 'Bavo Church', '16:00:00', '2025-07-27', '18:00:00', '2025-07-27'),
+(39, 12, 'Chinese', 'Kim', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-27', '12:00:00', '2025-07-27'),
+(40, 12, 'Chinese', 'Kim', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-27', '15:00:00', '2025-07-27'),
+(41, 12, 'Chinese', 'Susan', 49.59, 14.46, 0.21, 'Bavo Church', '13:00:00', '2025-07-27', '15:00:00', '2025-07-27');
 
 CREATE TABLE dance_tickets (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -293,15 +304,16 @@ CREATE TABLE yummy_tickets (
     invoice_id INT,
     kids_count INT DEFAULT 0,
     adult_count INT DEFAULT 0,
+    note TEXT,
     qrcode VARCHAR(255),
     ticket_used BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (yummy_event_id) REFERENCES yummy_events(id),
     FOREIGN KEY (invoice_id) REFERENCES invoices(id)
 );
-INSERT INTO `yummy_tickets` (`id`, `yummy_event_id`, `invoice_id`, `kids_count`, `adult_count`, `qrcode`, `ticket_used`) VALUES
-(1, 1, 1, 2, 2, 'QR123YUMMY', 0),
-(2, 2, 1, 1, 3, 'QR456YUMMY', 1),
-(3, 3, 1, 0, 4, 'QR789YUMMY', 0);
+INSERT INTO `yummy_tickets` (`id`, `yummy_event_id`, `invoice_id`, `kids_count`, `adult_count`, `note`, `qrcode`, `ticket_used`) VALUES
+(1, 1, 1, 2, 2, NULL, 'QR123YUMMY', 0),
+(2, 2, 1, 1, 3, NULL, 'QR456YUMMY', 1),
+(3, 3, 1, 0, 4, NULL, 'QR789YUMMY', 0);
 
 CREATE TABLE history_tickets (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -322,10 +334,41 @@ INSERT INTO `history_tickets` (`id`, `invoice_id`, `history_event_id`, `total_se
 CREATE TABLE assets (
     id INT PRIMARY KEY AUTO_INCREMENT,
     collection VARCHAR(255) NOT NULL,
+    filepath VARCHAR(255) NOT NULL,
     filename VARCHAR(255) NOT NULL,
     mimetype VARCHAR(255) NOT NULL,
     size INT NOT NULL,
-    model VARCHAR(255) NOT NULL,
-    model_id INT NOT NULL,
+    model VARCHAR(255),
+    model_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+INSERT INTO assets (`id`, `collection`, `filepath`, `filename`, `mimetype`, `size`, `model`, `model_id`) VALUES
+(1, 'cover', 'assets/img/artists', 'hardwell.png', 'image/png', 311704, 'App\\Models\\Artist', 1),
+(2, 'cover', 'assets/img/artists', 'armin.png', 'image/png', 331035, 'App\\Models\\Artist', 2),
+(3, 'cover', 'assets/img/artists', 'martin.png', 'image/png', 269175, 'App\\Models\\Artist', 3),
+(4, 'cover', 'assets/img/artists', 'tiesto.png', 'image/png', 332987, 'App\\Models\\Artist', 4),
+(5, 'cover', 'assets/img/artists', 'nicky.png', 'image/png', 270514, 'App\\Models\\Artist', 5),
+(6, 'cover', 'assets/img/artists', 'afrojack.png', 'image/png', 278148, 'App\\Models\\Artist', 6),
+(7, 'cover', 'assets/img/events', 'dance.png', 'image/png', 1166415, NULL, NULL),
+(8, 'cover', 'assets/img/events', 'history.png', 'image/png', 827269, NULL, NULL),
+(9, 'cover', 'assets/img/events/slider', 'dance.png', 'image/png', 686420, NULL, NULL),
+(10, 'cover', 'assets/img/events/slider', 'history.png', 'image/png', 707075, NULL, NULL),
+(11, 'cover', 'assets/img/events/slider', 'teylers.png', 'image/png', 686674, NULL, NULL),
+(12, 'cover', 'assets/img/events/slider', 'yummy.png', 'image/png', 805206, NULL, NULL),
+(13, 'cover', 'assets/img/events', 'teylers.png', 'image/png', 256627, NULL, NULL),
+(14, 'cover', 'assets/img/events', 'yummy.png', 'image/png', 937557, NULL, NULL),
+(15, 'cover', 'assets/img/locations', 'amsterdamsepoort.png', 'image/png', 374472, 'App\\Models\\Location', 22),
+(16, 'cover', 'assets/img/locations', 'caprera.jpg', 'image/jpeg', 422800, 'App\\Models\\Location', 12),
+(17, 'cover', 'assets/img/locations', 'dehallen.png', 'image/png', 406354, 'App\\Models\\Location', 17),
+(18, 'cover', 'assets/img/locations', 'grotemarkt.png', 'image/png', 335336, 'App\\Models\\Location', 16),
+(19, 'cover', 'assets/img/locations', 'hofvanbakenes.png', 'image/png', 437900, 'App\\Models\\Location', 23),
+(20, 'cover', 'assets/img/locations', 'jopenkerk-2.png', 'image/png', 390841, 'App\\Models\\Location', 19),
+(21, 'cover', 'assets/img/locations', 'jopenkerk.jpg', 'image/jpeg', 407051, 'App\\Models\\Location', 13),
+(22, 'cover', 'assets/img/locations', 'lichtfabriek.jpg', 'image/jpeg', 174155, 'App\\Models\\Location', 8),
+(23, 'cover', 'assets/img/locations', 'molendeadriaan.png', 'image/png', 346793, 'App\\Models\\Location', 21),
+(24, 'cover', 'assets/img/locations', 'proveniershof.png', 'image/png', 422859, 'App\\Models\\Location', 18),
+(25, 'cover', 'assets/img/locations', 'puncher.jpg', 'image/jpeg', 110529, 'App\\Models\\Location', 14),
+(26, 'cover', 'assets/img/locations', 'slachthuis.jpg', 'image/jpeg', 100646, 'App\\Models\\Location', 11),
+(27, 'cover', 'assets/img/locations', 'stbavo.png', 'image/png', 412680, 'App\\Models\\Location', 10),
+(28, 'cover', 'assets/img/locations', 'waalsekerk.png', 'image/png', 322239, 'App\\Models\\Location', 20),
+(29, 'cover', 'assets/img/locations', 'xo.jpg', 'image/jpeg', 2196793, 'App\\Models\\Location', 15);

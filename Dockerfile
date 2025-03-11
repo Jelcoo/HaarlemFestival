@@ -11,3 +11,6 @@ RUN apk add --no-cache git unzip zip libpng-dev libjpeg-turbo-dev freetype-dev l
 COPY . .
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN echo "post_max_size=128M" >> /usr/local/etc/php/conf.d/custom.ini \
+    && echo "upload_max_filesize=128M" >> /usr/local/etc/php/conf.d/custom.ini

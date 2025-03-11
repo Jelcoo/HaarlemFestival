@@ -34,7 +34,7 @@ class AssetService
      *
      * @param array $file The file object from the request $_FILES.
      * @param string $collection The collection name the asset should belong to.
-     * @param mixed $model The model the asset belongs to.
+     * @param mixed|null $model The model the asset belongs to. Set to null if not applicable.
      *
      * @return Asset
      * @throws \Exception
@@ -46,9 +46,10 @@ class AssetService
         }
 
         $mimeType = $this->getMimeType($file['tmp_name']);
+        $filePath = $this->fileService->getFilePath();
         $fileName = $this->generateUuid() . '.' . FileService::getExtension($mimeType);
 
-        $savedFile = $this->fileService->saveFile($file, $this->fileService->getFilePath($fileName));
+        $savedFile = $this->fileService->saveFile($file, $this->fileService->assembleFilePath($filePath, $fileName));
 
         if (!$savedFile) {
             throw new \Exception('Failed to save file');
@@ -56,11 +57,14 @@ class AssetService
 
         $asset = new Asset();
         $asset->collection = $collection;
+        $asset->filepath = $filePath;
         $asset->filename = $fileName;
         $asset->mimetype = $mimeType;
         $asset->size = $file['size'];
-        $asset->model = get_class($model);
-        $asset->model_id = $model->id;
+        if (!is_null($model)) {
+            $asset->model = get_class($model);
+            $asset->model_id = $model->id;
+        }
 
         return $this->assetRepository->saveAsset($asset);
     }
@@ -70,7 +74,7 @@ class AssetService
      */
     public function deleteAsset(Asset $asset): void
     {
-        $this->fileService->deleteFile($this->fileService->getFilePath($asset->filename));
+        $this->fileService->deleteFile($this->fileService->assembleFilePath($asset->filepath, $asset->filename));
 
         $this->assetRepository->deleteAsset($asset->id);
     }

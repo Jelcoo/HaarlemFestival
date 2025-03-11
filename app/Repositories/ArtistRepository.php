@@ -4,9 +4,19 @@ namespace App\Repositories;
 
 use App\Helpers\QueryBuilder;
 use App\Models\Artist;
+use App\Services\AssetService;
 
 class ArtistRepository extends Repository
 {
+    private AssetService $assetService;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->assetService = new AssetService();
+    }
+
     public function createArtist(array $data): Artist
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
@@ -32,7 +42,7 @@ class ArtistRepository extends Repository
 
         $queryArtists = $queryBuilder->table('artists')->get();
 
-        return $queryArtists ? array_map(fn($artistData) => new Artist($artistData), $queryArtists) : [];
+        return $this->mapArtists($queryArtists);
     }
 
     public function getSortedArtists(string $searchQuery, string $sortColumn = 'id', string $sortDirection = 'asc'): array
@@ -57,7 +67,7 @@ class ArtistRepository extends Repository
 
         $queryArtists = $query->orderBy($sortColumn, $sortDirection)->get();
 
-        return $queryArtists ? array_map(fn($artistData) => new Artist($artistData), $queryArtists) : [];
+        return $this->mapArtists($queryArtists);
     }
 
     public function deleteArtist(int $id): ?Artist
@@ -84,5 +94,15 @@ class ArtistRepository extends Repository
             'main_description' => $artist->main_description,
             'iconic_albums' => $artist->iconic_albums,
         ]);
+    }
+
+    private function mapArtists(array $artists): array
+    {
+        return array_map(function ($artist) {
+            $artist = new Artist($artist);
+            $artist->assets = $this->assetService->resolveAssets($artist, 'cover');
+
+            return $artist;
+        }, $artists);
     }
 }

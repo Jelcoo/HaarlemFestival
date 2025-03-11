@@ -76,10 +76,9 @@ class UserRepository extends Repository
         return null;
     }
 
-    public function updateUser(User $user): void
+    public function updateUserAdmin(User $user): void
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
-
         $updateFields = [
             'firstname' => $user->firstname,
             'lastname' => $user->lastname,
@@ -89,11 +88,23 @@ class UserRepository extends Repository
             'postal_code' => $user->postal_code,
         ];
 
-        if (isset($user->role)) {
-            $updateFields['role'] = $user->role->value;
-        }
+        if (isset($user->role)) $updateFields['role'] = $user->role->value;
 
         $queryBuilder->table('users')->where('id', '=', $user->id)->update($updateFields);
+    }
+
+    public function updateUser(User $user): void
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+        $queryBuilder->table('users')->where('id', '=', $user->id)->update([
+            'firstname' => $user->firstname,
+            'lastname' => $user->lastname,
+            'email' => $user->email,
+            'phone_number' => $user->phone_number,
+            'address' => $user->address,
+            'city' => $user->city,
+            'postal_code' => $user->postal_code,
+        ]);
     }
 
     public function updatePassword(int $userId, string $newPassword): void
