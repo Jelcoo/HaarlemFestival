@@ -17,7 +17,7 @@ SELECT
     de.start_date AS start_date,
     de.start_time AS start_time,
     l.name AS location_name,
-    GROUP_CONCAT(a.name ORDER BY a.name SEPARATOR ', ') AS artist_names,
+    GROUP_CONCAT(DISTINCT a.name ORDER BY a.name SEPARATOR ', ') AS artist_names,
     de.session AS session,
     TIMESTAMPDIFF(MINUTE, CONCAT(de.start_date, ' ', de.start_time), CONCAT(de.end_date, ' ', de.end_time)) AS duration,
     de.total_tickets - COALESCE(COUNT(dt.id), 0) AS tickets_available,
