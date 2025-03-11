@@ -74,7 +74,7 @@ class DashboardController extends Controller
         header('Content-Disposition: attachment; filename="' . $filename . '"');
         $output = fopen('php://output', 'w');
 
-        fputcsv($output, array_values($columns), ",", '"', "\\");
+        fputcsv($output, array_values($columns));
 
         foreach ($data as $row) {
             $csvRow = [];
@@ -97,7 +97,7 @@ class DashboardController extends Controller
 
                 $csvRow[] = $value;
             }
-            fputcsv($output, $csvRow, ",", '"', "\\");
+            fputcsv($output, $csvRow);
         }
 
         fclose($output);
