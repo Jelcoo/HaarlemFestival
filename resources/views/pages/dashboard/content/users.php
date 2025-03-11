@@ -35,6 +35,7 @@
             <option value="lastname" <?php echo ($sortColumn == 'lastname') ? 'selected' : ''; ?>>Last Name</option>
             <option value="email" <?php echo ($sortColumn == 'email') ? 'selected' : ''; ?>>Email</option>
             <option value="role" <?php echo ($sortColumn == 'role') ? 'selected' : ''; ?>>Role</option>
+            <option value="phone_number" <?php echo ($sortColumn == 'phone_number') ? 'selected' : ''; ?>>Phone Number</option>
             <option value="address" <?php echo ($sortColumn == 'address') ? 'selected' : ''; ?>>Address</option>
             <option value="city" <?php echo ($sortColumn == 'city') ? 'selected' : ''; ?>>City</option>
             <option value="postal_code" <?php echo ($sortColumn == 'postal_code') ? 'selected' : ''; ?>>Postal Code

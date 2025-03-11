@@ -103,6 +103,7 @@ class DashboardUsersController extends DashboardController
                 'email' => $existingUser->email,
                 'password' => $existingUser->password,
                 'role' => $existingUser->role->value,
+                'phone_number' => $existingUser->phone_number,
                 'address' => $existingUser->address,
                 'city' => $existingUser->city,
                 'postal_code' => $existingUser->postal_code,
@@ -131,6 +132,7 @@ class DashboardUsersController extends DashboardController
             $rules = [
                 'firstname' => 'required|max:255',
                 'lastname' => 'required|max:255',
+                'phone_number' => 'max:255',
                 'address' => 'max:255',
                 'city' => 'max:255',
                 'postal_code' => 'max:255',
@@ -156,6 +158,7 @@ class DashboardUsersController extends DashboardController
             $existingUser->lastname = $_POST['lastname'];
             $existingUser->email = $_POST['email'];
             $existingUser->role = UserRoleEnum::from(strtolower($_POST['role']));
+            $existingUser->phone_number = $_POST['phone_number'] ?? null;
             $existingUser->address = $_POST['address'] ?? null;
             $existingUser->city = $_POST['city'] ?? null;
             $existingUser->postal_code = $_POST['postal_code'] ?? null;
@@ -181,6 +184,7 @@ class DashboardUsersController extends DashboardController
                     'lastname' => 'required|alpha|max:255',
                     'email' => 'required|email|max:255',
                     'role' => 'required|in:' . implode(',', array_column(UserRoleEnum::cases(), 'value')),
+                    'phone_number' => 'nullable|max:255',
                     'address' => 'nullable|max:255',
                     'city' => 'nullable|max:255',
                     'postal_code' => 'nullable|max:20',
@@ -202,6 +206,7 @@ class DashboardUsersController extends DashboardController
                         'email',
                         'password',
                         'role',
+                        'phone_number',
                         'address',
                         'city',
                         'postal_code',
@@ -229,6 +234,7 @@ class DashboardUsersController extends DashboardController
             'lastname' => ['label' => 'Last Name', 'sortable' => true],
             'email' => ['label' => 'Email', 'sortable' => true],
             'role' => ['label' => 'Role', 'sortable' => true],
+            'phone_number' => ['label' => 'Phone Number', 'sortable' => true],
             'address' => ['label' => 'Address', 'sortable' => true],
             'city' => ['label' => 'City', 'sortable' => true],
             'postal_code' => ['label' => 'Postal Code', 'sortable' => true],
@@ -257,6 +263,7 @@ class DashboardUsersController extends DashboardController
             'lastname' => 'Lastname',
             'email' => 'Email',
             'role' => 'Role',
+            'phone_number' => 'Phone Number',
             'address' => 'Address',
             'city' => 'City',
             'postal_code' => 'Postal Code',

@@ -70,6 +70,13 @@ use App\Enum\UserRoleEnum;
                     </select>
                 </div>
 
+                <!-- Phone Number -->
+                <div class="form-group mt-3">
+                    <label for="phone_number">Phone Number</label>
+                    <input type="text" id="phone_number" name="phone_number" class="form-control"
+                        value="<?php echo htmlspecialchars($formData['phone_number'] ?? ''); ?>">
+                </div>
+
                 <!-- Address, City and Postal Code -->
                 <div class="row mt-3">
                     <div class="col-md-5">
