@@ -30,9 +30,11 @@ class HomeController extends Controller
     public function dance(): string
     {
         $artists = $this->artistRepository->getAllArtists();
+        $locations = $this->locationRepository->getSpecificLocations('dance');
 
         return $this->pageLoader->setPage('dance')->render([
             'artists' => $artists,
+            'locations' => $locations,
         ]);
     }
 
