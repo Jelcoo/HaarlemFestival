@@ -3,6 +3,7 @@ CREATE TABLE users (
     firstname VARCHAR(255) NOT NULL,
     lastname VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
+    phone_number VARCHAR(255),
     password VARCHAR(255) NOT NULL,
     role VARCHAR(255) NOT NULL DEFAULT 'user',
     address VARCHAR(255),
@@ -11,8 +12,8 @@ CREATE TABLE users (
     stripe_customer_id VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `role`, `address`, `city`, `postal_code`, `stripe_customer_id`) VALUES
-(1, 'John', 'Doe', 'johndoe@example.com', '$2a$12$I03L/LUh1SntONPFOVwz3eivdVa1O.hna9GFmfDbbGO/22imeOoR.', 'admin', NULL, NULL, NULL, NULL);
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `phone_number`, `password`, `role`, `address`, `city`, `postal_code`, `stripe_customer_id`) VALUES
+(1, 'John', 'Doe', 'johndoe@example.com', NULL, '$2a$12$I03L/LUh1SntONPFOVwz3eivdVa1O.hna9GFmfDbbGO/22imeOoR.', 'admin', NULL, NULL, NULL, NULL);
 
 CREATE TABLE invoices (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -303,15 +304,16 @@ CREATE TABLE yummy_tickets (
     invoice_id INT,
     kids_count INT DEFAULT 0,
     adult_count INT DEFAULT 0,
+    note TEXT,
     qrcode VARCHAR(255),
     ticket_used BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (yummy_event_id) REFERENCES yummy_events(id),
     FOREIGN KEY (invoice_id) REFERENCES invoices(id)
 );
-INSERT INTO `yummy_tickets` (`id`, `yummy_event_id`, `invoice_id`, `kids_count`, `adult_count`, `qrcode`, `ticket_used`) VALUES
-(1, 1, 1, 2, 2, 'QR123YUMMY', 0),
-(2, 2, 1, 1, 3, 'QR456YUMMY', 1),
-(3, 3, 1, 0, 4, 'QR789YUMMY', 0);
+INSERT INTO `yummy_tickets` (`id`, `yummy_event_id`, `invoice_id`, `kids_count`, `adult_count`, `note`, `qrcode`, `ticket_used`) VALUES
+(1, 1, 1, 2, 2, NULL, 'QR123YUMMY', 0),
+(2, 2, 1, 1, 3, NULL, 'QR456YUMMY', 1),
+(3, 3, 1, 0, 4, NULL, 'QR789YUMMY', 0);
 
 CREATE TABLE history_tickets (
     id INT PRIMARY KEY AUTO_INCREMENT,
