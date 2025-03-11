@@ -34,21 +34,25 @@ class DashboardRestaurantsController extends DashboardController
             $formData = $_SESSION['form_data'] ?? [];
             unset($_SESSION['form_data']);
 
-            return $this->renderPage('/../../../components/dashboard/forms/restaurant_form', [
+            return $this->renderPage(
+                '/../../../components/dashboard/forms/restaurant_form', [
                 'locations' => $this->locationRepository->getAllLocations(),
                 'formData' => $formData,
                 'status' => $this->getStatus(),
-            ]);
+                ]
+            );
         }
 
-        return $this->renderPage('restaurants', [
+        return $this->renderPage(
+            'restaurants', [
             'restaurants' => $this->restaurantRepository->getSortedRestaurants($searchQuery, $sortColumn, $sortDirection),
             'locations' => $this->locationRepository->getAllLocations(),
             'status' => $this->getStatus(),
             'sortColumn' => $sortColumn,
             'sortDirection' => $sortDirection,
             'searchQuery' => $searchQuery,
-        ]);
+            ]
+        );
     }
 
     public function handleAction(): void
@@ -81,10 +85,12 @@ class DashboardRestaurantsController extends DashboardController
     {
         try {
             $restaurantId = $_POST['id'] ?? null;
-            if (!$restaurantId) throw new \Exception('Invalid location ID');
+            if (!$restaurantId) { throw new \Exception('Invalid location ID');
+            }
 
             $existingRestaurant = $this->restaurantRepository->getRestaurantById($restaurantId);
-            if (!$existingRestaurant) throw new \Exception('Restaurant not found.');
+            if (!$existingRestaurant) { throw new \Exception('Restaurant not found.');
+            }
 
             $_SESSION['show_restaurant_form'] = true;
             $_SESSION['form_data'] = [
@@ -108,15 +114,18 @@ class DashboardRestaurantsController extends DashboardController
         try {
             $existingRestaurant = $this->restaurantRepository->getRestaurantById($restaurantId);
 
-            if (!$existingRestaurant) throw new \Exception('Restaurant not found.');
+            if (!$existingRestaurant) { throw new \Exception('Restaurant not found.');
+            }
 
             $validator = new Validator();
-            $validation = $validator->validate($_POST, [
+            $validation = $validator->validate(
+                $_POST, [
                 'restaurant_type' => 'nullable|max:100',
                 'rating' => 'nullable|numeric|min:0|max:5',
                 'location_id' => 'required|integer',
                 'menu' => 'nullable|max:5000',
-            ]);
+                ]
+            );
 
             if ($validation->fails()) {
                 $_SESSION['form_data'] = $_POST;
@@ -141,12 +150,14 @@ class DashboardRestaurantsController extends DashboardController
     {
         try {
             $validator = new Validator();
-            $validation = $validator->validate($_POST, [
+            $validation = $validator->validate(
+                $_POST, [
                 'location_id' => 'required|integer',
                 'rating' => 'nullable|numeric|min:0|max:5',
                 'restaurant_type' => 'nullable|max:100',
                 'menu' => 'nullable',
-            ]);
+                ]
+            );
 
             if ($validation->fails()) {
                 $_SESSION['show_restaurant_form'] = true;
@@ -154,12 +165,16 @@ class DashboardRestaurantsController extends DashboardController
                 throw new \Exception(implode(' ', $validation->errors()->all()));
             }
 
-            $restaurantData = array_intersect_key($_POST, array_flip([
-                'location_id',
-                'rating',
-                'restaurant_type',
-                'menu'
-            ]));
+            $restaurantData = array_intersect_key(
+                $_POST, array_flip(
+                    [
+                    'location_id',
+                    'rating',
+                    'restaurant_type',
+                    'menu'
+                    ]
+                )
+            );
 
             $createdRestaurant = $this->restaurantRepository->createRestaurant($restaurantData);
             $this->redirectToRestaurants(!empty($createdRestaurant), "Restaurant created successfully.");

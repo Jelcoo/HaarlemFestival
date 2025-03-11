@@ -33,21 +33,25 @@ class DashboardUsersController extends DashboardController
             $formData = $_SESSION['form_data'] ?? [];
             unset($_SESSION['form_data']);
 
-            return $this->renderPage('/../../../components/dashboard/forms/users_form', [
+            return $this->renderPage(
+                '/../../../components/dashboard/forms/users_form', [
                 'roles' => array_column(UserRoleEnum::cases(), 'value'),
                 'formData' => $formData,
                 'status' => $this->getStatus(),
-            ]);
+                ]
+            );
         }
 
-        return $this->renderPage('users', [
+        return $this->renderPage(
+            'users', [
             'users' => $this->userRepository->getSortedUsers($searchQuery, $sortColumn, $sortDirection),
             'status' => $this->getStatus(),
             'columns' => $this->getColumns(),
             'sortColumn' => $sortColumn,
             'sortDirection' => $sortDirection,
             'searchQuery' => $searchQuery,
-        ]);
+            ]
+        );
     }
 
     public function handleAction(): void
@@ -80,10 +84,12 @@ class DashboardUsersController extends DashboardController
     {
         try {
             $userId = $_POST['id'] ?? null;
-            if (!$userId) throw new \Exception('Invalid user ID.');
+            if (!$userId) { throw new \Exception('Invalid user ID.');
+            }
 
             $existingUser = $this->userRepository->getUserById($userId);
-            if (!$existingUser) throw new \Exception('User not found.');
+            if (!$existingUser) { throw new \Exception('User not found.');
+            }
 
             $_SESSION['show_user_form'] = true;
             $_SESSION['form_data'] = [
@@ -111,7 +117,8 @@ class DashboardUsersController extends DashboardController
         try {
             $existingUser = $this->userRepository->getUserById($userId);
 
-            if (!$existingUser) throw new \Exception('User not found.');
+            if (!$existingUser) { throw new \Exception('User not found.');
+            }
 
             $validator = new Validator();
             $validator->addValidator('unique', new UniqueRule());
@@ -162,7 +169,8 @@ class DashboardUsersController extends DashboardController
     {
         try {
             $validator = new Validator();
-            $validation = $validator->validate($_POST, [
+            $validation = $validator->validate(
+                $_POST, [
                 'firstname' => 'required|alpha|max:255',
                 'lastname' => 'required|alpha|max:255',
                 'email' => 'required|email|max:255',
@@ -170,7 +178,8 @@ class DashboardUsersController extends DashboardController
                 'address' => 'nullable|max:255',
                 'city' => 'nullable|max:255',
                 'postal_code' => 'nullable|max:20',
-            ]);
+                ]
+            );
 
             if ($validation->fails()) {
                 $_SESSION['show_create_user_form'] = true;
@@ -178,16 +187,20 @@ class DashboardUsersController extends DashboardController
                 throw new \Exception(implode(' ', $validation->errors()->all()));
             }
 
-            $userData = array_intersect_key($_POST, array_flip([
-                'firstname',
-                'lastname',
-                'email',
-                'password',
-                'role',
-                'address',
-                'city',
-                'postal_code'
-            ]));
+            $userData = array_intersect_key(
+                $_POST, array_flip(
+                    [
+                    'firstname',
+                    'lastname',
+                    'email',
+                    'password',
+                    'role',
+                    'address',
+                    'city',
+                    'postal_code'
+                    ]
+                )
+            );
 
             $userData['password'] = password_hash($_POST['password'] ?? '', PASSWORD_DEFAULT);
 

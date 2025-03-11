@@ -1,7 +1,7 @@
 <h2><?php echo isset($formData['id']) ? 'Update Restaurant' : 'Create New Restaurant' ?></h2>
 
 <!-- Status message -->
-<?php if (!empty($status['message'])): ?>
+<?php if (!empty($status['message'])) : ?>
     <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
         <?php echo htmlspecialchars($status['message']); ?>
     </div>
@@ -14,7 +14,7 @@
                 <input type="hidden" name="action"
                     value="<?php echo isset($formData['id']) ? 'update' : 'createNewRestaurant'; ?>">
 
-                <?php if (isset($formData['id'])): ?>
+                <?php if (isset($formData['id'])) : ?>
                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($formData['id']); ?>">
                 <?php endif; ?>
 

@@ -8,7 +8,7 @@
 </div>
 
 <!-- Status message -->
-<?php if (!empty($status['message'])): ?>
+<?php if (!empty($status['message'])) : ?>
     <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
         <?php echo htmlspecialchars($status['message']); ?>
     </div>

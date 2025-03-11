@@ -87,14 +87,16 @@ class LocationRepository extends Repository
     public function updateLocation(Location $location): void
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
-        $queryBuilder->table('locations')->where('id', '=', $location->id)->update([
+        $queryBuilder->table('locations')->where('id', '=', $location->id)->update(
+            [
             'name' => $location->name,
             'event_type' => $location->event_type->value,
             'coordinates' => $location->coordinates,
             'address' => $location->address,
             'preview_description' => $location->preview_description,
             'main_description' => $location->main_description,
-        ]);
+            ]
+        );
     }
 
     public function getHomeLocations(): array
@@ -121,11 +123,13 @@ class LocationRepository extends Repository
 
     private function mapLocations(array $locations): array
     {
-        return array_map(function ($location) {
-            $location = new Location($location);
-            $location->assets = $this->assetService->resolveAssets($location, 'cover');
+        return array_map(
+            function ($location) {
+                $location = new Location($location);
+                $location->assets = $this->assetService->resolveAssets($location, 'cover');
 
-            return $location;
-        }, $locations);
+                return $location;
+            }, $locations
+        );
     }
 }

@@ -6,7 +6,7 @@ use App\Enum\UserRoleEnum;
 <h2><?php echo isset($formData['id']) ? 'Update User' : 'Create User' ?></h2>
 
 <!-- Status message -->
-<?php if (!empty($status['message'])): ?>
+<?php if (!empty($status['message'])) : ?>
     <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
         <?php echo htmlspecialchars($status['message']); ?>
     </div>
@@ -19,7 +19,7 @@ use App\Enum\UserRoleEnum;
                 <input type="hidden" name="action"
                     value="<?php echo isset($formData['id']) ? 'update' : 'createUser'; ?>">
 
-                <?php if (isset($formData['id'])): ?>
+                <?php if (isset($formData['id'])) : ?>
                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($formData['id']); ?>">
                 <?php endif; ?>
 

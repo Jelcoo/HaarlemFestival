@@ -1,5 +1,6 @@
 <?php
-if (!isset($artist)) return;
+if (!isset($artist)) { return;
+}
 $showDetails = isset($_GET['details']) && $_GET['details'] == $artist->id;
 ?>
 

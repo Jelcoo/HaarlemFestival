@@ -21,11 +21,13 @@ class DashboardController extends Controller
         return $this->pageLoader
             ->setLayout('dashboard')
             ->setPage('dashboard/index')
-            ->render([
+            ->render(
+                [
                 'activePage' => $page,
                 'sidebarItems' => $this->getSidebarItems(),
                 'content' => $this->loadContent($page, $data),
-            ]);
+                ]
+            );
     }
 
     protected function getSidebarItems(): array
@@ -85,7 +87,8 @@ class DashboardController extends Controller
                     $value = $row;
                     foreach ($parts as $part) {
                         $value = $value->$part ?? '';
-                        if (empty($value)) break;
+                        if (empty($value)) { break;
+                        }
                     }
                 } else {
                     $value = $row->$key ?? '';

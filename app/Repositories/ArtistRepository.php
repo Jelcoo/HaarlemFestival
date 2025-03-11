@@ -88,21 +88,25 @@ class ArtistRepository extends Repository
     public function updateArtist(Artist $artist): void
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
-        $queryBuilder->table('artists')->where('id', '=', $artist->id)->update([
+        $queryBuilder->table('artists')->where('id', '=', $artist->id)->update(
+            [
             'name' => $artist->name,
             'preview_description' => $artist->preview_description,
             'main_description' => $artist->main_description,
             'iconic_albums' => $artist->iconic_albums,
-        ]);
+            ]
+        );
     }
 
     private function mapArtists(array $artists): array
     {
-        return array_map(function ($artist) {
-            $artist = new Artist($artist);
-            $artist->assets = $this->assetService->resolveAssets($artist, 'cover');
+        return array_map(
+            function ($artist) {
+                $artist = new Artist($artist);
+                $artist->assets = $this->assetService->resolveAssets($artist, 'cover');
 
-            return $artist;
-        }, $artists);
+                return $artist;
+            }, $artists
+        );
     }
 }

@@ -1,9 +1,9 @@
-<?php include_once __DIR__ . '/../../components/navbar.php'; ?>
+<?php require_once __DIR__ . '/../../components/navbar.php'; ?>
 
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-        <?php include __DIR__ . '/../../components/dashboard/sidebar.php'; ?>
+        <?php require __DIR__ . '/../../components/dashboard/sidebar.php'; ?>
 
         <!-- Main Content Area -->
         <main class="col-lg-10 p-4">

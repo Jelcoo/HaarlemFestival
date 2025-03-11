@@ -76,8 +76,9 @@ class RestaurantRepository extends Repository
         }
         $queryRestaurants = $query->fetchAll(\PDO::FETCH_ASSOC);
 
-        return array_map(function ($data) {
-            return (object) [
+        return array_map(
+            function ($data) {
+                return (object) [
                 'id' => $data['restaurant_id'],
                 'restaurant_type' => $data['restaurant_type'],
                 'rating' => $data['rating'],
@@ -87,8 +88,9 @@ class RestaurantRepository extends Repository
                     'name' => $data['location_name'],
                     'address' => $data['location_address']
                 ]
-            ];
-        }, $queryRestaurants);
+                ];
+            }, $queryRestaurants
+        );
     }
 
     public function getAllRestaurantsWithLocations(): array
@@ -110,8 +112,9 @@ class RestaurantRepository extends Repository
         $query->execute();
         $queryRestaurants = $query->fetchAll(\PDO::FETCH_ASSOC);
 
-        return array_map(function ($data) {
-            return (object) [
+        return array_map(
+            function ($data) {
+                return (object) [
                 'id' => $data['restaurant_id'],
                 'restaurant_type' => $data['restaurant_type'],
                 'rating' => $data['rating'],
@@ -121,8 +124,9 @@ class RestaurantRepository extends Repository
                     'name' => $data['location_name'],
                     'address' => $data['location_address']
                 ]
-            ];
-        }, $queryRestaurants);
+                ];
+            }, $queryRestaurants
+        );
     }
 
     public function deleteRestaurant(int $id): ?Restaurant
@@ -143,11 +147,13 @@ class RestaurantRepository extends Repository
     public function updateRestaurant(Restaurant $restaurant): void
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
-        $queryBuilder->table('restaurants')->where('id', '=', $restaurant->id)->update([
+        $queryBuilder->table('restaurants')->where('id', '=', $restaurant->id)->update(
+            [
             'location_id' => $restaurant->location_id,
             'restaurant_type' => $restaurant->restaurant_type,
             'rating' => $restaurant->rating,
             'menu' => $restaurant->menu,
-        ]);
+            ]
+        );
     }
 }

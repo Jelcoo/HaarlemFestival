@@ -8,7 +8,7 @@
 </div>
 
 <!-- Status message -->
-<?php if (!empty($status['message'])): ?>
+<?php if (!empty($status['message'])) : ?>
     <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
         <?php echo htmlspecialchars($status['message']); ?>
     </div>
@@ -65,7 +65,7 @@
                 }
                 ?>
                 <th>
-                    <?php if ($data['sortable']): ?>
+                    <?php if ($data['sortable']) : ?>
                         <a href="<?php echo $sortUrl; ?>">
                             <?php echo htmlspecialchars($data['label']); ?>
                         </a>
@@ -80,7 +80,7 @@
     </thead>
 
     <tbody>
-        <?php if (!empty($users)): ?>
+        <?php if (!empty($users)) : ?>
             <?php foreach ($users as $user): ?>
                 <tr id="user-row-<?php echo htmlspecialchars($user->id); ?>">
                     <form action="/dashboard/users" method="POST">
