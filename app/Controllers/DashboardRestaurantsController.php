@@ -59,10 +59,6 @@ class DashboardRestaurantsController extends DashboardController
 
     public function handleAction(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return;
-        }
-
         $action = $_POST['action'] ?? null;
         $restaurantId = $_POST['id'] ?? null;
 
