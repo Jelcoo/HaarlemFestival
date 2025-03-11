@@ -2,9 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Models\Location;
-use App\Helpers\QueryBuilder;
 use App\Models\Artist;
+use App\Helpers\QueryBuilder;
 use App\Services\AssetService;
 
 class ArtistRepository extends Repository

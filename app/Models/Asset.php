@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Config\Config;
-
 class Asset
 {
     public int $id;

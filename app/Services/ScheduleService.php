@@ -66,6 +66,7 @@ class ScheduleService
             if (!isset($event['start_date'])) {
                 return false;
             }
+
             return $event['start_date'] === $date;
         });
     }

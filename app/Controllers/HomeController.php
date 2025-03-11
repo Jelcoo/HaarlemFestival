@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Services\ScheduleService;
 use App\Repositories\ArtistRepository;
 use App\Repositories\LocationRepository;
-use App\Services\ScheduleService;
 
 class HomeController extends Controller
 {
