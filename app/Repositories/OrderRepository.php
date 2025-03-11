@@ -22,7 +22,7 @@ class OrderRepository extends Repository
                     $stmt->execute([
                         'dance_event_id' => $dance['event_id'],
                         'invoice_id' => $invoiceId,
-                        'all_access' => isset($dance['all_access']) ? 1 : 0,
+                        'all_access' => ($dance['all_access'] == 1) ? 1 : 0,
                     ]);
                 }
             }
@@ -59,19 +59,59 @@ class OrderRepository extends Repository
     {
         $unavailable = [];
         foreach ($data['dance'] as $dance) {
-            $sql = 'SELECT DE.id,DE.total_tickets - COUNT(DT.id) - :quantity AS tickets_remaining
-                    FROM dance_events AS DE
-                    LEFT JOIN dance_tickets AS DT ON DT.dance_event_id = DE.id
-                    WHERE DE.id = :dance_event_id
-                    GROUP BY DE.id, DE.total_tickets';
+            // Updated query to get detailed ticket breakdown
+            $sql = '
+                SELECT 
+                    DE.id,
+                    DE.total_tickets,
+                    COUNT(DT.id) AS total_tickets_sold,
+                    SUM(CASE WHEN DT.all_access = 1 THEN 1 ELSE 0 END) AS all_access_sold,
+                    SUM(CASE WHEN DT.all_access = 0 OR DT.all_access IS NULL THEN 1 ELSE 0 END) AS single_sold
+                FROM dance_events AS DE
+                LEFT JOIN dance_tickets AS DT ON DT.dance_event_id = DE.id
+                WHERE DE.id = :dance_event_id
+                GROUP BY DE.id, DE.total_tickets
+            ';
+
             $stmt = $this->pdoConnection->prepare($sql);
             $stmt->execute([
-                'quantity' => $dance['quantity'],
                 'dance_event_id' => $dance['event_id'],
             ]);
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-            if ($result['tickets_remaining'] < 0) {
-                $unavailable[] = ['dance' => $result['id']];
+
+            if (!$result) {
+                $unavailable[] = ['dance' => $dance['event_id'], 'reason' => 'Event not found'];
+                continue;
+            }
+
+            // Calculate ticket type limits
+            $total = (int) $result['total_tickets'];
+            $quantity = (int) $dance['quantity'];
+            $allAccessLimit = floor($total * 0.10);
+            echo $dance['event_id'] . ': id<br>';
+            echo $total . ': total<br>';
+            echo $allAccessLimit . ': all access limit<br>';
+            $singleLimit = $total - $allAccessLimit;
+
+            $allAccessSold = (int) $result['all_access_sold'];
+            $singleSold = (int) $result['single_sold'];
+
+            if (!empty($dance['all_access']) && $dance['all_access'] == 1) {
+                // User is trying to buy an all-access ticket
+                if (($allAccessSold + $quantity) > $allAccessLimit) {
+                    $unavailable[] = [
+                        'dance' => $result['id'],
+                        'reason' => 'Not enough all-access tickets available'
+                    ];
+                }
+            } else {
+                // User is trying to buy single tickets
+                if (($singleSold + $quantity) > $singleLimit) {
+                    $unavailable[] = [
+                        'dance' => $result['id'],
+                        'reason' => 'Not enough single tickets available'
+                    ];
+                }
             }
         }
 
