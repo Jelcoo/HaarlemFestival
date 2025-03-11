@@ -9,7 +9,6 @@ use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
 use App\Helpers\TurnstileHelper;
 use App\Repositories\UserRepository;
-use App\Services\EmailService;
 use App\Services\EmailWriterService;
 
 class AuthController extends Controller

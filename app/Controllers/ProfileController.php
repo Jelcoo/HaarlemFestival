@@ -5,7 +5,6 @@ namespace App\Controllers;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
 use App\Repositories\UserRepository;
-use App\Services\EmailService;
 use App\Services\EmailWriterService;
 
 class ProfileController extends Controller
