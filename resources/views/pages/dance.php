@@ -184,7 +184,7 @@ include_once __DIR__ . '/../components/header.php';
         let dateString = `${eventData.day} ${getNextOccurrence(`${eventData.day} ${eventData.start}`)} ${eventData.start}`;
         let date = new Date(dateString + ' UTC');
         let json = {
-            "event_id": eventData.event_id,
+            "event_id": parseInt(eventData.event_id),
             "date": new Date(new Date(dateString + ' UTC').setUTCHours(0, 0, 0, 0)).toISOString(),
             "image": "placeholder.png",
             "name": eventData.venue,
