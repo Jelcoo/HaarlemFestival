@@ -12,6 +12,7 @@ $router->get('/dance', [App\Controllers\HomeController::class, 'dance']);
 $router->get('/yummy', [App\Controllers\HomeController::class, 'yummy']);
 $router->get('/history', [App\Controllers\HomeController::class, 'history']);
 $router->get('/magic', [App\Controllers\HomeController::class, 'magic']);
+$router->get('/cart', [App\Controllers\CartController::class, 'index']);
 
 $router->get('/editor', [App\Controllers\EditorController::class, 'index']);
 $router->post('/editor', [App\Controllers\EditorController::class, 'editPost']);

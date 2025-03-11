@@ -9,6 +9,7 @@ class Restaurant
     public string $restaurant_type;
     public int $rating;
     public ?string $menu;
+    public ?array $assets;
 
     public function __construct(array $collection)
     {

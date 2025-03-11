@@ -24,6 +24,11 @@ body {
     width: fit-content;
 }
 
+select[disabled], input[disabled] {
+    cursor: not-allowed;
+    opacity: 0.8 !important;
+}
+
 /* Button styles are !important to force override Bootstrap */
 .btn-custom-yellow {
     background-color: var(--buttons) !important;
