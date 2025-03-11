@@ -3,8 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\Location;
-use App\Helpers\QueryBuilder;
 use App\Models\Restaurant;
+use App\Helpers\QueryBuilder;
 use App\Services\AssetService;
 
 class LocationRepository extends Repository
@@ -115,7 +115,7 @@ class LocationRepository extends Repository
 
     public function getYummyLocations(): array
     {
-        $query = $this->getConnection()->prepare("
+        $query = $this->getConnection()->prepare('
 SELECT 
     r.id AS id,
     l.id AS location_id,
@@ -130,7 +130,7 @@ SELECT
     l.preview_description,
     l.main_description
 FROM restaurants r
-INNER JOIN locations l ON r.location_id = l.id");
+INNER JOIN locations l ON r.location_id = l.id');
 
         $query->execute();
         $queryRestaurants = $query->fetchAll();
@@ -146,7 +146,7 @@ INNER JOIN locations l ON r.location_id = l.id");
             );
 
             return $restaurantModel;
-        },$queryRestaurants);
+        }, $queryRestaurants);
     }
 
     public function getSpecificLocations(string $type): array
