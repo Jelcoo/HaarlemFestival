@@ -13,10 +13,12 @@ class CartController extends Controller
         parent::__construct();
         $this->orderRepository = new OrderRepository();
     }
+
     public function index()
     {
         return $this->pageLoader->setPage('cart/index')->render();
     }
+
     public function createOrder()
     {
         $data = file_get_contents('php://input');
@@ -44,7 +46,7 @@ class CartController extends Controller
                                 }));
 
                                 if (count($historyItem['event_id']) === 0) {
-                                    throw new \Exception("Event ID list is empty after removing already booked items.");
+                                    throw new \Exception('Event ID list is empty after removing already booked items.');
                                 }
                             }
                         }
@@ -53,6 +55,7 @@ class CartController extends Controller
                 }
             } else {
                 echo json_encode($available);
+
                 return;
             }
         }

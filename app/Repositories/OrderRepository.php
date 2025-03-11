@@ -55,6 +55,7 @@ class OrderRepository extends Repository
             throw $e;
         }
     }
+
     public function checkAvailability(array $data)
     {
         $unavailable = [];
@@ -101,7 +102,7 @@ class OrderRepository extends Repository
                 if (($allAccessSold + $quantity) > $allAccessLimit) {
                     $unavailable[] = [
                         'dance' => $result['id'],
-                        'reason' => 'Not enough all-access tickets available'
+                        'reason' => 'Not enough all-access tickets available',
                     ];
                 }
             } else {
@@ -109,7 +110,7 @@ class OrderRepository extends Repository
                 if (($singleSold + $quantity) > $singleLimit) {
                     $unavailable[] = [
                         'dance' => $result['id'],
-                        'reason' => 'Not enough single tickets available'
+                        'reason' => 'Not enough single tickets available',
                     ];
                 }
             }
@@ -149,6 +150,7 @@ class OrderRepository extends Repository
                 }
             }
         }
+
         return $unavailable;
     }
 }
