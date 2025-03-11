@@ -42,7 +42,7 @@
         </select>
 
         <button type="button" class="btn btn-primary" onclick="updateURL()">Apply</button>
-        <a href="/dashboard/locations" class="btn btn-secondary">Reset</a>
+        <button type="button" class="btn btn-secondary" onclick="resetSort()">Reset</button>
     </div>
 </form>
 
@@ -73,6 +73,15 @@
         } else {
             searchParams.delete('direction');
         }
+
+        window.location.href = window.location.pathname + '?' + searchParams.toString();
+    }
+
+    function resetSort() {
+        let searchParams = new URLSearchParams(window.location.search);
+
+        searchParams.delete('sort');
+        searchParams.delete('direction');
 
         window.location.href = window.location.pathname + '?' + searchParams.toString();
     }
