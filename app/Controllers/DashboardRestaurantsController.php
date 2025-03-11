@@ -20,9 +20,6 @@ class DashboardRestaurantsController extends DashboardController
 
     public function index(): string
     {
-        ini_set('display_startup_errors', 1);
-        ini_set('display_errors', 1);
-        error_reporting(-1);
         $sortColumn = $_GET['sort'] ?? 'id';
         $sortDirection = $_GET['direction'] ?? 'asc';
         $searchQuery = $_GET['search'] ?? '';
@@ -48,7 +45,6 @@ class DashboardRestaurantsController extends DashboardController
             'restaurants' => $this->restaurantRepository->getSortedRestaurants($searchQuery, $sortColumn, $sortDirection),
             'locations' => $this->locationRepository->getAllLocations(),
             'status' => $this->getStatus(),
-            'columns' => $this->getColumns(),
             'sortColumn' => $sortColumn,
             'sortDirection' => $sortDirection,
             'searchQuery' => $searchQuery,
@@ -70,6 +66,7 @@ class DashboardRestaurantsController extends DashboardController
             'edit' => $restaurantId ? $this->editRestaurant() : $this->redirectToRestaurants(false, 'Invalid restaurant ID.'),
             'create' => $this->showForm(),
             'createNewRestaurant' => $this->createNewRestaurant(),
+            'export' => $this->exportRestaurants(),
             default => $this->redirectToRestaurants(false, 'Invalid action.'),
         };
     }
@@ -199,5 +196,25 @@ class DashboardRestaurantsController extends DashboardController
     {
         $_SESSION['show_restaurant_form'] = true;
         $this->redirectToRestaurants();
+    }
+
+    private function exportRestaurants(): void
+    {
+        $restaurants = $this->restaurantRepository->getAllRestaurants();
+
+        $columns = [
+            'id' => 'ID',
+            'location_name' => 'Name',
+            'restaurant_type' => 'Restaurant Type',
+            'rating' => 'Rating',
+            'location_address' => 'Address',
+            'menu' => 'Menu',
+        ];
+
+        $columns['location_name'] = 'Location Name';
+        $columns['location_address'] = 'Location Address';
+
+
+        $this->exportToCsv('restaurants', $restaurants, $columns);
     }
 }

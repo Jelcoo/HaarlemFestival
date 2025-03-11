@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use Carbon\Carbon;
+
 class DashboardController extends Controller
 {
     public function __construct()
@@ -60,5 +62,35 @@ class DashboardController extends Controller
         unset($_SESSION['status']);
 
         return $status;
+    }
+
+    // https://phppot.com/php/php-array-to-csv/
+    protected function exportToCsv(string $filename, array $data, array $columns): void
+    {
+        $timestamp = Carbon::now()->format('d-m-Y_H-i-s');
+        $filename = $filename . "_$timestamp.csv";
+
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        $output = fopen('php://output', 'w');
+
+        fputcsv($output, array_values($columns), ",", '"', "\\");
+
+        foreach ($data as $row) {
+            $csvRow = [];
+
+            foreach (array_keys($columns) as $key) {
+                $value = $row->$key ?? '';
+
+                if (is_object($value) && enum_exists(get_class($value))) {
+                    $value = $value->value;
+                }
+
+                $csvRow[] = $value;
+            }
+            fputcsv($output, $csvRow, ",", '"', "\\");
+        }
+
+        fclose($output);
     }
 }

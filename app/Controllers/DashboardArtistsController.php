@@ -40,7 +40,6 @@ class DashboardArtistsController extends DashboardController
         return $this->renderPage('artists', [
             'artists' => $this->artistRepository->getSortedArtists($searchQuery, $sortColumn, $sortDirection),
             'status' => $this->getStatus(),
-            'columns' => $this->getColumns(),
             'sortColumn' => $sortColumn,
             'sortDirection' => $sortDirection,
             'searchQuery' => $searchQuery,
@@ -62,6 +61,7 @@ class DashboardArtistsController extends DashboardController
             'create' => $this->showForm(),
             'edit' => $artistId ? $this->editArtist() : $this->redirectToArtists(false, 'Invalid artist ID.'),
             'createArtist' => $this->createNewArtist(),
+            'export' => $this->exportArtists(),
             default => $this->redirectToArtists(false, 'Invalid action.'),
         };
     }
@@ -175,19 +175,6 @@ class DashboardArtistsController extends DashboardController
         }
     }
 
-
-    private function getColumns(): array
-    {
-        return [
-            'id' => ['label' => 'ID', 'sortable' => true],
-            'name' => ['label' => 'Artist Name', 'sortable' => true],
-            'preview_description' => ['label' => 'Preview Description', 'sortable' => true],
-            'main_description' => ['label' => 'Main Description', 'sortable' => true],
-            'iconic_albums' => ['label' => 'Iconic Albums', 'sortable' => true],
-            'actions' => ['label' => 'Actions', 'sortable' => false],
-        ];
-    }
-
     private function redirectToArtists(bool $success = false, string $message = ''): void
     {
         $this->redirectTo('artists', $success, $message);
@@ -197,5 +184,20 @@ class DashboardArtistsController extends DashboardController
     {
         $_SESSION['show_artist_form'] = true;
         $this->redirectToArtists();
+    }
+
+    private function exportArtists(): void
+    {
+        $artists = $this->artistRepository->getAllArtists();
+
+        $columns = [
+            'id' => 'ID',
+            'name' => 'Name',
+            'preview_description' => 'Preview Description',
+            'main_description' => 'Main Description',
+            'iconic_albums' => 'Iconic Albums',
+        ];
+
+        $this->exportToCsv('artists', $artists, $columns);
     }
 }

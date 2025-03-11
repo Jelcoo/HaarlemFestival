@@ -65,6 +65,7 @@ class DashboardUsersController extends DashboardController
             'edit' => $userId ? $this->editUser() : $this->redirectToUsers(false, 'Invalid user ID.'),
             'create' => $this->showForm(),
             'createUser' => $this->createNewUser(),
+            'export' => $this->exportUsers(),
             default => $this->redirectToUsers(false, 'Invalid action.'),
         };
     }
@@ -222,5 +223,24 @@ class DashboardUsersController extends DashboardController
     {
         $_SESSION['show_user_form'] = true;
         $this->redirectToUsers();
+    }
+
+    private function exportUsers(): void
+    {
+        $users = $this->userRepository->getAllUsers();
+
+        $columns = [
+            'id' => 'ID',
+            'firstname' => 'Firstname',
+            'lastname' => 'Lastname',
+            'email' => 'Email',
+            'role' => 'Role',
+            'address' => 'Address',
+            'city' => 'City',
+            'postal_code' => 'Postal Code',
+            'created_at' => 'Created At',
+        ];
+
+        $this->exportToCsv('users', $users, $columns);
     }
 }

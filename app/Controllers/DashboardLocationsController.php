@@ -41,7 +41,6 @@ class DashboardLocationsController extends DashboardController
         return $this->renderPage('locations', [
             'locations' => $this->locationRepository->getSortedLocations($searchQuery, $sortColumn, $sortDirection),
             'status' => $this->getStatus(),
-            'columns' => $this->getColumns(),
             'sortColumn' => $sortColumn,
             'sortDirection' => $sortDirection,
             'searchQuery' => $searchQuery,
@@ -63,6 +62,7 @@ class DashboardLocationsController extends DashboardController
             'create' => $this->showForm(),
             'edit' => $locationId ? $this->editLocation() : $this->redirectToLocations(false, 'Invalid location ID.'),
             'createLocation' => $this->createNewLocation(),
+            'export' => $this->exportLocations(),
             default => $this->redirectToLocations(false, 'Invalid action.'),
         };
     }
@@ -193,20 +193,6 @@ class DashboardLocationsController extends DashboardController
         }
     }
 
-    private function getColumns(): array
-    {
-        return [
-            'id' => ['label' => 'ID', 'sortable' => true],
-            'name' => ['label' => 'Location Name', 'sortable' => true],
-            'event_type' => ['label' => 'Event Type', 'sortable' => true],
-            'coordinates' => ['label' => 'Coordinates', 'sortable' => false],
-            'address' => ['label' => 'Address', 'sortable' => false],
-            'preview_description' => ['label' => 'Preview Description', 'sortable' => false],
-            'main_description' => ['label' => 'Main Description', 'sortable' => false],
-            'actions' => ['label' => 'Actions', 'sortable' => false],
-        ];
-    }
-
     private function redirectToLocations(bool $success = false, string $message = ''): void
     {
         $this->redirectTo('locations', $success, $message);
@@ -216,5 +202,22 @@ class DashboardLocationsController extends DashboardController
     {
         $_SESSION['show_location_form'] = true;
         $this->redirectToLocations();
+    }
+
+    private function exportLocations(): void
+    {
+        $locations = $this->locationRepository->getAllLocations();
+
+        $columns = [
+            'id' => 'ID',
+            'name' => 'Name',
+            'event_type' => 'Event Type',
+            'coordinates' => 'Coordinates',
+            'address' => 'Address',
+            'preview_description' => 'Preview Description',
+            'main_description' => 'Main Description',
+        ];
+
+        $this->exportToCsv('locations', $locations, $columns);
     }
 }
