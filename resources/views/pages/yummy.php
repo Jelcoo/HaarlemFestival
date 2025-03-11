@@ -165,12 +165,6 @@ body {
     background-color: #f5f5f5;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 15px;
-}
-
 .mt-5 {
     margin-top: 2rem;
 }
@@ -441,62 +435,5 @@ body {
     .odd-row .cuisine-container {
         justify-content: center !important;
     }
-}
-
-/* New Styles Added from the Provided CSS */
-
-/* Root Colors */
-:root {
-    --primary: #3F835C;
-    --primary-accent: #599563;
-    --secondary: #1F4E66;
-    --secondary-accent: #226C92;
-    --buttons: #E6A640;
-    --buttons-accent: #CC9439;
-    --link: #4D5AEB;
-    --error: #CD4747;
-}
-
-/* Body Layout */
-body {
-    font-family: "Arial", sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.full-container {
-    display: contents;
-}
-
-.btn {
-    width: fit-content;
-}
-
-/* Button styles for custom buttons */
-.btn-custom-yellow {
-    background-color: var(--buttons) !important;
-    color: black !important;
-    font-weight: bold !important;
-    border-radius: 8px !important;
-    padding: 6px 12px !important;
-}
-.btn-custom-yellow:hover {
-    background-color: var(--buttons-accent) !important;
-}
-.btn-custom-green {
-    background-color: var(--primary) !important;
-    color: black !important;
-    font-weight: bold !important;
-    border-radius: 8px !important;
-    padding: 6px 12px !important;
-}
-.btn-custom-green:hover {
-    background-color: var(--primary-accent) !important;
-}
-
-/* Map container style */
-.map-container {
-    height: 800px;
 }
 </style>
