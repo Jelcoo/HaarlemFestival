@@ -4,11 +4,13 @@ namespace App\Controllers;
 
 use App\Repositories\ArtistRepository;
 use App\Repositories\LocationRepository;
+use App\Services\ScheduleService;
 
 class HomeController extends Controller
 {
     private LocationRepository $locationRepository;
     private ArtistRepository $artistRepository;
+    private ScheduleService $scheduleService;
 
     public function __construct()
     {
@@ -16,6 +18,7 @@ class HomeController extends Controller
 
         $this->locationRepository = new LocationRepository();
         $this->artistRepository = new ArtistRepository();
+        $this->scheduleService = new ScheduleService();
     }
 
     public function index(): string
@@ -31,10 +34,12 @@ class HomeController extends Controller
     {
         $artists = $this->artistRepository->getAllArtists();
         $locations = $this->locationRepository->getSpecificLocations('dance');
+        $schedules = $this->scheduleService->getDanceSchedule();
 
         return $this->pageLoader->setPage('dance')->render([
             'artists' => $artists,
             'locations' => $locations,
+            'schedules' => $schedules,
         ]);
     }
 
