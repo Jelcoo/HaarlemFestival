@@ -14,6 +14,7 @@ class Restaurant
     public function __construct(array $collection)
     {
         $this->id = $collection['id'];
+        $this->location_id = $collection['location_id'];
         $this->restaurant_type = $collection['restaurant_type'];
         $this->rating = $collection['rating'];
         $this->menu = $collection['menu'];
