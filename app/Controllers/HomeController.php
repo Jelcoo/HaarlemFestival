@@ -51,9 +51,11 @@ class HomeController extends Controller
     public function history(): string
     {
         $locations = $this->locationRepository->getSpecificLocations('history');
+        $schedules = $this->scheduleService->getHistorySchedule();
 
         return $this->pageLoader->setPage('history')->render([
             'locations' => $locations,
+            'schedules' => $schedules,
         ]);
     }
 

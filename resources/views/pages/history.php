@@ -1,193 +1,193 @@
 <?php
 
-$schedules = [
-    [
-        'date' => 'Thursday July 24',
-        'location' => 'Bavo Church',
-        'seats_per_tour' => 12,
-        'prices' => [
-            'single' => 17.50,
-            'family' => 60.00,
-        ],
-        'guides' => [
-            [
-                'language' => 'Dutch',
-                'names' => ['Jan-Willem'],
-            ],
-            [
-                'language' => 'English',
-                'names' => ['Frederic'],
-            ],
-        ],
-        'start' => [
-            [
-                'time' => '10:00',
-                'tours' => [
-                    'Dutch' => [1],
-                    'English' => [2],
-                ],
-            ],
-            [
-                'time' => '13:00',
-                'tours' => [
-                    'Dutch' => [3],
-                    'English' => [4],
-                ],
-            ],
-            [
-                'time' => '16:00',
-                'tours' => [
-                    'Dutch' => [6],
-                    'English' => [5],
-                ],
-            ],
-        ],
-    ],
-    [
-        'date' => 'Friday July 25',
-        'location' => 'Bavo Church',
-        'seats_per_tour' => 12,
-        'prices' => [
-            'single' => 17.50,
-            'family' => 60.00,
-        ],
-        'guides' => [
-            [
-                'language' => 'Dutch',
-                'names' => ['Annet'],
-            ],
-            [
-                'language' => 'English',
-                'names' => ['William'],
-            ],
-            [
-                'language' => 'Chinese',
-                'names' => ['Kim'],
-            ],
-        ],
-        'start' => [
-            [
-                'time' => '10:00',
-                'tours' => [
-                    'Dutch' => [7],
-                    'English' => [10],
-                ],
-            ],
-            [
-                'time' => '13:00',
-                'tours' => [
-                    'Dutch' => [8],
-                    'English' => [11],
-                    'Chinese' => [13],
-                ],
-            ],
-            [
-                'time' => '16:00',
-                'tours' => [
-                    'Dutch' => [9],
-                    'English' => [12],
-                    'Chinese' => [14],
-                ],
-            ],
-        ],
-    ],
-    [
-        'date' => 'Saturday July 26',
-        'location' => 'Bavo Church',
-        'seats_per_tour' => 12,
-        'prices' => [
-            'single' => 17.50,
-            'family' => 60.00,
-        ],
-        'guides' => [
-            [
-                'language' => 'Dutch',
-                'names' => ['Annet', 'Jan-Willem'],
-            ],
-            [
-                'language' => 'English',
-                'names' => ['Frederic', 'William'],
-            ],
-            [
-                'language' => 'Chinese',
-                'names' => ['Kim'],
-            ],
-        ],
-        'start' => [
-            [
-                'time' => '10:00',
-                'tours' => [
-                    'Dutch' => [15, 16],
-                    'English' => [20, 21],
-                ],
-            ],
-            [
-                'time' => '13:00',
-                'tours' => [
-                    'Dutch' => [17, 18],
-                    'English' => [22, 23],
-                    'Chinese' => [25],
-                ],
-            ],
-            [
-                'time' => '16:00',
-                'tours' => [
-                    'Dutch' => [19],
-                    'English' => [24],
-                    'Chinese' => [26],
-                ],
-            ],
-        ],
-    ],
-    [
-        'date' => 'Sunday July 27',
-        'location' => 'Bavo Church',
-        'seats_per_tour' => 12,
-        'prices' => [
-            'single' => 17.50,
-            'family' => 60.00,
-        ],
-        'guides' => [
-            [
-                'language' => 'Dutch',
-                'names' => ['Annet', 'Jan-Willem', 'Lisa'],
-            ],
-            [
-                'language' => 'English',
-                'names' => ['Deirdre', 'Frederic', 'William'],
-            ],
-            [
-                'language' => 'Chinese',
-                'names' => ['Kim', 'Susan'],
-            ],
-        ],
-        'start' => [
-            [
-                'time' => '10:00',
-                'tours' => [
-                    'Dutch' => [27, 28],
-                    'English' => [33, 34],
-                    'Chinese' => [39],
-                ],
-            ],
-            [
-                'time' => '13:00',
-                'tours' => [
-                    'Dutch' => [29, 30, 31],
-                    'English' => [35, 36, 37],
-                    'Chinese' => [40, 41],
-                ],
-            ],
-            [
-                'time' => '16:00',
-                'tours' => [
-                    'Dutch' => [32],
-                    'English' => [38],
-                ],
-            ],
-        ],
-    ],
-];
+// $schedules = [
+//     [
+//         'date' => 'Thursday July 24',
+//         'location' => 'Bavo Church',
+//         'seats_per_tour' => 12,
+//         'prices' => [
+//             'single' => 17.50,
+//             'family' => 60.00,
+//         ],
+//         'guides' => [
+//             [
+//                 'language' => 'Dutch',
+//                 'names' => ['Jan-Willem'],
+//             ],
+//             [
+//                 'language' => 'English',
+//                 'names' => ['Frederic'],
+//             ],
+//         ],
+//         'start' => [
+//             [
+//                 'time' => '10:00',
+//                 'tours' => [
+//                     'Dutch' => [1],
+//                     'English' => [2],
+//                 ],
+//             ],
+//             [
+//                 'time' => '13:00',
+//                 'tours' => [
+//                     'Dutch' => [3],
+//                     'English' => [4],
+//                 ],
+//             ],
+//             [
+//                 'time' => '16:00',
+//                 'tours' => [
+//                     'Dutch' => [6],
+//                     'English' => [5],
+//                 ],
+//             ],
+//         ],
+//     ],
+//     [
+//         'date' => 'Friday July 25',
+//         'location' => 'Bavo Church',
+//         'seats_per_tour' => 12,
+//         'prices' => [
+//             'single' => 17.50,
+//             'family' => 60.00,
+//         ],
+//         'guides' => [
+//             [
+//                 'language' => 'Dutch',
+//                 'names' => ['Annet'],
+//             ],
+//             [
+//                 'language' => 'English',
+//                 'names' => ['William'],
+//             ],
+//             [
+//                 'language' => 'Chinese',
+//                 'names' => ['Kim'],
+//             ],
+//         ],
+//         'start' => [
+//             [
+//                 'time' => '10:00',
+//                 'tours' => [
+//                     'Dutch' => [7],
+//                     'English' => [10],
+//                 ],
+//             ],
+//             [
+//                 'time' => '13:00',
+//                 'tours' => [
+//                     'Dutch' => [8],
+//                     'English' => [11],
+//                     'Chinese' => [13],
+//                 ],
+//             ],
+//             [
+//                 'time' => '16:00',
+//                 'tours' => [
+//                     'Dutch' => [9],
+//                     'English' => [12],
+//                     'Chinese' => [14],
+//                 ],
+//             ],
+//         ],
+//     ],
+//     [
+//         'date' => 'Saturday July 26',
+//         'location' => 'Bavo Church',
+//         'seats_per_tour' => 12,
+//         'prices' => [
+//             'single' => 17.50,
+//             'family' => 60.00,
+//         ],
+//         'guides' => [
+//             [
+//                 'language' => 'Dutch',
+//                 'names' => ['Annet', 'Jan-Willem'],
+//             ],
+//             [
+//                 'language' => 'English',
+//                 'names' => ['Frederic', 'William'],
+//             ],
+//             [
+//                 'language' => 'Chinese',
+//                 'names' => ['Kim'],
+//             ],
+//         ],
+//         'start' => [
+//             [
+//                 'time' => '10:00',
+//                 'tours' => [
+//                     'Dutch' => [15, 16],
+//                     'English' => [20, 21],
+//                 ],
+//             ],
+//             [
+//                 'time' => '13:00',
+//                 'tours' => [
+//                     'Dutch' => [17, 18],
+//                     'English' => [22, 23],
+//                     'Chinese' => [25],
+//                 ],
+//             ],
+//             [
+//                 'time' => '16:00',
+//                 'tours' => [
+//                     'Dutch' => [19],
+//                     'English' => [24],
+//                     'Chinese' => [26],
+//                 ],
+//             ],
+//         ],
+//     ],
+//     [
+//         'date' => 'Sunday July 27',
+//         'location' => 'Bavo Church',
+//         'seats_per_tour' => 12,
+//         'prices' => [
+//             'single' => 17.50,
+//             'family' => 60.00,
+//         ],
+//         'guides' => [
+//             [
+//                 'language' => 'Dutch',
+//                 'names' => ['Annet', 'Jan-Willem', 'Lisa'],
+//             ],
+//             [
+//                 'language' => 'English',
+//                 'names' => ['Deirdre', 'Frederic', 'William'],
+//             ],
+//             [
+//                 'language' => 'Chinese',
+//                 'names' => ['Kim', 'Susan'],
+//             ],
+//         ],
+//         'start' => [
+//             [
+//                 'time' => '10:00',
+//                 'tours' => [
+//                     'Dutch' => [27, 28],
+//                     'English' => [33, 34],
+//                     'Chinese' => [39],
+//                 ],
+//             ],
+//             [
+//                 'time' => '13:00',
+//                 'tours' => [
+//                     'Dutch' => [29, 30, 31],
+//                     'English' => [35, 36, 37],
+//                     'Chinese' => [40, 41],
+//                 ],
+//             ],
+//             [
+//                 'time' => '16:00',
+//                 'tours' => [
+//                     'Dutch' => [32],
+//                     'English' => [38],
+//                 ],
+//             ],
+//         ],
+//     ],
+// ];
 ?>
 
 <?php

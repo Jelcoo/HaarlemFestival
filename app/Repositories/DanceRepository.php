@@ -21,7 +21,7 @@ SELECT
     de.session AS session,
     TIMESTAMPDIFF(MINUTE, CONCAT(de.start_date, ' ', de.start_time), CONCAT(de.end_date, ' ', de.end_time)) AS duration,
     de.total_tickets - COALESCE(COUNT(dt.id), 0) AS tickets_available,
-    ROUND(de.price * (de.vat + 1)) AS price
+    ROUND(de.price * (de.vat + 1), 2) AS price
 FROM dance_events de
 JOIN locations l ON de.location_id = l.id
 JOIN dance_event_artists dea ON de.id = dea.event_id
