@@ -27,7 +27,7 @@ JOIN locations l ON de.location_id = l.id
 JOIN dance_event_artists dea ON de.id = dea.event_id
 JOIN artists a ON dea.artist_id = a.id
 LEFT JOIN dance_tickets dt ON de.id = dt.dance_event_id
-GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, de.end_time, de.total_tickets, de.price, de.vat;");
+GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, de.end_time, de.total_tickets, de.price, de.vat");
 
         $query->execute();
         $queryEvents = $query->fetchAll();

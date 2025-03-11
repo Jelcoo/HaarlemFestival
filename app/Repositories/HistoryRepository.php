@@ -11,7 +11,7 @@ class HistoryRepository extends Repository
 
     public function getSchedule(): array
     {
-        $query = $this->getConnection()->prepare("
+        $query = $this->getConnection()->prepare('
 SELECT
     he.id AS tour_id,
     he.start_location AS start_location,
@@ -22,7 +22,7 @@ SELECT
     he.guide AS guide,
     he.start_date AS start_date,
     he.start_time AS start_time
-FROM history_events he;");
+FROM history_events he');
 
         $query->execute();
         $queryEvents = $query->fetchAll();

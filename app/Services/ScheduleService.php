@@ -68,11 +68,12 @@ class ScheduleService
                 $languageNames = array_values(array_unique(array_column($tours, 'language')));
 
                 $guides = array_values(array_map(function ($language) use ($tours) {
-                    $toursInLang = array_filter($tours, fn($tour) => $tour['language'] === $language);
+                    $toursInLang = array_filter($tours, fn ($tour) => $tour['language'] === $language);
                     $guideNames = array_values(array_unique(array_column($toursInLang, 'guide')));
+
                     return [
                         'language' => $language,
-                        'names' => $guideNames
+                        'names' => $guideNames,
                     ];
                 }, $languageNames));
 
@@ -80,7 +81,7 @@ class ScheduleService
                 sort($startTimes);
 
                 $start = array_map(function ($time) use ($tours) {
-                    $toursAtTime = array_filter($tours, fn($tour) => $tour['start_time'] === $time);
+                    $toursAtTime = array_filter($tours, fn ($tour) => $tour['start_time'] === $time);
                     $toursGroupedByLanguage = [];
 
                     foreach ($toursAtTime as $tour) {
@@ -89,7 +90,7 @@ class ScheduleService
 
                     return [
                         'time' => date('H:i', strtotime($time)),
-                        'tours' => $toursGroupedByLanguage
+                        'tours' => $toursGroupedByLanguage,
                     ];
                 }, $startTimes);
 
