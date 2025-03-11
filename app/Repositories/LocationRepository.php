@@ -89,12 +89,12 @@ class LocationRepository extends Repository
         $queryBuilder = new QueryBuilder($this->getConnection());
         $queryBuilder->table('locations')->where('id', '=', $location->id)->update(
             [
-            'name' => $location->name,
-            'event_type' => $location->event_type->value,
-            'coordinates' => $location->coordinates,
-            'address' => $location->address,
-            'preview_description' => $location->preview_description,
-            'main_description' => $location->main_description,
+                'name' => $location->name,
+                'event_type' => $location->event_type->value,
+                'coordinates' => $location->coordinates,
+                'address' => $location->address,
+                'preview_description' => $location->preview_description,
+                'main_description' => $location->main_description,
             ]
         );
     }
@@ -129,7 +129,8 @@ class LocationRepository extends Repository
                 $location->assets = $this->assetService->resolveAssets($location, 'cover');
 
                 return $location;
-            }, $locations
+            },
+            $locations
         );
     }
 }

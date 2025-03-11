@@ -1,11 +1,11 @@
-<h2><?php echo isset($formData['id']) ? 'Update Restaurant' : 'Create New Restaurant' ?></h2>
+<h2><?php echo isset($formData['id']) ? 'Update Restaurant' : 'Create New Restaurant'; ?></h2>
 
 <!-- Status message -->
-<?php if (!empty($status['message'])) : ?>
+<?php if (!empty($status['message'])) { ?>
     <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
         <?php echo htmlspecialchars($status['message']); ?>
     </div>
-<?php endif; ?>
+<?php } ?>
 
 <div class="container-fluid">
     <div class="row">
@@ -14,9 +14,9 @@
                 <input type="hidden" name="action"
                     value="<?php echo isset($formData['id']) ? 'update' : 'createNewRestaurant'; ?>">
 
-                <?php if (isset($formData['id'])) : ?>
+                <?php if (isset($formData['id'])) { ?>
                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($formData['id']); ?>">
-                <?php endif; ?>
+                <?php } ?>
 
                 <!-- Name and Type -->
                 <div class="row">
@@ -62,11 +62,11 @@
 
                 <!-- Action Buttons -->
                 <div class="d-flex justify-content-between mt-4">
-                    <a href="<?php echo isset($formData['id']) ? "/dashboard/restaurants?details=" . $formData['id'] : "/dashboard/restaurants"; ?>"
+                    <a href="<?php echo isset($formData['id']) ? '/dashboard/restaurants?details=' . $formData['id'] : '/dashboard/restaurants'; ?>"
                         class="btn btn-outline-secondary">Cancel</a>
 
                     <button type="submit" class="btn btn-primary">
-                        <?php echo isset($formData['id']) ? 'Update' : 'Create' ?> Restaurant
+                        <?php echo isset($formData['id']) ? 'Update' : 'Create'; ?> Restaurant
                     </button>
                 </div>
             </form>

@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Enum\UserRoleEnum;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
-use App\Enum\UserRoleEnum;
 use App\Repositories\UserRepository;
 
 class DashboardUsersController extends DashboardController
@@ -34,22 +34,24 @@ class DashboardUsersController extends DashboardController
             unset($_SESSION['form_data']);
 
             return $this->renderPage(
-                '/../../../components/dashboard/forms/users_form', [
-                'roles' => array_column(UserRoleEnum::cases(), 'value'),
-                'formData' => $formData,
-                'status' => $this->getStatus(),
+                '/../../../components/dashboard/forms/users_form',
+                [
+                    'roles' => array_column(UserRoleEnum::cases(), 'value'),
+                    'formData' => $formData,
+                    'status' => $this->getStatus(),
                 ]
             );
         }
 
         return $this->renderPage(
-            'users', [
-            'users' => $this->userRepository->getSortedUsers($searchQuery, $sortColumn, $sortDirection),
-            'status' => $this->getStatus(),
-            'columns' => $this->getColumns(),
-            'sortColumn' => $sortColumn,
-            'sortDirection' => $sortDirection,
-            'searchQuery' => $searchQuery,
+            'users',
+            [
+                'users' => $this->userRepository->getSortedUsers($searchQuery, $sortColumn, $sortDirection),
+                'status' => $this->getStatus(),
+                'columns' => $this->getColumns(),
+                'sortColumn' => $sortColumn,
+                'sortDirection' => $sortDirection,
+                'searchQuery' => $searchQuery,
             ]
         );
     }
@@ -84,11 +86,13 @@ class DashboardUsersController extends DashboardController
     {
         try {
             $userId = $_POST['id'] ?? null;
-            if (!$userId) { throw new \Exception('Invalid user ID.');
+            if (!$userId) {
+                throw new \Exception('Invalid user ID.');
             }
 
             $existingUser = $this->userRepository->getUserById($userId);
-            if (!$existingUser) { throw new \Exception('User not found.');
+            if (!$existingUser) {
+                throw new \Exception('User not found.');
             }
 
             $_SESSION['show_user_form'] = true;
@@ -117,7 +121,8 @@ class DashboardUsersController extends DashboardController
         try {
             $existingUser = $this->userRepository->getUserById($userId);
 
-            if (!$existingUser) { throw new \Exception('User not found.');
+            if (!$existingUser) {
+                throw new \Exception('User not found.');
             }
 
             $validator = new Validator();
@@ -170,14 +175,15 @@ class DashboardUsersController extends DashboardController
         try {
             $validator = new Validator();
             $validation = $validator->validate(
-                $_POST, [
-                'firstname' => 'required|alpha|max:255',
-                'lastname' => 'required|alpha|max:255',
-                'email' => 'required|email|max:255',
-                'role' => 'required|in:' . implode(',', array_column(UserRoleEnum::cases(), 'value')),
-                'address' => 'nullable|max:255',
-                'city' => 'nullable|max:255',
-                'postal_code' => 'nullable|max:20',
+                $_POST,
+                [
+                    'firstname' => 'required|alpha|max:255',
+                    'lastname' => 'required|alpha|max:255',
+                    'email' => 'required|email|max:255',
+                    'role' => 'required|in:' . implode(',', array_column(UserRoleEnum::cases(), 'value')),
+                    'address' => 'nullable|max:255',
+                    'city' => 'nullable|max:255',
+                    'postal_code' => 'nullable|max:20',
                 ]
             );
 
@@ -188,16 +194,17 @@ class DashboardUsersController extends DashboardController
             }
 
             $userData = array_intersect_key(
-                $_POST, array_flip(
+                $_POST,
+                array_flip(
                     [
-                    'firstname',
-                    'lastname',
-                    'email',
-                    'password',
-                    'role',
-                    'address',
-                    'city',
-                    'postal_code'
+                        'firstname',
+                        'lastname',
+                        'email',
+                        'password',
+                        'role',
+                        'address',
+                        'city',
+                        'postal_code',
                     ]
                 )
             );

@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Helpers\QueryBuilder;
 use App\Models\Restaurant;
+use App\Helpers\QueryBuilder;
 
 class RestaurantRepository extends Repository
 {
@@ -32,7 +32,7 @@ class RestaurantRepository extends Repository
 
         $queryRestaurants = $queryBuilder->table('restaurants')->get();
 
-        return $queryRestaurants ? array_map(fn($restaurantData) => new Restaurant($restaurantData), $queryRestaurants) : [];
+        return $queryRestaurants ? array_map(fn ($restaurantData) => new Restaurant($restaurantData), $queryRestaurants) : [];
     }
 
     public function getSortedRestaurants(string $searchQuery, string $sortColumn = 'id', string $sortDirection = 'asc'): array
@@ -45,7 +45,7 @@ class RestaurantRepository extends Repository
             $sortDirection = 'asc';
         }
 
-        $sql = "
+        $sql = '
             SELECT
                 restaurants.id AS restaurant_id,
                 restaurants.restaurant_type,
@@ -56,7 +56,7 @@ class RestaurantRepository extends Repository
                 locations.address AS location_address
             FROM restaurants
             LEFT JOIN locations ON restaurants.location_id = locations.id
-        ";
+        ';
 
         if (!empty($searchQuery)) {
             $sql .= " WHERE CONCAT(
@@ -79,23 +79,24 @@ class RestaurantRepository extends Repository
         return array_map(
             function ($data) {
                 return (object) [
-                'id' => $data['restaurant_id'],
-                'restaurant_type' => $data['restaurant_type'],
-                'rating' => $data['rating'],
-                'menu' => $data['menu'],
-                'location' => (object) [
-                    'id' => $data['location_id'],
-                    'name' => $data['location_name'],
-                    'address' => $data['location_address']
-                ]
+                    'id' => $data['restaurant_id'],
+                    'restaurant_type' => $data['restaurant_type'],
+                    'rating' => $data['rating'],
+                    'menu' => $data['menu'],
+                    'location' => (object) [
+                        'id' => $data['location_id'],
+                        'name' => $data['location_name'],
+                        'address' => $data['location_address'],
+                    ],
                 ];
-            }, $queryRestaurants
+            },
+            $queryRestaurants
         );
     }
 
     public function getAllRestaurantsWithLocations(): array
     {
-        $sql = "
+        $sql = '
             SELECT
                 restaurants.id AS restaurant_id,
                 restaurants.restaurant_type,
@@ -106,7 +107,7 @@ class RestaurantRepository extends Repository
                 locations.address AS location_address
             FROM restaurants
             LEFT JOIN locations ON restaurants.location_id = locations.id
-        ";
+        ';
 
         $query = $this->getConnection()->prepare($sql);
         $query->execute();
@@ -115,17 +116,18 @@ class RestaurantRepository extends Repository
         return array_map(
             function ($data) {
                 return (object) [
-                'id' => $data['restaurant_id'],
-                'restaurant_type' => $data['restaurant_type'],
-                'rating' => $data['rating'],
-                'menu' => $data['menu'],
-                'location' => (object) [
-                    'id' => $data['location_id'],
-                    'name' => $data['location_name'],
-                    'address' => $data['location_address']
-                ]
+                    'id' => $data['restaurant_id'],
+                    'restaurant_type' => $data['restaurant_type'],
+                    'rating' => $data['rating'],
+                    'menu' => $data['menu'],
+                    'location' => (object) [
+                        'id' => $data['location_id'],
+                        'name' => $data['location_name'],
+                        'address' => $data['location_address'],
+                    ],
                 ];
-            }, $queryRestaurants
+            },
+            $queryRestaurants
         );
     }
 
@@ -149,10 +151,10 @@ class RestaurantRepository extends Repository
         $queryBuilder = new QueryBuilder($this->getConnection());
         $queryBuilder->table('restaurants')->where('id', '=', $restaurant->id)->update(
             [
-            'location_id' => $restaurant->location_id,
-            'restaurant_type' => $restaurant->restaurant_type,
-            'rating' => $restaurant->rating,
-            'menu' => $restaurant->menu,
+                'location_id' => $restaurant->location_id,
+                'restaurant_type' => $restaurant->restaurant_type,
+                'rating' => $restaurant->rating,
+                'menu' => $restaurant->menu,
             ]
         );
     }

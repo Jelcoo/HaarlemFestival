@@ -23,9 +23,9 @@ class DashboardController extends Controller
             ->setPage('dashboard/index')
             ->render(
                 [
-                'activePage' => $page,
-                'sidebarItems' => $this->getSidebarItems(),
-                'content' => $this->loadContent($page, $data),
+                    'activePage' => $page,
+                    'sidebarItems' => $this->getSidebarItems(),
+                    'content' => $this->loadContent($page, $data),
                 ]
             );
     }
@@ -87,7 +87,8 @@ class DashboardController extends Controller
                     $value = $row;
                     foreach ($parts as $part) {
                         $value = $value->$part ?? '';
-                        if (empty($value)) { break;
+                        if (empty($value)) {
+                            break;
                         }
                     }
                 } else {

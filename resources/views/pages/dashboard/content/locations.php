@@ -8,11 +8,11 @@
 </div>
 
 <!-- Status message -->
-<?php if (!empty($status['message'])) : ?>
+<?php if (!empty($status['message'])) { ?>
     <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
         <?php echo htmlspecialchars($status['message']); ?>
     </div>
-<?php endif; ?>
+<?php } ?>
 
 <!-- Sort -->
 <form method="GET" action="/dashboard/locations" class="mb-3 d-flex justify-content-between align-items-center">

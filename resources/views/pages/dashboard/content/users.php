@@ -8,11 +8,11 @@
 </div>
 
 <!-- Status message -->
-<?php if (!empty($status['message'])) : ?>
+<?php if (!empty($status['message'])) { ?>
     <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
         <?php echo htmlspecialchars($status['message']); ?>
     </div>
-<?php endif; ?>
+<?php } ?>
 
 <!-- Search and Sort -->
 <form method="GET" action="/dashboard/users" class="mb-3 d-flex justify-content-between align-items-center">
@@ -56,7 +56,7 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <?php foreach ($columns as $column => $data): ?>
+            <?php foreach ($columns as $column => $data) { ?>
                 <?php
                 $newDirection = ($sortColumn == $column && $sortDirection == 'asc') ? 'desc' : 'asc';
                 $sortUrl = "?sort={$column}&direction={$newDirection}";
@@ -65,38 +65,38 @@
                 }
                 ?>
                 <th>
-                    <?php if ($data['sortable']) : ?>
+                    <?php if ($data['sortable']) { ?>
                         <a href="<?php echo $sortUrl; ?>">
                             <?php echo htmlspecialchars($data['label']); ?>
                         </a>
-                    <?php else: ?>
+                    <?php } else { ?>
                         <?php echo htmlspecialchars($data['label']); ?>
-                    <?php endif; ?>
+                    <?php } ?>
                 </th>
-            <?php endforeach; ?>
+            <?php } ?>
 
             <th>Actions</th>
         </tr>
     </thead>
 
     <tbody>
-        <?php if (!empty($users)) : ?>
-            <?php foreach ($users as $user): ?>
+        <?php if (!empty($users)) { ?>
+            <?php foreach ($users as $user) { ?>
                 <tr id="user-row-<?php echo htmlspecialchars($user->id); ?>">
                     <form action="/dashboard/users" method="POST">
                         <input type="hidden" name="id" value="<?php echo htmlspecialchars($user->id); ?>">
 
-                        <?php foreach ($columns as $columnKey => $columnData): ?>
+                        <?php foreach ($columns as $columnKey => $columnData) { ?>
                             <td>
                                 <!-- Display Values -->
                                 <?php
-                                $displayValue = $user->$columnKey instanceof \BackedEnum
+                                $displayValue = $user->$columnKey instanceof BackedEnum
                                     ? $user->$columnKey->value
                                     : (string) $user->$columnKey;
-                                ?>
+                            ?>
                                 <?php echo htmlspecialchars(ucfirst($displayValue)); ?>
                             </td>
-                        <?php endforeach; ?>
+                        <?php } ?>
 
                         <!-- Actions -->
                         <td class="d-flex gap-2">
@@ -109,12 +109,12 @@
                         </td>
                     </form>
                 </tr>
-            <?php endforeach; ?>
-        <?php else: ?>
+            <?php } ?>
+        <?php } else { ?>
             <tr>
                 <td colspan="<?php echo count($columns); ?>">No users found.</td>
             </tr>
-        <?php endif; ?>
+        <?php } ?>
     </tbody>
 
 </table>

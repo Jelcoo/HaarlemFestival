@@ -33,20 +33,22 @@ class DashboardLocationsController extends DashboardController
             unset($_SESSION['form_data']);
 
             return $this->renderPage(
-                '/../../../components/dashboard/forms/location_form', [
-                'formData' => $formData,
-                'status' => $this->getStatus(),
+                '/../../../components/dashboard/forms/location_form',
+                [
+                    'formData' => $formData,
+                    'status' => $this->getStatus(),
                 ]
             );
         }
 
         return $this->renderPage(
-            'locations', [
-            'locations' => $this->locationRepository->getSortedLocations($searchQuery, $sortColumn, $sortDirection),
-            'status' => $this->getStatus(),
-            'sortColumn' => $sortColumn,
-            'sortDirection' => $sortDirection,
-            'searchQuery' => $searchQuery,
+            'locations',
+            [
+                'locations' => $this->locationRepository->getSortedLocations($searchQuery, $sortColumn, $sortDirection),
+                'status' => $this->getStatus(),
+                'sortColumn' => $sortColumn,
+                'sortDirection' => $sortDirection,
+                'searchQuery' => $searchQuery,
             ]
         );
     }
@@ -116,18 +118,20 @@ class DashboardLocationsController extends DashboardController
 
             if (!$existingLocation) {
                 $this->redirectToLocations(false, 'Location not found');
+
                 return;
             }
 
             $validator = new Validator();
             $validation = $validator->validate(
-                $_POST, [
-                'name' => 'required|max:255',
-                'event_type' => 'required|in:dance,yummy,history,teylers',
-                'address' => 'required|max:255',
-                'coordinates' => 'nullable|regex:/^-?\d{1,3}\.\d+,\s*-?\d{1,3}\.\d+$/',
-                'preview_description' => 'nullable|max:500',
-                'main_description' => 'nullable|max:2000',
+                $_POST,
+                [
+                    'name' => 'required|max:255',
+                    'event_type' => 'required|in:dance,yummy,history,teylers',
+                    'address' => 'required|max:255',
+                    'coordinates' => 'nullable|regex:/^-?\d{1,3}\.\d+,\s*-?\d{1,3}\.\d+$/',
+                    'preview_description' => 'nullable|max:500',
+                    'main_description' => 'nullable|max:2000',
                 ]
             );
 
@@ -162,13 +166,14 @@ class DashboardLocationsController extends DashboardController
         try {
             $validator = new Validator();
             $validation = $validator->validate(
-                $_POST, [
-                'name' => 'required|max:255',
-                'event_type' => 'required',
-                'address' => 'required|max:255',
-                'coordinates' => 'nullable|regex:/^-?\d{1,3}\.\d+,\s*-?\d{1,3}\.\d+$/',
-                'preview_description' => 'nullable|max:500',
-                'main_description' => 'nullable|max:2000',
+                $_POST,
+                [
+                    'name' => 'required|max:255',
+                    'event_type' => 'required',
+                    'address' => 'required|max:255',
+                    'coordinates' => 'nullable|regex:/^-?\d{1,3}\.\d+,\s*-?\d{1,3}\.\d+$/',
+                    'preview_description' => 'nullable|max:500',
+                    'main_description' => 'nullable|max:2000',
                 ]
             );
 
@@ -183,20 +188,21 @@ class DashboardLocationsController extends DashboardController
             }
 
             $locationData = array_intersect_key(
-                $_POST, array_flip(
+                $_POST,
+                array_flip(
                     [
-                    'name',
-                    'event_type',
-                    'address',
-                    'coordinates',
-                    'preview_description',
-                    'main_description'
+                        'name',
+                        'event_type',
+                        'address',
+                        'coordinates',
+                        'preview_description',
+                        'main_description',
                     ]
                 )
             );
 
             $createdLocation = $this->locationRepository->createLocation($locationData);
-            $this->redirectToLocations(!empty($createdLocation), "Location created successfully.");
+            $this->redirectToLocations(!empty($createdLocation), 'Location created successfully.');
         } catch (\Exception $e) {
             $_SESSION['show_location_form'] = true;
             $_SESSION['form_data'] = $_POST;

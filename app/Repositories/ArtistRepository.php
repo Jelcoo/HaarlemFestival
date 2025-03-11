@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Helpers\QueryBuilder;
 use App\Models\Artist;
+use App\Helpers\QueryBuilder;
 use App\Services\AssetService;
 
 class ArtistRepository extends Repository
@@ -90,10 +90,10 @@ class ArtistRepository extends Repository
         $queryBuilder = new QueryBuilder($this->getConnection());
         $queryBuilder->table('artists')->where('id', '=', $artist->id)->update(
             [
-            'name' => $artist->name,
-            'preview_description' => $artist->preview_description,
-            'main_description' => $artist->main_description,
-            'iconic_albums' => $artist->iconic_albums,
+                'name' => $artist->name,
+                'preview_description' => $artist->preview_description,
+                'main_description' => $artist->main_description,
+                'iconic_albums' => $artist->iconic_albums,
             ]
         );
     }
@@ -106,7 +106,8 @@ class ArtistRepository extends Repository
                 $artist->assets = $this->assetService->resolveAssets($artist, 'cover');
 
                 return $artist;
-            }, $artists
+            },
+            $artists
         );
     }
 }

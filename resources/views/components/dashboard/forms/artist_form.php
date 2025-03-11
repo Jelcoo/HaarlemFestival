@@ -1,11 +1,11 @@
 <h2><?php echo isset($formData['id']) ? 'Update Artist' : 'Create Artist'; ?></h2>
 
 <!-- Status message -->
-<?php if (!empty($status['message'])) : ?>
+<?php if (!empty($status['message'])) { ?>
 <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
     <?php echo htmlspecialchars($status['message']); ?>
 </div>
-<?php endif; ?>
+<?php } ?>
 
 <div class="container-fluid">
     <div class="row">
@@ -14,9 +14,9 @@
                 <input type="hidden" name="action"
                     value="<?php echo isset($formData['id']) ? 'update' : 'createArtist'; ?>">
 
-                <?php if (isset($formData['id'])) : ?>
+                <?php if (isset($formData['id'])) { ?>
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($formData['id']); ?>">
-                <?php endif; ?>
+                <?php } ?>
 
                 <!-- Artist Name -->
                 <div class="form-group">
@@ -48,11 +48,11 @@
 
                 <!-- Action Buttons -->
                 <div class="d-flex justify-content-between mt-4">
-                    <a href="<?php echo isset($formData['id']) ? "/dashboard/artists?details=" . $formData['id'] : "/dashboard/artists"; ?>"
+                    <a href="<?php echo isset($formData['id']) ? '/dashboard/artists?details=' . $formData['id'] : '/dashboard/artists'; ?>"
                         class="btn btn-outline-secondary">Cancel</a>
 
                     <button type="submit" class="btn btn-primary">
-                        <?php echo isset($formData['id']) ? 'Update' : 'Create' ?> Artist
+                        <?php echo isset($formData['id']) ? 'Update' : 'Create'; ?> Artist
                     </button>
                 </div>
             </form>

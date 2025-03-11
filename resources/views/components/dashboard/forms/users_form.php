@@ -1,16 +1,17 @@
 <?php
 
 use App\Enum\UserRoleEnum;
+
 ?>
 
-<h2><?php echo isset($formData['id']) ? 'Update User' : 'Create User' ?></h2>
+<h2><?php echo isset($formData['id']) ? 'Update User' : 'Create User'; ?></h2>
 
 <!-- Status message -->
-<?php if (!empty($status['message'])) : ?>
+<?php if (!empty($status['message'])) { ?>
     <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
         <?php echo htmlspecialchars($status['message']); ?>
     </div>
-<?php endif; ?>
+<?php } ?>
 
 <div class="container-fluid">
     <div class="row">
@@ -19,9 +20,9 @@ use App\Enum\UserRoleEnum;
                 <input type="hidden" name="action"
                     value="<?php echo isset($formData['id']) ? 'update' : 'createUser'; ?>">
 
-                <?php if (isset($formData['id'])) : ?>
+                <?php if (isset($formData['id'])) { ?>
                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($formData['id']); ?>">
-                <?php endif; ?>
+                <?php } ?>
 
                 <!-- First and Last Name -->
                 <div class="row">
@@ -98,7 +99,7 @@ use App\Enum\UserRoleEnum;
                 <div class="d-flex justify-content-between mt-4">
                     <a href="/dashboard/users" class="btn btn-outline-secondary">Cancel</a>
                     <button type="submit" class="btn btn-primary">
-                        <?php echo isset($formData['id']) ? 'Update' : 'Create' ?> User
+                        <?php echo isset($formData['id']) ? 'Update' : 'Create'; ?> User
                     </button>
                 </div>
             </form>

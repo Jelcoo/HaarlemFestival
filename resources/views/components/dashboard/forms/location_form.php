@@ -1,16 +1,17 @@
 <?php
 
 use App\Enum\EventTypeEnum;
+
 ?>
 
-<h2><?php echo isset($formData['id']) ? 'Update Location' : 'Create Location' ?></h2>
+<h2><?php echo isset($formData['id']) ? 'Update Location' : 'Create Location'; ?></h2>
 
 <!-- Status message -->
-<?php if (!empty($status['message'])) : ?>
+<?php if (!empty($status['message'])) { ?>
     <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
         <?php echo htmlspecialchars($status['message']); ?>
     </div>
-<?php endif; ?>
+<?php } ?>
 
 <div class="container-fluid">
     <div class="col-md-8">
@@ -18,9 +19,9 @@ use App\Enum\EventTypeEnum;
             <input type="hidden" name="action"
                 value="<?php echo isset($formData['id']) ? 'update' : 'createLocation'; ?>">
 
-            <?php if (isset($formData['id'])) : ?>
+            <?php if (isset($formData['id'])) { ?>
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($formData['id']); ?>">
-            <?php endif; ?>
+            <?php } ?>
 
             <!-- Location Name -->
             <div class="form-group">
@@ -75,11 +76,11 @@ use App\Enum\EventTypeEnum;
 
             <!-- Action Buttons -->
             <div class="d-flex justify-content-between mt-4">
-                <a href="<?php echo isset($formData['id']) ? "/dashboard/locations?details=" . $formData['id'] : "/dashboard/locations"; ?>"
+                <a href="<?php echo isset($formData['id']) ? '/dashboard/locations?details=' . $formData['id'] : '/dashboard/locations'; ?>"
                     class="btn btn-outline-secondary">Cancel</a>
 
                 <button type="submit" class="btn btn-primary">
-                    <?php echo isset($formData['id']) ? 'Update' : 'Create' ?> Location
+                    <?php echo isset($formData['id']) ? 'Update' : 'Create'; ?> Location
                 </button>
             </div>
         </form>

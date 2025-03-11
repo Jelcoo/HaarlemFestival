@@ -19,7 +19,7 @@ $dashboardCards = [
         'title' => 'Artist Dashboard',
         'description' => 'Manage and view all your artists in one place. Easily update artist information, add new artists, or delete existing ones.',
         'url' => '/dashboard/artists',
-    ]
+    ],
 ];
 ?>
 
@@ -28,8 +28,8 @@ $dashboardCards = [
 
     <!-- Dynamic Cards -->
     <div class="row">
-        <?php foreach ($dashboardCards as $card): ?>
+        <?php foreach ($dashboardCards as $card) { ?>
             <?php include __DIR__ . '/../../../components/dashboard/dashboard_card.php'; ?>
-        <?php endforeach; ?>
+        <?php } ?>
     </div>
 </div>

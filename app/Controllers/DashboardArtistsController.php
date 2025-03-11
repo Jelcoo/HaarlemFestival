@@ -32,20 +32,22 @@ class DashboardArtistsController extends DashboardController
             unset($_SESSION['form_data']);
 
             return $this->renderPage(
-                '/../../../components/dashboard/forms/artist_form', [
-                'formData' => $formData,
-                'status' => $this->getStatus(),
+                '/../../../components/dashboard/forms/artist_form',
+                [
+                    'formData' => $formData,
+                    'status' => $this->getStatus(),
                 ]
             );
         }
 
         return $this->renderPage(
-            'artists', [
-            'artists' => $this->artistRepository->getSortedArtists($searchQuery, $sortColumn, $sortDirection),
-            'status' => $this->getStatus(),
-            'sortColumn' => $sortColumn,
-            'sortDirection' => $sortDirection,
-            'searchQuery' => $searchQuery,
+            'artists',
+            [
+                'artists' => $this->artistRepository->getSortedArtists($searchQuery, $sortColumn, $sortDirection),
+                'status' => $this->getStatus(),
+                'sortColumn' => $sortColumn,
+                'sortDirection' => $sortDirection,
+                'searchQuery' => $searchQuery,
             ]
         );
     }
@@ -113,16 +115,18 @@ class DashboardArtistsController extends DashboardController
 
             if (!$existingArtist) {
                 $this->redirectToArtists(false, 'Artist not found');
+
                 return;
             }
 
             $validator = new Validator();
             $validation = $validator->validate(
-                $_POST, [
-                'name' => 'required|max:255',
-                'preview_description' => 'nullable|max:500',
-                'main_description' => 'nullable|max:2000',
-                'iconic_albums' => 'nullable|max:1000',
+                $_POST,
+                [
+                    'name' => 'required|max:255',
+                    'preview_description' => 'nullable|max:500',
+                    'main_description' => 'nullable|max:2000',
+                    'iconic_albums' => 'nullable|max:1000',
                 ]
             );
 
@@ -152,11 +156,12 @@ class DashboardArtistsController extends DashboardController
         try {
             $validator = new Validator();
             $validation = $validator->validate(
-                $_POST, [
-                'name' => 'required|max:255',
-                'preview_description' => 'nullable|max:500',
-                'main_description' => 'nullable|max:2000',
-                'iconic_albums' => 'nullable|max:1000',
+                $_POST,
+                [
+                    'name' => 'required|max:255',
+                    'preview_description' => 'nullable|max:500',
+                    'main_description' => 'nullable|max:2000',
+                    'iconic_albums' => 'nullable|max:1000',
                 ]
             );
 
@@ -167,18 +172,19 @@ class DashboardArtistsController extends DashboardController
             }
 
             $artistData = array_intersect_key(
-                $_POST, array_flip(
+                $_POST,
+                array_flip(
                     [
-                    'name',
-                    'preview_description',
-                    'main_description',
-                    'iconic_albums'
+                        'name',
+                        'preview_description',
+                        'main_description',
+                        'iconic_albums',
                     ]
                 )
             );
 
             $createdArtist = $this->artistRepository->createArtist($artistData);
-            $this->redirectToArtists(!empty($createdArtist), "Artist created successfully.");
+            $this->redirectToArtists(!empty($createdArtist), 'Artist created successfully.');
         } catch (\Exception $e) {
             $_SESSION['show_artist_form'] = true;
             $_SESSION['form_data'] = $_POST;
