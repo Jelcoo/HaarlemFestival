@@ -141,9 +141,9 @@ class DashboardArtistsController extends DashboardController
             $existingArtist->main_description = $_POST['main_description'] ?? null;
             $existingArtist->iconic_albums = $_POST['iconic_albums'] ?? null;
 
-            $updatedArtist = $this->artistRepository->updateArtist($existingArtist);
+            $this->artistRepository->updateArtist($existingArtist);
             $this->redirectTo("artists?details=$artistId", true, 'Artist updated successfully');
-            $this->redirectToArtists(!empty($updatedArtist), $updatedArtist ? 'Artist updated successfully.' : 'No changes were made.');
+            $this->redirectToArtists(true, 'Artist updated successfully.');
         } catch (\Exception $e) {
             $_SESSION['form_data'] = $_POST;
             $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
@@ -183,8 +183,8 @@ class DashboardArtistsController extends DashboardController
                 )
             );
 
-            $createdArtist = $this->artistRepository->createArtist($artistData);
-            $this->redirectToArtists(!empty($createdArtist), 'Artist created successfully.');
+            $this->artistRepository->createArtist($artistData);
+            $this->redirectToArtists(true, 'Artist created successfully.');
         } catch (\Exception $e) {
             $_SESSION['show_artist_form'] = true;
             $_SESSION['form_data'] = $_POST;
