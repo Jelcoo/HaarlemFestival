@@ -16,6 +16,7 @@ class LocationRepository extends Repository
 
         $this->assetService = new AssetService();
     }
+
     public function createLocation(array $data): Location
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
@@ -41,7 +42,7 @@ class LocationRepository extends Repository
 
         $queryLocations = $queryBuilder->table('locations')->get();
 
-        return $queryLocations ? array_map(fn($locationData) => new Location($locationData), $queryLocations) : [];
+        return $this->mapLocations($queryLocations);
     }
 
     public function getSortedLocations(string $searchQuery, string $sortColumn = 'id', string $sortDirection = 'asc'): array
@@ -65,7 +66,7 @@ class LocationRepository extends Repository
 
         $queryLocations = $query->orderBy($sortColumn, $sortDirection)->get();
 
-        return $queryLocations ? array_map(fn($locationData) => new Location($locationData), $queryLocations) : [];
+        return $this->mapLocations($queryLocations);
     }
 
     public function deleteLocation(int $id): ?Location
