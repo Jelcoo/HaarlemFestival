@@ -57,33 +57,4 @@
     <?php } ?>
 </div>
 
-<script>
-    function updateURL() {
-        let sort = document.getElementById('sortSelect').value;
-        let direction = document.getElementById('directionSelect').value;
-        let searchParams = new URLSearchParams(window.location.search);
-
-        if (sort) {
-            searchParams.set('sort', sort);
-        } else {
-            searchParams.delete('sort');
-        }
-
-        if (direction) {
-            searchParams.set('direction', direction);
-        } else {
-            searchParams.delete('direction');
-        }
-
-        window.location.href = window.location.pathname + '?' + searchParams.toString();
-    }
-
-    function resetSort() {
-        let searchParams = new URLSearchParams(window.location.search);
-
-        searchParams.delete('sort');
-        searchParams.delete('direction');
-
-        window.location.href = window.location.pathname + '?' + searchParams.toString();
-    }
-</script>
+<script src="/assets/js/utils.js"></script>
