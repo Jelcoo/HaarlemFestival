@@ -17,6 +17,20 @@ class ScheduleService
         $this->historyRepository = new HistoryRepository();
     }
 
+    /**
+     * Parse the schedule for the dance page.
+     *
+     * Format:
+     * $event['date']: Date events are held on
+     * $event['rows']['event_id']: ID of event
+     * $event['rows']['start']: Start time of event formatted as 00:00
+     * $event['rows']['venue']: Location name
+     * $event['rows']['artists']: Comma seperated list of artist names
+     * $event['rows']['session']: Name of the session
+     * $event['rows']['duration']: Duration of the session in minutes
+     * $event['rows']['tickets_available']: How many tickets are still available
+     * $event['rows']['price']: The price calculated with VAT (in SQL query)
+     */
     public function getDanceSchedule(): array
     {
         $querySchedule = $this->danceRepository->getSchedule();
@@ -53,6 +67,20 @@ class ScheduleService
         return $schedules;
     }
 
+    /**
+     * Parse the schedule for the history page.
+     *
+     * Format:
+     * $event['date']: Date events are held on
+     * $event['location']: The location the event is held at
+     * $event['seats_per_tour']: Number of seats per tour
+     * $event['prices']['single']: Price of a single ticket with VAT (in SQL query)
+     * $event['prices']['family']: Price of a family ticket with VAT (in SQL query)
+     * $event['guides'][]['language']: The language of the guide
+     * $event['guides'][]['names'][]: Array of guide names
+     * $event['start'][]['time']: The start time of the tour formatted as 00:00
+     * $event['start'][]['tours'][]: Array of tours, key is language, value is tour ID
+     */
     public function getHistorySchedule(): array
     {
         $querySchedule = $this->historyRepository->getSchedule();
@@ -67,7 +95,7 @@ class ScheduleService
                 $firstTour = $tours[0];
                 $languageNames = array_values(array_unique(array_column($tours, 'language')));
 
-                $guides = array_values(array_map(function ($language) use ($tours) {
+                $guides = array_map(function ($language) use ($tours) {
                     $toursInLang = array_filter($tours, fn ($tour) => $tour['language'] === $language);
                     $guideNames = array_values(array_unique(array_column($toursInLang, 'guide')));
 
@@ -75,7 +103,7 @@ class ScheduleService
                         'language' => $language,
                         'names' => $guideNames,
                     ];
-                }, $languageNames));
+                }, $languageNames);
 
                 $startTimes = array_values(array_unique(array_column($tours, 'start_time')));
                 sort($startTimes);
@@ -131,6 +159,10 @@ class ScheduleService
         });
     }
 
+    /**
+     * Get unique tours by start location, seats per tour, family price and single price.
+     * This is a simple way to ensure that tours with a single different field are split off.
+     */
     private function getUniqueTours(array $schedule): array
     {
         $tours = [];
