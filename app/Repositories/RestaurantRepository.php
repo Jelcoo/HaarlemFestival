@@ -91,6 +91,40 @@ class RestaurantRepository extends Repository
         }, $queryRestaurants);
     }
 
+    public function getAllRestaurantsWithLocations(): array
+    {
+        $sql = "
+            SELECT
+                restaurants.id AS restaurant_id,
+                restaurants.restaurant_type,
+                restaurants.rating,
+                restaurants.menu,
+                locations.id AS location_id,
+                locations.name AS location_name,
+                locations.address AS location_address
+            FROM restaurants
+            LEFT JOIN locations ON restaurants.location_id = locations.id
+        ";
+
+        $query = $this->getConnection()->prepare($sql);
+        $query->execute();
+        $queryRestaurants = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+        return array_map(function ($data) {
+            return (object) [
+                'id' => $data['restaurant_id'],
+                'restaurant_type' => $data['restaurant_type'],
+                'rating' => $data['rating'],
+                'menu' => $data['menu'],
+                'location' => (object) [
+                    'id' => $data['location_id'],
+                    'name' => $data['location_name'],
+                    'address' => $data['location_address']
+                ]
+            ];
+        }, $queryRestaurants);
+    }
+
     public function deleteRestaurant(int $id): ?Restaurant
     {
         $queryBuilder = new QueryBuilder($this->getConnection());

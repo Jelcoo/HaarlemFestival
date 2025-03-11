@@ -80,7 +80,16 @@ class DashboardController extends Controller
             $csvRow = [];
 
             foreach (array_keys($columns) as $key) {
-                $value = $row->$key ?? '';
+                if (str_contains($key, '.')) {
+                    $parts = explode('.', $key);
+                    $value = $row;
+                    foreach ($parts as $part) {
+                        $value = $value->$part ?? '';
+                        if (empty($value)) break;
+                    }
+                } else {
+                    $value = $row->$key ?? '';
+                }
 
                 if (is_object($value) && enum_exists(get_class($value))) {
                     $value = $value->value;
