@@ -196,13 +196,10 @@ include_once __DIR__ . '/../components/header.php';
                 "name": artists[i]
             });
         }
-        const items = localStorage.getItem('orderedItems');
-        if (items) {
-            const orderedItems = JSON.parse(items);
-            orderedItems.dance.push(json);
-            localStorage.setItem('orderedItems', JSON.stringify(orderedItems));
-            closeModal();
-        }
+        const items = getStoredItems();
+        items.dance.push(json);
+        localStorage.setItem('orderedItems', JSON.stringify(items));
+        closeModal();
     }
 </script>
 

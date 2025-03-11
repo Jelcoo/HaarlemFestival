@@ -611,12 +611,9 @@ include_once __DIR__ . '/../components/header.php';
                 seats: quantity
             };
 
-            const items = localStorage.getItem('orderedItems');
-            if (items) {
-                const orderedItems = JSON.parse(items);
-                orderedItems.history.push(json);
-                localStorage.setItem('orderedItems', JSON.stringify(orderedItems));
-            }
+            const items = getStoredItems();
+            items.history.push(json);
+            localStorage.setItem('orderedItems', JSON.stringify(items));
             closeModal();
         }
     };
