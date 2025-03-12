@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Config\Config;
 use App\Application\Request;
 use App\Application\Session;
 use App\Application\Response;
@@ -70,7 +69,7 @@ class AuthController extends Controller
 
             $_SESSION['user_id'] = $createdUser->id;
             // TODO: Temporary solution
-            if ($_SESSION['origin'] == Config::getKey('APP_URL') . '/cart') {
+            if (isset($_SESSION['cart'])) {
                 Response::redirect('/cart');
             } else {
                 Response::redirect('/');
@@ -124,7 +123,7 @@ class AuthController extends Controller
             if (password_verify($password, $user?->password)) {
                 $_SESSION['user_id'] = $user->id;
                 // TODO: Temporary solution
-                if ($_SESSION['origin'] == Config::getKey('APP_URL') . '/cart') {
+                if (isset($_SESSION['cart'])) {
                     Response::redirect('/cart');
                 } else {
                     Response::redirect('/');
