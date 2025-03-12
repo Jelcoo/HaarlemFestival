@@ -18,9 +18,14 @@ class FileService
         }
     }
 
-    public static function getFilePath(string $filename)
+    public static function getFilePath()
     {
-        return rtrim(Config::getKey('STORAGE_PATH'), '/') . '/' . $filename;
+        return rtrim(Config::getKey('STORAGE_PATH'), '/');
+    }
+
+    public static function assembleFilePath(string $filepath, string $filename)
+    {
+        return $filepath . '/' . $filename;
     }
 
     public static function getExtension(string $mimeType)

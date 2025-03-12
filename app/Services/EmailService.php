@@ -14,7 +14,7 @@ class EmailService
     {
         $this->mailer = new PHPMailer();
 
-        if (Config::getKey('APP_ENV') === 'development') {
+        if (Config::getKey('MAIL_DEBUG') === true) {
             $this->mailer->SMTPDebug = SMTP::DEBUG_SERVER;
         }
 

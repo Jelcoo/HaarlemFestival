@@ -26,7 +26,9 @@ $pages = [
                     </li>
                 <?php } ?>
             </ul>
+
             <a href="/program" class="btn btn-custom-yellow ms-3">
+            <a href="/cart" class="btn btn-custom-yellow ms-3">
                 <i class="fa-solid fa-calendar-days"></i> Program
             </a>
             <?php if (App\Application\Session::isValidSession()) { ?>

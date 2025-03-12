@@ -2,17 +2,16 @@
 
 namespace App\Models;
 
-use App\Config\Config;
-
 class Asset
 {
     public int $id;
     public string $collection;
+    public string $filepath;
     public string $filename;
     public string $mimetype;
     public int $size;
-    public string $model;
-    public int $model_id;
+    public ?string $model;
+    public ?int $model_id;
     public string $created_at;
 
     public function __construct()
@@ -29,6 +28,7 @@ class Asset
         $this->id = $collection['id'];
         $this->collection = $collection['collection'];
         $this->filename = $collection['filename'];
+        $this->filepath = $collection['filepath'];
         $this->mimetype = $collection['mimetype'];
         $this->size = $collection['size'];
         $this->model = $collection['model'];
@@ -38,6 +38,6 @@ class Asset
 
     public function getUrl(): string
     {
-        return Config::getKey('APP_URL') . '/assets/' . $this->filename;
+        return '/' . $this->filepath . '/' . $this->filename;
     }
 }

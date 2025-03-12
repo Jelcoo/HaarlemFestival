@@ -1,148 +1,112 @@
-<h2>User Management</h2>
+<!-- Title and Create Button -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>User Management</h2>
+    <form action="/dashboard/users" method="POST">
+        <button type="submit" class="btn btn-success" name="action" value="export">Export to CSV</button>
+        <button type="submit" class="btn btn-primary" name="action" value="create">Create New User</button>
+    </form>
+</div>
 
 <!-- Status message -->
 <?php if (!empty($status['message'])) { ?>
     <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
-        <?php echo $status['message']; ?>
+        <?php echo htmlspecialchars($status['message']); ?>
     </div>
 <?php } ?>
 
-<!-- Create Button -->
-<form action="/dashboard/users" method="POST">
-    <button type="submit" class="btn btn-primary mb-3" name="action" value="create">Create New User</button>
-</form>
+<!-- Search and Sort -->
+<form method="GET" action="/dashboard/users" class="mb-3 d-flex justify-content-between align-items-center">
+    <!-- Search -->
+    <div class="d-flex align-items-center gap-2">
+        <input type="text" name="search" placeholder="Search users..."
+            value="<?php echo htmlspecialchars($searchQuery); ?>" class="form-control d-inline-block w-auto"
+            style="max-width: 200px;">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <?php if (!empty($searchQuery)) { ?>
+            <a href="/dashboard/users" class="btn btn-secondary text-white">Clear</a>
+        <?php } ?>
+    </div>
 
-<!-- Search Form -->
-<form method="GET" action="/dashboard/users" class="mb-3 d-flex align-items-center">
-    <input type="text" name="search" placeholder="Search users..." value="<?php echo htmlspecialchars($searchQuery); ?>"
-        class="form-control d-inline-block w-auto me-2">
+    <!-- Sort -->
+    <div class="d-flex align-items-center gap-2">
+        <select name="sort" id="sortSelect" class="form-select" style="width: 150px;">
+            <option value="" disabled selected>Sort by...</option>
+            <option value="firstname" <?php echo ($sortColumn == 'firstname') ? 'selected' : ''; ?>>First Name</option>
+            <option value="lastname" <?php echo ($sortColumn == 'lastname') ? 'selected' : ''; ?>>Last Name</option>
+            <option value="email" <?php echo ($sortColumn == 'email') ? 'selected' : ''; ?>>Email</option>
+            <option value="role" <?php echo ($sortColumn == 'role') ? 'selected' : ''; ?>>Role</option>
+            <option value="phone_number" <?php echo ($sortColumn == 'phone_number') ? 'selected' : ''; ?>>Phone Number</option>
+            <option value="address" <?php echo ($sortColumn == 'address') ? 'selected' : ''; ?>>Address</option>
+            <option value="city" <?php echo ($sortColumn == 'city') ? 'selected' : ''; ?>>City</option>
+            <option value="postal_code" <?php echo ($sortColumn == 'postal_code') ? 'selected' : ''; ?>>Postal Code
+            </option>
+            <option value="created_at" <?php echo ($sortColumn == 'created_at') ? 'selected' : ''; ?>>Creation Date
+            </option>
+        </select>
 
-    <button type="submit" class="btn btn-primary me-2">Search</button>
-    <?php if (!empty($searchQuery)) { ?>
-        <a href="/dashboard/users" class="btn btn-secondary text-white">Clear</a>
-    <?php } ?>
+        <select name="direction" id="directionSelect" class="form-select" style="width: 150px;">
+            <option value="asc" <?php echo ($sortDirection == 'asc') ? 'selected' : ''; ?>>Ascending</option>
+            <option value="desc" <?php echo ($sortDirection == 'desc') ? 'selected' : ''; ?>>Descending</option>
+        </select>
+
+        <button type="button" class="btn btn-primary" onclick="updateURL()">Apply</button>
+        <button type="button" class="btn btn-secondary" onclick="resetSort()">Reset</button>
+    </div>
 </form>
 
 <table class="table table-bordered">
     <thead>
         <tr>
             <?php foreach ($columns as $column => $data) { ?>
-                <?php if ($data['sortable']) { ?>
-                    <?php
-                    $newDirection = ($sortColumn == $column && $sortDirection == 'asc') ? 'desc' : 'asc';
-                    $sortUrl = "?sort={$column}&direction={$newDirection}";
-                    if (!empty($searchQuery)) {
-                        $sortUrl .= '&search=' . htmlspecialchars($searchQuery);
-                    }
-                    ?>
-                    <th>
+                <?php
+                $newDirection = ($sortColumn == $column && $sortDirection == 'asc') ? 'desc' : 'asc';
+                $sortUrl = "?sort={$column}&direction={$newDirection}";
+                if (!empty($searchQuery)) {
+                    $sortUrl .= '&search=' . htmlspecialchars($searchQuery);
+                }
+                ?>
+                <th>
+                    <?php if ($data['sortable']) { ?>
                         <a href="<?php echo $sortUrl; ?>">
-                            <?php echo $data['label']; ?>
+                            <?php echo htmlspecialchars($data['label']); ?>
                         </a>
-                    </th>
-                <?php } else { ?>
-                    <th><?php echo $data['label']; ?></th>
-                <?php } ?>
+                    <?php } else { ?>
+                        <?php echo htmlspecialchars($data['label']); ?>
+                    <?php } ?>
+                </th>
             <?php } ?>
+
+            <th>Actions</th>
         </tr>
     </thead>
 
     <tbody>
         <?php if (!empty($users)) { ?>
             <?php foreach ($users as $user) { ?>
-                <tr id="user-row-<?php echo $user->id; ?>">
+                <tr id="user-row-<?php echo htmlspecialchars($user->id); ?>">
                     <form action="/dashboard/users" method="POST">
-                        <input type="hidden" name="id" value="<?php echo $user->id; ?>">
+                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($user->id); ?>">
 
-                        <td><?php echo $user->id; ?></td>
+                        <?php foreach ($columns as $columnKey => $columnData) { ?>
+                            <td>
+                                <!-- Display Values -->
+                                <?php
+                                $displayValue = $user->$columnKey instanceof BackedEnum
+                                    ? $user->$columnKey->value
+                                    : (string) $user->$columnKey;
+                            ?>
+                                <?php echo htmlspecialchars(ucfirst($displayValue)); ?>
+                            </td>
+                        <?php } ?>
 
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <input type="text" name="firstname" value="<?php echo htmlspecialchars($user->firstname); ?>"
-                                    class="form-control w-100" required>
-                            <?php } else { ?>
-                                <?php echo htmlspecialchars($user->firstname); ?>
-                            <?php } ?>
-                        </td>
-
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <input type="text" name="lastname" value="<?php echo htmlspecialchars($user->lastname); ?>"
-                                    class="form-control w-100" required>
-                            <?php } else { ?>
-                                <?php echo htmlspecialchars($user->lastname); ?>
-                            <?php } ?>
-                        </td>
-
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <input type="email" name="email" value="<?php echo htmlspecialchars($user->email); ?>"
-                                    class="form-control w-100" required>
-                            <?php } else { ?>
-                                <?php echo htmlspecialchars($user->email); ?>
-                            <?php } ?>
-                        </td>
-
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <select name="role" required>
-                                    <?php foreach ($roles as $role) { ?>
-                                        <option value="<?php echo $role; ?>" <?php echo $user->role->value == $role ? 'selected' : ''; ?>><?php echo ucfirst($role); ?></option>
-                                    <?php } ?>
-                                </select>
-                            <?php } else { ?>
-                                <?php echo $user->role->value; ?>
-                            <?php } ?>
-                        </td>
-
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <input type="text" name="address" value="<?php echo htmlspecialchars($user->address); ?>"
-                                    class="form-control w-100" required>
-                            <?php } else { ?>
-                                <?php echo htmlspecialchars($user->address); ?>
-                            <?php } ?>
-                        </td>
-
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <input type="text" name="city" value="<?php echo htmlspecialchars($user->city); ?>"
-                                    class="form-control w-100" required>
-                            <?php } else { ?>
-                                <?php echo htmlspecialchars($user->city); ?>
-                            <?php } ?>
-                        </td>
-
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <input type="text" name="postal_code" value="<?php echo htmlspecialchars($user->postal_code); ?>"
-                                    class="form-control w-100" required>
-                            <?php } else { ?>
-                                <?php echo htmlspecialchars($user->postal_code); ?>
-                            <?php } ?>
-                        </td>
-
-                        <td class="text-nowrap"><?php echo $user->created_at; ?></td>
-
-                        <td>
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <input type="text" name="stripe_customer_id"
-                                    value="<?php echo htmlspecialchars($user->stripe_customer_id); ?>" class="form-control w-100" required>
-                            <?php } else { ?>
-                                <?php echo htmlspecialchars($user->stripe_customer_id); ?>
-                            <?php } ?>
-                        </td>
-
-                        <td>
-                            <!-- Edit/Update Button -->
-                            <?php if (isset($_GET['edit']) && $_GET['edit'] == $user->id) { ?>
-                                <button type="submit" class="btn btn-success btn-sm" name="action" value="update">Update</button>
-                            <?php } else { ?>
-                                <a href="/dashboard/users?edit=<?php echo $user->id; ?>" class="btn btn-warning btn-sm">Edit</a>
-                            <?php } ?>
-
-                            <!-- Delete Button -->
-                            <button type="submit" class="btn btn-danger btn-sm" name="action" value="delete">Delete</button>
+                        <!-- Actions -->
+                        <td class="d-flex gap-2">
+                            <form action="/dashboard/users" method="POST" class="d-inline">
+                                <input type="hidden" name="id" value="<?php echo $user->id; ?>">
+                                <button type="submit" class="btn btn-warning btn-sm" name="action" value="edit">Edit</button>
+                                <button type="submit" class="btn btn-danger btn-sm ms-2" name="action"
+                                    value="delete">Delete</button>
+                            </form>
                         </td>
                     </form>
                 </tr>
@@ -153,4 +117,7 @@
             </tr>
         <?php } ?>
     </tbody>
+
 </table>
+
+<script src="/assets/js/utils.js"></script>
