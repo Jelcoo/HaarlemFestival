@@ -13,6 +13,11 @@ $router->get('/yummy', [App\Controllers\HomeController::class, 'yummy']);
 $router->get('/history', [App\Controllers\HomeController::class, 'history']);
 $router->get('/magic', [App\Controllers\HomeController::class, 'magic']);
 
+$router->get('/program', [App\Controllers\ProgramController::class, 'index']);
+$router->get('/program/tickets', [App\Controllers\ProgramController::class, 'tickets']);
+$router->get('/program/tickets/qrcode', [App\Controllers\ProgramController::class, 'qrcode']);
+
+
 $router->middleware(EnsureNotLoggedIn::class, function () use ($router) {
     $router->get('/register', [App\Controllers\AuthController::class, 'register']);
     $router->post('/register', [App\Controllers\AuthController::class, 'registerPost']);

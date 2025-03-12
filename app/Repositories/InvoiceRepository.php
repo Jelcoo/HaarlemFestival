@@ -18,4 +18,16 @@ class InvoiceRepository extends Repository{
     
         return array_map(fn($invoice) => new Invoice($invoice), $invoices);
     }
+    public function getInvoicesByUserId(int $userId): array
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+        
+        $invoices = $queryBuilder
+            ->table('invoices')
+            ->where('user_id', '=', $userId)
+            ->get();
+        
+        return array_map(fn($invoice) => new Invoice($invoice), $invoices);
+    }
+
 }

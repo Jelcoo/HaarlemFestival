@@ -8,7 +8,6 @@
                 <strong>Ticket ID:</strong> <?= $ticket->id ?> |
                 <strong>Event ID:</strong> <?= $ticket->dance_event_id ?> |
                 <strong>All Access:</strong> <?= $ticket->all_access ? 'Yes' : 'No' ?> |
-                <strong>QR Code:</strong> <?= $ticket->qrcode ?> |
                 <strong>Used:</strong> <?= $ticket->ticket_used ? 'Yes' : 'No' ?>
             </li>
         <?php endforeach; ?>
@@ -26,7 +25,6 @@
                 <strong>Event ID:</strong> <?= $ticket->history_event_id ?> |
                 <strong>Total Seats:</strong> <?= $ticket->total_seats ?> |
                 <strong>Family Ticket:</strong> <?= $ticket->family_ticket ? 'Yes' : 'No' ?> |
-                <strong>QR Code:</strong> <?= $ticket->qrcode ?> |
                 <strong>Used:</strong> <?= $ticket->ticket_used ? 'Yes' : 'No' ?>
             </li>
         <?php endforeach; ?>
@@ -57,7 +55,7 @@
     document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".back").forEach(button => {
         button.addEventListener("click", function () {
-            window.location.href = "http://localhost/dashboard/orders"; // Remove the closing brace
+            window.location.href = "http://localhost/dashboard/orders"; 
         });
     });
 });

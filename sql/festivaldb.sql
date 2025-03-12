@@ -37,7 +37,7 @@ CREATE TABLE locations (
 );
 
 INSERT INTO locations (
-    name, coordinates, adress, preview_description, main_description
+    name, coordinates, address, preview_description, main_description
 ) VALUES 
 ('Lichtfabriek', '3,3', 'Minckelersweg 2, 2031 EM Haarlem', 'leeg', 'leeg'),
 ('Slachthuis', '3,3', 'Rockplein 6, 2033 KK Haarlem', 'leeg', 'leeg'),
