@@ -421,4 +421,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // Re-initialize by triggering the DOMContentLoaded event
     document.dispatchEvent(new Event("DOMContentLoaded"));
   }
+
+  const paymentModal = document.getElementById("confirmModal");
+  const hiddenField = document.getElementById("hiddenOrderField");
+  paymentModal.addEventListener("show.bs.modal", function (event) {
+    hiddenField.value = JSON.stringify(orderedItems);
+  });
+  paymentModal.addEventListener("hide.bs.modal", function (event) {
+    hiddenField.value = "";
+  });
 });
