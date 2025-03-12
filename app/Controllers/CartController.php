@@ -17,7 +17,8 @@ class CartController extends Controller
 
     public function index(array $paramaters = [])
     {
-        // var_dump($paramaters);
+        $_SESSION['cart'] = true;
+
         return $this->pageLoader->setPage('cart/index')->render($paramaters);
     }
 
