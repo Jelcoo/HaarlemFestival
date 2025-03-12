@@ -89,9 +89,6 @@ class OrderRepository extends Repository
             $total = (int) $result['total_tickets'];
             $quantity = (int) $dance['quantity'];
             $allAccessLimit = floor($total * 0.10);
-            echo $dance['event_id'] . ': id<br>';
-            echo $total . ': total<br>';
-            echo $allAccessLimit . ': all access limit<br>';
             $singleLimit = $total - $allAccessLimit;
 
             $allAccessSold = (int) $result['all_access_sold'];
