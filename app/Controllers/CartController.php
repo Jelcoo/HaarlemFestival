@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Application\Response;
-use App\Application\Session;
 use App\Repositories\OrderRepository;
 
 class CartController extends Controller

@@ -8,6 +8,7 @@ class CheckoutController extends Controller
     {
         return $this->pageLoader->setPage('checkout/index')->render($paramaters);
     }
+
     public function payLater(array $paramaters = [])
     {
         return $this->pageLoader->setPage('checkout/pay_later')->render($paramaters);
