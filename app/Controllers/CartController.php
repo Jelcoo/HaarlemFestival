@@ -17,6 +17,7 @@ class CartController extends Controller
 
     public function index(array $paramaters = [])
     {
+        // var_dump($paramaters);
         return $this->pageLoader->setPage('cart/index')->render($paramaters);
     }
 
@@ -25,8 +26,12 @@ class CartController extends Controller
         if ($_POST['paymentChoice'] == 'payNow') {
             Response::redirect('/checkout');
         } else {
-            $this->createOrder($_POST['order']);
-            Response::redirect('/checkout/pay_later');
+            $result = $this->createOrder($_POST['order']);
+            if (isset($result['error'])) {
+                return $this->pageLoader->setPage('cart/index')->render($result);
+            } else {
+                Response::redirect('/checkout/pay_later');
+            }
         }
     }
 
@@ -56,7 +61,39 @@ class CartController extends Controller
                                 }));
 
                                 if (count($historyItem['event_id']) === 0) {
-                                    throw new \Exception('Event ID list is empty after removing already booked items.');
+                                    $errors = [];
+
+                                    foreach ($available as $item) {
+                                        if (isset($item['dance'])) {
+                                            $eventId = $item['dance'];
+                                            foreach ($json['dance'] as $event) {
+                                                if ($event['event_id'] == $eventId) {
+                                                    $errors[] = "{$event['name']} has {$item['reason']}. So please remove it from your cart";
+                                                    break;
+                                                }
+                                            }
+                                        } elseif (isset($item['yummy'])) {
+                                            $eventId = $item['yummy'];
+                                            foreach ($json['yummy'] as $event) {
+                                                if ($event['event_id'] == $eventId) {
+                                                    $errors[] = "{$event['name']} has {$item['reason']}. So please remove it from your cart";
+                                                    break;
+                                                }
+                                            }
+                                        } elseif (isset($item['history'])) {
+                                            $eventId = $item['history'];
+                                            foreach ($json['history'] as $event) {
+                                                if (in_array($eventId, $event['event_id'])) {
+                                                    $errors[] = "{$event['name']} has {$item['reason']}. So please remove it from your cart";
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    return [
+                                        'error' => [$errors],
+                                    ];
                                 }
                             }
                         }
@@ -64,9 +101,39 @@ class CartController extends Controller
                     }
                 }
             } else {
-                echo json_encode($available);
+                $errors = [];
 
-                return;
+                foreach ($available as $item) {
+                    if (isset($item['dance'])) {
+                        $eventId = $item['dance'];
+                        foreach ($json['dance'] as $event) {
+                            if ($event['event_id'] == $eventId) {
+                                $errors[] = "{$event['name']} has {$item['reason']}. So please remove it from your cart";
+                                break;
+                            }
+                        }
+                    } elseif (isset($item['yummy'])) {
+                        $eventId = $item['yummy'];
+                        foreach ($json['yummy'] as $event) {
+                            if ($event['event_id'] == $eventId) {
+                                $errors[] = "{$event['name']} has {$item['reason']}. So please remove it from your cart";
+                                break;
+                            }
+                        }
+                    } elseif (isset($item['history'])) {
+                        $eventId = $item['history'];
+                        foreach ($json['history'] as $event) {
+                            if (in_array($eventId, $event['event_id'])) {
+                                $errors[] = "{$event['name']} has {$item['reason']}. So please remove it from your cart";
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                return [
+                    'error' => [$errors],
+                ];
             }
         }
         $this->orderRepository->createOrder($json);

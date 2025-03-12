@@ -125,7 +125,10 @@ class OrderRepository extends Repository
             ]);
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
             if ($result['tickets_remaining'] < 0) {
-                $unavailable[] = ['yummy' => $result['id']];
+                $unavailable[] = [
+                    'yummy' => $result['id'],
+                    'reason' => 'Not enough seats available',
+                ];
             }
         }
 
@@ -143,7 +146,10 @@ class OrderRepository extends Repository
                 ]);
                 $result = $stmt->fetch(\PDO::FETCH_ASSOC);
                 if ($result['seats_remaining'] < 0) {
-                    $unavailable[] = ['history' => $result['id']];
+                    $unavailable[] = [
+                        'history' => $result['id'],
+                        'reason' => 'Not enough seats available',
+                    ];
                 }
             }
         }
