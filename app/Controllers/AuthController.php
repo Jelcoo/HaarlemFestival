@@ -6,6 +6,7 @@ use App\Config\Config;
 use App\Application\Request;
 use App\Application\Session;
 use App\Application\Response;
+use App\Helpers\StripeHelper;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
 use App\Helpers\TurnstileHelper;
@@ -14,12 +15,14 @@ use App\Repositories\UserRepository;
 class AuthController extends Controller
 {
     private UserRepository $userRepository;
+    private StripeHelper $stripeHelper;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->userRepository = new UserRepository();
+        $this->stripeHelper = new StripeHelper();
     }
 
     public function register(array $parameters = []): string
@@ -61,11 +64,17 @@ class AuthController extends Controller
             $email = Request::getPostField('email');
             $password = Request::getPostField('password');
 
+            $stripeCustomer = $this->stripeHelper->createCustomer(
+                $email,
+                "$firstname $lastname"
+            );
+
             $createdUser = $this->userRepository->createUser([
                 'firstname' => $firstname,
                 'lastname' => $lastname,
                 'email' => $email,
                 'password' => password_hash($password, PASSWORD_DEFAULT),
+                'stripe_customer_id' => $stripeCustomer,
             ]);
 
             $_SESSION['user_id'] = $createdUser->id;
