@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Application\Response;
+use App\Application\Session;
 use App\Repositories\OrderRepository;
 
 class CartController extends Controller
@@ -14,14 +16,23 @@ class CartController extends Controller
         $this->orderRepository = new OrderRepository();
     }
 
-    public function index()
+    public function index(array $paramaters = [])
     {
-        return $this->pageLoader->setPage('cart/index')->render();
+        return $this->pageLoader->setPage('cart/index')->render($paramaters);
     }
 
-    public function createOrder()
+    public function checkout()
     {
-        $data = file_get_contents('php://input');
+        if ($_POST['paymentChoice'] == 'payNow') {
+            Response::redirect('/checkout');
+        } else {
+            $this->createOrder($_POST['order']);
+            Response::redirect('/checkout/pay_later');
+        }
+    }
+
+    private function createOrder($data)
+    {
         $json = json_decode($data, true);
         $available = $this->orderRepository->checkAvailability($json);
         if (count($available) > 0) {

@@ -31,6 +31,7 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
     $router->post('/account/manage', [App\Controllers\ProfileController::class, 'update']);
     $router->post('/account/manage/password', [App\Controllers\ProfileController::class, 'updatePassword']);
 
+    $router->post('/cart', [App\Controllers\CartController::class, 'checkout']);
     $router->middleware(EnsureEmployee::class, function () use ($router) {
         $router->get('/qrcode', [App\Controllers\QrController::class, 'index']);
     });

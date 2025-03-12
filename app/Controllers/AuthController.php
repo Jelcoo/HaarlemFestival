@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Application\Request;
 use App\Application\Session;
 use App\Application\Response;
+use App\Config\Config;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
 use App\Helpers\TurnstileHelper;
@@ -68,7 +69,12 @@ class AuthController extends Controller
             ]);
 
             $_SESSION['user_id'] = $createdUser->id;
-            Response::redirect('/');
+            //TODO: Temporary solution
+            if ($_SESSION['origin'] == Config::getKey('APP_URL') . "/cart") {
+                Response::redirect('/cart');
+            } else {
+                Response::redirect('/');
+            }
         } catch (\Exception $e) {
             return $this->register([
                 'error' => $e->getMessage(),
@@ -117,7 +123,12 @@ class AuthController extends Controller
 
             if (password_verify($password, $user?->password)) {
                 $_SESSION['user_id'] = $user->id;
-                Response::redirect('/');
+                //TODO: Temporary solution
+                if ($_SESSION['origin'] == Config::getKey('APP_URL') . "/cart") {
+                    Response::redirect('/cart');
+                } else {
+                    Response::redirect('/');
+                }
             } else {
                 return $this->login([
                     'error' => 'Invalid credentials',
