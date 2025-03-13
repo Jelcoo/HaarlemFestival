@@ -91,7 +91,7 @@ INSERT INTO `restaurants` (`id`, `location_id`, `restaurant_type`, `rating`, `me
 (4, 4, 'Dutch, French, European', 4, NULL),
 (5, 5, 'Vegan', 3, NULL),
 (6, 6, 'Dutch, European, Modern', 3, NULL),
-(7, 7, 'Dutch, fish and seafood, European', 3, NULL);
+(7, 7, 'Dutch, Fish and Seafood, European', 3, NULL);
 
 CREATE TABLE dance_events (
     id INT PRIMARY KEY AUTO_INCREMENT,
