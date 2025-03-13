@@ -1,3 +1,65 @@
+<div class="container mt-4">
+    <?php include __DIR__ . '/../../components/errordisplay.php'; ?>
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <h1>Cart - Overview</h1>
+        </div>
+        <div class="col-6 d-flex gap-3 justify-content-end px-0 align-items-center">
+            <h2>Total items: <span id="total-items">0</span></h2>
+            <button type="button" class="btn btn-custom-yellow" data-bs-toggle="modal"
+                data-bs-target="#confirmModal">Place order <i
+                    class="fa-solid fa-arrow-up-right-from-square"></i></button>
+        </div>
+        <hr>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-lg-4" id="dance">
+            <h2>DANCE!</h2>
+            <p id="danceNotFound">No events found</p>
+        </div>
+        <div class="col-sm-12 col-lg-4" id="yummy">
+            <h2>Yummy!</h2>
+            <p id="yummyNotFound">No events found</p>
+        </div>
+        <div class="col-sm-12 col-lg-4" id="history">
+            <h2>A stroll through history</h2>
+            <p id="historyNotFound">No events found</p>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm choice</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/cart" method="POST">
+                    <input type="hidden" id="hiddenOrderField" name="order">
+                    <div class="mb-3 d-flex flex-column">
+                        <p>Do you want to pay now or pay later?</p>
+                        <div>
+                            <input type="radio" name="paymentChoice" id="payNow" value="payNow" checked>
+                            <label for="payNow">Pay now</label>
+                        </div>
+                        <div>
+                            <input type="radio" name="paymentChoice" id="payLater" value="payLater">
+                            <label for="payLater">Pay later</label>
+                        </div>
+                    </div>
+                    <p><em>If you are not logged in, you will be redirected to the login page (you can also register if
+                            you don't have an account)</em></p>
+                    <p><em>after logging in you will be redirected back to this page</em></p>
+                    <button type="button" class="btn btn-custom-yellow" data-bs-dismiss="modal">Go back</button>
+                    <button type="submit" class="btn btn-custom-yellow">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/assets/js/cart.js"></script>
 <style>
     .eventCard {
         background-color: var(--secondary);
@@ -95,30 +157,29 @@
         justify-content: center;
         cursor: pointer;
     }
+
+    .modal-content {
+        background-color: var(--secondary-accent);
+        color: white;
+        border-radius: 10px;
+    }
+
+    .modal-header {
+        border-bottom-color: var(--secondary);
+    }
+
+    .modal-footer {
+        border-top-color: var(--secondary);
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+        font-weight: 500;
+        margin-bottom: 10px;
+    }
+
+    .section-content {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
 </style>
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-6">
-            <h1>Cart - Overview</h1>
-        </div>
-        <div class="col-6 text-end">
-            <h2>Total items: <span id="total-items">0</span></h2>
-        </div>
-        <hr>
-    </div>
-    <div class="row">
-        <div class="col-sm-12 col-lg-4" id="dance">
-            <h2>DANCE!</h2>
-            <p id="danceNotFound">No events found</p>
-        </div>
-        <div class="col-sm-12 col-lg-4" id="yummy">
-            <h2>Yummy!</h2>
-            <p id="yummyNotFound">No events found</p>
-        </div>
-        <div class="col-sm-12 col-lg-4" id="history">
-            <h2>A stroll through history</h2>
-            <p id="historyNotFound">No events found</p>
-        </div>
-    </div>
-</div>
-<script src="/assets/js/cart.js"></script>

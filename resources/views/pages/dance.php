@@ -37,7 +37,8 @@ include_once __DIR__ . '/../components/header.php';
         <?php if ($locationCount % 2 == 0) { ?>
             <div class="row g-0">
             <?php } ?>
-            <div class="col-md-6 location-card" style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');">
+            <div class="col-md-6 location-card"
+                style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');">
                 <div class="location-overlay">
                     <div class="location-title"><?php echo $location->name; ?></div>
                     <div class="location-description">
@@ -83,14 +84,12 @@ include_once __DIR__ . '/../components/header.php';
                         <td><?php echo $row['tickets_available']; ?></td>
                         <td>&euro;<?php echo $row['price']; ?></td>
                         <td><button class="btn btn-custom-yellow" onclick="openModal()"
-                                data-event_id="<?php echo $row['event_id']; ?>"
-                                data-start="<?php echo $row['start']; ?>"
+                                data-event_id="<?php echo $row['event_id']; ?>" data-start="<?php echo $row['start']; ?>"
                                 data-venue="<?php echo $row['venue']; ?>"
                                 data-artists="<?php echo implode(', ', $row['artists']); ?>"
-                                data-price="<?php echo $row['price']; ?>"
-                                data-day="<?php echo $schedule['date']; ?>"
+                                data-price="<?php echo $row['price']; ?>" data-day="<?php echo $schedule['date']; ?>"
                                 data-duration="<?php echo $row['duration']; ?>">
-                            <i class="fa fa-ticket"></i> Buy now</button>
+                                <i class="fa fa-ticket"></i> Buy now</button>
                         </td>
                     </tr>
                 <?php } ?>
@@ -192,7 +191,8 @@ include_once __DIR__ . '/../components/header.php';
             "starttime": date.toISOString(),
             "endtime": new Date(date.setUTCMinutes(date.getUTCMinutes() + parseInt(eventData.duration))).toISOString(),
             "price": basePrice,
-            "quantity": quantity
+            "quantity": quantity,
+            "all_access": 0
         };
         const artists = eventData.artists.split(', ');
         for (let i = 0; i < artists.length; i++) {
