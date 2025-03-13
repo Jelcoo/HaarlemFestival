@@ -20,6 +20,11 @@ $router->post('/order/create', [App\Controllers\CartController::class, 'createOr
 $router->get('/editor', [App\Controllers\EditorController::class, 'index']);
 $router->post('/editor', [App\Controllers\EditorController::class, 'editPost']);
 
+$router->get('/program', [App\Controllers\ProgramController::class, 'index']);
+$router->get('/program/tickets', [App\Controllers\ProgramController::class, 'tickets']);
+$router->get('/program/tickets/qrcode', [App\Controllers\ProgramController::class, 'qrcode']);
+
+
 $router->middleware(EnsureNotLoggedIn::class, function () use ($router) {
     $router->get('/register', [App\Controllers\AuthController::class, 'register']);
     $router->post('/register', [App\Controllers\AuthController::class, 'registerPost']);
@@ -49,6 +54,9 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
         $router->get('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'index']);
         $router->post('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'handleAction']);
 
+        $router->get('/dashboard/orders', [App\Controllers\DashboardOrderController::class, 'index']);
+        $router->get('/dashboard/orders/tickets', [App\Controllers\DashboardOrderTicketsController::class, 'index']);
+
         $router->get('/dashboard/restaurants', [App\Controllers\DashboardRestaurantsController::class, 'index']);
         $router->post('/dashboard/restaurants', [App\Controllers\DashboardRestaurantsController::class, 'handleAction']);
 
@@ -57,5 +65,6 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
 
         $router->get('/dashboard/artists', [App\Controllers\DashboardArtistsController::class, 'index']);
         $router->post('/dashboard/artists', [App\Controllers\DashboardArtistsController::class, 'handleAction']);
+
     });
 });

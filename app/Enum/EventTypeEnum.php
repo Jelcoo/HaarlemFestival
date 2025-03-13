@@ -8,4 +8,5 @@ enum EventTypeEnum: string
     case YUMMY = 'yummy';
     case HISTORY = 'history';
     case TEYLERS = 'teylers';
+    case UNKNOWN = 'unknown';
 }
