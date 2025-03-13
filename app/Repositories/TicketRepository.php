@@ -55,18 +55,23 @@ class TicketRepository extends Repository
         $eventData = $queryBuilder
             ->table('dance_events')
             ->where('id', '=', (int)$eventId)
-            ->first(); 
+            ->first();
 
         if (!$eventData) {
             return null; 
         }
 
-        $artists = $queryBuilder
-            ->table('artists')
-            ->where('id', '=', $eventData['artist_id'])
-            ->get();
+        $query = $this->getConnection()->prepare('
+SELECT a.id, a.name, a.preview_description, a.main_description, a.iconic_albums
+FROM artists a
+JOIN dance_event_artists dea ON a.id = dea.artist_id
+WHERE dea.event_id = :eventId;');
+        
+        $query->bindValue(':eventId', $eventId, \PDO::PARAM_INT);
+        $query->execute();
+        $queryArtists = $query->fetchAll();
 
-        $artistNames = array_map(fn($artist) => $artist['name'], $artists);
+        $artistNames = array_map(fn($artist) => $artist['name'], $queryArtists);
 
         $location = $queryBuilder
             ->table('locations')
