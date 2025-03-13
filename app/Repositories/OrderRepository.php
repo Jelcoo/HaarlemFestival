@@ -50,6 +50,8 @@ class OrderRepository extends Repository
             }
 
             $this->pdoConnection->commit();
+
+            return intval($invoiceId);
         } catch (\Exception $e) {
             $this->pdoConnection->rollBack();
             throw $e;
@@ -155,5 +157,34 @@ class OrderRepository extends Repository
         }
 
         return $unavailable;
+    }
+
+    public function updateOrderStatus(int $orderId, string $data)
+    {
+        $sql = 'UPDATE invoices SET status = :data WHERE id = :id';
+        $stmt = $this->pdoConnection->prepare($sql);
+        $stmt->execute([
+            'data' => $data,
+            'id' => $orderId,
+        ]);
+    }
+
+    public function completeOrder(int $orderId)
+    {
+        $sql = 'UPDATE invoices SET completed_at = NOW() WHERE id = :id';
+        $stmt = $this->pdoConnection->prepare($sql);
+        $stmt->execute([
+            'id' => $orderId,
+        ]);
+    }
+
+    public function setStripeId(int $orderId, string $data)
+    {
+        $sql = 'UPDATE invoices SET stripe_payment_id = :data WHERE id = :id';
+        $stmt = $this->pdoConnection->prepare($sql);
+        $stmt->execute([
+            'data' => $data,
+            'id' => $orderId,
+        ]);
     }
 }
