@@ -29,6 +29,7 @@ class ProgramController extends Controller
         
         return $this->pageLoader->setPage('program')->render(['invoices' => $invoices]);
     }
+
     public function tickets(): string
     {
         $invoiceId = $_GET['invoice_id'] ?? null;  

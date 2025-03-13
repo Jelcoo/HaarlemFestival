@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enum\EventTypeEnum;
 use App\Models\Location;
 use App\Models\TicketDance;
 use App\Models\TicketYummy;
@@ -82,6 +83,7 @@ WHERE dea.event_id = :eventId;');
             $locationData = [
                 "id" => 1,
                 "name" => "Error Finding location",
+                "event_type" => EventTypeEnum::UNKNOWN->value,
                 "coordinates" => "3,3",
                 "address" => "Error",
                 "preview_description" => "leeg",
@@ -171,7 +173,7 @@ WHERE dea.event_id = :eventId;');
             'vat' => $eventData['vat'],
             'start_time' => $eventData['start_time'],
             'start_date' => $eventData['start_date'],
-            'restaurant_name' => $restaurant['name'],
+            'restaurant_name' => $locationObject->name,
             'location' => $locationObject,
         ]);
     }
