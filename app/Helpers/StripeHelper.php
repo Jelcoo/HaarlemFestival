@@ -14,13 +14,13 @@ class StripeHelper
         $this->stripe = new StripeClient(Config::getKey('STRIPE_SECRET_KEY'));
     }
 
-    public function createIntent(int $amount, ?string $customerId)
+    public function createIntent(int $amount, int $orderId, ?string $customerId)
     {
         $paymentIntent = [
             'amount' => $amount,
             'currency' => 'eur',
             'metadata' => [
-                'order_id' => 1,
+                'order_id' => $orderId,
             ],
         ];
 
@@ -51,8 +51,29 @@ class StripeHelper
     {
         $amount = 0;
 
-        foreach ($items as $item) {
-            $amount += $item['price'] * $item['quantity'];
+        // Calculate dance events
+        if (!empty($items['dance'])) {
+            foreach ($items['dance'] as $danceItem) {
+                $amount += $danceItem['price'] * $danceItem['quantity'];
+            }
+        }
+
+        // Calculate yummy (restaurant) reservations
+        if (!empty($items['yummy'])) {
+            foreach ($items['yummy'] as $yummyItem) {
+                $amount += $yummyItem['reservationcost'];
+            }
+        }
+
+        // Calculate history tours
+        if (!empty($items['history'])) {
+            foreach ($items['history'] as $historyItem) {
+                if ($historyItem['type'] === 'family') {
+                    $amount += $historyItem['price'];
+                } else {
+                    $amount += $historyItem['price'] * $historyItem['seats'];
+                }
+            }
         }
 
         return intval(number_format($amount, 2, '', ''));
