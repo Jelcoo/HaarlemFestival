@@ -12,7 +12,6 @@ CREATE TABLE users (
     stripe_customer_id VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `phone_number`, `password`, `role`, `address`, `city`, `postal_code`, `stripe_customer_id`) VALUES
 (1, 'John', 'Doe', 'johndoe@example.com', NULL, '$2a$12$I03L/LUh1SntONPFOVwz3eivdVa1O.hna9GFmfDbbGO/22imeOoR.', 'admin', NULL, NULL, NULL, NULL);
 
@@ -25,7 +24,6 @@ CREATE TABLE invoices (
     completed_at TIMESTAMP DEFAULT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
-
 INSERT INTO `invoices` (`id`, `user_id`, `status`, `stripe_payment_id`, `created_at`, `completed_at`) VALUES
 (1, 1, 'started', 'pi_123xyz', '2025-03-06 10:52:27', NULL);
 
@@ -63,24 +61,6 @@ INSERT INTO `locations` (`id`, `name`, `event_type`, `coordinates`, `address`, `
 (22, 'Amsterdamse Poort', 'history', '52.38051738005276,4.646598531624926', '2011 BZ Haarlem', NULL, NULL),
 (23, 'Hof van Bakenes', 'history', '52.38248911248071,4.640292785411666', '2011 JN Haarlem', NULL, NULL);
 
-INSERT INTO locations (
-    name, coordinates, address, preview_description, main_description
-) VALUES 
-('Lichtfabriek', '3,3', 'Minckelersweg 2, 2031 EM Haarlem', 'leeg', 'leeg'),
-('Slachthuis', '3,3', 'Rockplein 6, 2033 KK Haarlem', 'leeg', 'leeg'),
-('Jopenkerk', '3,3', 'Gedempte Voldersgracht 2, 2011 WD Haarlem', 'leeg', 'leeg'),
-('XO the Club', '3,3', 'Grote Markt 8, 2011 RD Haarlem', 'leeg', 'leeg'),
-('Puncher Comedy Club', '3,3', 'Grote Markt 10, 2011 RD Haarlem','leeg', 'leeg'),
-('Caprera Openluchttheater', '3,3', 'Hoge Duin en Daalseweg 2, 2061 AG Bloemendaal', 'leeg', 'leeg'),
-('Café de Roemer', '3,3', 'Botermarkt 17, 2011 XL Haarlem', 'leeg', 'leeg'),
-('Ratatouille', '3,3', 'Spaarne 96, 2011 CL Haarlem, Nederland', 'leeg', 'leeg'),
-('Restaurant ML', '3,3', 'Kleine Houtstraat 70, 2011 DR Haarlem, Nederland', 'leeg', 'leeg'),
-('Restaurant Fris', '3,3', 'Twijnderslaan 7, 2012 BG Haarlem, Nederland', 'leeg', 'leeg'),
-('New Vegas', '3,3', 'Koningstraat 5, 2011 TB Haarlem','leeg', 'leeg'),
-('Grand Cafe Brinkman', '3,3', 'Grote Markt 13, 2011 RC Haarlem, Nederland', 'leeg', 'leeg'),
-('Urban Frenchy Bistro Toujours', '3,3', 'Oude Groenmarkt 10-12, 2011 HL Haarlem, Nederland','leeg', 'leeg');
-
-
 CREATE TABLE artists (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
@@ -88,7 +68,6 @@ CREATE TABLE artists (
     main_description TEXT,
     iconic_albums TEXT
 );
-
 INSERT INTO `artists` (`id`, `name`, `preview_description`, `main_description`, `iconic_albums`) VALUES
 (1, 'Hardwell', 'A powerhouse in the electronic dance music world, Hardwell is known for his explosive live performances and chart-topping tracks. Hailing from Breda, Netherlands, this superstar DJ and producer has dominated global stages with hits like \"Spaceman\" and \"Apollo\". Hardwell\'s blend of big-room house and progressive beats makes him a fan favorite.', NULL, NULL),
 (2, 'Armin van Buuren', 'A legend in trance music, Armin van Buuren has been at the forefront of the EDM scene for decades. With five-time DJ Mag\'s \"World’s No. 1 DJ\" titles and iconic tracks like \"This Is What It Feels Like\", Armin has captivated audiences worldwide. His A State of Trance radio show is a lifeline for trance enthusiasts everywhere.', 'Armin van Buuren is a name synonymous with electronic dance music, particularly trance, where he has reigned as a global icon for over two decades. Hailing from Leiden, Netherlands, Armin began producing music in the mid-90s and quickly became a leading force in the genre. Known for his euphoric melodies, emotional depth, and exceptional DJ skills, he has set the standard for trance music worldwide.\r\n\r\nCareer Highlights:\r\nA State of Trance (ASOT): In 2001, Armin launched A State of Trance, a weekly radio show that reaches over 40 million listeners across more than 80 countries. The show has become a cornerstone for trance enthusiasts, showcasing the best in the genre and celebrating milestones with global festivals.\r\nDJ Mag Accolades: Armin has been named the world’s No. 1 DJ five times by DJ Mag’s Top 100 DJs poll (2007-2010, 2012), solidifying his position as a titan in electronic music.\r\nGrammy Nomination: In 2014, he became one of the few electronic artists to earn a Grammy nomination for \"This Is What It Feels Like\" featuring Trevor Guthrie, a track that marked his crossover success.\r\nNotable Albums: His discography includes standout albums like \"76\" (2003), \"Intense\" (2013), and \"Balance\" (2019), showcasing his evolution as an artist while staying true to his trance roots.\r\nMajor Festivals: Armin has headlined some of the world\'s largest festivals, including Tomorrowland, Ultra Music Festival, and EDC, captivating millions with his spellbinding performances.\r\n\r\nIconic Tracks:\r\nArmin’s catalog features legendary tracks that have defined his career and the trance genre. \"Communication\", his early breakthrough hit, became a staple in dance music. \"Shivers\", an emotional anthem, showcased his melodic mastery, while \"In and Out of Love\" (featuring Sharon den Adel) captivated audiences with its heartfelt vocals. Tracks like \"Blah Blah Blah\" and \"This Is What It Feels Like\" highlight his ability to cross genres and reach global audiences without losing his signature sound.\r\nArmin van Buuren is not just a DJ; he’s a storyteller, innovator, and ambassador for electronic music, continually pushing boundaries while uniting fans through the universal language of trance.', '76 (2003) – Armin’s debut album, a landmark release with tracks like “Blue Fear” and “Burned With Desire”, laying the foundation for his career.\r\nShivers (2005) – Featuring a mix of vocal trance and instrumental tracks, this album solidified Armin’s place in the EDM world.\r\nImagine (2008) – His first album to debut at No. 1 in the Netherlands, featuring the hit “In and Out of Love”.\r\nMirage (2010) – A rich, cinematic album with standout tracks like “Not Giving Up on Love” (with Sophie Ellis-Bextor).\r\nIntense (2013) – A Grammy-nominated album that blended orchestral elements with electronic beats, featuring hits like “This Is What It Feels Like”.\r\nBalance (2019) – A double album showcasing Armin’s exploration of diverse electronic styles while staying true to his trance roots.\r\nYou can click on the pictures down below to listen to the albums'),
@@ -106,7 +85,6 @@ CREATE TABLE restaurants (
     menu TEXT,
     FOREIGN KEY (location_id) REFERENCES locations(id)
 );
-
 INSERT INTO `restaurants` (`id`, `location_id`, `restaurant_type`, `rating`, `menu`) VALUES
 (1, 1, 'Dutch, Fish and Seafood, European', 4, NULL),
 (2, 2, 'French, Fish and Seafood, European', 4, NULL),
@@ -130,7 +108,6 @@ CREATE TABLE dance_events (
     end_date DATE NOT NULL,
     FOREIGN KEY (location_id) REFERENCES locations(id)
 );
-
 INSERT INTO `dance_events` (`id`, `location_id`, `total_tickets`, `session`, `price`, `vat`, `start_time`, `start_date`, `end_time`, `end_date`) VALUES
 (1, 8, 1500, 'b2b', 61.98, 0.21, '20:00:00', '2025-07-25', '02:00:00', '2025-07-26'),
 (2, 11, 200, 'club', 49.59, 0.21, '22:00:00', '2025-07-25', '23:30:00', '2025-07-25'),
@@ -153,7 +130,6 @@ CREATE TABLE dance_event_artists (
     FOREIGN KEY (event_id) REFERENCES dance_events(id),
     FOREIGN KEY (artist_id) REFERENCES artists(id)
 );
-
 INSERT INTO `dance_event_artists` (`event_id`, `artist_id`) VALUES
 (3, 1),
 (6, 1),
@@ -250,18 +226,6 @@ INSERT INTO `yummy_events` (`id`, `restaurant_id`, `total_seats`, `kids_price`, 
 (59, 6, 48, 17.50, 35.00, 8.26, 0.21, '19:00:00', '2025-07-27', '20:30:00', '2025-07-27'),
 (60, 6, 48, 17.50, 35.00, 8.26, 0.21, '20:30:00', '2025-07-27', '22:00:00', '2025-07-27');
 
-INSERT INTO yummy_events (
-    restaurant_id, total_seats, kids_price, adult_price, vat, 
-    start_time, start_date, end_time, end_date
-) VALUES 
-(1, 35, 17.50, 35.00, 1.21, '18:00:00', '2025-07-25', '21:00:00', '2025-07-25'),
-(2, 52, 22.50, 45.00, 1.21, '17:00:00', '2025-07-25', '22:00:00', '2025-07-25'),
-(3, 60, 22.50, 45.00, 1.21, '17:00:00', '2025-07-25', '20:30:00', '2025-07-25'),
-(4, 45, 22.50, 45.00, 1.21, '17:30:00', '2025-07-25', '21:00:00', '2025-07-25'),
-(5, 36, 22.50, 35.00, 1.21, '17:00:00', '2025-07-25', '22:00:00', '2025-07-25'),
-(6, 100, 17.50, 35.00, 1.21, '16:30:00','2025-07-25', '20:30:00', '2025-07-25'),
-(7, 48, 17.50, 35.00, 1.21, '17:30:00', '2025-07-25', '21:45:00', '2025-07-25');
-
 CREATE TABLE history_events (
     id INT PRIMARY KEY AUTO_INCREMENT,
     seats_per_tour INT NOT NULL,
@@ -276,7 +240,6 @@ CREATE TABLE history_events (
     end_time TIME NOT NULL,
     end_date DATE NOT NULL
 );
-
 INSERT INTO `history_events` (`id`, `seats_per_tour`, `language`, `guide`, `family_price`, `single_price`, `vat`, `start_location`, `start_time`, `start_date`, `end_time`, `end_date`) VALUES
 (1, 12, 'Dutch', 'Jan-Willem', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-24', '12:00:00', '2025-07-24'),
 (2, 12, 'English', 'Frederic', 49.59, 14.46, 0.21, 'Bavo Church', '10:00:00', '2025-07-24', '12:00:00', '2025-07-24'),
@@ -330,13 +293,6 @@ CREATE TABLE dance_tickets (
     FOREIGN KEY (dance_event_id) REFERENCES dance_events(id),
     FOREIGN KEY (invoice_id) REFERENCES invoices(id)
 );
-INSERT INTO dance_tickets (dance_event_id, invoice_id, all_access, qrcode, ticket_used)
-VALUES 
-(1, 1, TRUE, 'QR123DANCE', FALSE),
-(2, 1, FALSE, 'QR456DANCE', TRUE),
-(3, 1, TRUE, 'QR789DANCE', FALSE);
-
-
 INSERT INTO `dance_tickets` (`id`, `dance_event_id`, `invoice_id`, `all_access`, `qrcode`, `ticket_used`) VALUES
 (1, 1, 1, 1, 'QR123DANCE', 0),
 (2, 2, 1, 0, 'QR456DANCE', 1),
@@ -354,7 +310,6 @@ CREATE TABLE yummy_tickets (
     FOREIGN KEY (yummy_event_id) REFERENCES yummy_events(id),
     FOREIGN KEY (invoice_id) REFERENCES invoices(id)
 );
-
 INSERT INTO `yummy_tickets` (`id`, `yummy_event_id`, `invoice_id`, `kids_count`, `adult_count`, `note`, `qrcode`, `ticket_used`) VALUES
 (1, 1, 1, 2, 2, NULL, 'QR123YUMMY', 0),
 (2, 2, 1, 1, 3, NULL, 'QR456YUMMY', 1),
@@ -371,7 +326,6 @@ CREATE TABLE history_tickets (
     FOREIGN KEY (history_event_id) REFERENCES history_events(id),
     FOREIGN KEY (invoice_id) REFERENCES invoices(id)
 );
-
 INSERT INTO `history_tickets` (`id`, `invoice_id`, `history_event_id`, `total_seats`, `family_ticket`, `qrcode`, `ticket_used`) VALUES
 (1, 1, 1, 4, 1, 'QR123HISTORY', 0),
 (2, 1, 2, 2, 0, 'QR456HISTORY', 1),

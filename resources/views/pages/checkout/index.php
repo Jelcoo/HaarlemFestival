@@ -1,0 +1,1 @@
+<a href="/checkout/pay">payment trigger</a>

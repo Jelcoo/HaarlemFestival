@@ -14,7 +14,7 @@ $router->get('/yummy', [App\Controllers\HomeController::class, 'yummy']);
 $router->get('/history', [App\Controllers\HomeController::class, 'history']);
 $router->get('/magic', [App\Controllers\HomeController::class, 'magic']);
 $router->get('/cart', [App\Controllers\CartController::class, 'index']);
-$router->post('/order/create', [App\Controllers\CartController::class, 'createOrder']);
+$router->post('/stripe/webhook', [App\Controllers\CheckoutController::class, 'webhook']);
 
 
 $router->get('/editor', [App\Controllers\EditorController::class, 'index']);
@@ -41,6 +41,10 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
     $router->post('/account/manage/password', [App\Controllers\ProfileController::class, 'updatePassword']);
 
     $router->post('/cart', [App\Controllers\CartController::class, 'checkout']);
+    $router->get('/checkout', [App\Controllers\CheckoutController::class, 'index']);
+    $router->get('/checkout/pay', [App\Controllers\CheckoutController::class, 'checkout']);
+    $router->post('/checkout/create', [App\Controllers\CheckoutController::class, 'createCheckout']);
+    $router->get('/checkout/complete', [App\Controllers\CheckoutController::class, 'completePayment']);
     $router->get('/checkout/pay_later', [App\Controllers\CheckoutController::class, 'payLater']);
     $router->middleware(EnsureEmployee::class, function () use ($router) {
         $router->get('/qrcode', [App\Controllers\QrController::class, 'index']);

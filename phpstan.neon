@@ -4,3 +4,6 @@ parameters:
         - routes/
         - public/
     level: 5
+
+    ignoreErrors:
+        - '#Access to an undefined property Stripe\\StripeObject::\$[a-zA-Z0-9\\_]+#'
