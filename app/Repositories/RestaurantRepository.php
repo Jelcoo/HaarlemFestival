@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Location;
 use App\Models\Restaurant;
 use App\Helpers\QueryBuilder;
 
@@ -158,4 +159,31 @@ class RestaurantRepository extends Repository
             ]
         );
     }
+
+    public function getRestaurantWithLocationById(int $id): ?Restaurant
+    {
+        $query = $this->getConnection()->prepare("
+            SELECT 
+                r.*, 
+                l.name, 
+                l.address, 
+                l.coordinates,
+                l.event_type, 
+                l.preview_description, 
+                l.main_description 
+            FROM restaurants r
+            INNER JOIN locations l ON r.location_id = l.id
+            WHERE r.id = :id
+        ");
+
+        $query->bindParam(':id', $id, type: \PDO::PARAM_INT);
+        $query->execute();
+        $restaurantWithLocation = $query->fetch(\PDO::FETCH_ASSOC);
+
+        $restaurant = new Restaurant($restaurantWithLocation);
+        $location = new Location($restaurantWithLocation);
+        $restaurant->location = $location;
+
+        return $restaurant ?: null;
+    }                                           
 }

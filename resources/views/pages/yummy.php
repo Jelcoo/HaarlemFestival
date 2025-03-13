@@ -20,20 +20,17 @@ include_once __DIR__ . '/../components/header.php';
 </div>
 
 <div class="container">
-    <h2 class="text-center restaurants-title">Our Restaurants</h2>
+    <h2 class="restaurants-title">Our Restaurants</h2>
     <div class="restaurant-container">
         <?php foreach ($restaurants as $key => $restaurant) {
             $isEven = $key % 2 == 0;
             ?>
             <div class="restaurant-row <?php echo $isEven ? 'even-row' : 'odd-row'; ?>">
-                <!-- Icon section outside the card -->
                 <div class="icon-wrapper <?php echo $isEven ? 'icon-left' : 'icon-right'; ?>">
                     <div class="restaurant-icon">
                         <img src="<?php echo $restaurant->assets[1]->getUrl(); ?>" alt="<?php echo $restaurant->location->name; ?> Icon">
                     </div>
                 </div>
-                
-                <!-- Restaurant card -->
                 <div class="restaurant-card <?php echo $isEven ? 'card-right' : 'card-left'; ?>">
                     <?php if ($isEven) { ?>
                         <div class="restaurant-image">
@@ -58,7 +55,9 @@ include_once __DIR__ . '/../components/header.php';
                                     </div>
                                 </div>
                                 <div class="button-container">
-                                    <button class="btn btn-primary visit-btn">Visit <i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+                                    <a href="/yummy/<?= $restaurant->id ?>" class="btn btn-primary visit-btn">
+                                        Visit <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +79,9 @@ include_once __DIR__ . '/../components/header.php';
                                     </div>
                                 </div>
                                 <div class="button-container">
-                                    <button class="btn btn-primary visit-btn">Visit <i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+                                    <a href="/yummy/<?= $restaurant->id ?>" class="btn btn-primary visit-btn">
+                                        Visit <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
