@@ -21,7 +21,7 @@
         document.querySelectorAll(".tickets").forEach(button => {
             button.addEventListener("click", function () {
                 const invoiceId = this.getAttribute("data-id");
-                window.location.href = `http://localhost/program/tickets?invoice_id=${invoiceId}`;
+                window.location.href = `/program/tickets?invoice_id=${invoiceId}`;
             });
         });
     });

@@ -55,7 +55,7 @@
     document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".back").forEach(button => {
         button.addEventListener("click", function () {
-            window.location.href = "http://localhost/dashboard/orders"; 
+            window.location.href = "/dashboard/orders"; 
         });
     });
 });

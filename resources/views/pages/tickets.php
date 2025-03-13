@@ -145,7 +145,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".back").forEach(button => {
             button.addEventListener("click", function () {
-                window.location.href = "http://localhost/program"; 
+                window.location.href = "/program"; 
             });
         });
     });

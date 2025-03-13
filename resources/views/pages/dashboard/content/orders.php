@@ -37,7 +37,7 @@
         document.querySelectorAll(".tickets").forEach(button => {
             button.addEventListener("click", function () {
                 const invoiceId = this.getAttribute("data-id");
-                window.location.href = `http://localhost/dashboard/orders/tickets?invoice_id=${invoiceId}`;
+                window.location.href = `/dashboard/orders/tickets?invoice_id=${invoiceId}`;
             });
         });
     });
