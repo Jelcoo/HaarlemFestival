@@ -338,7 +338,7 @@ include_once __DIR__ . '/../components/header.php';
             const selectedOption = sessionSelect.options[sessionSelect.selectedIndex];
             if (selectedOption.dataset.tourIds) {
                 const tourIds = JSON.parse(selectedOption.dataset.tourIds);
-                selectedTourId = tourIds[0]; // Take the first tour ID
+                selectedTourId = tourIds;
             }
         } else {
             selectedTourId = null;
