@@ -2,18 +2,15 @@
 
 namespace App\Controllers;
 
-use App\Repositories\TicketRepository;
 use App\Repositories\InvoiceRepository;
 
 class DashboardOrderController extends DashboardController
 {
-    private TicketRepository $ticketRepository;
     private InvoiceRepository $invoiceRepository;
 
     public function __construct()
     {
         parent::__construct();
-        $this->ticketRepository = new TicketRepository();
         $this->invoiceRepository = new InvoiceRepository();
     }
 
