@@ -13,7 +13,7 @@ class QrController extends Controller
 
     public function index(): string
     {
-        $datauri = QrCodeGenerator::generateQRCode();
+        $datauri = QrCodeGenerator::generateQRCode('Testing');
 
         return $this->pageLoader->setPage('qrcode')->render(['dataUri' => $datauri]);
     }

@@ -27,6 +27,7 @@ class QueryBuilder
 
     public function table(string $table): self
     {
+        $this->resetState();
         $this->table = $table;
 
         return $this;
@@ -242,5 +243,15 @@ class QueryBuilder
     public function commit(): void
     {
         $this->pdo->commit();
+    }
+
+    private function resetState(): void
+    {
+        $this->queryType = QueryType::QUERY_TYPE_ALL;
+        $this->columns = [];
+        $this->conditions = [];
+        $this->orderBy = '';
+        $this->limit = '';
+        $this->updates = [];
     }
 }
