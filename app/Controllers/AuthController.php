@@ -73,7 +73,12 @@ class AuthController extends Controller
             $this->emailWriterService->sendWelcomeEmail($createdUser);
 
             $_SESSION['user_id'] = $createdUser->id;
-            Response::redirect('/');
+            // TODO: Temporary solution
+            if (isset($_SESSION['cart'])) {
+                Response::redirect('/cart');
+            } else {
+                Response::redirect('/');
+            }
         } catch (\Exception $e) {
             return $this->register([
                 'error' => $e->getMessage(),
@@ -122,7 +127,12 @@ class AuthController extends Controller
 
             if (password_verify($password, $user?->password)) {
                 $_SESSION['user_id'] = $user->id;
-                Response::redirect('/');
+                // TODO: Temporary solution
+                if (isset($_SESSION['cart'])) {
+                    Response::redirect('/cart');
+                } else {
+                    Response::redirect('/');
+                }
             } else {
                 return $this->login([
                     'error' => 'Invalid credentials',

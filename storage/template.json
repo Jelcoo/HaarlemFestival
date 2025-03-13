@@ -13,7 +13,8 @@
             "starttime": "2025-03-03T14:00+00:00",
             "endtime": "2025-03-03T23:00+00:00",
             "price": 29.00,
-            "quantity": 1
+            "quantity": 1,
+            "all_access": 0
         },
         {
             "event_id": 2,
@@ -26,7 +27,8 @@
             "starttime": "2025-03-03T14:00+00:00",
             "endtime": "2025-03-03T23:00+00:00",
             "price": 29.99,
-            "quantity": 1
+            "quantity": 1,
+            "all_access": 0
         }
     ],
     "yummy": [
