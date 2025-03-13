@@ -18,6 +18,6 @@ class TicketDance
         $this->dance_event_id = $collection['dance_event_id'];
         $this->all_access = $collection['all_access'];
         $this->qrcode = $collection['qrcode'];
-        $this->ticket_used =(bool)['ticket_used'];
+        $this->ticket_used = (bool) ['ticket_used'];
     }
 }

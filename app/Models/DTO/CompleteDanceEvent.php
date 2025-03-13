@@ -3,13 +3,11 @@
 namespace App\Models\DTO;
 
 use App\Models\Location;
-use App\Enum\DanceSessionEnum;
-use BaconQrCode\Encoder\QrCode;
 
-class CompleteDanceEvent 
+class CompleteDanceEvent
 {
     public int $id;
-    public array $artists; 
+    public array $artists;
     public Location $location;
     public int $total_tickets;
     public string $session;
@@ -23,9 +21,9 @@ class CompleteDanceEvent
 
     public function __construct(array $collection)
     {
-        $this->id = $collection['id'] ?? 0; 
-        $this->artists = $collection['artists']; 
-        $this->location = $collection['location']; 
+        $this->id = $collection['id'] ?? 0;
+        $this->artists = $collection['artists'];
+        $this->location = $collection['location'];
         $this->total_tickets = $collection['total_tickets'];
         $this->session = $collection['session'];
         $this->price = $collection['price'];

@@ -2,12 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Repositories\InvoiceRepository;
 use App\Repositories\TicketRepository;
-use App\Models\TicketHistory;
-use App\Models\TicketDance;
-use App\Models\TicketYummy;
-
+use App\Repositories\InvoiceRepository;
 
 class DashboardOrderTicketsController extends DashboardController
 {
@@ -25,10 +21,9 @@ class DashboardOrderTicketsController extends DashboardController
         $invoiceId = $_GET['invoice_id'] ?? null;
         $danceTickets = $this->ticketRepository->getDanceTickets($invoiceId);
         $historyTickets = $this->ticketRepository->getHistoryTickets($invoiceId);
-        $yummyTickets = $this->ticketRepository->getYummyTickets($invoiceId);invoiceId: 
+        $yummyTickets = $this->ticketRepository->getYummyTickets($invoiceId);
+        invoiceId:
 
         return $this->renderPage('order_tickets', ['danceTickets' => $danceTickets, 'historyTickets' => $historyTickets, 'yummyTickets' => $yummyTickets]);
     }
-   
-
 }

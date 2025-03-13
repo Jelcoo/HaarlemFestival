@@ -1,55 +1,55 @@
 <h2>Tickets</h2>
 <button class="back">back</button>
-<?php if (!empty($danceTickets)): ?>
+<?php if (!empty($danceTickets)) { ?>
     <h3>Dance Tickets</h3>
     <ul>
-        <?php foreach ($danceTickets as $ticket): ?>
+        <?php foreach ($danceTickets as $ticket) { ?>
             <li>
-                <strong>Ticket ID:</strong> <?= $ticket->id ?> |
-                <strong>Event ID:</strong> <?= $ticket->dance_event_id ?> |
-                <strong>All Access:</strong> <?= $ticket->all_access ? 'Yes' : 'No' ?> |
-                <strong>Used:</strong> <?= $ticket->ticket_used ? 'Yes' : 'No' ?>
+                <strong>Ticket ID:</strong> <?php echo $ticket->id; ?> |
+                <strong>Event ID:</strong> <?php echo $ticket->dance_event_id; ?> |
+                <strong>All Access:</strong> <?php echo $ticket->all_access ? 'Yes' : 'No'; ?> |
+                <strong>Used:</strong> <?php echo $ticket->ticket_used ? 'Yes' : 'No'; ?>
             </li>
-        <?php endforeach; ?>
+        <?php } ?>
     </ul>
-<?php else: ?>
+<?php } else { ?>
     <p>No dance tickets found.</p>
-<?php endif; ?>
+<?php } ?>
 
-<?php if (!empty($historyTickets)): ?>
+<?php if (!empty($historyTickets)) { ?>
     <h3>History Tickets</h3>
     <ul>
-        <?php foreach ($historyTickets as $ticket): ?>
+        <?php foreach ($historyTickets as $ticket) { ?>
             <li>
-                <strong>Ticket ID:</strong> <?= $ticket->id ?> |
-                <strong>Event ID:</strong> <?= $ticket->history_event_id ?> |
-                <strong>Total Seats:</strong> <?= $ticket->total_seats ?> |
-                <strong>Family Ticket:</strong> <?= $ticket->family_ticket ? 'Yes' : 'No' ?> |
-                <strong>Used:</strong> <?= $ticket->ticket_used ? 'Yes' : 'No' ?>
+                <strong>Ticket ID:</strong> <?php echo $ticket->id; ?> |
+                <strong>Event ID:</strong> <?php echo $ticket->history_event_id; ?> |
+                <strong>Total Seats:</strong> <?php echo $ticket->total_seats; ?> |
+                <strong>Family Ticket:</strong> <?php echo $ticket->family_ticket ? 'Yes' : 'No'; ?> |
+                <strong>Used:</strong> <?php echo $ticket->ticket_used ? 'Yes' : 'No'; ?>
             </li>
-        <?php endforeach; ?>
+        <?php } ?>
     </ul>
-<?php else: ?>
+<?php } else { ?>
     <p>No history tickets found.</p>
-<?php endif; ?>
+<?php } ?>
 
-<?php if (!empty($yummyTickets)): ?>
+<?php if (!empty($yummyTickets)) { ?>
     <h3>Yummy Tickets</h3>
     <ul>
-        <?php foreach ($yummyTickets as $ticket): ?>
+        <?php foreach ($yummyTickets as $ticket) { ?>
             <li>
-                <strong>Ticket ID:</strong> <?= $ticket->id ?> |
-                <strong>Event ID:</strong> <?= $ticket->yummy_event_id ?> |
-                <strong>Kids:</strong> <?= $ticket->kids_count ?> |
-                <strong>Adults:</strong> <?= $ticket->adult_count ?> |
-                <strong>QR Code:</strong> <?= $ticket->qrcode ?> |
-                <strong>Used:</strong> <?= $ticket->ticket_used ? 'Yes' : 'No' ?>
+                <strong>Ticket ID:</strong> <?php echo $ticket->id; ?> |
+                <strong>Event ID:</strong> <?php echo $ticket->yummy_event_id; ?> |
+                <strong>Kids:</strong> <?php echo $ticket->kids_count; ?> |
+                <strong>Adults:</strong> <?php echo $ticket->adult_count; ?> |
+                <strong>QR Code:</strong> <?php echo $ticket->qrcode; ?> |
+                <strong>Used:</strong> <?php echo $ticket->ticket_used ? 'Yes' : 'No'; ?>
             </li>
-        <?php endforeach; ?>
+        <?php } ?>
     </ul>
-<?php else: ?>
+<?php } else { ?>
     <p>No yummy tickets found.</p>
-<?php endif; ?>
+<?php } ?>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

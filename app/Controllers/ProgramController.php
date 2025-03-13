@@ -2,15 +2,15 @@
 
 namespace App\Controllers;
 
-use App\Repositories\InvoiceRepository;
-use App\Repositories\TicketRepository;
-use App\Models\Invoice;
 use App\Helpers\QrCodeGenerator;
+use App\Repositories\TicketRepository;
+use App\Repositories\InvoiceRepository;
 
 class ProgramController extends Controller
 {
     private TicketRepository $ticketRepository;
     private InvoiceRepository $invoiceRepository;
+
     public function __construct()
     {
         parent::__construct();
@@ -21,18 +21,18 @@ class ProgramController extends Controller
     public function index(): string
     {
         if (!isset($_SESSION['user_id'])) {
-            header("Location: /login");
-            exit();
+            header('Location: /login');
+            exit;
         }
         $user_id = $_SESSION['user_id'];
         $invoices = $this->invoiceRepository->getInvoicesByUserId($user_id);
-        
+
         return $this->pageLoader->setPage('program')->render(['invoices' => $invoices]);
     }
 
     public function tickets(): string
     {
-        $invoiceId = $_GET['invoice_id'] ?? null;  
+        $invoiceId = $_GET['invoice_id'] ?? null;
 
         $historyTickets = $this->ticketRepository->getHistoryTickets($invoiceId);
         $yummyTickets = $this->ticketRepository->getYummyTickets($invoiceId);
@@ -46,49 +46,50 @@ class ProgramController extends Controller
                 $danceTicket->qrcode = $qrCodeGenerator->generateQRCode($danceTicket->qrcode);
                 $completeDanceEvents[] = [
                     'ticket' => $danceTicket,
-                    'event' => $danceEvent
-                ];
-        }
-        $completeHistoryEvents = [];
-        foreach ($historyTickets as $historyTicket) {
-            if (isset($historyTicket)) {
-                $completeHistoryEvent = $this->ticketRepository->getEventHistoryByEventId($historyTicket->history_event_id);
-                $qrCodeGenerator = new QrCodeGenerator();
-                $historyTicket->qrcode = $qrCodeGenerator->generateQRCode($historyTicket->qrcode);
-                $completeHistoryEvents[] = [
-                    'ticket' => $historyTicket,
-                    'event' => $completeHistoryEvent
+                    'event' => $danceEvent,
                 ];
             }
-        }
-
-        $completeRestaurantEvents = [];
-        foreach ($yummyTickets as $yummyTicket) {
-            if (isset($yummyTicket)) {
-                $completeRestaurantEvent = $this->ticketRepository->getRestaurantInformation($yummyTicket->yummy_event_id);
-
-                $qrCodeGenerator = new QrCodeGenerator();
-                $yummyTicket->qrcode = $qrCodeGenerator->generateQRCode($yummyTicket->qrcode);
-                $completeRestaurantEvents[] = [
-                    'ticket' => $yummyTicket,
-                    'event' => $completeRestaurantEvent
-                ];
+            $completeHistoryEvents = [];
+            foreach ($historyTickets as $historyTicket) {
+                if (isset($historyTicket)) {
+                    $completeHistoryEvent = $this->ticketRepository->getEventHistoryByEventId($historyTicket->history_event_id);
+                    $qrCodeGenerator = new QrCodeGenerator();
+                    $historyTicket->qrcode = $qrCodeGenerator->generateQRCode($historyTicket->qrcode);
+                    $completeHistoryEvents[] = [
+                        'ticket' => $historyTicket,
+                        'event' => $completeHistoryEvent,
+                    ];
+                }
             }
+
+            $completeRestaurantEvents = [];
+            foreach ($yummyTickets as $yummyTicket) {
+                if (isset($yummyTicket)) {
+                    $completeRestaurantEvent = $this->ticketRepository->getRestaurantInformation($yummyTicket->yummy_event_id);
+
+                    $qrCodeGenerator = new QrCodeGenerator();
+                    $yummyTicket->qrcode = $qrCodeGenerator->generateQRCode($yummyTicket->qrcode);
+                    $completeRestaurantEvents[] = [
+                        'ticket' => $yummyTicket,
+                        'event' => $completeRestaurantEvent,
+                    ];
+                }
+            }
+
+            return $this->pageLoader->setPage('tickets')->render([
+                'completeDanceEvents' => $completeDanceEvents,
+                'completeHistoryEvents' => $completeHistoryEvents,
+                'completeRestaurantEvents' => $completeRestaurantEvents]);
         }
 
-        return $this->pageLoader->setPage('tickets')->render([ 
-            'completeDanceEvents' => $completeDanceEvents,
-            'completeHistoryEvents' => $completeHistoryEvents,
-            'completeRestaurantEvents' => $completeRestaurantEvents]);
-        }
         return $this->pageLoader->setPage('program')->render();
     }
-    function qrcode(): string
+
+    public function qrcode(): string
     {
         $user_id = $_SESSION['user_id'];
         $invoices = $this->invoiceRepository->getInvoicesByUserId($user_id);
-        
+
         return $this->pageLoader->setPage('program')->render(['invoices' => $invoices]);
     }
-
 }

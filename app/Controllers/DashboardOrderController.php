@@ -2,9 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Repositories\InvoiceRepository;
 use App\Repositories\TicketRepository;
-use App\Models\Invoice;
+use App\Repositories\InvoiceRepository;
 
 class DashboardOrderController extends DashboardController
 {
@@ -21,14 +20,13 @@ class DashboardOrderController extends DashboardController
     public function index(): string
     {
         $page = $_GET['page'] ?? 1;
-        $offset = ($page - 1) * 10; 
+        $offset = ($page - 1) * 10;
 
         $invoices = $this->invoiceRepository->getInvoices($offset);
 
         return $this->renderPage('orders', [
             'invoices' => $invoices,
-            'page' => $page
+            'page' => $page,
         ]);
-}
-
+    }
 }

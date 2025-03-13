@@ -20,6 +20,6 @@ class TicketYummy
         $this->kids_count = $collection['kids_count'];
         $this->adult_count = $collection['adult_count'];
         $this->qrcode = $collection['qrcode'];
-        $this->ticket_used =(bool)['ticket_used'];
+        $this->ticket_used = (bool) ['ticket_used'];
     }
 }

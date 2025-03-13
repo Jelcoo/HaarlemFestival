@@ -20,6 +20,6 @@ class TicketHistory
         $this->total_seats = $collection['total_seats'];
         $this->family_ticket = $collection['family_ticket'];
         $this->qrcode = $collection['qrcode'];
-        $this->ticket_used =(bool)['ticket_used'];
+        $this->ticket_used = (bool) ['ticket_used'];
     }
 }
