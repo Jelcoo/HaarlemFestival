@@ -20,7 +20,8 @@ return $config = [
     'MAIL_USER' => '',
     'MAIL_PASSWORD' => '',
     'MAIL_PORT' => 587,
-
+    'MAIL_DEBUG' => false,
+    
     'STRIPE_SECRET_KEY' => '',
     'STRIPE_WEBHOOK_SECRET' => '',
 ];

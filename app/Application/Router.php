@@ -68,6 +68,11 @@ class Router
 
             $content = call_user_func_array($route->callback, [...$route->params]);
 
+            if (isset($content['status'])) {
+                $this->response->setStatusCode($content['status']);
+                unset($content['status']);
+            }
+
             $this->response->setContent($content);
         }
 

@@ -10,11 +10,13 @@ use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
 use App\Helpers\TurnstileHelper;
 use App\Repositories\UserRepository;
+use App\Services\EmailWriterService;
 
 class AuthController extends Controller
 {
     private UserRepository $userRepository;
     private StripeHelper $stripeHelper;
+    private EmailWriterService $emailWriterService;
 
     public function __construct()
     {
@@ -22,6 +24,7 @@ class AuthController extends Controller
 
         $this->userRepository = new UserRepository();
         $this->stripeHelper = new StripeHelper();
+        $this->emailWriterService = new EmailWriterService();
     }
 
     public function register(array $parameters = []): string
@@ -75,6 +78,8 @@ class AuthController extends Controller
                 'password' => password_hash($password, PASSWORD_DEFAULT),
                 'stripe_customer_id' => $stripeCustomer,
             ]);
+
+            $this->emailWriterService->sendWelcomeEmail($createdUser);
 
             $_SESSION['user_id'] = $createdUser->id;
             // TODO: Temporary solution

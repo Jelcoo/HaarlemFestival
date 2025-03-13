@@ -3,6 +3,7 @@ CREATE TABLE users (
     firstname VARCHAR(255) NOT NULL,
     lastname VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
+    phone_number VARCHAR(255),
     password VARCHAR(255) NOT NULL,
     role VARCHAR(255) NOT NULL DEFAULT 'user',
     address VARCHAR(255),
@@ -11,8 +12,8 @@ CREATE TABLE users (
     stripe_customer_id VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `role`, `address`, `city`, `postal_code`, `stripe_customer_id`) VALUES
-(1, 'John', 'Doe', 'johndoe@example.com', '$2a$12$I03L/LUh1SntONPFOVwz3eivdVa1O.hna9GFmfDbbGO/22imeOoR.', 'admin', NULL, NULL, NULL, NULL);
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `phone_number`, `password`, `role`, `address`, `city`, `postal_code`, `stripe_customer_id`) VALUES
+(1, 'John', 'Doe', 'johndoe@example.com', NULL, '$2a$12$I03L/LUh1SntONPFOVwz3eivdVa1O.hna9GFmfDbbGO/22imeOoR.', 'admin', NULL, NULL, NULL, NULL);
 
 CREATE TABLE invoices (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -303,15 +304,16 @@ CREATE TABLE yummy_tickets (
     invoice_id INT,
     kids_count INT DEFAULT 0,
     adult_count INT DEFAULT 0,
+    note TEXT,
     qrcode VARCHAR(255),
     ticket_used BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (yummy_event_id) REFERENCES yummy_events(id),
     FOREIGN KEY (invoice_id) REFERENCES invoices(id)
 );
-INSERT INTO `yummy_tickets` (`id`, `yummy_event_id`, `invoice_id`, `kids_count`, `adult_count`, `qrcode`, `ticket_used`) VALUES
-(1, 1, 1, 2, 2, 'QR123YUMMY', 0),
-(2, 2, 1, 1, 3, 'QR456YUMMY', 1),
-(3, 3, 1, 0, 4, 'QR789YUMMY', 0);
+INSERT INTO `yummy_tickets` (`id`, `yummy_event_id`, `invoice_id`, `kids_count`, `adult_count`, `note`, `qrcode`, `ticket_used`) VALUES
+(1, 1, 1, 2, 2, NULL, 'QR123YUMMY', 0),
+(2, 2, 1, 1, 3, NULL, 'QR456YUMMY', 1),
+(3, 3, 1, 0, 4, NULL, 'QR789YUMMY', 0);
 
 CREATE TABLE history_tickets (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -369,4 +371,18 @@ INSERT INTO assets (`id`, `collection`, `filepath`, `filename`, `mimetype`, `siz
 (26, 'cover', 'assets/img/locations', 'slachthuis.jpg', 'image/jpeg', 100646, 'App\\Models\\Location', 11),
 (27, 'cover', 'assets/img/locations', 'stbavo.png', 'image/png', 412680, 'App\\Models\\Location', 10),
 (28, 'cover', 'assets/img/locations', 'waalsekerk.png', 'image/png', 322239, 'App\\Models\\Location', 20),
-(29, 'cover', 'assets/img/locations', 'xo.jpg', 'image/jpeg', 2196793, 'App\\Models\\Location', 15);
+(29, 'cover', 'assets/img/locations', 'xo.jpg', 'image/jpeg', 2196793, 'App\\Models\\Location', 15),
+(30, 'cover', 'assets/img/restaurants', 'roemer.png', 'image/png', 11118, 'App\\Models\\Restaurant', 1),
+(31, 'cover', 'assets/img/restaurants', 'ratatouille.png', 'image/png', 12743, 'App\\Models\\Restaurant', 2),
+(32, 'cover', 'assets/img/restaurants', 'ml.png', 'image/png', 18393, 'App\\Models\\Restaurant', 3),
+(33, 'cover', 'assets/img/restaurants', 'fris.png', 'image/png', 58155, 'App\\Models\\Restaurant', 4),
+(34, 'cover', 'assets/img/restaurants', 'newvegas.png', 'image/png', 26943, 'App\\Models\\Restaurant', 5),
+(35, 'cover', 'assets/img/restaurants', 'brinkmann.png', 'image/png', 10472, 'App\\Models\\Restaurant', 6),
+(36, 'cover', 'assets/img/restaurants', 'toujours.png', 'image/png', 15977, 'App\\Models\\Restaurant', 7),
+(37, 'icon', 'assets/img/icons', 'icon1.png', 'image/png', 8863, 'App\\Models\\Restaurant', 1),
+(38, 'icon', 'assets/img/icons', 'icon2.png', 'image/png', 7347, 'App\\Models\\Restaurant', 2),
+(39, 'icon', 'assets/img/icons', 'icon3.png', 'image/png', 12765, 'App\\Models\\Restaurant', 3),
+(40, 'icon', 'assets/img/icons', 'icon4.png', 'image/png', 10794, 'App\\Models\\Restaurant', 4),
+(41, 'icon', 'assets/img/icons', 'icon5.png', 'image/png', 6945, 'App\\Models\\Restaurant', 5),
+(42, 'icon', 'assets/img/icons', 'icon6.png', 'image/png', 16982, 'App\\Models\\Restaurant', 6),
+(43, 'icon', 'assets/img/icons', 'icon7.png', 'image/png', 7486, 'App\\Models\\Restaurant', 7);

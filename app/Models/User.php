@@ -11,6 +11,7 @@ class User
     public string $firstname;
     public string $lastname;
     public string $email;
+    public ?string $phone_number;
     public string $password;
     public UserRoleEnum $role;
     public ?string $address;
@@ -25,6 +26,7 @@ class User
         $this->firstname = $collection['firstname'];
         $this->lastname = $collection['lastname'];
         $this->email = $collection['email'];
+        $this->phone_number = $collection['phone_number'];
         $this->password = $collection['password'];
         $this->role = UserRoleEnum::from($collection['role']);
         $this->address = $collection['address'];
@@ -40,6 +42,7 @@ class User
         $this->firstname = $collection['firstname'];
         $this->lastname = $collection['lastname'];
         $this->email = $collection['email'];
+        $this->phone_number = $collection['phone_number'];
         $this->role = UserRoleEnum::from($collection['role']);
         $this->address = $collection['address'];
         $this->city = $collection['city'];
