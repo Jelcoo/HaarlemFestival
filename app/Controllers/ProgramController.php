@@ -66,6 +66,7 @@ class ProgramController extends Controller
         foreach ($yummyTickets as $yummyTicket) {
             if (isset($yummyTicket)) {
                 $completeRestaurantEvent = $this->ticketRepository->getRestaurantInformation($yummyTicket->yummy_event_id);
+
                 $qrCodeGenerator = new QrCodeGenerator();
                 $yummyTicket->qrcode = $qrCodeGenerator->generateQRCode($yummyTicket->qrcode);
                 $completeRestaurantEvents[] = [
@@ -74,6 +75,7 @@ class ProgramController extends Controller
                 ];
             }
         }
+
         return $this->pageLoader->setPage('tickets')->render([ 
             'completeDanceEvents' => $completeDanceEvents,
             'completeHistoryEvents' => $completeHistoryEvents,

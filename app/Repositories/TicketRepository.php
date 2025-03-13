@@ -128,7 +128,6 @@ WHERE dea.event_id = :eventId;');
     public function getRestaurantInformation(int $eventId): ?RestaurantInformation
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
-
         $eventData = $queryBuilder
             ->table('yummy_events')
             ->where('id', '=', $eventId)
@@ -156,6 +155,7 @@ WHERE dea.event_id = :eventId;');
             $locationData = [
                 "id" => 1,
                 "name" => "Default Location",
+                "event_type" => EventTypeEnum::UNKNOWN->value,
                 "coordinates" => "0,0",
                 "address" => "Unknown Address",
                 "preview_description" => "No description available",
