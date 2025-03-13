@@ -76,6 +76,7 @@ INSERT INTO `artists` (`id`, `name`, `preview_description`, `main_description`, 
 (5, 'Nikcy Romero', 'A master of progressive house, Nicky Romero burst onto the scene with hits like \"Toulouse\" and \"I Could Be the One\" with Avicii. As a DJ, producer, and label head of Protocol Recordings, he’s recognized for his dynamic sound and mentorship of upcoming artists. His sets are a journey through emotion and rhythm.', NULL, NULL),
 (6, 'Afrojack', 'Afrojack is a Grammy-winning DJ and producer renowned for his signature Dutch house sound. Known for tracks like \"Take Over Control\" and \"Ten Feet Tall\", he’s a regular at major festivals worldwide. Afrojack’s collaborations with artists such as Beyoncé and David Guetta underscore his versatility and influence.', NULL, NULL);
 
+
 CREATE TABLE restaurants (
     id INT PRIMARY KEY AUTO_INCREMENT,
     location_id INT NOT NULL,
@@ -92,6 +93,7 @@ INSERT INTO `restaurants` (`id`, `location_id`, `restaurant_type`, `rating`, `me
 (5, 5, 'Vegan', 3, NULL),
 (6, 6, 'Dutch, European, Modern', 3, NULL),
 (7, 7, 'Dutch, Fish and Seafood, European', 3, NULL);
+
 
 CREATE TABLE dance_events (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -128,7 +130,6 @@ CREATE TABLE dance_event_artists (
     FOREIGN KEY (event_id) REFERENCES dance_events(id),
     FOREIGN KEY (artist_id) REFERENCES artists(id)
 );
-
 INSERT INTO `dance_event_artists` (`event_id`, `artist_id`) VALUES
 (3, 1),
 (6, 1),
@@ -292,7 +293,6 @@ CREATE TABLE dance_tickets (
     FOREIGN KEY (dance_event_id) REFERENCES dance_events(id),
     FOREIGN KEY (invoice_id) REFERENCES invoices(id)
 );
-
 INSERT INTO `dance_tickets` (`id`, `dance_event_id`, `invoice_id`, `all_access`, `qrcode`, `ticket_used`) VALUES
 (1, 1, 1, 1, 'QR123DANCE', 0),
 (2, 2, 1, 0, 'QR456DANCE', 1),

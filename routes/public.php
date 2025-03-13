@@ -17,11 +17,16 @@ $router->get('/yummy/{id}', [App\Controllers\RestaurantController::class, 'show'
 $router->get('/history', [App\Controllers\HomeController::class, 'history']);
 $router->get('/magic', [App\Controllers\HomeController::class, 'magic']);
 $router->get('/cart', [App\Controllers\CartController::class, 'index']);
-$router->post('/order/create', [App\Controllers\CartController::class, 'createOrder']);
+$router->post('/stripe/webhook', [App\Controllers\CheckoutController::class, 'webhook']);
 
 
 $router->get('/editor', [App\Controllers\EditorController::class, 'index']);
 $router->post('/editor', [App\Controllers\EditorController::class, 'editPost']);
+
+$router->get('/program', [App\Controllers\ProgramController::class, 'index']);
+$router->get('/program/tickets', [App\Controllers\ProgramController::class, 'tickets']);
+$router->get('/program/tickets/qrcode', [App\Controllers\ProgramController::class, 'qrcode']);
+
 
 $router->middleware(EnsureNotLoggedIn::class, function () use ($router) {
     $router->get('/register', [App\Controllers\AuthController::class, 'register']);
@@ -39,6 +44,10 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
     $router->post('/account/manage/password', [App\Controllers\ProfileController::class, 'updatePassword']);
 
     $router->post('/cart', [App\Controllers\CartController::class, 'checkout']);
+    $router->get('/checkout', [App\Controllers\CheckoutController::class, 'index']);
+    $router->get('/checkout/pay', [App\Controllers\CheckoutController::class, 'checkout']);
+    $router->post('/checkout/create', [App\Controllers\CheckoutController::class, 'createCheckout']);
+    $router->get('/checkout/complete', [App\Controllers\CheckoutController::class, 'completePayment']);
     $router->get('/checkout/pay_later', [App\Controllers\CheckoutController::class, 'payLater']);
     $router->middleware(EnsureEmployee::class, function () use ($router) {
         $router->get('/qrcode', [App\Controllers\QrController::class, 'index']);
@@ -52,6 +61,9 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
         $router->get('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'index']);
         $router->post('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'handleAction']);
 
+        $router->get('/dashboard/orders', [App\Controllers\DashboardOrderController::class, 'index']);
+        $router->get('/dashboard/orders/tickets', [App\Controllers\DashboardOrderTicketsController::class, 'index']);
+
         $router->get('/dashboard/restaurants', [App\Controllers\DashboardRestaurantsController::class, 'index']);
         $router->post('/dashboard/restaurants', [App\Controllers\DashboardRestaurantsController::class, 'handleAction']);
 
@@ -60,5 +72,6 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
 
         $router->get('/dashboard/artists', [App\Controllers\DashboardArtistsController::class, 'index']);
         $router->post('/dashboard/artists', [App\Controllers\DashboardArtistsController::class, 'handleAction']);
+
     });
 });

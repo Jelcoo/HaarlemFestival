@@ -6,4 +6,5 @@ enum InvoiceStatusEnum: string
 {
     case COMPLETED = 'completed';
     case STARTED = 'started';
+    case FAILED = 'failed';
 }
