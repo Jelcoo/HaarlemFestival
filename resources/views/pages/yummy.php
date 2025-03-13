@@ -20,7 +20,7 @@ include_once __DIR__ . '/../components/header.php';
 </div>
 
 <div class="container">
-    <h2 class="restaurants-title">Our Restaurants</h2>
+    <h2 class="restaurants">Our Restaurants</h2>
     <div class="restaurant-container">
         <?php foreach ($restaurants as $key => $restaurant) {
             $isEven = $key % 2 == 0;
@@ -125,6 +125,13 @@ body {
 
 .info-box p {
     margin: 10px 0;
+}
+
+.restaurants {
+    text-align: center;
+    margin: 50px 0 60px;
+    font-size: 28px;
+    font-weight: bold;
 }
 
 /* Restaurant Section */
