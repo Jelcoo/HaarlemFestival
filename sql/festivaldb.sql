@@ -63,24 +63,6 @@ INSERT INTO `locations` (`id`, `name`, `event_type`, `coordinates`, `address`, `
 (22, 'Amsterdamse Poort', 'history', '52.38051738005276,4.646598531624926', '2011 BZ Haarlem', NULL, NULL),
 (23, 'Hof van Bakenes', 'history', '52.38248911248071,4.640292785411666', '2011 JN Haarlem', NULL, NULL);
 
-INSERT INTO locations (
-    name, coordinates, address, preview_description, main_description
-) VALUES 
-('Lichtfabriek', '3,3', 'Minckelersweg 2, 2031 EM Haarlem', 'leeg', 'leeg'),
-('Slachthuis', '3,3', 'Rockplein 6, 2033 KK Haarlem', 'leeg', 'leeg'),
-('Jopenkerk', '3,3', 'Gedempte Voldersgracht 2, 2011 WD Haarlem', 'leeg', 'leeg'),
-('XO the Club', '3,3', 'Grote Markt 8, 2011 RD Haarlem', 'leeg', 'leeg'),
-('Puncher Comedy Club', '3,3', 'Grote Markt 10, 2011 RD Haarlem','leeg', 'leeg'),
-('Caprera Openluchttheater', '3,3', 'Hoge Duin en Daalseweg 2, 2061 AG Bloemendaal', 'leeg', 'leeg'),
-('Café de Roemer', '3,3', 'Botermarkt 17, 2011 XL Haarlem', 'leeg', 'leeg'),
-('Ratatouille', '3,3', 'Spaarne 96, 2011 CL Haarlem, Nederland', 'leeg', 'leeg'),
-('Restaurant ML', '3,3', 'Kleine Houtstraat 70, 2011 DR Haarlem, Nederland', 'leeg', 'leeg'),
-('Restaurant Fris', '3,3', 'Twijnderslaan 7, 2012 BG Haarlem, Nederland', 'leeg', 'leeg'),
-('New Vegas', '3,3', 'Koningstraat 5, 2011 TB Haarlem','leeg', 'leeg'),
-('Grand Cafe Brinkman', '3,3', 'Grote Markt 13, 2011 RC Haarlem, Nederland', 'leeg', 'leeg'),
-('Urban Frenchy Bistro Toujours', '3,3', 'Oude Groenmarkt 10-12, 2011 HL Haarlem, Nederland','leeg', 'leeg');
-
-
 CREATE TABLE artists (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
