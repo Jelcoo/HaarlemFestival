@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Repositories\InvoiceRepository;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
 use App\Repositories\UserRepository;
@@ -11,17 +12,22 @@ class ProfileController extends Controller
 {
     private UserRepository $userRepository;
     private EmailWriterService $emailWriterService;
+    private InvoiceRepository $invoiceRepository;
 
     public function __construct()
     {
         parent::__construct();
         $this->userRepository = new UserRepository();
         $this->emailWriterService = new EmailWriterService();
+        $this->invoiceRepository = new InvoiceRepository();
     }
 
     public function index(array $parameters = []): string
     {
         $user = $this->getAuthUser();
+
+        $invoice = $this->invoiceRepository->getInvoiceById(1);
+        $this->emailWriterService->sendInvoice($user, $invoice);
 
         return $this->pageLoader->setPage('account/manage')->render(array_merge($parameters, ['user' => $user]));
     }

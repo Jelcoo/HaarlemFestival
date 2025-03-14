@@ -48,4 +48,9 @@ class User
         $this->city = $collection['city'];
         $this->postal_code = $collection['postal_code'];
     }
+
+    public function fullName(): string
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
 }

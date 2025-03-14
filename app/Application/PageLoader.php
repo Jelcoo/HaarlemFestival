@@ -32,6 +32,11 @@ class PageLoader
         return str_replace('{{content}}', $page, $layout);
     }
 
+    public function renderEmail(string $pageName, array $parameters = []): string
+    {
+        return $this->loadView('emails/' . $pageName, $parameters);
+    }
+
     /**
      * @param array<string, mixed> $parameters
      */
