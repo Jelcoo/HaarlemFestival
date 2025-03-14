@@ -96,3 +96,16 @@ function resetSort() {
     window.location.href =
         window.location.pathname + "?" + searchParams.toString();
 }
+
+function fillFileInput(input, url) {
+    fetch(url)
+        .then((response) => response.blob())
+        .then((blob) => {
+            const file = new File([blob], url.split("/").pop(), { type: blob.type });
+
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+    
+            input.files = dataTransfer.files;
+        });
+}

@@ -10,7 +10,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8">
-            <form action="/dashboard/restaurants" method="POST">
+            <form action="/dashboard/restaurants" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="action"
                     value="<?php echo isset($formData['id']) ? 'update' : 'createNewRestaurant'; ?>">
 
@@ -18,8 +18,16 @@
                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($formData['id']); ?>">
                 <?php } ?>
 
+                <!-- Restaurant Logo -->
+                <div class="form-group">
+                    <div class="form-group">
+                        <label for="restaurant_logo">Logo</label>
+                        <input type="file" id="restaurant_logo" name="restaurant_logo" class="form-control" accept="image/jpeg, image/png">
+                    </div>
+                </div>
+
                 <!-- Name and Type -->
-                <div class="row">
+                <div class="row mt-3">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="location_id">Location</label>
@@ -73,3 +81,8 @@
         </div>
     </div>
 </div>
+
+<script>
+    const logoInput = document.getElementById('restaurant_logo');
+    fillFileInput(logoInput, '<?php echo $formData['cover']; ?>');
+</script>

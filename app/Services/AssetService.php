@@ -46,7 +46,7 @@ class AssetService
         }
 
         $mimeType = $this->getMimeType($file['tmp_name']);
-        $filePath = $this->fileService->getFilePath();
+        $filePath = basename($this->fileService->getFilePath());
         $fileName = $this->generateUuid() . '.' . FileService::getExtension($mimeType);
 
         $savedFile = $this->fileService->saveFile($file, $this->fileService->assembleFilePath($filePath, $fileName));
