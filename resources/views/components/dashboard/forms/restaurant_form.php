@@ -73,3 +73,7 @@
         </div>
     </div>
 </div>
+
+<script>
+    initEditor('menu');
+</script>

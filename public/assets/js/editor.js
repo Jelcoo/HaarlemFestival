@@ -1,11 +1,6 @@
-<script src="https://cdn.jsdelivr.net/npm/tinymce@7.7.0/tinymce.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tinymce@7.7.0/skins/ui/oxide/content.min.css">
-
-<textarea id="editor"><?php echo $content ?? ''; ?></textarea>
-
-<script>
+function initEditor(elementId) {
     tinymce.init({
-        selector: '#editor',
+        selector: `#${elementId}`,
         license_key: 'gpl',
         promotion: false,
 
@@ -17,4 +12,4 @@
 
         newline_behavior: 'linebreak',
     });
-</script>
+}
