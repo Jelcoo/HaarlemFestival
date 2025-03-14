@@ -11,7 +11,7 @@ class StripeHelper
 
     public function __construct()
     {
-        $this->stripe = new StripeClient(Config::getKey('STRIPE_SECRET_KEY'));
+        $this->stripe = new StripeClient(Config::getKey('STRIPE_SECRET_KEY', 'abc'));
     }
 
     public function createIntent(int $amount, int $orderId, ?string $customerId)
