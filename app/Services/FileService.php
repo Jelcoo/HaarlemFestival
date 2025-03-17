@@ -13,7 +13,7 @@ class FileService
 
     public function deleteFile($filePath)
     {
-        if (str_starts_with($filePath, self::getFilePath())) {
+        if (str_starts_with($filePath, 'assets/img')) {
             return;
         }
 

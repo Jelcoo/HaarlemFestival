@@ -26,6 +26,14 @@
                     </div>
                 </div>
 
+                <!-- Restaurant Icon -->
+                <div class="form-group">
+                    <div class="form-group">
+                        <label for="restaurant_icon">Icon</label>
+                        <input type="file" id="restaurant_icon" name="restaurant_icon" class="form-control" accept="image/jpeg, image/png">
+                    </div>
+                </div>
+
                 <!-- Name and Type -->
                 <div class="row mt-3">
                     <div class="col-md-6">
@@ -84,7 +92,9 @@
 
 <script>
     const logoInput = document.getElementById('restaurant_logo');
+    const iconInput = document.getElementById('restaurant_icon');
     fillFileInput(logoInput, '<?php echo $formData['cover']; ?>');
+    fillFileInput(iconInput, '<?php echo $formData['icon']; ?>');
 
     initEditor('menu');
 </script>

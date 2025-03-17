@@ -95,7 +95,8 @@ class DashboardRestaurantsController extends DashboardController
                 throw new \Exception('Restaurant not found.');
             }
 
-            $restaurantAssets = $this->assetService->resolveAssets($existingRestaurant, 'cover');
+            $restaurantCover = $this->assetService->resolveAssets($existingRestaurant, 'cover');
+            $restaurantIcon = $this->assetService->resolveAssets($existingRestaurant, 'icon');
 
             $_SESSION['show_restaurant_form'] = true;
             $_SESSION['form_data'] = [
@@ -104,7 +105,8 @@ class DashboardRestaurantsController extends DashboardController
                 'rating' => $existingRestaurant->rating,
                 'location_id' => $existingRestaurant->location_id,
                 'menu' => $existingRestaurant->menu,
-                'cover' => $restaurantAssets[0]->getUrl(),
+                'cover' => $restaurantCover[0]->getUrl(),
+                'icon' => $restaurantIcon[0]->getUrl(),
             ];
 
             $this->redirectToRestaurants();
@@ -129,6 +131,7 @@ class DashboardRestaurantsController extends DashboardController
                 $_POST + $_FILES,
                 [
                     'restaurant_logo' => 'required|uploaded_file|max:5M|mimes:jpeg,png',
+                    'restaurant_icon' => 'required|uploaded_file|max:5M|mimes:jpeg,png',
                     'restaurant_type' => 'nullable|max:100',
                     'rating' => 'nullable|numeric|min:0|max:5',
                     'location_id' => 'required|integer',
@@ -148,12 +151,13 @@ class DashboardRestaurantsController extends DashboardController
 
             $this->restaurantRepository->updateRestaurant($existingRestaurant);
 
-            $restaurantAssets = $this->assetService->resolveAssets($existingRestaurant, 'cover');
+            $restaurantAssets = $this->assetService->resolveAssets($existingRestaurant);
             foreach ($restaurantAssets as $asset) {
                 $this->assetService->deleteAsset($asset);
             }
 
             $this->assetService->saveAsset($_FILES['restaurant_logo'], 'cover', $existingRestaurant);
+            $this->assetService->saveAsset($_FILES['restaurant_icon'], 'icon', $existingRestaurant);
 
             $this->redirectTo("restaurants?details=$restaurantId", true, 'Restaurant updated successfully.');
         } catch (\Exception $e) {
