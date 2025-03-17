@@ -35,6 +35,14 @@ class AssetRepository extends Repository
         }, $assets);
     }
 
+    public function getAssetsByClass(mixed $class, int $id, ?string $collection = null): array
+    {
+        $model = new $class();
+        $model->id = $id;
+
+        return $this->getAssetsByModel($model, $collection);
+    }
+
     public function assetExists(string $name): bool
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
