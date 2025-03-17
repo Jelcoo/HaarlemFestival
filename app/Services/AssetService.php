@@ -9,7 +9,6 @@ use App\Repositories\AssetRepository;
  * You can learn how to use this class in the file app/Controllers/DashboardArtistsController.php.
  * Search for "$this->assetService" to see where it is used.
  */
-
 class AssetService
 {
     private AssetRepository $assetRepository;
