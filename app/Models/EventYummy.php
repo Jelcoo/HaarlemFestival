@@ -30,4 +30,9 @@ class EventYummy extends Event
         $this->adult_price = $collection['adult_price'];
         $this->reservation_cost = $collection['reservation_cost'];
     }
+
+    public function reservationCost(): float
+    {
+        return round($this->reservation_cost * ($this->vat + 1), 2);
+    }
 }

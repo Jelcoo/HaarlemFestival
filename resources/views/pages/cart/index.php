@@ -14,6 +14,14 @@ $yummyCart = array_filter($cartItems, function ($item) {
 $historyCart = array_filter($cartItems, function ($item) {
     return $item->event_model === 'App\\Models\\EventHistory';
 });
+
+function formatTime($date) {
+    return date('H:i', strtotime($date));
+}
+
+function formatMoney($amount) {
+    return number_format($amount, 2);
+}
 ?>
 
 <div class="container mt-4">
@@ -34,19 +42,19 @@ $historyCart = array_filter($cartItems, function ($item) {
         <div class="col-sm-12 col-lg-4" id="dance">
             <h2>DANCE!</h2>
             <?php foreach ($danceCart as $cartItem) { ?>
-                <div class="eventCard" data-event-id="<?php echo $cartItem->event_id; ?>">
+                <div class="eventCard">
                     <h4><?php echo $cartItem->event->location->name; ?></h4>
                     <div>
                         <?php if (count($cartItem->event->location->assets) > 0) { ?>
                             <img src="<?php echo $cartItem->event->location->assets[0]->getUrl(); ?>" alt="Image of venue">
                         <?php } ?>
                         <div>
-                            <p>Duration: <?php echo date('H:i', timestamp: strtotime($cartItem->event->start_time)); ?>-<?php echo date('H:i', timestamp: strtotime($cartItem->event->end_time)); ?></p>
+                            <p>Duration: <?php echo formatTime($cartItem->event->start_time); ?>-<?php echo formatTime($cartItem->event->end_time); ?></p>
                             <p>Artists: <?php echo implode(', ', array_map(fn ($artist) => $artist->name, $cartItem->event->artists)); ?></p>
                         </div>
                     </div>
                     <div class="d-flex">
-                        <p><?php echo $cartItem->quantities[0]->quantity; ?> x &euro;<?php echo number_format($cartItem->singlePrice(), 2); ?> = &euro;<?php echo number_format($cartItem->totalPrice(), 2); ?></p>
+                        <p><?php echo $cartItem->quantities[0]->quantity; ?> x &euro;<?php echo formatMoney($cartItem->singlePrice()); ?> = &euro;<?php echo formatMoney($cartItem->totalPrice()); ?></p>
                         <div class="counter">
                             <form action="/cart/decrease" method="POST">
                                 <button type="submit" class="decrease-btn">
@@ -64,7 +72,7 @@ $historyCart = array_filter($cartItems, function ($item) {
                         </div>
                         <form action="/cart/remove" method="POST">
                             <button type="submit" class="remove-btn">
-                            <i class="fa-solid fa-trash"></i>
+                                <i class="fa-solid fa-trash"></i>
                             </button>
                             <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
                         </form>
@@ -77,15 +85,91 @@ $historyCart = array_filter($cartItems, function ($item) {
         </div>
         <div class="col-sm-12 col-lg-4" id="yummy">
             <h2>Yummy!</h2>
-            <?php if (count($cartItems) > 0) { ?>
-                <p id="danceFound">Events found</p>
-            <?php } else { ?>
+            <?php foreach ($yummyCart as $cartItem) { ?>
+                <?php
+                    $childrenQuantity = 0;
+                    $adultQuantity = 0;
+                    foreach ($cartItem->quantities as $quantity) {
+                        if ($quantity->type->value === 'child') {
+                            $childrenQuantity += $quantity->quantity;
+                        } else {
+                            $adultQuantity += $quantity->quantity;
+                        }
+                    }
+                ?>
+                <div class="eventCard">
+                    <h4><?php echo $cartItem->event->restaurant->location->name; ?></h4>
+                    <div>
+                        <?php if (count($cartItem->event->restaurant->assets) > 0) { ?>
+                            <img src="<?php echo $cartItem->event->restaurant->assets[0]->getUrl(); ?>" alt="Image of venue">
+                        <?php } ?>
+                        <div>
+                            <p>Duration: <?php echo formatTime($cartItem->event->start_time); ?>-<?php echo formatTime($cartItem->event->end_time); ?></p>
+                            <p>Reservation cost: €<?php echo $cartItem->event->reservationCost(); ?></p>
+                            <?php if ($cartItem->note) { ?>
+                                <p>Notes: <?php echo $cartItem->note; ?></p>
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="d-flex flex-column align-items-stretch p-0 gap-2 justify-content-between" style="flex-grow: 0.5">
+                            <div class="d-flex justify-content-between p-0">
+                                <p>Adults: <?php echo $adultQuantity; ?></p>
+                                <div class="counter">
+                                    <form action="/cart/decrease" method="POST">
+                                        <button type="submit" class="decrease-btn">
+                                            <i class="fa-solid fa-minus"></i>
+                                        </button>
+                                        <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
+                                        <input type="hidden" name="quantity_type" value="adult">
+                                    </form>
+                                    <span><?php echo $adultQuantity; ?></span>
+                                    <form action="/cart/increase" method="POST">
+                                        <button type="submit" class="increase-btn">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                        <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
+                                        <input type="hidden" name="quantity_type" value="adult">
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between p-0">
+                                <p>Children: <?php echo $childrenQuantity; ?></p>
+                                <div class="counter">
+                                    <form action="/cart/decrease" method="POST">
+                                        <button type="submit" class="decrease-btn">
+                                            <i class="fa-solid fa-minus"></i>
+                                        </button>
+                                        <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
+                                        <input type="hidden" name="quantity_type" value="child">
+                                    </form>
+                                    <span><?php echo $childrenQuantity; ?></span>
+                                    <form action="/cart/increase" method="POST">
+                                        <button type="submit" class="increase-btn">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                        <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
+                                        <input type="hidden" name="quantity_type" value="child">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <form action="/cart/remove" method="POST">
+                            <button type="submit" class="remove-btn">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                            <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
+                        </form>
+                    </div>
+                </div>
+            <?php } ?>
+            <?php if (count($yummyCart) < 1) { ?>
                 <p>No events found</p>
             <?php } ?>
         </div>
         <div class="col-sm-12 col-lg-4" id="history">
             <h2>A stroll through history</h2>
-            <?php if (count($cartItems) > 0) { ?>
+            <?php if (count($historyCart) > 0) { ?>
                 <p id="danceFound">Events found</p>
             <?php } else { ?>
                 <p>No events found</p>
