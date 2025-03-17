@@ -94,40 +94,48 @@ class ScheduleService
         $schedules = [];
 
         $dates = $this->getScheduleDates($querySchedule);
+
         foreach ($dates as $date) {
-            $todayEvents = $this->getScheduleByDate($querySchedule, $date);
-            $uniqueTours = $this->getUniqueTours($todayEvents);
+            $eventsForDate = $this->getScheduleByDate($querySchedule, $date);
+            $groupedTours = $this->getUniqueTours($eventsForDate);
+    
+            foreach ($groupedTours as $tourGroup) {
+                $firstTour = $tourGroup[0];
 
-            foreach ($uniqueTours as $key => $tours) {
-                $firstTour = $tours[0];
-                $languageNames = array_values(array_unique(array_column($tours, 'language')));
+                // Extract unique languages
+                $languages = array_unique(array_column($tourGroup, 'language'));
 
-                $guides = array_map(function ($language) use ($tours) {
-                    $toursInLang = array_filter($tours, fn ($tour) => $tour['language'] === $language);
-                    $guideNames = array_values(array_unique(array_column($toursInLang, 'guide')));
+                // Organize guides by language
+                $guides = [];
+                foreach ($languages as $language) {
+                    $filteredTours = array_filter($tourGroup, fn($tour) => $tour['language'] === $language);
+                    $guideNames = array_unique(array_column($filteredTours, 'guide'));
 
-                    return [
+                    $guides[] = [
                         'language' => $language,
-                        'names' => $guideNames,
+                        'names' => array_values($guideNames),
                     ];
-                }, $languageNames);
+                }
 
-                $startTimes = array_values(array_unique(array_column($tours, 'start_time')));
+                // Extract and sort unique start times
+                $startTimes = array_unique(array_column($tourGroup, 'start_time'));
                 sort($startTimes);
 
-                $start = array_map(function ($time) use ($tours) {
-                    $toursAtTime = array_filter($tours, fn ($tour) => $tour['start_time'] === $time);
-                    $toursGroupedByLanguage = [];
+                // Organize tours by start time and language
+                $start = [];
+                foreach ($startTimes as $time) {
+                    $filteredTours = array_filter($tourGroup, fn($tour) => $tour['start_time'] === $time);
+                    $toursByLanguage = [];
 
-                    foreach ($toursAtTime as $tour) {
-                        $toursGroupedByLanguage[$tour['language']][] = $tour['tour_id'];
+                    foreach ($filteredTours as $tour) {
+                        $toursByLanguage[$tour['language']][] = $tour['tour_id'];
                     }
 
-                    return [
+                    $start[] = [
                         'time' => date('H:i', strtotime($time)),
-                        'tours' => $toursGroupedByLanguage,
+                        'tours' => $toursByLanguage,
                     ];
-                }, $startTimes);
+                }
 
                 $schedules[] = [
                     'date' => date('l F j', strtotime($date)),
