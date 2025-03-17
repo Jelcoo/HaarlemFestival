@@ -98,7 +98,7 @@ class ScheduleService
         foreach ($dates as $date) {
             $eventsForDate = $this->getScheduleByDate($querySchedule, $date);
             $groupedTours = $this->getUniqueTours($eventsForDate);
-    
+
             foreach ($groupedTours as $tourGroup) {
                 $firstTour = $tourGroup[0];
 
@@ -108,7 +108,7 @@ class ScheduleService
                 // Organize guides by language
                 $guides = [];
                 foreach ($languages as $language) {
-                    $filteredTours = array_filter($tourGroup, fn($tour) => $tour['language'] === $language);
+                    $filteredTours = array_filter($tourGroup, fn ($tour) => $tour['language'] === $language);
                     $guideNames = array_unique(array_column($filteredTours, 'guide'));
 
                     $guides[] = [
@@ -124,7 +124,7 @@ class ScheduleService
                 // Organize tours by start time and language
                 $start = [];
                 foreach ($startTimes as $time) {
-                    $filteredTours = array_filter($tourGroup, fn($tour) => $tour['start_time'] === $time);
+                    $filteredTours = array_filter($tourGroup, fn ($tour) => $tour['start_time'] === $time);
                     $toursByLanguage = [];
 
                     foreach ($filteredTours as $tour) {
