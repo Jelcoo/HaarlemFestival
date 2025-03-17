@@ -169,9 +169,42 @@ function formatMoney($amount) {
         </div>
         <div class="col-sm-12 col-lg-4" id="history">
             <h2>A stroll through history</h2>
-            <?php if (count($historyCart) > 0) { ?>
-                <p id="danceFound">Events found</p>
-            <?php } else { ?>
+            <?php foreach ($historyCart as $cartItem) { ?>
+                <div class="eventCard">
+                    <h4>History tour (<?php echo $cartItem->event->language; ?>)</h4>
+                    <div>
+                        <div>
+                            <p>Duration: <?php echo formatTime($cartItem->event->start_time); ?>-<?php echo formatTime($cartItem->event->end_time); ?></p>
+                            <!-- <p>Ticket type: <?php //echo $cartItem->event->type; ?></p> -->
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <p><?php echo $cartItem->quantities[0]->quantity; ?> x &euro;<?php echo formatMoney($cartItem->singlePrice()); ?> = &euro;<?php echo formatMoney($cartItem->totalPrice()); ?></p>
+                        <div class="counter">
+                            <form action="/cart/decrease" method="POST">
+                                <button type="submit" class="decrease-btn">
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+                                <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
+                            </form>
+                            <span><?php echo $cartItem->quantities[0]->quantity; ?></span>
+                            <form action="/cart/increase" method="POST">
+                                <button type="submit" class="increase-btn">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                                <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
+                            </form>
+                        </div>
+                        <form action="/cart/remove" method="POST">
+                            <button type="submit" class="remove-btn">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                            <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
+                        </form>
+                    </div>
+                </div>
+            <?php } ?>
+            <?php if (count($historyCart) < 1) { ?>
                 <p>No events found</p>
             <?php } ?>
         </div>
