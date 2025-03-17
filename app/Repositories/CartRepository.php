@@ -2,9 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Enum\ItemQuantityEnum;
 use App\Helpers\QueryBuilder;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\CartItemQuantity;
 use App\Models\Event;
 use App\Models\EventDance;
 use App\Models\EventHistory;
@@ -33,7 +35,7 @@ class CartRepository extends Repository
         $this->assetService = new AssetService();
     }
 
-    public function getCartById(int $id, bool $includeItems = false, bool $includeEvents = false): Cart
+    public function getCartById(int $id, bool $includeItems = false, bool $includeEvents = false): Cart|null
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
 
@@ -68,6 +70,7 @@ class CartRepository extends Repository
 
         return array_map(function ($item) use ($includeEvents) {
             $cartItem = new CartItem($item);
+            $cartItem->quantities = $this->getItemQuantities($cartItem->id);
 
             if ($includeEvents) {
                 $cartItem->event = $this->getMixedEvent($cartItem->event_model, $cartItem->event_id);
@@ -75,6 +78,17 @@ class CartRepository extends Repository
 
             return $cartItem;
         }, $queryItems);
+    }
+
+    private function getItemQuantities(int $cartItemId): array
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $queryQuantities = $queryBuilder->table('cart_item_quantities')->where('cart_item_id', '=', $cartItemId)->get();
+
+        return array_map(function ($quantity) {
+            return new CartItemQuantity($quantity);
+        }, $queryQuantities);
     }
 
     private function getMixedEvent(string $eventModel, int $eventId): Event|null
@@ -97,45 +111,59 @@ class CartRepository extends Repository
         return $modelInstance;
     }
 
-    public function increaseQuantity(int $cartId, int $cartItemId): void
+    public function increaseQuantity(int $cartId, int $cartItemId, ItemQuantityEnum $type): void
     {
         $query = $this->getConnection()->prepare("
-UPDATE cart_items
-SET quantity = quantity + 1
-WHERE id = :cartItemId
-AND cart_id = :cartId");
+UPDATE cart_items ci
+JOIN cart_item_quantities ciq ON ciq.cart_item_id = ci.id
+SET ciq.quantity = ciq.quantity + 1
+WHERE ci.id = :cartItemId
+AND ci.cart_id = :cartId
+AND ciq.type = :type");
 
         $query->execute([
             'cartItemId' => $cartItemId,
-            'cartId' => $cartId
+            'cartId' => $cartId,
+            'type' => $type->value
         ]);
     }
 
-    public function decreaseQuantity(int $cartId, int $cartItemId): void
+    public function decreaseQuantity(int $cartId, int $cartItemId, ItemQuantityEnum $type): void
     {
         $query = $this->getConnection()->prepare("
-UPDATE cart_items
-SET quantity = quantity - 1
-WHERE id = :cartItemId
-AND cart_id = :cartId
-AND quantity > 1");
+UPDATE cart_items ci
+JOIN cart_item_quantities ciq ON ciq.cart_item_id = ci.id
+SET ciq.quantity = ciq.quantity - 1
+WHERE ci.id = :cartItemId
+AND ci.cart_id = :cartId
+AND ciq.type = :type
+AND ciq.quantity > 1");
 
         $query->execute([
             'cartItemId' => $cartItemId,
-            'cartId' => $cartId
+            'cartId' => $cartId,
+            'type' => $type->value
         ]);
     }
 
-    public function addCartItem(int $cartId, int $eventId, string $eventModel, int $quantity): void
+    public function addCartItem(CartItem $cartItem): void
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
 
-        $queryBuilder->table('cart_items')->insert([
-            'cart_id' => $cartId,
-            'event_id' => $eventId,
-            'event_model' => $eventModel,
-            'quantity' => $quantity
+        $cartItemId = $queryBuilder->table('cart_items')->insert([
+            'cart_id' => $cartItem->cart_id,
+            'event_id' => $cartItem->event_id,
+            'event_model' => $cartItem->event_model,
+            'note' => $cartItem->note
         ]);
+
+        foreach ($cartItem->quantities as $quantity) {
+            $queryBuilder->table('cart_item_quantities')->insert([
+                'cart_item_id' => $cartItemId,
+                'type' => $quantity->type->value,
+                'quantity' => $quantity->quantity
+            ]);
+        }
     }
 
     public function deleteCartItem(int $cartId, int $cartItemId): void

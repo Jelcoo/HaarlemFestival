@@ -46,7 +46,7 @@ $historyCart = array_filter($cartItems, function ($item) {
                         </div>
                     </div>
                     <div class="d-flex">
-                        <p><?php echo $cartItem->quantity; ?> x &euro;<?php echo number_format($cartItem->singlePrice(), 2); ?> = &euro;<?php echo number_format($cartItem->totalPrice(), 2); ?></p>
+                        <p><?php echo $cartItem->quantities[0]->quantity; ?> x &euro;<?php echo number_format($cartItem->singlePrice(), 2); ?> = &euro;<?php echo number_format($cartItem->totalPrice(), 2); ?></p>
                         <div class="counter">
                             <form action="/cart/decrease" method="POST">
                                 <button type="submit" class="decrease-btn">
@@ -54,7 +54,7 @@ $historyCart = array_filter($cartItems, function ($item) {
                                 </button>
                                 <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
                             </form>
-                            <span><?php echo $cartItem->quantity; ?></span>
+                            <span><?php echo $cartItem->quantities[0]->quantity; ?></span>
                             <form action="/cart/increase" method="POST">
                                 <button type="submit" class="increase-btn">
                                     <i class="fa-solid fa-plus"></i>
