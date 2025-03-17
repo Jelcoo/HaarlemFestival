@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Helpers\QueryBuilder;
 use App\Models\EventHistory;
+use App\Helpers\QueryBuilder;
 
 class HistoryRepository extends Repository
 {

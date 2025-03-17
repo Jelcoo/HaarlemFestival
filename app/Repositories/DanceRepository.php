@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Helpers\QueryBuilder;
 use App\Models\EventDance;
+use App\Helpers\QueryBuilder;
 
 class DanceRepository extends Repository
 {

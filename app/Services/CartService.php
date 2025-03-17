@@ -21,6 +21,7 @@ class CartService
         if (!isset($_SESSION['cart_id'])) {
             $cart = $this->cartRepository->createCart($userId);
             $_SESSION['cart_id'] = $cart->id;
+
             return $cart;
         }
 
@@ -28,6 +29,7 @@ class CartService
 
         if (is_null($cart)) {
             unset($_SESSION['cart_id']);
+
             return $this->getSessionCart();
         }
 

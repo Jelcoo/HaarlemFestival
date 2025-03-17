@@ -2,16 +2,16 @@
 
 namespace App\Controllers;
 
-use App\Application\Response;
-use App\Enum\ItemQuantityEnum;
 use App\Models\CartItem;
-use App\Models\CartItemQuantity;
 use App\Models\EventDance;
-use App\Models\EventHistory;
 use App\Models\EventYummy;
-use App\Repositories\CartRepository;
+use App\Models\EventHistory;
+use App\Application\Response;
 use App\Services\CartService;
+use App\Enum\ItemQuantityEnum;
 use App\Services\OrderService;
+use App\Models\CartItemQuantity;
+use App\Repositories\CartRepository;
 
 class CartController extends Controller
 {
@@ -32,7 +32,7 @@ class CartController extends Controller
         $cart = $this->cartService->getSessionCart(true, true);
 
         return $this->pageLoader->setPage('cart/index')->render([
-            'cartItems' => $cart->items
+            'cartItems' => $cart->items,
         ]);
     }
 

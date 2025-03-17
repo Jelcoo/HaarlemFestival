@@ -2,16 +2,16 @@
 
 namespace App\Repositories;
 
-use App\Enum\ItemQuantityEnum;
-use App\Helpers\QueryBuilder;
 use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\CartItemQuantity;
 use App\Models\Event;
+use App\Models\CartItem;
 use App\Models\EventDance;
-use App\Models\EventHistory;
 use App\Models\EventYummy;
+use App\Models\EventHistory;
+use App\Helpers\QueryBuilder;
+use App\Enum\ItemQuantityEnum;
 use App\Services\AssetService;
+use App\Models\CartItemQuantity;
 
 class CartRepository extends Repository
 {
@@ -35,7 +35,7 @@ class CartRepository extends Repository
         $this->assetService = new AssetService();
     }
 
-    public function getCartById(int $id, bool $includeItems = false, bool $includeEvents = false): Cart|null
+    public function getCartById(int $id, bool $includeItems = false, bool $includeEvents = false): ?Cart
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
 
@@ -50,7 +50,7 @@ class CartRepository extends Repository
         return $cart;
     }
 
-    public function createCart(int|null $user_id): Cart
+    public function createCart(?int $user_id): Cart
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
 
@@ -91,7 +91,7 @@ class CartRepository extends Repository
         }, $queryQuantities);
     }
 
-    private function getMixedEvent(string $eventModel, int $eventId): Event|null
+    private function getMixedEvent(string $eventModel, int $eventId): ?Event
     {
         $modelInstance = new $eventModel();
 
@@ -100,9 +100,9 @@ class CartRepository extends Repository
             $modelInstance->location = $this->locationRepository->getLocationById($modelInstance->location_id);
             $modelInstance->location->assets = $this->assetService->resolveAssets($modelInstance->location, 'cover');
             $modelInstance->artists = $this->artistRepository->getArtistsByEventId($eventId);
-        } else if ($modelInstance instanceof EventHistory) {
+        } elseif ($modelInstance instanceof EventHistory) {
             $modelInstance = $this->historyRepository->getEventById($eventId);
-        } else if ($modelInstance instanceof EventYummy) {
+        } elseif ($modelInstance instanceof EventYummy) {
             $modelInstance = $this->yummyRepository->getEventById($eventId);
             $modelInstance->restaurant = $this->restaurantRepository->getRestaurantByIdWithLocation($modelInstance->restaurant_id);
             $modelInstance->restaurant->assets = $this->assetService->resolveAssets($modelInstance->restaurant, 'cover');
@@ -113,36 +113,36 @@ class CartRepository extends Repository
 
     public function increaseQuantity(int $cartId, int $cartItemId, ItemQuantityEnum $type): void
     {
-        $query = $this->getConnection()->prepare("
+        $query = $this->getConnection()->prepare('
 UPDATE cart_items ci
 JOIN cart_item_quantities ciq ON ciq.cart_item_id = ci.id
 SET ciq.quantity = ciq.quantity + 1
 WHERE ci.id = :cartItemId
 AND ci.cart_id = :cartId
-AND ciq.type = :type");
+AND ciq.type = :type');
 
         $query->execute([
             'cartItemId' => $cartItemId,
             'cartId' => $cartId,
-            'type' => $type->value
+            'type' => $type->value,
         ]);
     }
 
     public function decreaseQuantity(int $cartId, int $cartItemId, ItemQuantityEnum $type): void
     {
-        $query = $this->getConnection()->prepare("
+        $query = $this->getConnection()->prepare('
 UPDATE cart_items ci
 JOIN cart_item_quantities ciq ON ciq.cart_item_id = ci.id
 SET ciq.quantity = ciq.quantity - 1
 WHERE ci.id = :cartItemId
 AND ci.cart_id = :cartId
 AND ciq.type = :type
-AND ciq.quantity > 1");
+AND ciq.quantity > 1');
 
         $query->execute([
             'cartItemId' => $cartItemId,
             'cartId' => $cartId,
-            'type' => $type->value
+            'type' => $type->value,
         ]);
     }
 
@@ -154,28 +154,28 @@ AND ciq.quantity > 1");
             'cart_id' => $cartItem->cart_id,
             'event_id' => $cartItem->event_id,
             'event_model' => $cartItem->event_model,
-            'note' => $cartItem->note
+            'note' => $cartItem->note,
         ]);
 
         foreach ($cartItem->quantities as $quantity) {
             $queryBuilder->table('cart_item_quantities')->insert([
                 'cart_item_id' => $cartItemId,
                 'type' => $quantity->type->value,
-                'quantity' => $quantity->quantity
+                'quantity' => $quantity->quantity,
             ]);
         }
     }
 
     public function deleteCartItem(int $cartId, int $cartItemId): void
     {
-        $query = $this->getConnection()->prepare("
+        $query = $this->getConnection()->prepare('
 DELETE FROM cart_items
 WHERE id = :cartItemId
-AND cart_id = :cartId");
+AND cart_id = :cartId');
 
         $query->execute([
             'cartItemId' => $cartItemId,
-            'cartId' => $cartId
+            'cartId' => $cartId,
         ]);
     }
 }

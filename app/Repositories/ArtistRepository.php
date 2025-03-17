@@ -38,7 +38,7 @@ class ArtistRepository extends Repository
 
     public function getArtistsByEventId(int $eventId): array
     {
-        $query = $this->getConnection()->prepare("
+        $query = $this->getConnection()->prepare('
 SELECT
 	a.id,
     a.name,
@@ -48,13 +48,13 @@ SELECT
 FROM dance_events de
 JOIN dance_event_artists dea ON de.id = dea.event_id
 JOIN artists a ON dea.artist_id = a.id
-WHERE de.id = :eventId");
+WHERE de.id = :eventId');
 
         $query->execute([
-            'eventId' => $eventId
+            'eventId' => $eventId,
         ]);
         $queryArtists = $query->fetchAll();
-        
+
         return $this->mapArtists($queryArtists);
     }
 

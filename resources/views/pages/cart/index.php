@@ -2,7 +2,6 @@
 /**
  * @var App\Models\CartItem[] $cartItems
  */
-
 $danceCart = array_filter($cartItems, function ($item) {
     return $item->event_model === 'App\\Models\\EventDance';
 });
@@ -15,11 +14,13 @@ $historyCart = array_filter($cartItems, function ($item) {
     return $item->event_model === 'App\\Models\\EventHistory';
 });
 
-function formatTime($date) {
+function formatTime($date)
+{
     return date('H:i', strtotime($date));
 }
 
-function formatMoney($amount) {
+function formatMoney($amount)
+{
     return number_format($amount, 2);
 }
 ?>
@@ -87,15 +88,15 @@ function formatMoney($amount) {
             <h2>Yummy!</h2>
             <?php foreach ($yummyCart as $cartItem) { ?>
                 <?php
-                    $childrenQuantity = 0;
-                    $adultQuantity = 0;
-                    foreach ($cartItem->quantities as $quantity) {
-                        if ($quantity->type->value === 'child') {
-                            $childrenQuantity += $quantity->quantity;
-                        } else {
-                            $adultQuantity += $quantity->quantity;
-                        }
+                $childrenQuantity = 0;
+                $adultQuantity = 0;
+                foreach ($cartItem->quantities as $quantity) {
+                    if ($quantity->type->value === 'child') {
+                        $childrenQuantity += $quantity->quantity;
+                    } else {
+                        $adultQuantity += $quantity->quantity;
                     }
+                }
                 ?>
                 <div class="eventCard">
                     <h4><?php echo $cartItem->event->restaurant->location->name; ?></h4>
@@ -175,7 +176,7 @@ function formatMoney($amount) {
                     <div>
                         <div>
                             <p>Duration: <?php echo formatTime($cartItem->event->start_time); ?>-<?php echo formatTime($cartItem->event->end_time); ?></p>
-                            <!-- <p>Ticket type: <?php //echo $cartItem->event->type; ?></p> -->
+                            <!-- <p>Ticket type: <?php // echo $cartItem->event->type;?></p> -->
                         </div>
                     </div>
                     <div class="d-flex">

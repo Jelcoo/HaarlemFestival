@@ -2,9 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Helpers\QueryBuilder;
-use App\Models\EventHistory;
 use App\Models\EventYummy;
+use App\Helpers\QueryBuilder;
 
 class YummyRepository extends Repository
 {
