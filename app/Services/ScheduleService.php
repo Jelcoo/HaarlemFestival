@@ -34,37 +34,44 @@ class ScheduleService
     public function getDanceSchedule(): array
     {
         $querySchedule = $this->danceRepository->getSchedule();
-        $schedules = [];
+        $scheduleList = [];
 
-        $dates = $this->getScheduleDates($querySchedule);
-        foreach ($dates as $date) {
-            $todayEvents = $this->getScheduleByDate($querySchedule, $date);
-            $todaySchedule = [
+        $eventDates = $this->getScheduleDates($querySchedule);
+
+        foreach ($eventDates as $date) {
+            $eventsOnDate = $this->getScheduleByDate($querySchedule, $date);
+
+            $dailySchedule = [
                 'date' => date('l F j', strtotime($date)),
                 'rows' => [],
             ];
 
-            foreach ($todayEvents as $event) {
-                $todaySchedule['rows'][] = [
+            foreach ($eventsOnDate as $event) {
+                $dailySchedule['rows'][] = [
                     'event_id' => $event['event_id'],
                     'start' => date('H:i', strtotime($event['start_time'])),
                     'venue' => $event['location_name'],
                     'artists' => explode(', ', $event['artist_names']),
-                    'session' => match (DanceSessionEnum::from($event['session'])) {
-                        DanceSessionEnum::CLUB => 'Club',
-                        DanceSessionEnum::B2B => 'Back2Back',
-                        DanceSessionEnum::TIESTO_WORLD => 'Tiesto World',
-                    },
+                    'session' => $this->getSessionName($event['session']),
                     'duration' => $event['duration'],
                     'tickets_available' => $event['tickets_available'],
                     'price' => $event['price'],
                 ];
             }
 
-            $schedules[] = $todaySchedule;
+            $scheduleList[] = $dailySchedule;
         }
 
-        return $schedules;
+        return $scheduleList;
+    }
+
+    private function getSessionName(string $session): string
+    {
+        return match (DanceSessionEnum::from($session)) {
+            DanceSessionEnum::CLUB => 'Club',
+            DanceSessionEnum::B2B => 'Back2Back',
+            DanceSessionEnum::TIESTO_WORLD => 'Tiesto World',
+        };
     }
 
     /**
