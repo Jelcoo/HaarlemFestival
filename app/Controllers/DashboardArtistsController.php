@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Services\AssetService;
 use Rakit\Validation\Validator;
 use App\Repositories\ArtistRepository;
-use App\Services\AssetService;
 
 class DashboardArtistsController extends DashboardController
 {
