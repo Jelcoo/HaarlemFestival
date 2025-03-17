@@ -4,15 +4,18 @@ namespace App\Controllers;
 
 use Rakit\Validation\Validator;
 use App\Repositories\ArtistRepository;
+use App\Services\AssetService;
 
 class DashboardArtistsController extends DashboardController
 {
     private ArtistRepository $artistRepository;
+    private AssetService $assetService;
 
     public function __construct()
     {
         parent::__construct();
         $this->artistRepository = new ArtistRepository();
+        $this->assetService = new AssetService();
     }
 
     public function index(): string
@@ -87,6 +90,8 @@ class DashboardArtistsController extends DashboardController
                 throw new \Exception('Artist not found.');
             }
 
+            $artistCover = $this->assetService->resolveAssets($existingArtist, 'cover');
+
             $_SESSION['show_artist_form'] = true;
             $_SESSION['form_data'] = [
                 'id' => $existingArtist->id,
@@ -94,6 +99,7 @@ class DashboardArtistsController extends DashboardController
                 'preview_description' => $existingArtist->preview_description,
                 'main_description' => $existingArtist->main_description,
                 'iconic_albums' => $existingArtist->iconic_albums,
+                'cover' => count($artistCover) > 0 ? $artistCover[0]->getUrl() : null,
             ];
 
             $this->redirectToArtists();
@@ -117,8 +123,9 @@ class DashboardArtistsController extends DashboardController
 
             $validator = new Validator();
             $validation = $validator->validate(
-                $_POST,
+                $_POST + $_FILES,
                 [
+                    'artist_cover' => 'required|uploaded_file|max:5M|mimes:jpeg,png',
                     'name' => 'required|max:255',
                     'preview_description' => 'nullable|max:500',
                     'main_description' => 'nullable|max:2000',
@@ -138,6 +145,14 @@ class DashboardArtistsController extends DashboardController
             $existingArtist->iconic_albums = $_POST['iconic_albums'] ?? null;
 
             $this->artistRepository->updateArtist($existingArtist);
+
+            $artistAssets = $this->assetService->resolveAssets($existingArtist);
+            foreach ($artistAssets as $asset) {
+                $this->assetService->deleteAsset($asset);
+            }
+
+            $this->assetService->saveAsset($_FILES['artist_cover'], 'cover', $existingArtist);
+
             $this->redirectTo("artists?details=$artistId", true, 'Artist updated successfully');
             $this->redirectToArtists(true, 'Artist updated successfully.');
         } catch (\Exception $e) {
@@ -152,8 +167,9 @@ class DashboardArtistsController extends DashboardController
         try {
             $validator = new Validator();
             $validation = $validator->validate(
-                $_POST,
+                $_POST + $_FILES,
                 [
+                    'artist_cover' => 'required|uploaded_file|max:5M|mimes:jpeg,png',
                     'name' => 'required|max:255',
                     'preview_description' => 'nullable|max:500',
                     'main_description' => 'nullable|max:2000',
@@ -179,7 +195,10 @@ class DashboardArtistsController extends DashboardController
                 )
             );
 
-            $this->artistRepository->createArtist($artistData);
+            $newArtist = $this->artistRepository->createArtist($artistData);
+
+            $this->assetService->saveAsset($_FILES['artist_cover'], 'cover', $newArtist);
+
             $this->redirectToArtists(true, 'Artist created successfully.');
         } catch (\Exception $e) {
             $_SESSION['show_artist_form'] = true;
