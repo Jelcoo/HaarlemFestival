@@ -71,6 +71,7 @@ class EmailWriterService
             'invoice' => $invoice,
             'total' => 1 #TODO: integrate with calculation
         ]);
+        $pdfPath = __DIR__ . '/../../storage/sample.pdf';
 
         $this->emailService
             ->addRecipient($user->email)
@@ -78,6 +79,7 @@ class EmailWriterService
                 $title,
                 $body
             )
+            ->addAttachment($pdfPath)
             ->send();
     }
 }
