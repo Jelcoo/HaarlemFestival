@@ -46,7 +46,7 @@
             display: inline-block;
             padding: 10px 20px;
             background: #007bff;
-            color: white;
+            color: white !important;
             text-decoration: none;
             border-radius: 5px;
             margin-top: 10px;

@@ -65,7 +65,7 @@ class EmailWriterService
 
     public function sendInvoice(User $user, Invoice $invoice): void
     {
-        $title = "Invoice #{$invoice->id}";
+        $title = "Receipt for order #{$invoice->id}";
         $body = $this->pageLoader->renderEmail('invoice', [
             'user' => $user,
             'invoice' => $invoice,
