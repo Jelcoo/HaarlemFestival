@@ -15,10 +15,10 @@ include_once __DIR__ . '/../components/header.php';
             <?php } ?>
 
             <div class="col-md-4 artist-card">
-                <img src="<?php echo $artist->assets[0]->getUrl(); ?>" alt="<?php echo $artist->name; ?>">
-                <h3><?php echo $artist->name; ?></h3>
+                <img src="<?php echo $artist->assets[0]->getUrl(); ?>" alt="<?php echo htmlspecialchars($artist->name); ?>">
+                <h3><?php echo htmlspecialchars($artist->name); ?></h3>
                 <p><?php echo $artist->preview_description; ?></p>
-                <a href="/dance/<?php echo str_replace(' ', '_', $artist->name); ?>" class="btn btn-custom-yellow"><i
+                <a href="/dance/<?php echo str_replace(' ', '_', htmlspecialchars($artist->name)); ?>" class="btn btn-custom-yellow"><i
                         class="fa-solid fa-arrow-up-right-from-square"></i>
                     More information</a>
             </div>
@@ -38,14 +38,16 @@ include_once __DIR__ . '/../components/header.php';
             <div class="row g-0">
             <?php } ?>
             <div class="col-md-6 location-card"
-                style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');">
+                <?php if (count($location->assets) > 0) { ?>
+                style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');"
+                <?php } ?>>
                 <div class="location-overlay">
-                    <div class="location-title"><?php echo $location->name; ?></div>
+                    <div class="location-title"><?php echo htmlspecialchars($location->name); ?></div>
                     <div class="location-description">
                         <?php echo $location->preview_description; ?>
                     </div>
                     <div class="location-address">
-                        <em>Address: <?php echo $location->address; ?></em>
+                        <em>Address: <?php echo htmlspecialchars($location->address); ?></em>
                     </div>
                 </div>
             </div>
@@ -59,7 +61,7 @@ include_once __DIR__ . '/../components/header.php';
 <h2 class="text-center mt-5">The Schedule</h2>
 <?php foreach ($schedules as $schedule) { ?>
     <div class="container table-container">
-        <h2 class="text-center"><?php echo $schedule['date']; ?></h2>
+        <h2 class="text-center"><?php echo htmlspecialchars($schedule['date']); ?></h2>
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -76,13 +78,13 @@ include_once __DIR__ . '/../components/header.php';
             <tbody>
                 <?php foreach ($schedule['rows'] as $row) { ?>
                     <tr>
-                        <td><?php echo $row['start']; ?></td>
-                        <td><?php echo $row['venue']; ?></td>
-                        <td><?php echo implode(', ', $row['artists']); ?></td>
-                        <td><?php echo $row['session']; ?></td>
-                        <td><?php echo $row['duration']; ?> min</td>
-                        <td><?php echo $row['tickets_available']; ?></td>
-                        <td>&euro;<?php echo $row['price']; ?></td>
+                        <td><?php echo htmlspecialchars($row['start']); ?></td>
+                        <td><?php echo htmlspecialchars($row['venue']); ?></td>
+                        <td><?php echo htmlspecialchars(implode(', ', $row['artists'])); ?></td>
+                        <td><?php echo htmlspecialchars($row['session']); ?></td>
+                        <td><?php echo htmlspecialchars($row['duration']); ?> min</td>
+                        <td><?php echo htmlspecialchars($row['tickets_available']); ?></td>
+                        <td>&euro;<?php echo htmlspecialchars($row['price']); ?></td>
                         <td><button class="btn btn-custom-yellow" onclick="openModal()"
                                 data-event_id="<?php echo $row['event_id']; ?>" data-start="<?php echo $row['start']; ?>"
                                 data-venue="<?php echo $row['venue']; ?>"

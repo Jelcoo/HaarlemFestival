@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Services\AssetService;
 use Rakit\Validation\Validator;
 use App\Repositories\LocationRepository;
 use App\Repositories\RestaurantRepository;
@@ -10,12 +11,14 @@ class DashboardRestaurantsController extends DashboardController
 {
     private RestaurantRepository $restaurantRepository;
     private LocationRepository $locationRepository;
+    private AssetService $assetService;
 
     public function __construct()
     {
         parent::__construct();
         $this->restaurantRepository = new RestaurantRepository();
         $this->locationRepository = new LocationRepository();
+        $this->assetService = new AssetService();
     }
 
     public function index(): string
@@ -75,8 +78,16 @@ class DashboardRestaurantsController extends DashboardController
 
     private function deleteRestaurant(int $restaurantId): void
     {
-        $success = $this->restaurantRepository->deleteRestaurant($restaurantId);
-        $this->redirectToRestaurants(!empty($success), $success ? 'Restaurant deleted successfully.' : 'Failed to delete Restaurant');
+        $deletedRestaurant = $this->restaurantRepository->deleteRestaurant($restaurantId);
+
+        if (!is_null($deletedRestaurant)) {
+            $restaurantAssets = $this->assetService->resolveAssets($deletedRestaurant);
+            foreach ($restaurantAssets as $asset) {
+                $this->assetService->deleteAsset($asset);
+            }
+        }
+
+        $this->redirectToRestaurants(!empty($deletedRestaurant), $deletedRestaurant ? 'Restaurant deleted successfully.' : 'Failed to delete Restaurant');
     }
 
     private function editRestaurant(): void
@@ -92,6 +103,9 @@ class DashboardRestaurantsController extends DashboardController
                 throw new \Exception('Restaurant not found.');
             }
 
+            $restaurantCover = $this->assetService->resolveAssets($existingRestaurant, 'cover');
+            $restaurantIcon = $this->assetService->resolveAssets($existingRestaurant, 'icon');
+
             $_SESSION['show_restaurant_form'] = true;
             $_SESSION['form_data'] = [
                 'id' => $existingRestaurant->id,
@@ -99,6 +113,8 @@ class DashboardRestaurantsController extends DashboardController
                 'rating' => $existingRestaurant->rating,
                 'location_id' => $existingRestaurant->location_id,
                 'menu' => $existingRestaurant->menu,
+                'cover' => $restaurantCover[0]->getUrl(),
+                'icon' => $restaurantIcon[0]->getUrl(),
             ];
 
             $this->redirectToRestaurants();
@@ -120,8 +136,10 @@ class DashboardRestaurantsController extends DashboardController
 
             $validator = new Validator();
             $validation = $validator->validate(
-                $_POST,
+                $_POST + $_FILES,
                 [
+                    'restaurant_logo' => 'required|uploaded_file|max:5M|mimes:jpeg,png',
+                    'restaurant_icon' => 'required|uploaded_file|max:5M|mimes:jpeg,png',
                     'restaurant_type' => 'nullable|max:100',
                     'rating' => 'nullable|numeric|min:0|max:5',
                     'location_id' => 'required|integer',
@@ -140,6 +158,15 @@ class DashboardRestaurantsController extends DashboardController
             $existingRestaurant->menu = $_POST['menu'] ?? null;
 
             $this->restaurantRepository->updateRestaurant($existingRestaurant);
+
+            $restaurantAssets = $this->assetService->resolveAssets($existingRestaurant);
+            foreach ($restaurantAssets as $asset) {
+                $this->assetService->deleteAsset($asset);
+            }
+
+            $this->assetService->saveAsset($_FILES['restaurant_logo'], 'cover', $existingRestaurant);
+            $this->assetService->saveAsset($_FILES['restaurant_icon'], 'icon', $existingRestaurant);
+
             $this->redirectTo("restaurants?details=$restaurantId", true, 'Restaurant updated successfully.');
         } catch (\Exception $e) {
             $_SESSION['form_data'] = $_POST;
@@ -180,7 +207,11 @@ class DashboardRestaurantsController extends DashboardController
                 )
             );
 
-            $this->restaurantRepository->createRestaurant($restaurantData);
+            $newRestaurant = $this->restaurantRepository->createRestaurant($restaurantData);
+
+            $this->assetService->saveAsset($_FILES['restaurant_logo'], 'cover', $newRestaurant);
+            $this->assetService->saveAsset($_FILES['restaurant_icon'], 'icon', $newRestaurant);
+
             $this->redirectToRestaurants(true, 'Restaurant created successfully.');
         } catch (\Exception $e) {
             $_SESSION['show_restaurant_form'] = true;

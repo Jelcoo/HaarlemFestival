@@ -28,7 +28,11 @@ $loggedIn = Session::isValidSession();
         });
     </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@7.7.0/tinymce.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tinymce@7.7.0/skins/ui/oxide/content.min.css">
+
     <script src="/assets/js/utils.js"></script>
+    <script src="/assets/js/editor.js"></script>
 </head>
 
 <body>
