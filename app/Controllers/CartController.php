@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Application\Response;
+use App\Models\EventDance;
+use App\Models\EventYummy;
 use App\Repositories\CartRepository;
 use App\Services\CartService;
 use App\Services\OrderService;
@@ -46,6 +48,21 @@ class CartController extends Controller
         $this->cartRepository->decreaseQuantity($cart->id, $_POST['item_id']);
 
         Response::redirect('/cart');
+    }
+
+    public function addItem(array $paramaters = [])
+    {
+        $cart = $this->cartService->getSessionCart();
+
+        $eventModel = match ($_POST['event_type']) {
+            'dance' => EventDance::class,
+            'yummy' => EventYummy::class,
+            'history' => EventDance::class,
+        };
+
+        $this->cartRepository->addCartItem($cart->id, $_POST['event_id'], $eventModel, $_POST['quantity']);
+
+        Response::redirect("/{$_POST['event_type']}");
     }
 
     public function removeItem(array $paramaters = [])

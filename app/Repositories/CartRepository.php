@@ -126,6 +126,18 @@ AND quantity > 1");
         ]);
     }
 
+    public function addCartItem(int $cartId, int $eventId, string $eventModel, int $quantity): void
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $queryBuilder->table('cart_items')->insert([
+            'cart_id' => $cartId,
+            'event_id' => $eventId,
+            'event_model' => $eventModel,
+            'quantity' => $quantity
+        ]);
+    }
+
     public function deleteCartItem(int $cartId, int $cartItemId): void
     {
         $query = $this->getConnection()->prepare("
