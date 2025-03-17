@@ -10,7 +10,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8">
-            <form action="/dashboard/artists" method="POST">
+            <form action="/dashboard/artists" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="action"
                     value="<?php echo isset($formData['id']) ? 'update' : 'createArtist'; ?>">
 
@@ -18,8 +18,16 @@
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($formData['id']); ?>">
                 <?php } ?>
 
+                <!-- Artist Cover -->
+                <div class="form-group mt-3">
+                    <div class="form-group">
+                        <label for="artist_cover">Cover</label>
+                        <input type="file" id="artist_cover" name="artist_cover" class="form-control" accept="image/jpeg, image/png">
+                    </div>
+                </div>
+
                 <!-- Artist Name -->
-                <div class="form-group">
+                <div class="form-group mt-3">
                     <label for="name">Artist Name</label>
                     <input type="text" id="name" name="name" class="form-control" required
                         value="<?php echo htmlspecialchars($formData['name'] ?? ''); ?>">
@@ -61,6 +69,9 @@
 </div>
 
 <script>
+    const coverInput = document.getElementById('artist_cover');
+    fillFileInput(coverInput, '<?php echo $formData['cover']; ?>');
+
     initEditor('preview_description');
     initEditor('main_description');
     initEditor('iconic_albums');
