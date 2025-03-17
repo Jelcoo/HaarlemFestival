@@ -78,8 +78,16 @@ class DashboardRestaurantsController extends DashboardController
 
     private function deleteRestaurant(int $restaurantId): void
     {
-        $success = $this->restaurantRepository->deleteRestaurant($restaurantId);
-        $this->redirectToRestaurants(!empty($success), $success ? 'Restaurant deleted successfully.' : 'Failed to delete Restaurant');
+        $deletedRestaurant = $this->restaurantRepository->deleteRestaurant($restaurantId);
+
+        if (!is_null($deletedRestaurant)) {
+            $restaurantAssets = $this->assetService->resolveAssets($deletedRestaurant);
+            foreach ($restaurantAssets as $asset) {
+                $this->assetService->deleteAsset($asset);
+            }
+        }
+
+        $this->redirectToRestaurants(!empty($deletedRestaurant), $deletedRestaurant ? 'Restaurant deleted successfully.' : 'Failed to delete Restaurant');
     }
 
     private function editRestaurant(): void
