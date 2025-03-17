@@ -22,13 +22,9 @@ $router->post('/cart/remove', [App\Controllers\CartController::class, 'removeIte
 
 $router->post('/stripe/webhook', [App\Controllers\CheckoutController::class, 'webhook']);
 
-$router->get('/editor', [App\Controllers\EditorController::class, 'index']);
-$router->post('/editor', [App\Controllers\EditorController::class, 'editPost']);
-
 $router->get('/program', [App\Controllers\ProgramController::class, 'index']);
 $router->get('/program/tickets', [App\Controllers\ProgramController::class, 'tickets']);
 $router->get('/program/tickets/qrcode', [App\Controllers\ProgramController::class, 'qrcode']);
-
 
 $router->middleware(EnsureNotLoggedIn::class, function () use ($router) {
     $router->get('/register', [App\Controllers\AuthController::class, 'register']);
