@@ -14,7 +14,7 @@ class CartService
         $this->cartRepository = new CartRepository();
     }
 
-    public function getSessionCart(bool $includeItems = false): Cart
+    public function getSessionCart(bool $includeItems = false, bool $includeEvents = false): Cart
     {
         $userId = $_SESSION['user_id'] ?? null;
 
@@ -24,7 +24,7 @@ class CartService
             return $cart;
         }
 
-        $cart = $this->cartRepository->getCartById($_SESSION['cart_id'], $includeItems);
+        $cart = $this->cartRepository->getCartById($_SESSION['cart_id'], $includeItems, $includeEvents);
 
         if (is_null($cart)) {
             unset($_SESSION['cart_id']);

@@ -33,7 +33,7 @@ class CartRepository extends Repository
         $this->assetService = new AssetService();
     }
 
-    public function getCartById(int $id, bool $includeItems = false): Cart
+    public function getCartById(int $id, bool $includeItems = false, bool $includeEvents = false): Cart
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
 
@@ -42,7 +42,7 @@ class CartRepository extends Repository
         $cart = $queryCart ? new Cart($queryCart) : null;
 
         if ($cart && $includeItems) {
-            $cart->items = $this->getCartItemsByCartId($id);
+            $cart->items = $this->getCartItemsByCartId($id, $includeEvents);
         }
 
         return $cart;
@@ -60,15 +60,18 @@ class CartRepository extends Repository
         return $cart;
     }
 
-    public function getCartItemsByCartId(int $cartId): array
+    public function getCartItemsByCartId(int $cartId, bool $includeEvents): array
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
 
         $queryItems = $queryBuilder->table('cart_items')->where('cart_id', '=', $cartId)->get();
 
-        return array_map(function ($item) {
+        return array_map(function ($item) use ($includeEvents) {
             $cartItem = new CartItem($item);
-            $cartItem->event = $this->getMixedEvent($cartItem->event_model, $cartItem->event_id);
+
+            if ($includeEvents) {
+                $cartItem->event = $this->getMixedEvent($cartItem->event_model, $cartItem->event_id);
+            }
 
             return $cartItem;
         }, $queryItems);
@@ -92,5 +95,47 @@ class CartRepository extends Repository
         }
 
         return $modelInstance;
+    }
+
+    public function increaseQuantity(int $cartId, int $cartItemId): void
+    {
+        $query = $this->getConnection()->prepare("
+UPDATE cart_items
+SET quantity = quantity + 1
+WHERE id = :cartItemId
+AND cart_id = :cartId");
+
+        $query->execute([
+            'cartItemId' => $cartItemId,
+            'cartId' => $cartId
+        ]);
+    }
+
+    public function decreaseQuantity(int $cartId, int $cartItemId): void
+    {
+        $query = $this->getConnection()->prepare("
+UPDATE cart_items
+SET quantity = quantity - 1
+WHERE id = :cartItemId
+AND cart_id = :cartId
+AND quantity > 1");
+
+        $query->execute([
+            'cartItemId' => $cartItemId,
+            'cartId' => $cartId
+        ]);
+    }
+
+    public function deleteCartItem(int $cartId, int $cartItemId): void
+    {
+        $query = $this->getConnection()->prepare("
+DELETE FROM cart_items
+WHERE id = :cartItemId
+AND cart_id = :cartId");
+
+        $query->execute([
+            'cartItemId' => $cartItemId,
+            'cartId' => $cartId
+        ]);
     }
 }

@@ -48,17 +48,26 @@ $historyCart = array_filter($cartItems, function ($item) {
                     <div class="d-flex">
                         <p><?php echo $cartItem->quantity; ?> x &euro;<?php echo number_format($cartItem->singlePrice(), 2); ?> = &euro;<?php echo number_format($cartItem->totalPrice(), 2); ?></p>
                         <div class="counter">
-                            <button type="button" class="decrease-btn" data-type="dance" data-id="1">
-                                <i class="fa-solid fa-minus"></i>
-                            </button>
+                            <form action="/cart/decrease" method="POST">
+                                <button type="submit" class="decrease-btn">
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+                                <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
+                            </form>
                             <span><?php echo $cartItem->quantity; ?></span>
-                            <button type="button" class="increase-btn" data-type="dance" data-id="1">
-                                <i class="fa-solid fa-plus"></i>
-                            </button>
+                            <form action="/cart/increase" method="POST">
+                                <button type="submit" class="increase-btn">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                                <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
+                            </form>
                         </div>
-                        <button type="button" class="remove-btn" data-type="dance" data-id="1">
+                        <form action="/cart/remove" method="POST">
+                            <button type="submit" class="remove-btn">
                             <i class="fa-solid fa-trash"></i>
-                        </button>
+                            </button>
+                            <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
+                        </form>
                     </div>
                 </div>
             <?php } ?>
