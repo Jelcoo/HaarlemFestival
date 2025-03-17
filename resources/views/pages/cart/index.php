@@ -1,3 +1,21 @@
+<?php
+/**
+ * @var App\Models\CartItem[] $cartItems
+ */
+
+$danceCart = array_filter($cartItems, function ($item) {
+    return $item->event_model === 'App\\Models\\EventDance';
+});
+
+$yummyCart = array_filter($cartItems, function ($item) {
+    return $item->event_model === 'App\\Models\\EventYummy';
+});
+
+$historyCart = array_filter($cartItems, function ($item) {
+    return $item->event_model === 'App\\Models\\EventHistory';
+});
+?>
+
 <div class="container mt-4">
     <?php include __DIR__ . '/../../components/errordisplay.php'; ?>
     <div class="row justify-content-center">
@@ -5,7 +23,7 @@
             <h1>Cart - Overview</h1>
         </div>
         <div class="col-6 d-flex gap-3 justify-content-end px-0 align-items-center">
-            <h2>Total items: <span id="total-items">0</span></h2>
+            <h2>Total items: <span id="total-items"><?php echo count($cartItems); ?></span></h2>
             <button type="button" class="btn btn-custom-yellow" data-bs-toggle="modal"
                 data-bs-target="#confirmModal">Place order <i
                     class="fa-solid fa-arrow-up-right-from-square"></i></button>
@@ -15,15 +33,54 @@
     <div class="row">
         <div class="col-sm-12 col-lg-4" id="dance">
             <h2>DANCE!</h2>
-            <p id="danceNotFound">No events found</p>
+            <?php foreach ($danceCart as $cartItem) { ?>
+                <div class="eventCard" data-event-id="<?php echo $cartItem->event_id; ?>">
+                    <h4><?php echo $cartItem->event->location->name; ?></h4>
+                    <div>
+                        <?php if (count($cartItem->event->location->assets) > 0) { ?>
+                            <img src="<?php echo $cartItem->event->location->assets[0]->getUrl(); ?>" alt="Image of venue">
+                        <?php } ?>
+                        <div>
+                            <p>Duration: <?php echo date('H:i', timestamp: strtotime($cartItem->event->start_time)); ?>-<?php echo date('H:i', timestamp: strtotime($cartItem->event->end_time)); ?></p>
+                            <p>Artists: <?php echo implode(', ', array_map(fn ($artist) => $artist->name, $cartItem->event->artists)); ?></p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <p><?php echo $cartItem->quantity; ?> x &euro;<?php echo number_format($cartItem->singlePrice(), 2); ?> = &euro;<?php echo number_format($cartItem->totalPrice(), 2); ?></p>
+                        <div class="counter">
+                            <button type="button" class="decrease-btn" data-type="dance" data-id="1">
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                            <span><?php echo $cartItem->quantity; ?></span>
+                            <button type="button" class="increase-btn" data-type="dance" data-id="1">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                        <button type="button" class="remove-btn" data-type="dance" data-id="1">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            <?php } ?>
+            <?php if (count($danceCart) < 1) { ?>
+                <p>No events found</p>
+            <?php } ?>
         </div>
         <div class="col-sm-12 col-lg-4" id="yummy">
             <h2>Yummy!</h2>
-            <p id="yummyNotFound">No events found</p>
+            <?php if (count($cartItems) > 0) { ?>
+                <p id="danceFound">Events found</p>
+            <?php } else { ?>
+                <p>No events found</p>
+            <?php } ?>
         </div>
         <div class="col-sm-12 col-lg-4" id="history">
             <h2>A stroll through history</h2>
-            <p id="historyNotFound">No events found</p>
+            <?php if (count($cartItems) > 0) { ?>
+                <p id="danceFound">Events found</p>
+            <?php } else { ?>
+                <p>No events found</p>
+            <?php } ?>
         </div>
     </div>
 </div>
@@ -59,7 +116,7 @@
     </div>
 </div>
 
-<script src="/assets/js/cart.js"></script>
+<!-- <script src="/assets/js/cart.js"></script> -->
 <style>
     .eventCard {
         background-color: var(--secondary);

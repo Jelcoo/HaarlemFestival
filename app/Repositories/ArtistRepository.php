@@ -36,6 +36,28 @@ class ArtistRepository extends Repository
         return $queryArtist ? new Artist($queryArtist) : null;
     }
 
+    public function getArtistsByEventId(int $eventId): array
+    {
+        $query = $this->getConnection()->prepare("
+SELECT
+	a.id,
+    a.name,
+    a.preview_description,
+    a.main_description,
+    a.iconic_albums
+FROM dance_events de
+JOIN dance_event_artists dea ON de.id = dea.event_id
+JOIN artists a ON dea.artist_id = a.id
+WHERE de.id = :eventId");
+
+        $query->execute([
+            'eventId' => $eventId
+        ]);
+        $queryArtists = $query->fetchAll();
+        
+        return $this->mapArtists($queryArtists);
+    }
+
     public function getAllArtists(): array
     {
         $queryBuilder = new QueryBuilder($this->getConnection());

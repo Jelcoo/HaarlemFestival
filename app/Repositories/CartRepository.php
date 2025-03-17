@@ -9,12 +9,17 @@ use App\Models\Event;
 use App\Models\EventDance;
 use App\Models\EventHistory;
 use App\Models\EventYummy;
+use App\Services\AssetService;
 
 class CartRepository extends Repository
 {
     private DanceRepository $danceRepository;
     private HistoryRepository $historyRepository;
     private YummyRepository $yummyRepository;
+    private LocationRepository $locationRepository;
+    private RestaurantRepository $restaurantRepository;
+    private ArtistRepository $artistRepository;
+    private AssetService $assetService;
 
     public function __construct()
     {
@@ -22,6 +27,10 @@ class CartRepository extends Repository
         $this->danceRepository = new DanceRepository();
         $this->historyRepository = new HistoryRepository();
         $this->yummyRepository = new YummyRepository();
+        $this->locationRepository = new LocationRepository();
+        $this->restaurantRepository = new RestaurantRepository();
+        $this->artistRepository = new ArtistRepository();
+        $this->assetService = new AssetService();
     }
 
     public function getCartById(int $id, bool $includeItems = false): Cart
@@ -70,13 +79,18 @@ class CartRepository extends Repository
         $modelInstance = new $eventModel();
 
         if ($modelInstance instanceof EventDance) {
-            return $this->danceRepository->getEventById($eventId);
+            $modelInstance = $this->danceRepository->getEventById($eventId);
+            $modelInstance->location = $this->locationRepository->getLocationById($modelInstance->location_id);
+            $modelInstance->location->assets = $this->assetService->resolveAssets($modelInstance->location, 'cover');
+            $modelInstance->artists = $this->artistRepository->getArtistsByEventId($eventId);
         } else if ($modelInstance instanceof EventHistory) {
-            return $this->historyRepository->getEventById($eventId);
+            $modelInstance = $this->historyRepository->getEventById($eventId);
         } else if ($modelInstance instanceof EventYummy) {
-            return $this->yummyRepository->getEventById($eventId);
+            $modelInstance = $this->yummyRepository->getEventById($eventId);
+            $modelInstance->restaurant = $this->restaurantRepository->getRestaurantByIdWithLocation($modelInstance->restaurant_id);
+            $modelInstance->restaurant->assets = $this->assetService->resolveAssets($modelInstance->restaurant, 'cover');
         }
 
-        return null;
+        return $modelInstance;
     }
 }

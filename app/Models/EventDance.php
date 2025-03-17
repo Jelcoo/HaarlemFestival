@@ -10,6 +10,8 @@ class EventDance extends Event
     public int $total_tickets;
     public DanceSessionEnum $session;
     public float $price;
+    public ?Location $location = null;
+    public ?array $artists = null;
 
     public function __construct()
     {
