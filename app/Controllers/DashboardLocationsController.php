@@ -3,17 +3,20 @@
 namespace App\Controllers;
 
 use App\Enum\EventTypeEnum;
+use App\Services\AssetService;
 use Rakit\Validation\Validator;
 use App\Repositories\LocationRepository;
 
 class DashboardLocationsController extends DashboardController
 {
     private LocationRepository $locationRepository;
+    private AssetService $assetService;
 
     public function __construct()
     {
         parent::__construct();
         $this->locationRepository = new LocationRepository();
+        $this->assetService = new AssetService();
     }
 
     public function index(): string
@@ -88,6 +91,8 @@ class DashboardLocationsController extends DashboardController
                 throw new \Exception('Location not found.');
             }
 
+            $locationCover = $this->assetService->resolveAssets($existingLocation, 'cover');
+
             $_SESSION['show_location_form'] = true;
             $_SESSION['form_data'] = [
                 'id' => $existingLocation->id,
@@ -97,6 +102,7 @@ class DashboardLocationsController extends DashboardController
                 'coordinates' => $existingLocation->coordinates,
                 'preview_description' => $existingLocation->preview_description,
                 'main_description' => $existingLocation->main_description,
+                'cover' => count($locationCover) > 0 ? $locationCover[0]->getUrl() : null,
             ];
 
             $this->redirectToLocations();
@@ -120,8 +126,9 @@ class DashboardLocationsController extends DashboardController
 
             $validator = new Validator();
             $validation = $validator->validate(
-                $_POST,
+                $_POST + $_FILES,
                 [
+                    'location_cover' => 'nullable|uploaded_file|max:5M|mimes:jpeg,png',
                     'name' => 'required|max:255',
                     'event_type' => 'required|in:dance,yummy,history,teylers',
                     'address' => 'required|max:255',
@@ -149,6 +156,16 @@ class DashboardLocationsController extends DashboardController
             $existingLocation->main_description = $_POST['main_description'] ?? null;
 
             $this->locationRepository->updateLocation($existingLocation);
+
+            $locationAssets = $this->assetService->resolveAssets($existingLocation);
+            foreach ($locationAssets as $asset) {
+                $this->assetService->deleteAsset($asset);
+            }
+
+            if (!empty($_FILES['location_cover']['name'])) {
+                $this->assetService->saveAsset($_FILES['location_cover'], 'cover', $existingLocation);
+            }
+
             $this->redirectTo("locations?details=$locationId", true, 'Location updated successfully');
         } catch (\Exception $e) {
             $_SESSION['form_data'] = $_POST;
@@ -197,7 +214,12 @@ class DashboardLocationsController extends DashboardController
                 )
             );
 
-            $this->locationRepository->createLocation($locationData);
+            $newLocation = $this->locationRepository->createLocation($locationData);
+
+            if (!empty($_FILES['location_cover']['name'])) {
+                $this->assetService->saveAsset($_FILES['location_cover'], 'cover', $newLocation);
+            }
+
             $this->redirectToLocations(true, 'Location created successfully.');
         } catch (\Exception $e) {
             $_SESSION['show_location_form'] = true;

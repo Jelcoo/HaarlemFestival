@@ -12,7 +12,9 @@ include_once __DIR__ . '/../components/header.php';
     <div class="swiper">
         <div class="swiper-wrapper">
             <?php foreach ($locations as $location) { ?>
-                <div class="swiper-slide" style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');">
+                <div class="swiper-slide" <?php if (count($location->assets) > 0) { ?>
+                style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');"
+                <?php } ?>>
                     <div class="slide-content">
                         <h2><?php echo htmlspecialchars($location->name); ?></h2>
                     </div>

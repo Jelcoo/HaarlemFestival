@@ -38,7 +38,9 @@ include_once __DIR__ . '/../components/header.php';
             <div class="row g-0">
             <?php } ?>
             <div class="col-md-6 location-card"
-                style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');">
+                <?php if (count($location->assets) > 0) { ?>
+                style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');"
+                <?php } ?>>
                 <div class="location-overlay">
                     <div class="location-title"><?php echo htmlspecialchars($location->name); ?></div>
                     <div class="location-description">

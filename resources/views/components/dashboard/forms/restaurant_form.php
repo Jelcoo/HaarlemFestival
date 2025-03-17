@@ -19,7 +19,7 @@
                 <?php } ?>
 
                 <!-- Restaurant Logo -->
-                <div class="form-group">
+                <div class="form-group mt-3">
                     <div class="form-group">
                         <label for="restaurant_logo">Logo</label>
                         <input type="file" id="restaurant_logo" name="restaurant_logo" class="form-control" accept="image/jpeg, image/png">
@@ -27,7 +27,7 @@
                 </div>
 
                 <!-- Restaurant Icon -->
-                <div class="form-group">
+                <div class="form-group mt-3">
                     <div class="form-group">
                         <label for="restaurant_icon">Icon</label>
                         <input type="file" id="restaurant_icon" name="restaurant_icon" class="form-control" accept="image/jpeg, image/png">
