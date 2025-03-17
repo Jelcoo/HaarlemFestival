@@ -386,3 +386,19 @@ INSERT INTO assets (`id`, `collection`, `filepath`, `filename`, `mimetype`, `siz
 (41, 'icon', 'assets/img/icons', 'icon5.png', 'image/png', 6945, 'App\\Models\\Restaurant', 5),
 (42, 'icon', 'assets/img/icons', 'icon6.png', 'image/png', 16982, 'App\\Models\\Restaurant', 6),
 (43, 'icon', 'assets/img/icons', 'icon7.png', 'image/png', 7486, 'App\\Models\\Restaurant', 7);
+
+CREATE TABLE carts (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE cart_items (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    cart_id INT,
+    event_model VARCHAR(255) NOT NULL,
+    event_id INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    note TEXT,
+    FOREIGN KEY (cart_id) REFERENCES carts(id)
+);
