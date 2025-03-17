@@ -199,7 +199,11 @@ class DashboardRestaurantsController extends DashboardController
                 )
             );
 
-            $this->restaurantRepository->createRestaurant($restaurantData);
+            $newRestaurant = $this->restaurantRepository->createRestaurant($restaurantData);
+
+            $this->assetService->saveAsset($_FILES['restaurant_logo'], 'cover', $newRestaurant);
+            $this->assetService->saveAsset($_FILES['restaurant_icon'], 'icon', $newRestaurant);
+
             $this->redirectToRestaurants(true, 'Restaurant created successfully.');
         } catch (\Exception $e) {
             $_SESSION['show_restaurant_form'] = true;
