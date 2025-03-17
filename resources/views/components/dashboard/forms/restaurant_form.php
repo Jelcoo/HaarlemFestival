@@ -85,4 +85,6 @@
 <script>
     const logoInput = document.getElementById('restaurant_logo');
     fillFileInput(logoInput, '<?php echo $formData['cover']; ?>');
+
+    initEditor('menu');
 </script>

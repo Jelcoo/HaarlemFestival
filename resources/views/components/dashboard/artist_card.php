@@ -15,22 +15,22 @@ $showDetails = isset($_GET['details']) && $_GET['details'] == $artist->id;
             <!-- Preview Description -->
             <p class="card-text flex-grow-1"><strong>Preview Description:</strong>
                 <?php echo $showDetails
-                    ? htmlspecialchars($artist->preview_description ?? 'No Preview Description')
-                    : htmlspecialchars(substr($artist->preview_description ?? 'No Preview Description', 0, 100)) . '...'; ?>
+                    ? strip_tags($artist->preview_description ?? 'No Preview Description')
+                    : strip_tags(substr($artist->preview_description ?? 'No Preview Description', 0, 100)) . '...'; ?>
             </p>
 
             <!-- Main Description -->
             <p class="card-text flex-grow-1"><strong>Main Description:</strong>
                 <?php echo $showDetails
-                    ? htmlspecialchars($artist->main_description ?? 'No Main Description')
-                    : htmlspecialchars(substr($artist->main_description ?? 'No Main Description', 0, 100)) . '...'; ?>
+                    ? strip_tags($artist->main_description ?? 'No Main Description')
+                    : strip_tags(substr($artist->main_description ?? 'No Main Description', 0, 100)) . '...'; ?>
             </p>
 
             <!-- Iconic Albums -->
             <p class="card-text flex-grow-1"><strong>Iconic Albums:</strong>
                 <?php echo $showDetails
-                    ? htmlspecialchars($artist->iconic_albums ?? 'No Iconic Albums Listed')
-                    : htmlspecialchars(substr($artist->iconic_albums ?? 'No Iconic Albums Listed', 0, 100)) . '...'; ?>
+                    ? strip_tags($artist->iconic_albums ?? 'No Iconic Albums Listed')
+                    : strip_tags(substr($artist->iconic_albums ?? 'No Iconic Albums Listed', 0, 100)) . '...'; ?>
             </p>
 
             <!-- Show More Button -->

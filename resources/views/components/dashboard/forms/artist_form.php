@@ -59,3 +59,9 @@
         </div>
     </div>
 </div>
+
+<script>
+    initEditor('preview_description');
+    initEditor('main_description');
+    initEditor('iconic_albums');
+</script>

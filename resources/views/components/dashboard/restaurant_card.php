@@ -32,7 +32,7 @@ if (!isset($restaurant)) {
                 </p>
                 <!-- Menu -->
                 <p><strong>Menu:</strong>
-                    <?php echo !empty(trim($restaurant->menu)) ? htmlspecialchars($restaurant->menu) : 'Empty'; ?>
+                    <?php echo !empty(trim($restaurant->menu)) ? strip_tags($restaurant->menu) : 'Empty'; ?>
                 </p>
 
                 <!-- Actions -->

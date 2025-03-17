@@ -30,11 +30,11 @@ $showDetails = isset($_GET['details']) && $_GET['details'] == $location->id;
             <?php if ($showDetails) { ?>
                 <!-- Full Descriptions -->
                 <p class="card-text"><strong>Preview Description:</strong>
-                    <?php echo !empty(trim($location->preview_description)) ? htmlspecialchars($location->preview_description) : 'No Preview Description'; ?>
+                    <?php echo !empty(trim($location->preview_description)) ? strip_tags($location->preview_description) : 'No Preview Description'; ?>
                 </p>
 
                 <p class="card-text"><strong>Main Description:</strong>
-                    <?php echo !empty(trim($location->main_description)) ? htmlspecialchars($location->main_description) : 'No Main Description'; ?>
+                    <?php echo !empty(trim($location->main_description)) ? strip_tags($location->main_description) : 'No Main Description'; ?>
                 </p>
             <?php } ?>
 
