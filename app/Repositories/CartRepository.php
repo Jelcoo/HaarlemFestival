@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Cart;
-use App\Models\Event;
 use App\Models\CartItem;
 use App\Models\EventDance;
 use App\Models\EventYummy;
@@ -91,7 +90,7 @@ class CartRepository extends Repository
         }, $queryQuantities);
     }
 
-    private function getMixedEvent(string $eventModel, int $eventId): ?Event
+    private function getMixedEvent(string $eventModel, int $eventId): EventDance|EventHistory|EventYummy
     {
         $modelInstance = new $eventModel();
 

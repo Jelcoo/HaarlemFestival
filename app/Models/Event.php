@@ -13,7 +13,16 @@ class Event
     public Carbon $end_time;
     public Carbon $end_date;
 
-    public function __construct(array $collection)
+    public function __construct()
+    {
+        $arguments = func_get_args();
+
+        if (!empty($arguments)) {
+            $this->fill($arguments[0]);
+        }
+    }
+
+    public function fill(array $collection)
     {
         $this->id = $collection['id'];
         $this->vat = $collection['vat'];
