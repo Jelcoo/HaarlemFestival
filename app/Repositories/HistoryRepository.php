@@ -2,11 +2,18 @@
 
 namespace App\Repositories;
 
+use App\Helpers\QueryBuilder;
+use App\Models\EventHistory;
+
 class HistoryRepository extends Repository
 {
-    public function __construct()
+    public function getEventById(int $id): EventHistory
     {
-        parent::__construct();
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $queryEvent = $queryBuilder->table('history_events')->where('id', '=', $id)->first();
+
+        return $queryEvent ? new EventHistory($queryEvent) : null;
     }
 
     public function getSchedule(): array

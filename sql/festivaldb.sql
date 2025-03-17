@@ -395,7 +395,7 @@ CREATE TABLE carts (
 
 CREATE TABLE cart_items (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    cart_id INT,
+    cart_id INT NOT NULL,
     event_model VARCHAR(255) NOT NULL,
     event_id INT NOT NULL,
     quantity INT NOT NULL DEFAULT 1,

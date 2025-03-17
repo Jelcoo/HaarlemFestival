@@ -2,11 +2,18 @@
 
 namespace App\Repositories;
 
+use App\Helpers\QueryBuilder;
+use App\Models\EventDance;
+
 class DanceRepository extends Repository
 {
-    public function __construct()
+    public function getEventById(int $id): EventDance
     {
-        parent::__construct();
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $queryEvent = $queryBuilder->table('dance_events')->where('id', '=', $id)->first();
+
+        return $queryEvent ? new EventDance($queryEvent) : null;
     }
 
     public function getSchedule(): array
