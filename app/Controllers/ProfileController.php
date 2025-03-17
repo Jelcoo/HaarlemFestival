@@ -2,11 +2,11 @@
 
 namespace App\Controllers;
 
-use App\Repositories\InvoiceRepository;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
 use App\Repositories\UserRepository;
 use App\Services\EmailWriterService;
+use App\Repositories\InvoiceRepository;
 
 class ProfileController extends Controller
 {

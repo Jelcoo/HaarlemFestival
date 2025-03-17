@@ -2,11 +2,9 @@
 
 namespace App\Services;
 
-use App\Application\PageLoader;
-use App\Models\Invoice;
 use App\Models\User;
-use App\Repositories\InvoiceRepository;
-use Stripe\Service\InvoiceService;
+use App\Models\Invoice;
+use App\Application\PageLoader;
 
 class EmailWriterService
 {
@@ -69,7 +67,7 @@ class EmailWriterService
         $body = $this->pageLoader->renderEmail('invoice', [
             'user' => $user,
             'invoice' => $invoice,
-            'total' => 1 #TODO: integrate with calculation
+            'total' => 1, // TODO: integrate with calculation
         ]);
         $pdfPath = __DIR__ . '/../../storage/sample.pdf';
 

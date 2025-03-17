@@ -26,7 +26,7 @@ class InvoiceRepository extends Repository
         $invoice = $queryBuilder
             ->table('invoices')
             ->where('id', '=', $id)
-            ->first();           
+            ->first();
 
         return $invoice ? new Invoice($invoice) : null;
     }

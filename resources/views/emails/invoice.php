@@ -1,6 +1,8 @@
 <?php
-/** @var \App\Models\User $user */
-/** @var \App\Models\Invoice $invoice */
+/**
+ * @var App\Models\User $user
+ * @var App\Models\Invoice $invoice
+ */
 ?>
 
 <!DOCTYPE html>
