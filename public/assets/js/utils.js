@@ -98,6 +98,11 @@ function resetSort() {
 }
 
 function fillFileInput(input, url) {
+    if (!url) {
+        input.files = [];
+        return;
+    }
+
     fetch(url)
         .then((response) => response.blob())
         .then((blob) => {
