@@ -179,8 +179,9 @@ class DashboardLocationsController extends DashboardController
         try {
             $validator = new Validator();
             $validation = $validator->validate(
-                $_POST,
+                $_POST + $_FILES,
                 [
+                    'location_cover' => 'nullable|uploaded_file|max:5M|mimes:jpeg,png',
                     'name' => 'required|max:255',
                     'event_type' => 'required',
                     'address' => 'required|max:255',
