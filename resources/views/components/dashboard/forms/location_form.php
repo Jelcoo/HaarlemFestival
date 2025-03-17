@@ -86,3 +86,8 @@ use App\Enum\EventTypeEnum;
         </form>
     </div>
 </div>
+
+<script>
+    initEditor('preview_description');
+    initEditor('main_description');
+</script>
