@@ -106,7 +106,7 @@ function formatMoney($amount)
                         <?php } ?>
                         <div>
                             <p>Duration: <?php echo formatTime($cartItem->event->start_time); ?>-<?php echo formatTime($cartItem->event->end_time); ?></p>
-                            <p>Reservation cost: €<?php echo $cartItem->event->reservationCost(); ?></p>
+                            <p>Reservation cost: €<?php echo formatMoney($cartItem->singlePrice()); ?></p>
                             <?php if ($cartItem->note) { ?>
                                 <p>Notes: <?php echo $cartItem->note; ?></p>
                             <?php } ?>
@@ -180,7 +180,11 @@ function formatMoney($amount)
                         </div>
                     </div>
                     <div class="d-flex">
-                        <p><?php echo $cartItem->quantities[0]->quantity; ?> x &euro;<?php echo formatMoney($cartItem->singlePrice()); ?> = &euro;<?php echo formatMoney($cartItem->totalPrice()); ?></p>
+                        <?php if ($cartItem->quantities[0]->type->value === 'family') { ?>
+                            <p>&euro;<?php echo formatMoney($cartItem->singlePrice()); ?></p>
+                        <?php } else { ?>
+                            <p><?php echo $cartItem->quantities[0]->quantity; ?> x &euro;<?php echo formatMoney($cartItem->singlePrice()); ?> = &euro;<?php echo formatMoney($cartItem->totalPrice()); ?></p>
+                        <?php } ?>
                         <div class="counter">
                             <form action="/cart/decrease" method="POST">
                                 <button type="submit" class="decrease-btn">

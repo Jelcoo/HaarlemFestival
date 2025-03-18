@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enum\ItemQuantityEnum;
+
 class CartItem
 {
     public int $id;
@@ -36,8 +38,11 @@ class CartItem
             case EventDance::class:
                 return $this->event->price;
             case EventYummy::class:
-                return $this->event->adult_price;
+                return $this->event->reservation_cost;
             case EventHistory::class:
+                if ($this->quantities[0]->type === ItemQuantityEnum::FAMILY) {
+                    return $this->event->family_price;
+                }
                 return $this->event->single_price;
             default:
                 return 0;
