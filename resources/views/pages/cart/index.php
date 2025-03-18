@@ -29,6 +29,17 @@ function formatMoney($amount)
 {
     return number_format($amount, 2);
 }
+
+$danceMin = \App\Config\Config::getKey('CART_DANCE_MIN');
+$danceMax = \App\Config\Config::getKey('CART_DANCE_MAX');
+$yummyChildMin = \App\Config\Config::getKey('CART_YUMMY_CHILD_MIN');
+$yummyChildMax = \App\Config\Config::getKey('CART_YUMMY_CHILD_MAX');
+$yummyAdultMin = \App\Config\Config::getKey('CART_YUMMY_ADULT_MIN');
+$yummyAdultMax = \App\Config\Config::getKey('CART_YUMMY_ADULT_MAX');
+$historySingleMin = \App\Config\Config::getKey('CART_HISTORY_SINGLE_MIN');
+$historySingleMax = \App\Config\Config::getKey('CART_HISTORY_SINGLE_MAX');
+$historyFamilyMin = \App\Config\Config::getKey('CART_HISTORY_FAMILY_MIN');
+$historyFamilyMax = \App\Config\Config::getKey('CART_HISTORY_FAMILY_MAX');
 ?>
 
 <div class="container mt-4">
@@ -49,6 +60,7 @@ function formatMoney($amount)
         <div class="col-sm-12 col-lg-4" id="dance">
             <h2>DANCE!</h2>
             <?php foreach ($danceCart as $cartItem) { ?>
+                <?php $displayedQuantity = $cartItem->quantities[0]->quantity; ?>
                 <div class="eventCard">
                     <h4><?php echo $cartItem->event->location->name; ?></h4>
                     <div>
@@ -61,17 +73,17 @@ function formatMoney($amount)
                         </div>
                     </div>
                     <div class="d-flex">
-                        <p><?php echo $cartItem->quantities[0]->quantity; ?> x &euro;<?php echo formatMoney($cartItem->singlePrice()); ?> = &euro;<?php echo formatMoney($cartItem->totalPrice()); ?></p>
+                        <p><?php echo $displayedQuantity; ?> x &euro;<?php echo formatMoney($cartItem->singlePrice()); ?> = &euro;<?php echo formatMoney($cartItem->totalPrice()); ?></p>
                         <div class="counter">
                             <form action="/cart/decrease" method="POST">
-                                <button type="submit" class="decrease-btn">
+                                <button type="submit" class="decrease-btn" <?php echo $displayedQuantity <= $danceMin ? 'disabled' : ''; ?>>
                                     <i class="fa-solid fa-minus"></i>
                                 </button>
                                 <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
                             </form>
-                            <span><?php echo $cartItem->quantities[0]->quantity; ?></span>
+                            <span><?php echo $displayedQuantity; ?></span>
                             <form action="/cart/increase" method="POST">
-                                <button type="submit" class="increase-btn">
+                                <button type="submit" class="increase-btn" <?php echo !is_null($danceMax) && $displayedQuantity >= $danceMax ? 'disabled' : ''; ?>>
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
                                 <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
@@ -124,7 +136,7 @@ function formatMoney($amount)
                                 <p>Adults: <?php echo $adultQuantity; ?></p>
                                 <div class="counter">
                                     <form action="/cart/decrease" method="POST">
-                                        <button type="submit" class="decrease-btn">
+                                        <button type="submit" class="decrease-btn" <?php echo $adultQuantity <= $yummyAdultMin ? 'disabled' : ''; ?>>
                                             <i class="fa-solid fa-minus"></i>
                                         </button>
                                         <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
@@ -132,7 +144,7 @@ function formatMoney($amount)
                                     </form>
                                     <span><?php echo $adultQuantity; ?></span>
                                     <form action="/cart/increase" method="POST">
-                                        <button type="submit" class="increase-btn">
+                                        <button type="submit" class="increase-btn" <?php echo !is_null($yummyAdultMax) && $adultQuantity >= $yummyAdultMax ? 'disabled' : ''; ?>>
                                             <i class="fa-solid fa-plus"></i>
                                         </button>
                                         <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
@@ -144,7 +156,7 @@ function formatMoney($amount)
                                 <p>Children: <?php echo $childrenQuantity; ?></p>
                                 <div class="counter">
                                     <form action="/cart/decrease" method="POST">
-                                        <button type="submit" class="decrease-btn">
+                                        <button type="submit" class="decrease-btn" <?php echo $childrenQuantity <= $yummyChildMin ? 'disabled' : ''; ?>>
                                             <i class="fa-solid fa-minus"></i>
                                         </button>
                                         <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
@@ -152,7 +164,7 @@ function formatMoney($amount)
                                     </form>
                                     <span><?php echo $childrenQuantity; ?></span>
                                     <form action="/cart/increase" method="POST">
-                                        <button type="submit" class="increase-btn">
+                                        <button type="submit" class="increase-btn" <?php echo !is_null($yummyChildMax) && $childrenQuantity >= $yummyChildMax ? 'disabled' : ''; ?>>
                                             <i class="fa-solid fa-plus"></i>
                                         </button>
                                         <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
@@ -177,35 +189,41 @@ function formatMoney($amount)
         <div class="col-sm-12 col-lg-4" id="history">
             <h2>A stroll through history</h2>
             <?php foreach ($historyCart as $cartItem) { ?>
+                <?php $displayedQuantity = $cartItem->quantities[0]->quantity; ?>
+                <?php $tourType = $cartItem->quantities[0]->type->value; ?>
                 <div class="eventCard">
                     <h4>History tour (<?php echo $cartItem->event->language; ?>)</h4>
                     <div>
                         <div>
                             <p>Duration: <?php echo formatTime($cartItem->event->start_time); ?>-<?php echo formatTime($cartItem->event->end_time); ?></p>
-                            <p>Ticket type: <?php echo $cartItem->quantities[0]->type->value; ?></p>
+                            <p>Ticket type: <?php echo $tourType; ?></p>
                         </div>
                     </div>
                     <div class="d-flex">
-                        <?php if ($cartItem->quantities[0]->type->value === 'family') { ?>
+                        <?php if ($tourType === 'family') { ?>
                             <p>&euro;<?php echo formatMoney($cartItem->singlePrice()); ?></p>
                         <?php } else { ?>
-                            <p><?php echo $cartItem->quantities[0]->quantity; ?> x &euro;<?php echo formatMoney($cartItem->singlePrice()); ?> = &euro;<?php echo formatMoney($cartItem->totalPrice()); ?></p>
+                            <p><?php echo $displayedQuantity; ?> x &euro;<?php echo formatMoney($cartItem->singlePrice()); ?> = &euro;<?php echo formatMoney($cartItem->totalPrice()); ?></p>
                         <?php } ?>
                         <div class="counter">
                             <form action="/cart/decrease" method="POST">
-                                <button type="submit" class="decrease-btn">
+                                <button type="submit" class="decrease-btn" <?php echo ($tourType === 'family')
+                                                                                ? (($displayedQuantity <= $historyFamilyMin) ? 'disabled' : '')
+                                                                                : (($displayedQuantity <= $historySingleMin) ? 'disabled' : '');?>>
                                     <i class="fa-solid fa-minus"></i>
                                 </button>
                                 <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
-                                <input type="hidden" name="quantity_type" value="<?php echo $cartItem->quantities[0]->type->value; ?>">
+                                <input type="hidden" name="quantity_type" value="<?php echo $tourType; ?>">
                             </form>
-                            <span><?php echo $cartItem->quantities[0]->quantity; ?></span>
+                            <span><?php echo $displayedQuantity; ?></span>
                             <form action="/cart/increase" method="POST">
-                                <button type="submit" class="increase-btn">
+                                <button type="submit" class="increase-btn" <?php echo ($tourType === 'family')
+                                                                                ? (!is_null($historyFamilyMax) && ($displayedQuantity >= $historyFamilyMax) ? 'disabled' : '')
+                                                                                : (!is_null($historySingleMax) && ($displayedQuantity >= $historySingleMax) ? 'disabled' : '');?>>
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
                                 <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
-                                <input type="hidden" name="quantity_type" value="<?php echo $cartItem->quantities[0]->type->value; ?>">
+                                <input type="hidden" name="quantity_type" value="<?php echo $tourType; ?>">
                             </form>
                         </div>
                         <form action="/cart/remove" method="POST">
@@ -320,6 +338,11 @@ function formatMoney($amount)
         color: #555;
         cursor: pointer;
         padding: 0;
+    }
+
+    .counter button:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
     }
 
     .counter span {
