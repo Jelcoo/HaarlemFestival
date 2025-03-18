@@ -82,6 +82,14 @@ class CartController extends Controller
             $childModel->type = ItemQuantityEnum::CHILD;
             $childModel->quantity = $childQuantity;
             $quantityModels[] = $childModel;
+        } else if ($eventModel === EventHistory::class) {
+            $eventIds = explode(',', $_POST['event_ids']);
+            $_POST['event_id'] = array_rand($eventIds);
+
+            $quantityModel = new CartItemQuantity();
+            $quantityModel->type = ItemQuantityEnum::from($_POST['ticket_type']);
+            $quantityModel->quantity = $_POST['quantity'];
+            $quantityModels[] = $quantityModel;
         } else {
             $quantityModel = new CartItemQuantity();
             $quantityModel->type = ItemQuantityEnum::GENERAL;
