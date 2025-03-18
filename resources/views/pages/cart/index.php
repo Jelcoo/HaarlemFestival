@@ -14,6 +14,12 @@ $historyCart = array_filter($cartItems, function ($item) {
     return $item->event_model === 'App\\Models\\EventHistory';
 });
 
+$totalItems = array_sum(array_map(function ($item) {
+    return array_sum(array_map(function ($quantity) {
+        return $quantity->quantity;
+    }, $item->quantities));
+}, $cartItems));
+
 function formatTime($date)
 {
     return date('H:i', strtotime($date));
@@ -32,7 +38,7 @@ function formatMoney($amount)
             <h1>Cart - Overview</h1>
         </div>
         <div class="col-6 d-flex gap-3 justify-content-end px-0 align-items-center">
-            <h2>Total items: <span id="total-items"><?php echo count($cartItems); ?></span></h2>
+            <h2>Total items: <span id="total-items"><?php echo $totalItems; ?></span></h2>
             <button type="button" class="btn btn-custom-yellow" data-bs-toggle="modal"
                 data-bs-target="#confirmModal">Place order <i
                     class="fa-solid fa-arrow-up-right-from-square"></i></button>
