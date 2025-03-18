@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Enum\ItemQuantityEnum;
+
 class OrderRepository extends Repository
 {
     public function createOrder(array $data)
@@ -58,13 +60,9 @@ class OrderRepository extends Repository
         }
     }
 
-    public function checkAvailability(array $data)
+    public function checkDanceTicketAvailable(int $eventId, int $quantity, ItemQuantityEnum $type): bool
     {
-        $unavailable = [];
-        foreach ($data['dance'] as $dance) {
-            // Updated query to get detailed ticket breakdown
-            $sql = '
-                SELECT 
+        $sql = 'SELECT 
                     DE.id,
                     DE.total_tickets,
                     COUNT(DT.id) AS total_tickets_sold,
@@ -73,90 +71,45 @@ class OrderRepository extends Repository
                 FROM dance_events AS DE
                 LEFT JOIN dance_tickets AS DT ON DT.dance_event_id = DE.id
                 WHERE DE.id = :dance_event_id
-                GROUP BY DE.id, DE.total_tickets
-            ';
+                GROUP BY DE.id, DE.total_tickets';
+        
+        $stmt = $this->pdoConnection->prepare($sql);
+        $stmt->execute([
+            'dance_event_id' => $eventId
+        ]);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            $stmt = $this->pdoConnection->prepare($sql);
-            $stmt->execute([
-                'dance_event_id' => $dance['event_id'],
-            ]);
-            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $total = (int) $result['total_tickets'];
+        $allAccessLimit = floor($total * 0.10);
+        $singleLimit = $total - $allAccessLimit;
 
-            if (!$result) {
-                $unavailable[] = ['dance' => $dance['event_id'], 'reason' => 'Event not found'];
-                continue;
-            }
+        $allAccessSold = (int) $result['all_access_sold'];
+        $singleSold = (int) $result['single_sold'];
 
-            // Calculate ticket type limits
-            $total = (int) $result['total_tickets'];
-            $quantity = (int) $dance['quantity'];
-            $allAccessLimit = floor($total * 0.10);
-            $singleLimit = $total - $allAccessLimit;
-
-            $allAccessSold = (int) $result['all_access_sold'];
-            $singleSold = (int) $result['single_sold'];
-
-            if (!empty($dance['all_access']) && $dance['all_access'] == 1) {
-                // User is trying to buy an all-access ticket
-                if (($allAccessSold + $quantity) > $allAccessLimit) {
-                    $unavailable[] = [
-                        'dance' => $result['id'],
-                        'reason' => 'Not enough all-access tickets available',
-                    ];
-                }
-            } else {
-                // User is trying to buy single tickets
-                if (($singleSold + $quantity) > $singleLimit) {
-                    $unavailable[] = [
-                        'dance' => $result['id'],
-                        'reason' => 'Not enough single tickets available',
-                    ];
-                }
-            }
+        if ($type == ItemQuantityEnum::ALL_ACCESS) {
+            return ($allAccessSold + $quantity) <= $allAccessLimit;
+        } else {
+            return ($singleSold + $quantity) <= $singleLimit;
         }
+    }
 
-        foreach ($data['yummy'] as $yummy) {
-            $sql = 'SELECT YE.id, YE.total_seats - COALESCE(SUM(YT.kids_count + YT.adult_count), 0) - :adult_quantity - :children_quantity AS seats_remaining 
-                    FROM yummy_events AS YE
-                    LEFT JOIN yummy_tickets AS YT ON YT.yummy_event_id = YE.id
-                    WHERE YE.id = :yummy_event_id
-                    GROUP BY YE.id, YE.total_seats';
-            $stmt = $this->pdoConnection->prepare($sql);
-            $stmt->execute([
-                'yummy_event_id' => $yummy['event_id'],
-            ]);
-            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-            if ($result['tickets_remaining'] < 0) {
-                $unavailable[] = [
-                    'yummy' => $result['id'],
-                    'reason' => 'Not enough seats available',
-                ];
-            }
-        }
+    public function checkYummyTicketAvailable(int $eventId, int $adultQuantity, int $childrenQuantity): bool
+    {
+        $sql = 'SELECT YE.id, YE.total_seats - COALESCE(SUM(YT.kids_count + YT.adult_count), 0) - :adult_quantity - :children_quantity AS seats_remaining 
+                FROM yummy_events AS YE
+                LEFT JOIN yummy_tickets AS YT ON YT.yummy_event_id = YE.id
+                WHERE YE.id = :yummy_event_id
+                GROUP BY YE.id, YE.total_seats';
+        
+        $stmt = $this->pdoConnection->prepare($sql);
+        $stmt->execute([
+            'yummy_event_id' => $eventId,
+            'adult_quantity' => $adultQuantity,
+            'children_quantity' => $childrenQuantity
+        ]);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        foreach ($data['history'] as $history) {
-            foreach ($history['event_id'] as $id) {
-                $sql = 'SELECT HE.id, HE.seats_per_tour - COALESCE(SUM(HT.total_seats), 0) - :seats AS seats_remaining 
-                        FROM history_events AS HE
-                        LEFT JOIN history_tickets AS HT ON HT.history_event_id = HE.id
-                        WHERE HE.id = :history_event_id
-                        GROUP BY HE.id, HE.seats_per_tour';
-                $stmt = $this->pdoConnection->prepare($sql);
-                $stmt->execute([
-                    'history_event_id' => $id,
-                    'seats' => $history['seats'],
-                ]);
-                $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-                if ($result['seats_remaining'] < 0) {
-                    $unavailable[] = [
-                        'history' => $result['id'],
-                        'reason' => 'Not enough seats available',
-                    ];
-                }
-            }
-        }
-
-        return $unavailable;
+        return $result['seats_remaining'] >= 0;
     }
 
     public function checkHistoryTicketAvailable(int $eventId, int $seats): bool

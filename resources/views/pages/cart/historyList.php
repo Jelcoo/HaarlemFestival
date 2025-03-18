@@ -18,6 +18,8 @@ $historySingleMin = App\Config\Config::getKey('CART_HISTORY_SINGLE_MIN');
 $historySingleMax = App\Config\Config::getKey('CART_HISTORY_SINGLE_MAX');
 $historyFamilyMin = App\Config\Config::getKey('CART_HISTORY_FAMILY_MIN');
 $historyFamilyMax = App\Config\Config::getKey('CART_HISTORY_FAMILY_MAX');
+
+$historyErrors = $stockErrors['history'] ?? [];
 ?>
 
 <div class="col-sm-12 col-lg-4" id="history">
@@ -70,6 +72,11 @@ $historyFamilyMax = App\Config\Config::getKey('CART_HISTORY_FAMILY_MAX');
                         <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
                     </form>
                 </div>
+                <?php if (isset($historyErrors[$cartItem->event_id])) { ?>
+                    <div class="alert alert-danger mx-3" role="alert">
+                        <?php echo $historyErrors[$cartItem->event_id]; ?>
+                    </div>
+                <?php } ?>
             </div>
         <?php } ?>
     <?php } ?>

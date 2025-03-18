@@ -135,10 +135,20 @@ class CartController extends Controller
 
     public function checkout()
     {
-        $result = $this->orderService->validateAvailability($_POST['order']);
-        if (isset($result['error'])) {
-            return $this->pageLoader->setPage('cart/index')->render($result);
+        $cart = $this->cartService->getSessionCart(true);
+
+        $errors = $this->orderService->validateAvailability($cart);
+        $errorCount = count(array_filter($errors, function($errorArray) {
+            return !empty($errorArray);
+        }));
+
+        if ($errorCount > 0) {
+            return $this->index([
+                'stockErrors' => $errors,
+                'error' => 'There are some items out of stock. Please remove them from your cart.',
+            ]);
         }
+
         if ($_POST['paymentChoice'] == 'payNow') {
             Response::redirect('/checkout');
         } else {

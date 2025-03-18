@@ -12,6 +12,8 @@ $yummyChildMin = App\Config\Config::getKey('CART_YUMMY_CHILD_MIN');
 $yummyChildMax = App\Config\Config::getKey('CART_YUMMY_CHILD_MAX');
 $yummyAdultMin = App\Config\Config::getKey('CART_YUMMY_ADULT_MIN');
 $yummyAdultMax = App\Config\Config::getKey('CART_YUMMY_ADULT_MAX');
+
+$yummyErrors = $stockErrors['yummy'] ?? [];
 ?>
 
 <div class="col-sm-12 col-lg-4" id="yummy">
@@ -95,6 +97,11 @@ $yummyAdultMax = App\Config\Config::getKey('CART_YUMMY_ADULT_MAX');
                         <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
                     </form>
                 </div>
+                <?php if (isset($yummyErrors[$cartItem->event_id])) { ?>
+                    <div class="alert alert-danger mx-3" role="alert">
+                        <?php echo $yummyErrors[$cartItem->event_id]; ?>
+                    </div>
+                <?php } ?>
             </div>
         <?php } ?>
     <?php } ?>

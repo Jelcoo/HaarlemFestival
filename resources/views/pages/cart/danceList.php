@@ -10,6 +10,8 @@ $danceDates = getScheduleDates($danceCart);
 
 $danceMin = App\Config\Config::getKey('CART_DANCE_MIN');
 $danceMax = App\Config\Config::getKey('CART_DANCE_MAX');
+
+$danceErrors = $stockErrors['dance'] ?? [];
 ?>
 
 <div class="col-sm-12 col-lg-4" id="dance">
@@ -54,6 +56,11 @@ $danceMax = App\Config\Config::getKey('CART_DANCE_MAX');
                         <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
                     </form>
                 </div>
+                <?php if (isset($danceErrors[$cartItem->event_id])) { ?>
+                    <div class="alert alert-danger mx-3" role="alert">
+                        <?php echo $danceErrors[$cartItem->event_id]; ?>
+                    </div>
+                <?php } ?>
             </div>
         <?php } ?>
     <?php } ?>
