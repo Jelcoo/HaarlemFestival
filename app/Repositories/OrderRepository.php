@@ -159,6 +159,23 @@ class OrderRepository extends Repository
         return $unavailable;
     }
 
+    public function checkHistoryTicketAvailable(int $eventId, int $seats): bool
+    {
+        $sql = 'SELECT HE.id, HE.seats_per_tour - COALESCE(SUM(HT.total_seats), 0) - :seats AS seats_remaining 
+                FROM history_events AS HE
+                LEFT JOIN history_tickets AS HT ON HT.history_event_id = HE.id
+                WHERE HE.id = :history_event_id
+                GROUP BY HE.id, HE.seats_per_tour';
+        $stmt = $this->pdoConnection->prepare($sql);
+        $stmt->execute([
+            'history_event_id' => $eventId,
+            'seats' => $seats,
+        ]);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        return $result['seats_remaining'] >= 0;
+    }
+
     public function updateOrderStatus(int $orderId, string $data)
     {
         $sql = 'UPDATE invoices SET status = :data WHERE id = :id';

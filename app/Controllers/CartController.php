@@ -12,12 +12,14 @@ use App\Enum\ItemQuantityEnum;
 use App\Services\OrderService;
 use App\Models\CartItemQuantity;
 use App\Repositories\CartRepository;
+use App\Repositories\OrderRepository;
 
 class CartController extends Controller
 {
     private OrderService $orderService;
     private CartService $cartService;
     private CartRepository $cartRepository;
+    private OrderRepository $orderRepository;
 
     public function __construct()
     {
@@ -25,6 +27,7 @@ class CartController extends Controller
         $this->orderService = new OrderService();
         $this->cartService = new CartService();
         $this->cartRepository = new CartRepository();
+        $this->orderRepository = new OrderRepository();
     }
 
     public function index(array $paramaters = [])
@@ -33,7 +36,7 @@ class CartController extends Controller
 
         return $this->pageLoader->setPage('cart/index')->render([
             'cartItems' => $cart->items,
-        ]);
+        ] + $paramaters);
     }
 
     public function increaseQuantity(array $paramaters = [])
@@ -84,7 +87,19 @@ class CartController extends Controller
             $quantityModels[] = $childModel;
         } else if ($eventModel === EventHistory::class) {
             $eventIds = explode(',', $_POST['event_ids']);
-            $_POST['event_id'] = array_rand($eventIds);
+            foreach ($eventIds as $eventId) {
+                $available = $this->orderRepository->checkHistoryTicketAvailable($eventId, $_POST['quantity']);
+                if (!$available) {
+                    array_splice($eventIds, array_search($eventId, $eventIds), 1);
+                }
+            }
+            if (empty($eventIds)) {
+                return $this->index([
+                    'error' => 'No more tickets available',
+                ]);
+            }
+
+            $_POST['event_id'] = $eventIds[0];
 
             $quantityModel = new CartItemQuantity();
             $quantityModel->type = ItemQuantityEnum::from($_POST['ticket_type']);
