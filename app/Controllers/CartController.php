@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Models\Event;
 use App\Models\CartItem;
 use App\Models\EventDance;
 use App\Models\EventYummy;
@@ -67,7 +66,7 @@ class CartController extends Controller
             'dance' => EventDance::class,
             'yummy' => EventYummy::class,
             'history' => EventHistory::class,
-            default => Event::class,
+            default => null,
         };
         $quantityModels = [];
 
