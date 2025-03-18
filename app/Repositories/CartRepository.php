@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Config\Config;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\EventDance;
@@ -112,23 +113,40 @@ class CartRepository extends Repository
 
     public function increaseQuantity(int $cartId, int $cartItemId, ItemQuantityEnum $type): void
     {
-        $query = $this->getConnection()->prepare('
+        $maxQuantity = $this->getMaxQuantity($type);
+
+        $sql = '
 UPDATE cart_items ci
 JOIN cart_item_quantities ciq ON ciq.cart_item_id = ci.id
 SET ciq.quantity = ciq.quantity + 1
 WHERE ci.id = :cartItemId
 AND ci.cart_id = :cartId
-AND ciq.type = :type');
+AND ciq.type = :type';
+    
+        // Only enforce maxQuantity if it's not null
+        if ($maxQuantity !== null) {
+            $sql .= ' AND ciq.quantity < :maxQuantity';
+        }
 
-        $query->execute([
+        $query = $this->getConnection()->prepare($sql);
+
+        $params = [
             'cartItemId' => $cartItemId,
             'cartId' => $cartId,
-            'type' => $type->value,
-        ]);
+            'type' => $type->value
+        ];
+
+        if ($maxQuantity !== null) {
+            $params['maxQuantity'] = $maxQuantity;
+        }
+
+        $query->execute($params);
     }
 
     public function decreaseQuantity(int $cartId, int $cartItemId, ItemQuantityEnum $type): void
     {
+        $minQuantity = $this->getMinQuantity($type);
+
         $query = $this->getConnection()->prepare('
 UPDATE cart_items ci
 JOIN cart_item_quantities ciq ON ciq.cart_item_id = ci.id
@@ -136,13 +154,38 @@ SET ciq.quantity = ciq.quantity - 1
 WHERE ci.id = :cartItemId
 AND ci.cart_id = :cartId
 AND ciq.type = :type
-AND ciq.quantity > 1');
+AND ciq.quantity > :minQuantity');
 
         $query->execute([
             'cartItemId' => $cartItemId,
             'cartId' => $cartId,
             'type' => $type->value,
+            'minQuantity' => $minQuantity
         ]);
+    }
+
+    private function getMaxQuantity(ItemQuantityEnum $type): int|null
+    {
+        return match ($type) {
+            ItemQuantityEnum::GENERAL => Config::getKey('CART_DANCE_MAX'),
+            ItemQuantityEnum::ADULT => Config::getKey('CART_YUMMY_ADULT_MAX'),
+            ItemQuantityEnum::CHILD => Config::getKey('CART_YUMMY_CHILD_MAX'),
+            ItemQuantityEnum::SINGLE => Config::getKey('CART_HISTORY_SINGLE_MAX'),
+            ItemQuantityEnum::FAMILY => Config::getKey('CART_HISTORY_FAMILY_MAX'),
+            default => null
+        };
+    }
+
+    private function getMinQuantity(ItemQuantityEnum $type): int|null
+    {
+        return match ($type) {
+            ItemQuantityEnum::GENERAL => Config::getKey('CART_DANCE_MIN'),
+            ItemQuantityEnum::ADULT => Config::getKey('CART_YUMMY_ADULT_MIN'),
+            ItemQuantityEnum::CHILD => Config::getKey('CART_YUMMY_CHILD_MIN'),
+            ItemQuantityEnum::SINGLE => Config::getKey('CART_HISTORY_SINGLE_MIN'),
+            ItemQuantityEnum::FAMILY => Config::getKey('CART_HISTORY_FAMILY_MIN'),
+            default => 1
+        };
     }
 
     public function addCartItem(CartItem $cartItem): void
