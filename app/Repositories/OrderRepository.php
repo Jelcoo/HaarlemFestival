@@ -72,10 +72,10 @@ class OrderRepository extends Repository
                 LEFT JOIN dance_tickets AS DT ON DT.dance_event_id = DE.id
                 WHERE DE.id = :dance_event_id
                 GROUP BY DE.id, DE.total_tickets';
-        
+
         $stmt = $this->pdoConnection->prepare($sql);
         $stmt->execute([
-            'dance_event_id' => $eventId
+            'dance_event_id' => $eventId,
         ]);
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -100,12 +100,12 @@ class OrderRepository extends Repository
                 LEFT JOIN yummy_tickets AS YT ON YT.yummy_event_id = YE.id
                 WHERE YE.id = :yummy_event_id
                 GROUP BY YE.id, YE.total_seats';
-        
+
         $stmt = $this->pdoConnection->prepare($sql);
         $stmt->execute([
             'yummy_event_id' => $eventId,
             'adult_quantity' => $adultQuantity,
-            'children_quantity' => $childrenQuantity
+            'children_quantity' => $childrenQuantity,
         ]);
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 

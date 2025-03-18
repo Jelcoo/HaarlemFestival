@@ -172,6 +172,7 @@ AND ciq.quantity > :minQuantity');
             ItemQuantityEnum::CHILD => Config::getKey('CART_YUMMY_CHILD_MAX'),
             ItemQuantityEnum::SINGLE => Config::getKey('CART_HISTORY_SINGLE_MAX'),
             ItemQuantityEnum::FAMILY => Config::getKey('CART_HISTORY_FAMILY_MAX'),
+            default => null,
         };
     }
 
@@ -183,6 +184,7 @@ AND ciq.quantity > :minQuantity');
             ItemQuantityEnum::CHILD => Config::getKey('CART_YUMMY_CHILD_MIN'),
             ItemQuantityEnum::SINGLE => Config::getKey('CART_HISTORY_SINGLE_MIN'),
             ItemQuantityEnum::FAMILY => Config::getKey('CART_HISTORY_FAMILY_MIN'),
+            default => 1,
         };
     }
 

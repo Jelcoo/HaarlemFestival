@@ -85,10 +85,10 @@ class CartController extends Controller
             $childModel->type = ItemQuantityEnum::CHILD;
             $childModel->quantity = $childQuantity;
             $quantityModels[] = $childModel;
-        } else if ($eventModel === EventHistory::class) {
+        } elseif ($eventModel === EventHistory::class) {
             $eventIds = explode(',', $_POST['event_ids']);
             foreach ($eventIds as $eventId) {
-                $available = $this->orderRepository->checkHistoryTicketAvailable($eventId, $_POST['quantity']);
+                $available = $this->orderRepository->checkHistoryTicketAvailable((int) $eventId, $_POST['quantity']);
                 if (!$available) {
                     array_splice($eventIds, array_search($eventId, $eventIds), 1);
                 }
@@ -138,7 +138,7 @@ class CartController extends Controller
         $cart = $this->cartService->getSessionCart(true);
 
         $errors = $this->orderService->validateAvailability($cart);
-        $errorCount = count(array_filter($errors, function($errorArray) {
+        $errorCount = count(array_filter($errors, function ($errorArray) {
             return !empty($errorArray);
         }));
 
