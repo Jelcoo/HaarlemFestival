@@ -176,7 +176,7 @@ function formatMoney($amount)
                     <div>
                         <div>
                             <p>Duration: <?php echo formatTime($cartItem->event->start_time); ?>-<?php echo formatTime($cartItem->event->end_time); ?></p>
-                            <!-- <p>Ticket type: <?php // echo $cartItem->event->type;?></p> -->
+                            <p>Ticket type: <?php echo $cartItem->quantities[0]->type->value; ?></p>
                         </div>
                     </div>
                     <div class="d-flex">
@@ -187,6 +187,7 @@ function formatMoney($amount)
                                     <i class="fa-solid fa-minus"></i>
                                 </button>
                                 <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
+                                <input type="hidden" name="quantity_type" value="<?php echo $cartItem->quantities[0]->type->value; ?>">
                             </form>
                             <span><?php echo $cartItem->quantities[0]->quantity; ?></span>
                             <form action="/cart/increase" method="POST">
@@ -194,6 +195,7 @@ function formatMoney($amount)
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
                                 <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
+                                <input type="hidden" name="quantity_type" value="<?php echo $cartItem->quantities[0]->type->value; ?>">
                             </form>
                         </div>
                         <form action="/cart/remove" method="POST">
