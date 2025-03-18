@@ -27,7 +27,7 @@ $danceMax = App\Config\Config::getKey('CART_DANCE_MAX');
                     <?php } ?>
                     <div>
                         <p>Duration: <?php echo formatTime($cartItem->event->start_time); ?>-<?php echo formatTime($cartItem->event->end_time); ?></p>
-                        <p>Artists: <?php echo implode(', ', array_map(fn($artist) => $artist->name, $cartItem->event->artists)); ?></p>
+                        <p>Artists: <?php echo implode(', ', array_map(fn ($artist) => $artist->name, $cartItem->event->artists)); ?></p>
                     </div>
                 </div>
                 <div class="d-flex">

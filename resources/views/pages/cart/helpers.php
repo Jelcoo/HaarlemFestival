@@ -13,7 +13,7 @@ function formatMoney($amount)
 function getScheduleDates(array $schedule): array
 {
     $dates = array_map(function ($event) {
-        return \Carbon\Carbon::parse($event->event->start_date);
+        return Carbon\Carbon::parse($event->event->start_date);
     }, $schedule);
     usort($dates, function ($a, $b) {
         return $a->timestamp - $b->timestamp;
@@ -29,8 +29,8 @@ function getScheduleByDate(array $schedule, string $date): array
             return false;
         }
 
-        $dateCarbon = \Carbon\Carbon::parse($date);
-        $startCarbon = \Carbon\Carbon::parse($event->event->start_date);
+        $dateCarbon = Carbon\Carbon::parse($date);
+        $startCarbon = Carbon\Carbon::parse($event->event->start_date);
 
         return $dateCarbon->eq($startCarbon);
     });

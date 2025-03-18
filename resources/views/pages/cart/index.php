@@ -37,9 +37,9 @@ $historyFamilyMax = App\Config\Config::getKey('CART_HISTORY_FAMILY_MAX');
         <hr>
     </div>
     <div class="row">
-        <?php include __DIR__ . '/danceList.php' ?>
-        <?php include __DIR__ . '/yummyList.php' ?>
-        <?php include __DIR__ . '/historyList.php' ?>
+        <?php include __DIR__ . '/danceList.php'; ?>
+        <?php include __DIR__ . '/yummyList.php'; ?>
+        <?php include __DIR__ . '/historyList.php'; ?>
     </div>
 </div>
 <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
