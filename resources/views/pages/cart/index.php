@@ -2,62 +2,13 @@
 /**
  * @var App\Models\CartItem[] $cartItems
  */
-$danceCart = array_filter($cartItems, function ($item) {
-    return $item->event_model === 'App\\Models\\EventDance';
-});
-$danceDates = getScheduleDates($danceCart);
-
-$yummyCart = array_filter($cartItems, function ($item) {
-    return $item->event_model === 'App\\Models\\EventYummy';
-});
-$yummyDates = getScheduleDates($yummyCart);
-
-$historyCart = array_filter($cartItems, function ($item) {
-    return $item->event_model === 'App\\Models\\EventHistory';
-});
-$historyDates = getScheduleDates($historyCart);
+require __DIR__ . '/helpers.php';
 
 $totalItems = array_sum(array_map(function ($item) {
     return array_sum(array_map(function ($quantity) {
         return $quantity->quantity;
     }, $item->quantities));
 }, $cartItems));
-
-function formatTime($date)
-{
-    return date('H:i', strtotime($date));
-}
-
-function formatMoney($amount)
-{
-    return number_format($amount, 2);
-}
-
-function getScheduleDates(array $schedule): array
-{
-    $dates = array_map(function ($event) {
-        return \Carbon\Carbon::parse($event->event->start_date);
-    }, $schedule);
-    usort($dates, function ($a, $b) {
-        return $a->timestamp - $b->timestamp;
-    });
-
-    return array_unique($dates);
-}
-
-function getScheduleByDate(array $schedule, string $date): array
-{
-    return array_filter($schedule, function ($event) use ($date) {
-        if (!isset($event->event->start_date)) {
-            return false;
-        }
-
-        $dateCarbon = \Carbon\Carbon::parse($date);
-        $startCarbon = \Carbon\Carbon::parse($event->event->start_date);
-
-        return $dateCarbon->eq($startCarbon);
-    });
-}
 
 $danceMin = App\Config\Config::getKey('CART_DANCE_MIN');
 $danceMax = App\Config\Config::getKey('CART_DANCE_MAX');
@@ -86,200 +37,9 @@ $historyFamilyMax = App\Config\Config::getKey('CART_HISTORY_FAMILY_MAX');
         <hr>
     </div>
     <div class="row">
-        <div class="col-sm-12 col-lg-4" id="dance">
-            <h2>DANCE!</h2>
-            <?php foreach ($danceDates as $date) { ?>
-                <?php $cartForDate = getScheduleByDate($danceCart, $date); ?>
-                <h3><?php echo date('l F j', strtotime($date)); ?></h3>
-                <?php foreach ($cartForDate as $cartItem) { ?>
-                    <?php $displayedQuantity = $cartItem->quantities[0]->quantity; ?>
-                    <div class="eventCard">
-                        <h4><?php echo $cartItem->event->location->name; ?></h4>
-                        <div>
-                            <?php if (count($cartItem->event->location->assets) > 0) { ?>
-                                <img src="<?php echo $cartItem->event->location->assets[0]->getUrl(); ?>" alt="Image of venue">
-                            <?php } ?>
-                            <div>
-                                <p>Duration: <?php echo formatTime($cartItem->event->start_time); ?>-<?php echo formatTime($cartItem->event->end_time); ?></p>
-                                <p>Artists: <?php echo implode(', ', array_map(fn ($artist) => $artist->name, $cartItem->event->artists)); ?></p>
-                            </div>
-                        </div>
-                        <div class="d-flex">
-                            <p><?php echo $displayedQuantity; ?> x &euro;<?php echo formatMoney($cartItem->singlePrice()); ?> = &euro;<?php echo formatMoney($cartItem->totalPrice()); ?></p>
-                            <div class="counter">
-                                <form action="/cart/decrease" method="POST">
-                                    <button type="submit" class="decrease-btn" <?php echo $displayedQuantity <= $danceMin ? 'disabled' : ''; ?>>
-                                        <i class="fa-solid fa-minus"></i>
-                                    </button>
-                                    <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
-                                </form>
-                                <span><?php echo $displayedQuantity; ?></span>
-                                <form action="/cart/increase" method="POST">
-                                    <button type="submit" class="increase-btn" <?php echo !is_null($danceMax) && $displayedQuantity >= $danceMax ? 'disabled' : ''; ?>>
-                                        <i class="fa-solid fa-plus"></i>
-                                    </button>
-                                    <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
-                                </form>
-                            </div>
-                            <form action="/cart/remove" method="POST">
-                                <button type="submit" class="remove-btn">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                                <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
-                            </form>
-                        </div>
-                    </div>
-                <?php } ?>
-            <?php } ?>
-            <?php if (count($danceCart) < 1) { ?>
-                <p>No events found</p>
-            <?php } ?>
-        </div>
-        <div class="col-sm-12 col-lg-4" id="yummy">
-            <h2>Yummy!</h2>
-            <?php foreach ($yummyDates as $date) { ?>
-                <?php $cartForDate = getScheduleByDate($yummyCart, $date); ?>
-                <h3><?php echo date('l F j', strtotime($date)); ?></h3>
-                <?php foreach ($cartForDate as $cartItem) { ?>
-                    <?php
-                    $childrenQuantity = 0;
-                    $adultQuantity = 0;
-                    foreach ($cartItem->quantities as $quantity) {
-                        if ($quantity->type->value === 'child') {
-                            $childrenQuantity += $quantity->quantity;
-                        } else {
-                            $adultQuantity += $quantity->quantity;
-                        }
-                    }
-                    ?>
-                    <div class="eventCard">
-                        <h4><?php echo $cartItem->event->restaurant->location->name; ?></h4>
-                        <div>
-                            <?php if (count($cartItem->event->restaurant->assets) > 0) { ?>
-                                <img src="<?php echo $cartItem->event->restaurant->assets[0]->getUrl(); ?>" alt="Image of venue">
-                            <?php } ?>
-                            <div>
-                                <p>Duration: <?php echo formatTime($cartItem->event->start_time); ?>-<?php echo formatTime($cartItem->event->end_time); ?></p>
-                                <p>Reservation cost: €<?php echo formatMoney($cartItem->singlePrice()); ?></p>
-                                <?php if ($cartItem->note) { ?>
-                                    <p>Notes: <?php echo $cartItem->note; ?></p>
-                                <?php } ?>
-                            </div>
-                        </div>
-                        <div class="d-flex">
-                            <div class="d-flex flex-column align-items-stretch p-0 gap-2 justify-content-between" style="flex-grow: 0.5">
-                                <div class="d-flex justify-content-between p-0">
-                                    <p>Adults: <?php echo $adultQuantity; ?></p>
-                                    <div class="counter">
-                                        <form action="/cart/decrease" method="POST">
-                                            <button type="submit" class="decrease-btn" <?php echo $adultQuantity <= $yummyAdultMin ? 'disabled' : ''; ?>>
-                                                <i class="fa-solid fa-minus"></i>
-                                            </button>
-                                            <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
-                                            <input type="hidden" name="quantity_type" value="adult">
-                                        </form>
-                                        <span><?php echo $adultQuantity; ?></span>
-                                        <form action="/cart/increase" method="POST">
-                                            <button type="submit" class="increase-btn" <?php echo !is_null($yummyAdultMax) && $adultQuantity >= $yummyAdultMax ? 'disabled' : ''; ?>>
-                                                <i class="fa-solid fa-plus"></i>
-                                            </button>
-                                            <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
-                                            <input type="hidden" name="quantity_type" value="adult">
-                                        </form>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between p-0">
-                                    <p>Children: <?php echo $childrenQuantity; ?></p>
-                                    <div class="counter">
-                                        <form action="/cart/decrease" method="POST">
-                                            <button type="submit" class="decrease-btn" <?php echo $childrenQuantity <= $yummyChildMin ? 'disabled' : ''; ?>>
-                                                <i class="fa-solid fa-minus"></i>
-                                            </button>
-                                            <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
-                                            <input type="hidden" name="quantity_type" value="child">
-                                        </form>
-                                        <span><?php echo $childrenQuantity; ?></span>
-                                        <form action="/cart/increase" method="POST">
-                                            <button type="submit" class="increase-btn" <?php echo !is_null($yummyChildMax) && $childrenQuantity >= $yummyChildMax ? 'disabled' : ''; ?>>
-                                                <i class="fa-solid fa-plus"></i>
-                                            </button>
-                                            <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
-                                            <input type="hidden" name="quantity_type" value="child">
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <form action="/cart/remove" method="POST">
-                                <button type="submit" class="remove-btn">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                                <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
-                            </form>
-                        </div>
-                    </div>
-                <?php } ?>
-            <?php } ?>
-            <?php if (count($yummyCart) < 1) { ?>
-                <p>No events found</p>
-            <?php } ?>
-        </div>
-        <div class="col-sm-12 col-lg-4" id="history">
-            <h2>A stroll through history</h2>
-            <?php foreach ($historyDates as $date) { ?>
-                <?php $cartForDate = getScheduleByDate($historyCart, $date); ?>
-                <h3><?php echo date('l F j', strtotime($date)); ?></h3>
-                <?php foreach ($cartForDate as $cartItem) { ?>
-                    <?php $displayedQuantity = $cartItem->quantities[0]->quantity; ?>
-                    <?php $tourType = $cartItem->quantities[0]->type->value; ?>
-                    <div class="eventCard">
-                        <h4>History tour (<?php echo $cartItem->event->language; ?>)</h4>
-                        <div>
-                            <div>
-                                <p>Duration: <?php echo formatTime($cartItem->event->start_time); ?>-<?php echo formatTime($cartItem->event->end_time); ?></p>
-                                <p>Ticket type: <?php echo $tourType; ?></p>
-                            </div>
-                        </div>
-                        <div class="d-flex">
-                            <?php if ($tourType === 'family') { ?>
-                                <p>&euro;<?php echo formatMoney($cartItem->singlePrice()); ?></p>
-                            <?php } else { ?>
-                                <p><?php echo $displayedQuantity; ?> x &euro;<?php echo formatMoney($cartItem->singlePrice()); ?> = &euro;<?php echo formatMoney($cartItem->totalPrice()); ?></p>
-                            <?php } ?>
-                            <div class="counter">
-                                <form action="/cart/decrease" method="POST">
-                                    <button type="submit" class="decrease-btn" <?php echo ($tourType === 'family')
-                                                                                    ? (($displayedQuantity <= $historyFamilyMin) ? 'disabled' : '')
-                                                                                    : (($displayedQuantity <= $historySingleMin) ? 'disabled' : ''); ?>>
-                                        <i class="fa-solid fa-minus"></i>
-                                    </button>
-                                    <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
-                                    <input type="hidden" name="quantity_type" value="<?php echo $tourType; ?>">
-                                </form>
-                                <span><?php echo $displayedQuantity; ?></span>
-                                <form action="/cart/increase" method="POST">
-                                    <button type="submit" class="increase-btn" <?php echo ($tourType === 'family')
-                                                                                    ? (!is_null($historyFamilyMax) && ($displayedQuantity >= $historyFamilyMax) ? 'disabled' : '')
-                                                                                    : (!is_null($historySingleMax) && ($displayedQuantity >= $historySingleMax) ? 'disabled' : ''); ?>>
-                                        <i class="fa-solid fa-plus"></i>
-                                    </button>
-                                    <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
-                                    <input type="hidden" name="quantity_type" value="<?php echo $tourType; ?>">
-                                </form>
-                            </div>
-                            <form action="/cart/remove" method="POST">
-                                <button type="submit" class="remove-btn">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                                <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
-                            </form>
-                        </div>
-                    </div>
-                <?php } ?>
-            <?php } ?>
-            <?php if (count($historyCart) < 1) { ?>
-                <p>No events found</p>
-            <?php } ?>
-        </div>
+        <?php include __DIR__ . '/danceList.php' ?>
+        <?php include __DIR__ . '/yummyList.php' ?>
+        <?php include __DIR__ . '/historyList.php' ?>
     </div>
 </div>
 <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
@@ -314,7 +74,6 @@ $historyFamilyMax = App\Config\Config::getKey('CART_HISTORY_FAMILY_MAX');
     </div>
 </div>
 
-<!-- <script src="/assets/js/cart.js"></script> -->
 <style>
     .eventCard {
         background-color: var(--secondary);
