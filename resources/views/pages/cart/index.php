@@ -30,16 +30,16 @@ function formatMoney($amount)
     return number_format($amount, 2);
 }
 
-$danceMin = \App\Config\Config::getKey('CART_DANCE_MIN');
-$danceMax = \App\Config\Config::getKey('CART_DANCE_MAX');
-$yummyChildMin = \App\Config\Config::getKey('CART_YUMMY_CHILD_MIN');
-$yummyChildMax = \App\Config\Config::getKey('CART_YUMMY_CHILD_MAX');
-$yummyAdultMin = \App\Config\Config::getKey('CART_YUMMY_ADULT_MIN');
-$yummyAdultMax = \App\Config\Config::getKey('CART_YUMMY_ADULT_MAX');
-$historySingleMin = \App\Config\Config::getKey('CART_HISTORY_SINGLE_MIN');
-$historySingleMax = \App\Config\Config::getKey('CART_HISTORY_SINGLE_MAX');
-$historyFamilyMin = \App\Config\Config::getKey('CART_HISTORY_FAMILY_MIN');
-$historyFamilyMax = \App\Config\Config::getKey('CART_HISTORY_FAMILY_MAX');
+$danceMin = App\Config\Config::getKey('CART_DANCE_MIN');
+$danceMax = App\Config\Config::getKey('CART_DANCE_MAX');
+$yummyChildMin = App\Config\Config::getKey('CART_YUMMY_CHILD_MIN');
+$yummyChildMax = App\Config\Config::getKey('CART_YUMMY_CHILD_MAX');
+$yummyAdultMin = App\Config\Config::getKey('CART_YUMMY_ADULT_MIN');
+$yummyAdultMax = App\Config\Config::getKey('CART_YUMMY_ADULT_MAX');
+$historySingleMin = App\Config\Config::getKey('CART_HISTORY_SINGLE_MIN');
+$historySingleMax = App\Config\Config::getKey('CART_HISTORY_SINGLE_MAX');
+$historyFamilyMin = App\Config\Config::getKey('CART_HISTORY_FAMILY_MIN');
+$historyFamilyMax = App\Config\Config::getKey('CART_HISTORY_FAMILY_MAX');
 ?>
 
 <div class="container mt-4">
@@ -209,7 +209,7 @@ $historyFamilyMax = \App\Config\Config::getKey('CART_HISTORY_FAMILY_MAX');
                             <form action="/cart/decrease" method="POST">
                                 <button type="submit" class="decrease-btn" <?php echo ($tourType === 'family')
                                                                                 ? (($displayedQuantity <= $historyFamilyMin) ? 'disabled' : '')
-                                                                                : (($displayedQuantity <= $historySingleMin) ? 'disabled' : '');?>>
+                                                                                : (($displayedQuantity <= $historySingleMin) ? 'disabled' : ''); ?>>
                                     <i class="fa-solid fa-minus"></i>
                                 </button>
                                 <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
@@ -219,7 +219,7 @@ $historyFamilyMax = \App\Config\Config::getKey('CART_HISTORY_FAMILY_MAX');
                             <form action="/cart/increase" method="POST">
                                 <button type="submit" class="increase-btn" <?php echo ($tourType === 'family')
                                                                                 ? (!is_null($historyFamilyMax) && ($displayedQuantity >= $historyFamilyMax) ? 'disabled' : '')
-                                                                                : (!is_null($historySingleMax) && ($displayedQuantity >= $historySingleMax) ? 'disabled' : '');?>>
+                                                                                : (!is_null($historySingleMax) && ($displayedQuantity >= $historySingleMax) ? 'disabled' : ''); ?>>
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
                                 <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">

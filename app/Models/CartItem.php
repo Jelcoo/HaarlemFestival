@@ -43,6 +43,7 @@ class CartItem
                 if ($this->quantities[0]->type === ItemQuantityEnum::FAMILY) {
                     return $this->event->family_price;
                 }
+
                 return $this->event->single_price;
             default:
                 return 0;

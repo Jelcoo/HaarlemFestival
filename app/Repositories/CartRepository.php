@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Config\Config;
 use App\Models\Cart;
+use App\Config\Config;
 use App\Models\CartItem;
 use App\Models\EventDance;
 use App\Models\EventYummy;
@@ -122,7 +122,7 @@ SET ciq.quantity = ciq.quantity + 1
 WHERE ci.id = :cartItemId
 AND ci.cart_id = :cartId
 AND ciq.type = :type';
-    
+
         // Only enforce maxQuantity if it's not null
         if ($maxQuantity !== null) {
             $sql .= ' AND ciq.quantity < :maxQuantity';
@@ -133,7 +133,7 @@ AND ciq.type = :type';
         $params = [
             'cartItemId' => $cartItemId,
             'cartId' => $cartId,
-            'type' => $type->value
+            'type' => $type->value,
         ];
 
         if ($maxQuantity !== null) {
@@ -160,11 +160,11 @@ AND ciq.quantity > :minQuantity');
             'cartItemId' => $cartItemId,
             'cartId' => $cartId,
             'type' => $type->value,
-            'minQuantity' => $minQuantity
+            'minQuantity' => $minQuantity,
         ]);
     }
 
-    private function getMaxQuantity(ItemQuantityEnum $type): int|null
+    private function getMaxQuantity(ItemQuantityEnum $type): ?int
     {
         return match ($type) {
             ItemQuantityEnum::GENERAL => Config::getKey('CART_DANCE_MAX'),
@@ -172,11 +172,10 @@ AND ciq.quantity > :minQuantity');
             ItemQuantityEnum::CHILD => Config::getKey('CART_YUMMY_CHILD_MAX'),
             ItemQuantityEnum::SINGLE => Config::getKey('CART_HISTORY_SINGLE_MAX'),
             ItemQuantityEnum::FAMILY => Config::getKey('CART_HISTORY_FAMILY_MAX'),
-            default => null
         };
     }
 
-    private function getMinQuantity(ItemQuantityEnum $type): int|null
+    private function getMinQuantity(ItemQuantityEnum $type): ?int
     {
         return match ($type) {
             ItemQuantityEnum::GENERAL => Config::getKey('CART_DANCE_MIN'),
@@ -184,7 +183,6 @@ AND ciq.quantity > :minQuantity');
             ItemQuantityEnum::CHILD => Config::getKey('CART_YUMMY_CHILD_MIN'),
             ItemQuantityEnum::SINGLE => Config::getKey('CART_HISTORY_SINGLE_MIN'),
             ItemQuantityEnum::FAMILY => Config::getKey('CART_HISTORY_FAMILY_MIN'),
-            default => 1
         };
     }
 
