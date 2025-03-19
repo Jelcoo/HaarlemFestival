@@ -19,7 +19,12 @@ class CartService
         $userId = $_SESSION['user_id'] ?? null;
 
         if (!isset($_SESSION['cart_id'])) {
-            $cart = $this->cartRepository->createCart($userId);
+            $cart = $this->cartRepository->getCartByUserId($userId);
+
+            if (is_null($cart)) {
+                $cart = $this->cartRepository->createCart($userId);
+            }
+
             $_SESSION['cart_id'] = $cart->id;
 
             return $cart;

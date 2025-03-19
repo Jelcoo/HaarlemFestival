@@ -50,6 +50,15 @@ class CartRepository extends Repository
         return $cart;
     }
 
+    public function getCartByUserId(int $userId): ?Cart
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $queryCart = $queryBuilder->table('carts')->where('user_id', '=', $userId)->first();
+
+        return $queryCart ? new Cart($queryCart) : null;
+    }
+
     public function createCart(?int $user_id): Cart
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
