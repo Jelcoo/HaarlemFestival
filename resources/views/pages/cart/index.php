@@ -9,17 +9,6 @@ $totalItems = array_sum(array_map(function ($item) {
         return $quantity->quantity;
     }, $item->quantities));
 }, $cartItems));
-
-$danceMin = App\Config\Config::getKey('CART_DANCE_MIN');
-$danceMax = App\Config\Config::getKey('CART_DANCE_MAX');
-$yummyChildMin = App\Config\Config::getKey('CART_YUMMY_CHILD_MIN');
-$yummyChildMax = App\Config\Config::getKey('CART_YUMMY_CHILD_MAX');
-$yummyAdultMin = App\Config\Config::getKey('CART_YUMMY_ADULT_MIN');
-$yummyAdultMax = App\Config\Config::getKey('CART_YUMMY_ADULT_MAX');
-$historySingleMin = App\Config\Config::getKey('CART_HISTORY_SINGLE_MIN');
-$historySingleMax = App\Config\Config::getKey('CART_HISTORY_SINGLE_MAX');
-$historyFamilyMin = App\Config\Config::getKey('CART_HISTORY_FAMILY_MIN');
-$historyFamilyMax = App\Config\Config::getKey('CART_HISTORY_FAMILY_MAX');
 ?>
 
 <div class="container mt-4">
