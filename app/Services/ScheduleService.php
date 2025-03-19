@@ -34,37 +34,44 @@ class ScheduleService
     public function getDanceSchedule(): array
     {
         $querySchedule = $this->danceRepository->getSchedule();
-        $schedules = [];
+        $scheduleList = [];
 
-        $dates = $this->getScheduleDates($querySchedule);
-        foreach ($dates as $date) {
-            $todayEvents = $this->getScheduleByDate($querySchedule, $date);
-            $todaySchedule = [
+        $eventDates = $this->getScheduleDates($querySchedule);
+
+        foreach ($eventDates as $date) {
+            $eventsOnDate = $this->getScheduleByDate($querySchedule, $date);
+
+            $dailySchedule = [
                 'date' => date('l F j', strtotime($date)),
                 'rows' => [],
             ];
 
-            foreach ($todayEvents as $event) {
-                $todaySchedule['rows'][] = [
+            foreach ($eventsOnDate as $event) {
+                $dailySchedule['rows'][] = [
                     'event_id' => $event['event_id'],
                     'start' => date('H:i', strtotime($event['start_time'])),
                     'venue' => $event['location_name'],
                     'artists' => explode(', ', $event['artist_names']),
-                    'session' => match (DanceSessionEnum::from($event['session'])) {
-                        DanceSessionEnum::CLUB => 'Club',
-                        DanceSessionEnum::B2B => 'Back2Back',
-                        DanceSessionEnum::TIESTO_WORLD => 'Tiesto World',
-                    },
+                    'session' => $this->getSessionName($event['session']),
                     'duration' => $event['duration'],
                     'tickets_available' => $event['tickets_available'],
                     'price' => $event['price'],
                 ];
             }
 
-            $schedules[] = $todaySchedule;
+            $scheduleList[] = $dailySchedule;
         }
 
-        return $schedules;
+        return $scheduleList;
+    }
+
+    private function getSessionName(string $session): string
+    {
+        return match (DanceSessionEnum::from($session)) {
+            DanceSessionEnum::CLUB => 'Club',
+            DanceSessionEnum::B2B => 'Back2Back',
+            DanceSessionEnum::TIESTO_WORLD => 'Tiesto World',
+        };
     }
 
     /**
@@ -87,40 +94,48 @@ class ScheduleService
         $schedules = [];
 
         $dates = $this->getScheduleDates($querySchedule);
+
         foreach ($dates as $date) {
-            $todayEvents = $this->getScheduleByDate($querySchedule, $date);
-            $uniqueTours = $this->getUniqueTours($todayEvents);
+            $eventsForDate = $this->getScheduleByDate($querySchedule, $date);
+            $groupedTours = $this->getUniqueTours($eventsForDate);
 
-            foreach ($uniqueTours as $key => $tours) {
-                $firstTour = $tours[0];
-                $languageNames = array_values(array_unique(array_column($tours, 'language')));
+            foreach ($groupedTours as $tourGroup) {
+                $firstTour = $tourGroup[0];
 
-                $guides = array_map(function ($language) use ($tours) {
-                    $toursInLang = array_filter($tours, fn ($tour) => $tour['language'] === $language);
-                    $guideNames = array_values(array_unique(array_column($toursInLang, 'guide')));
+                // Extract unique languages
+                $languages = array_unique(array_column($tourGroup, 'language'));
 
-                    return [
+                // Organize guides by language
+                $guides = [];
+                foreach ($languages as $language) {
+                    $filteredTours = array_filter($tourGroup, fn ($tour) => $tour['language'] === $language);
+                    $guideNames = array_unique(array_column($filteredTours, 'guide'));
+
+                    $guides[] = [
                         'language' => $language,
-                        'names' => $guideNames,
+                        'names' => array_values($guideNames),
                     ];
-                }, $languageNames);
+                }
 
-                $startTimes = array_values(array_unique(array_column($tours, 'start_time')));
+                // Extract and sort unique start times
+                $startTimes = array_unique(array_column($tourGroup, 'start_time'));
                 sort($startTimes);
 
-                $start = array_map(function ($time) use ($tours) {
-                    $toursAtTime = array_filter($tours, fn ($tour) => $tour['start_time'] === $time);
-                    $toursGroupedByLanguage = [];
+                // Organize tours by start time and language
+                $start = [];
+                foreach ($startTimes as $time) {
+                    $filteredTours = array_filter($tourGroup, fn ($tour) => $tour['start_time'] === $time);
+                    $toursByLanguage = [];
 
-                    foreach ($toursAtTime as $tour) {
-                        $toursGroupedByLanguage[$tour['language']][] = $tour['tour_id'];
+                    foreach ($filteredTours as $tour) {
+                        $toursByLanguage[$tour['language']][] = $tour['tour_id'];
                     }
 
-                    return [
+                    $start[] = [
                         'time' => date('H:i', strtotime($time)),
-                        'tours' => $toursGroupedByLanguage,
+                        'tours' => $toursByLanguage,
                     ];
-                }, $startTimes);
+                }
 
                 $schedules[] = [
                     'date' => date('l F j', strtotime($date)),

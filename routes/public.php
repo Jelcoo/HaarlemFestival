@@ -19,14 +19,9 @@ $router->get('/magic', [App\Controllers\HomeController::class, 'magic']);
 $router->get('/cart', [App\Controllers\CartController::class, 'index']);
 $router->post('/stripe/webhook', [App\Controllers\CheckoutController::class, 'webhook']);
 
-
-$router->get('/editor', [App\Controllers\EditorController::class, 'index']);
-$router->post('/editor', [App\Controllers\EditorController::class, 'editPost']);
-
 $router->get('/program', [App\Controllers\ProgramController::class, 'index']);
 $router->get('/program/tickets', [App\Controllers\ProgramController::class, 'tickets']);
 $router->get('/program/tickets/qrcode', [App\Controllers\ProgramController::class, 'qrcode']);
-
 
 $router->middleware(EnsureNotLoggedIn::class, function () use ($router) {
     $router->get('/register', [App\Controllers\AuthController::class, 'register']);
@@ -54,8 +49,6 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
     });
 
     $router->middleware(EnsureAdmin::class, function () use ($router) {
-        $router->post('/upload', [App\Controllers\UploadController::class, 'index']);
-
         $router->get('/dashboard', [App\Controllers\DashboardController::class, 'index']);
 
         $router->get('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'index']);

@@ -28,19 +28,19 @@ include_once __DIR__ . '/../components/header.php';
             <div class="restaurant-row <?php echo $isEven ? 'even-row' : 'odd-row'; ?>">
                 <div class="icon-wrapper <?php echo $isEven ? 'icon-left' : 'icon-right'; ?>">
                     <div class="restaurant-icon">
-                        <img src="<?php echo $restaurant->assets[1]->getUrl(); ?>" alt="<?php echo $restaurant->location->name; ?> Icon">
+                        <img src="<?php echo $restaurant->assets[1]->getUrl(); ?>" alt="<?php echo htmlspecialchars($restaurant->location->name); ?> Icon">
                     </div>
                 </div>
                 <div class="restaurant-card <?php echo $isEven ? 'card-right' : 'card-left'; ?>">
                     <?php if ($isEven) { ?>
                         <div class="restaurant-image">
                             <div class="image-wrapper">
-                                <img src="<?php echo $restaurant->assets[0]->getUrl(); ?>" alt="<?php echo $restaurant->location->name; ?>">
+                                <img src="<?php echo $restaurant->assets[0]->getUrl(); ?>" alt="<?php echo htmlspecialchars($restaurant->location->name); ?>">
                             </div>
                         </div>
                         <div class="restaurant-content">
                             <div class="restaurant-header">
-                                <h3><?php echo $restaurant->location->name; ?></h3>
+                                <h3><?php echo htmlspecialchars($restaurant->location->name); ?></h3>
                                 <div class="stars">
                                     <?php for ($i = 0; $i < $restaurant->rating; ++$i) { ?>
                                         <span>&#9733;</span>
@@ -51,7 +51,7 @@ include_once __DIR__ . '/../components/header.php';
                             <div class="restaurant-footer">
                                 <div class="cuisine-container">
                                     <div class="cuisine">
-                                        <em><?php echo $restaurant->restaurant_type; ?></em>
+                                        <em><?php echo htmlspecialchars($restaurant->restaurant_type); ?></em>
                                     </div>
                                 </div>
                                 <div class="button-container">
@@ -69,13 +69,13 @@ include_once __DIR__ . '/../components/header.php';
                                         <span>&#9733;</span>
                                     <?php } ?>
                                 </div>
-                                <h3><?php echo $restaurant->location->name; ?></h3>
+                                <h3><?php echo htmlspecialchars($restaurant->location->name); ?></h3>
                             </div>
                             <p><?php echo $restaurant->location->preview_description; ?></p>
                             <div class="restaurant-footer">
                                 <div class="cuisine-container">
                                     <div class="cuisine">
-                                    <em><?php echo $restaurant->restaurant_type; ?></em>
+                                    <em><?php echo htmlspecialchars($restaurant->restaurant_type); ?></em>
                                     </div>
                                 </div>
                                 <div class="button-container">
@@ -87,7 +87,7 @@ include_once __DIR__ . '/../components/header.php';
                         </div>
                         <div class="restaurant-image">
                             <div class="image-wrapper">
-                                <img src="<?php echo $restaurant->assets[0]->getUrl(); ?>" alt="<?php echo $restaurant->location->name; ?>">
+                                <img src="<?php echo $restaurant->assets[0]->getUrl(); ?>" alt="<?php echo htmlspecialchars($restaurant->location->name); ?>">
                             </div>
                         </div>
                     <?php } ?>

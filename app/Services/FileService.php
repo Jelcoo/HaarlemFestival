@@ -13,6 +13,10 @@ class FileService
 
     public function deleteFile($filePath)
     {
+        if (str_starts_with($filePath, 'assets/img')) {
+            return;
+        }
+
         if (file_exists($filePath)) {
             unlink($filePath);
         }

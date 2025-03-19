@@ -15,7 +15,7 @@ use App\Enum\EventTypeEnum;
 
 <div class="container-fluid">
     <div class="col-md-8">
-        <form action="/dashboard/locations" method="POST">
+        <form action="/dashboard/locations" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="action"
                 value="<?php echo isset($formData['id']) ? 'update' : 'createLocation'; ?>">
 
@@ -23,8 +23,21 @@ use App\Enum\EventTypeEnum;
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($formData['id']); ?>">
             <?php } ?>
 
+            <!-- Location Cover -->
+            <div class="form-group mt-3">
+                <div class="form-group">
+                    <label for="location_cover">Location Cover</label>
+                    <div class="d-flex align-items-center">
+                        <input type="file" id="location_cover" name="location_cover" class="form-control" accept="image/jpeg, image/png">
+                        <button type="button" class="btn btn-danger ms-2" onclick="clearCoverInput()">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Location Name -->
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <label for="name">Location Name</label>
                 <input type="text" id="name" name="name" class="form-control" required
                     value="<?php echo htmlspecialchars($formData['name'] ?? ''); ?>">
@@ -86,3 +99,15 @@ use App\Enum\EventTypeEnum;
         </form>
     </div>
 </div>
+
+<script>
+    const coverInput = document.getElementById('location_cover');
+    fillFileInput(coverInput, '<?php echo $formData['cover']; ?>');
+
+    initEditor('preview_description');
+    initEditor('main_description');
+
+    function clearCoverInput() {
+        document.getElementById('location_cover').value = "";
+    }
+</script>

@@ -12,9 +12,11 @@ include_once __DIR__ . '/../components/header.php';
     <div class="swiper">
         <div class="swiper-wrapper">
             <?php foreach ($locations as $location) { ?>
-                <div class="swiper-slide" style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');">
+                <div class="swiper-slide" <?php if (count($location->assets) > 0) { ?>
+                style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');"
+                <?php } ?>>
                     <div class="slide-content">
-                        <h2><?php echo $location->name; ?></h2>
+                        <h2><?php echo htmlspecialchars($location->name); ?></h2>
                     </div>
                 </div>
             <?php } ?>
@@ -42,23 +44,23 @@ include_once __DIR__ . '/../components/header.php';
 
             <div class="tour-ticket-card card shadow-sm">
                 <div class="card-header text-center">
-                    <h5 class="card-title mb-0"><?php echo $schedule['date']; ?></h5>
+                    <h5 class="card-title mb-0"><?php echo htmlspecialchars($schedule['date']); ?></h5>
                 </div>
                 <div class="card-body">
                     <div class="tour-detail">
                         <div class="row mb-2">
                             <div class="col-5 text-muted">Start Location</div>
-                            <div class="col-7 text-end"><?php echo $schedule['location']; ?></div>
+                            <div class="col-7 text-end"><?php echo htmlspecialchars($schedule['location']); ?></div>
                         </div>
                         <div class="row mb-2">
                             <div class="col-5 text-muted">Seats per Tour</div>
-                            <div class="col-7 text-end"><?php echo $schedule['seats_per_tour']; ?></div>
+                            <div class="col-7 text-end"><?php echo htmlspecialchars($schedule['seats_per_tour']); ?></div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-5 text-muted">Prices</div>
                             <div class="col-7 text-end">
-                                <div>Single: €<?php echo $schedule['prices']['single']; ?></div>
-                                <div>Family: €<?php echo $schedule['prices']['family']; ?> *</div>
+                                <div>Single: €<?php echo htmlspecialchars($schedule['prices']['single']); ?></div>
+                                <div>Family: €<?php echo htmlspecialchars($schedule['prices']['family']); ?> *</div>
                             </div>
                         </div>
 
@@ -66,8 +68,8 @@ include_once __DIR__ . '/../components/header.php';
                             <h6 class="text-center mb-2">Guides</h6>
                             <?php foreach ($schedule['guides'] as $guide) { ?>
                                 <div class="row mb-1">
-                                    <div class="col-5 text-muted"><?php echo $guide['language']; ?></div>
-                                    <div class="col-7 text-end"><?php echo implode(', ', $guide['names']); ?></div>
+                                    <div class="col-5 text-muted"><?php echo htmlspecialchars($guide['language']); ?></div>
+                                    <div class="col-7 text-end"><?php echo htmlspecialchars(implode(', ', $guide['names'])); ?></div>
                                 </div>
                             <?php } ?>
                         </div>
@@ -77,7 +79,7 @@ include_once __DIR__ . '/../components/header.php';
                             <div class="time-slots">
                                 <?php foreach ($schedule['start'] as $start) { ?>
                                     <div class="row mb-1">
-                                        <div class="col-6"><?php echo $start['time']; ?></div>
+                                        <div class="col-6"><?php echo htmlspecialchars($start['time']); ?></div>
                                         <div class="col-6 text-end">
                                             <?php
                                             $tours = array_map(function ($lang, $count) {
@@ -143,10 +145,10 @@ include_once __DIR__ . '/../components/header.php';
                     <select class="form-select dropdown-select" id="ticketSelect" disabled>
                         <option value="" selected>Select Ticket</option>
                         <option value="single" data-price="<?php echo $schedule['prices']['single']; ?>">Single
-                            (€<?php echo $schedule['prices']['single']; ?>)
+                            (€<?php echo htmlspecialchars($schedule['prices']['single']); ?>)
                         </option>
                         <option value="family" data-price="<?php echo $schedule['prices']['family']; ?>">Family
-                            (€<?php echo $schedule['prices']['family']; ?>)</option>
+                            (€<?php echo htmlspecialchars($schedule['prices']['family']); ?>)</option>
                     </select>
 
                     <div class="quantity-control">

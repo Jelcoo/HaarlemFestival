@@ -8,6 +8,15 @@ use App\Helpers\QueryBuilder;
 
 class RestaurantRepository extends Repository
 {
+    private AssetRepository $assetRepository;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->assetRepository = new AssetRepository();
+    }
+
     public function createRestaurant(array $data): Restaurant
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
@@ -79,6 +88,9 @@ class RestaurantRepository extends Repository
 
         return array_map(
             function ($data) {
+                $asset = $this->assetRepository->getAssetsByClass(Restaurant::class, $data['restaurant_id'], 'cover');
+                $logo = $asset ? $asset[0]->getUrl() : null;
+
                 return (object) [
                     'id' => $data['restaurant_id'],
                     'restaurant_type' => $data['restaurant_type'],
@@ -89,6 +101,7 @@ class RestaurantRepository extends Repository
                         'name' => $data['location_name'],
                         'address' => $data['location_address'],
                     ],
+                    'logo' => $logo,
                 ];
             },
             $queryRestaurants
