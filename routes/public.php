@@ -10,6 +10,7 @@ $router = App\Application\Router::getInstance();
 $router->get('/', [App\Controllers\HomeController::class, 'index']);
 
 $router->get('/dance', [App\Controllers\HomeController::class, 'dance']);
+$router->get('/dance/{id}', [App\Controllers\ArtistController::class, 'show']);
 
 $router->get('/yummy', [App\Controllers\HomeController::class, 'yummy']);
 $router->get('/yummy/{id}', [App\Controllers\RestaurantController::class, 'show']);

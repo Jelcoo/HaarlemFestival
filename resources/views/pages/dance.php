@@ -18,7 +18,7 @@ include_once __DIR__ . '/../components/header.php';
                 <img src="<?php echo $artist->assets[0]->getUrl(); ?>" alt="<?php echo htmlspecialchars($artist->name); ?>">
                 <h3><?php echo htmlspecialchars($artist->name); ?></h3>
                 <p><?php echo $artist->preview_description; ?></p>
-                <a href="/dance/<?php echo str_replace(' ', '_', htmlspecialchars($artist->name)); ?>" class="btn btn-custom-yellow"><i
+                <a href="/dance/<?php echo htmlspecialchars($artist->id); ?>" class="btn btn-custom-yellow"><i
                         class="fa-solid fa-arrow-up-right-from-square"></i>
                     More information</a>
             </div>
