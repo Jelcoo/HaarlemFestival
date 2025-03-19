@@ -11,6 +11,16 @@ $totalItems = array_sum(array_map(function ($item) {
 }, $cartItems));
 ?>
 
+<?php if (isset($_GET['message'])) { ?>
+    <?php include __DIR__ . '/../../components/toast.php'; ?>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var successToast = new bootstrap.Toast(document.getElementById("successToast"));
+            successToast.show();
+        });
+    </script>
+<?php } ?>
+
 <div class="container mt-4">
     <?php include __DIR__ . '/../../components/errordisplay.php'; ?>
     <div class="row justify-content-center">

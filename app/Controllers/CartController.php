@@ -47,7 +47,7 @@ class CartController extends Controller
 
         $this->cartRepository->increaseQuantity($cart->id, $_POST['item_id'], $quantityType);
 
-        Response::redirect('/cart');
+        Response::redirect('/cart?message=Added 1 item to cart');
     }
 
     public function decreaseQuantity(array $paramaters = [])
@@ -58,7 +58,7 @@ class CartController extends Controller
 
         $this->cartRepository->decreaseQuantity($cart->id, $_POST['item_id'], $quantityType);
 
-        Response::redirect('/cart');
+        Response::redirect('/cart?message=Removed 1 item from cart');
     }
 
     public function addItem(array $paramaters = [])
@@ -121,7 +121,7 @@ class CartController extends Controller
 
         $this->cartRepository->addCartItem($newCartItem);
 
-        Response::redirect("/{$_POST['event_type']}");
+        Response::redirect("/{$_POST['event_type']}?message=Item added to cart");
     }
 
     public function removeItem(array $paramaters = [])
@@ -130,7 +130,7 @@ class CartController extends Controller
 
         $this->cartRepository->deleteCartItem($cart->id, $_POST['item_id']);
 
-        Response::redirect('/cart');
+        Response::redirect('/cart?message=Item removed from cart');
     }
 
     public function checkout()

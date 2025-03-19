@@ -7,6 +7,16 @@ $header_image = '/assets/img/events/slider/dance.png';
 include_once __DIR__ . '/../components/header.php';
 ?>
 
+<?php if (isset($_GET['message'])) { ?>
+    <?php include __DIR__ . '/../components/toast.php'; ?>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var successToast = new bootstrap.Toast(document.getElementById("successToast"));
+            successToast.show();
+        });
+    </script>
+<?php } ?>
+
 <div class="container artist-grid">
     <?php $artistCount = 0; ?>
     <?php foreach ($artists as $artist) { ?>
