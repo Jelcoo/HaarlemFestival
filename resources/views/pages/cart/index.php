@@ -1,3 +1,26 @@
+<?php
+/**
+ * @var App\Models\CartItem[] $cartItems
+ */
+require __DIR__ . '/helpers.php';
+
+$totalItems = array_sum(array_map(function ($item) {
+    return array_sum(array_map(function ($quantity) {
+        return $quantity->quantity;
+    }, $item->quantities));
+}, $cartItems));
+?>
+
+<?php if (isset($_GET['message'])) { ?>
+    <?php include __DIR__ . '/../../components/toast.php'; ?>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var successToast = new bootstrap.Toast(document.getElementById("successToast"));
+            successToast.show();
+        });
+    </script>
+<?php } ?>
+
 <div class="container mt-4">
     <?php include __DIR__ . '/../../components/errordisplay.php'; ?>
     <div class="row justify-content-center">
@@ -5,7 +28,7 @@
             <h1>Cart - Overview</h1>
         </div>
         <div class="col-6 d-flex gap-3 justify-content-end px-0 align-items-center">
-            <h2>Total items: <span id="total-items">0</span></h2>
+            <h2>Total items: <span id="total-items"><?php echo $totalItems; ?></span></h2>
             <button type="button" class="btn btn-custom-yellow" data-bs-toggle="modal"
                 data-bs-target="#confirmModal">Place order <i
                     class="fa-solid fa-arrow-up-right-from-square"></i></button>
@@ -13,18 +36,9 @@
         <hr>
     </div>
     <div class="row">
-        <div class="col-sm-12 col-lg-4" id="dance">
-            <h2>DANCE!</h2>
-            <p id="danceNotFound">No events found</p>
-        </div>
-        <div class="col-sm-12 col-lg-4" id="yummy">
-            <h2>Yummy!</h2>
-            <p id="yummyNotFound">No events found</p>
-        </div>
-        <div class="col-sm-12 col-lg-4" id="history">
-            <h2>A stroll through history</h2>
-            <p id="historyNotFound">No events found</p>
-        </div>
+        <?php include __DIR__ . '/danceList.php'; ?>
+        <?php include __DIR__ . '/yummyList.php'; ?>
+        <?php include __DIR__ . '/historyList.php'; ?>
     </div>
 </div>
 <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
@@ -59,7 +73,6 @@
     </div>
 </div>
 
-<script src="/assets/js/cart.js"></script>
 <style>
     .eventCard {
         background-color: var(--secondary);
@@ -124,6 +137,11 @@
         color: #555;
         cursor: pointer;
         padding: 0;
+    }
+
+    .counter button:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
     }
 
     .counter span {

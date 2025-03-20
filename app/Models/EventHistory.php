@@ -10,7 +10,16 @@ class EventHistory extends Event
     public float $family_price;
     public float $single_price;
 
-    public function __construct(array $collection)
+    public function __construct()
+    {
+        $arguments = func_get_args();
+
+        if (!empty($arguments)) {
+            $this->fill($arguments[0]);
+        }
+    }
+
+    public function fill(array $collection)
     {
         parent::__construct($collection);
 
