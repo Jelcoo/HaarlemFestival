@@ -51,4 +51,15 @@ class CartService
 
         return $amount;
     }
+
+    public function calculateCartAmountExclVAT(Cart $cart): float
+    {
+        $amount = 0;
+
+        foreach ($cart->items as $item) {
+            $amount += $item->totalPriceExclVAT();
+        }
+
+        return $amount;
+    }
 }
