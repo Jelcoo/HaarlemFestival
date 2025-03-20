@@ -40,4 +40,15 @@ class CartService
 
         return $cart;
     }
+
+    public function calculateCartAmount(Cart $cart): float
+    {
+        $amount = 0;
+
+        foreach ($cart->items as $item) {
+            $amount += $item->totalPrice();
+        }
+
+        return $amount;
+    }
 }

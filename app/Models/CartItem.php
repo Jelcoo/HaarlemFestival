@@ -68,6 +68,13 @@ class CartItem
 
     public function totalPrice(): float
     {
-        return round($this->singlePrice() * $this->quantity(), 2);
+        $price = match($this->event_model) {
+            EventDance::class => $this->singlePrice() * $this->quantity(),
+            EventYummy::class => $this->singlePrice(),
+            EventHistory::class => $this->quantities[0]->type === ItemQuantityEnum::FAMILY ? $this->singlePrice() : $this->singlePrice() * $this->quantity(),
+            default => $this->singlePrice(),
+        };
+
+        return round($price, 2);
     }
 }
