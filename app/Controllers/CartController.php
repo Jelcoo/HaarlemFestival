@@ -152,7 +152,7 @@ class CartController extends Controller
         if ($_POST['paymentChoice'] == 'payNow') {
             Response::redirect('/checkout');
         } else {
-            $this->orderService->createOrder($_POST['order']);
+            $this->orderService->createOrder($cart);
             Response::redirect('/checkout/pay_later');
         }
     }

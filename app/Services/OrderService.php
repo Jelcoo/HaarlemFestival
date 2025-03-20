@@ -65,10 +65,8 @@ class OrderService
         return $errors;
     }
 
-    public function createOrder($data)
+    public function createOrder(Cart $cart)
     {
-        $json = json_decode($data, true);
-
-        return $this->orderRepository->createOrder($json);
+        return $this->orderRepository->createOrder($cart);
     }
 }
