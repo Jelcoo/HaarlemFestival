@@ -7,6 +7,7 @@ use App\Application\Response;
 use App\Helpers\StripeHelper;
 use App\Services\CartService;
 use App\Services\OrderService;
+use App\Repositories\CartRepository;
 use App\Repositories\OrderRepository;
 
 class CheckoutController extends Controller
@@ -15,6 +16,7 @@ class CheckoutController extends Controller
     private OrderService $orderService;
     private CartService $cartService;
     private OrderRepository $orderRepository;
+    private CartRepository $cartRepository;
 
     public function __construct()
     {
@@ -23,20 +25,27 @@ class CheckoutController extends Controller
         $this->orderService = new OrderService();
         $this->cartService = new CartService();
         $this->orderRepository = new OrderRepository();
+        $this->cartRepository = new CartRepository();
     }
 
     public function index(array $paramaters = [])
     {
         $cart = $this->cartService->getSessionCart(true, true);
+        $user = $this->getAuthUser();
 
         return $this->pageLoader->setPage('checkout/index')->render([
             'cartItems' => $cart->items,
+            'user' => $user,
         ] + $paramaters);
     }
 
     public function checkout(array $paramaters = [])
     {
-        return $this->pageLoader->setPage('checkout/pay')->render($paramaters);
+        $secret = $this->createCheckout();
+
+        return $this->pageLoader->setPage('checkout/pay')->render([
+            'clientSecret' => $secret,
+        ] + $paramaters);
     }
 
     public function completePayment(array $paramaters = [])
@@ -49,13 +58,11 @@ class CheckoutController extends Controller
         return $this->pageLoader->setPage('checkout/pay_later')->render($paramaters);
     }
 
-    public function createCheckout()
+    private function createCheckout()
     {
         try {
-            // retrieve JSON from POST body
-            $jsonStr = file_get_contents('php://input');
-            $jsonObj = json_decode($jsonStr, true);
-            $amount = StripeHelper::calculateOrderAmount($jsonObj);
+            $cart = $this->cartService->getSessionCart(true, true);
+            $amount = StripeHelper::calculateOrderAmount($cart);
             if ($amount == 0) {
                 $response = new Response();
                 $response->setStatusCode(400);
@@ -64,11 +71,12 @@ class CheckoutController extends Controller
                 exit;
             }
 
-            $invoiceId = $this->orderService->createOrder($jsonStr);
+            $invoiceId = $this->orderService->createOrder($cart);
+            $this->cartRepository->deleteCart($cart->id);
 
             $clientSecret = $this->stripe->createIntent($amount, $invoiceId, $this->getAuthUser()->stripe_customer_id);
 
-            return json_encode($clientSecret);
+            return $clientSecret;
         } catch (\Error $e) {
             $response = new Response();
             $response->setStatusCode(500);
