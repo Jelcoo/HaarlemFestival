@@ -9,6 +9,7 @@ use App\Services\CartService;
 use App\Services\OrderService;
 use App\Repositories\CartRepository;
 use App\Repositories\OrderRepository;
+use App\Repositories\InvoiceRepository;
 
 class CheckoutController extends Controller
 {
@@ -16,6 +17,7 @@ class CheckoutController extends Controller
     private OrderService $orderService;
     private CartService $cartService;
     private OrderRepository $orderRepository;
+    private InvoiceRepository $invoiceRepository;
     private CartRepository $cartRepository;
 
     public function __construct()
@@ -26,6 +28,7 @@ class CheckoutController extends Controller
         $this->cartService = new CartService();
         $this->orderRepository = new OrderRepository();
         $this->cartRepository = new CartRepository();
+        $this->invoiceRepository = new InvoiceRepository();
     }
 
     public function index(array $paramaters = [])
@@ -50,7 +53,10 @@ class CheckoutController extends Controller
 
     public function completePayment(array $paramaters = [])
     {
-        return $this->pageLoader->setPage('checkout/complete')->render($paramaters);
+        $paymentIntent = $this->stripe->retrievePaymentIntent($_GET['payment_intent']);
+        return $this->pageLoader->setPage('checkout/complete')->render([
+            'status' => $paymentIntent->status,
+        ] + $paramaters);
     }
 
     public function payLater(array $paramaters = [])
@@ -58,11 +64,15 @@ class CheckoutController extends Controller
         return $this->pageLoader->setPage('checkout/pay_later')->render($paramaters);
     }
 
-    private function createCheckout()
+    private function createCheckout(?int $invoiceId = null)
     {
         try {
-            $cart = $this->cartService->getSessionCart(true, true);
-            $amount = StripeHelper::calculateOrderAmount($cart);
+            if (is_null($invoiceId)) {
+                $cart = $this->cartService->getSessionCart(true, true);
+                $amount = StripeHelper::calculateOrderAmount($cart);
+            } else {
+                // Help
+            }
             if ($amount == 0) {
                 $response = new Response();
                 $response->setStatusCode(400);
@@ -70,9 +80,10 @@ class CheckoutController extends Controller
                 $response->sendJson();
                 exit;
             }
-
-            $invoiceId = $this->orderService->createOrder($cart);
-            $this->cartRepository->deleteCart($cart->id);
+            if (is_null($invoiceId)) {
+                $invoiceId = $this->orderService->createOrder($cart);
+                $this->cartRepository->deleteCart($cart->id);
+            }
 
             $clientSecret = $this->stripe->createIntent($amount, $invoiceId, $this->getAuthUser()->stripe_customer_id);
 

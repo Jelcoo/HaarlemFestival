@@ -52,4 +52,9 @@ class StripeHelper
 
         return intval(number_format($total, 2, '', ''));
     }
+
+    public function retrievePaymentIntent(string $paymentIntentId)
+    {
+        return $this->stripe->paymentIntents->retrieve($paymentIntentId);
+    }
 }
