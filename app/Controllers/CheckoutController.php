@@ -4,13 +4,12 @@ namespace App\Controllers;
 
 use App\Config\Config;
 use App\Application\Response;
-use App\Enum\InvoiceStatusEnum;
 use App\Helpers\StripeHelper;
 use App\Services\CartService;
 use App\Services\OrderService;
+use App\Enum\InvoiceStatusEnum;
 use App\Repositories\CartRepository;
 use App\Repositories\OrderRepository;
-use App\Repositories\InvoiceRepository;
 
 class CheckoutController extends Controller
 {
@@ -18,7 +17,6 @@ class CheckoutController extends Controller
     private OrderService $orderService;
     private CartService $cartService;
     private OrderRepository $orderRepository;
-    private InvoiceRepository $invoiceRepository;
     private CartRepository $cartRepository;
 
     public function __construct()
@@ -29,7 +27,6 @@ class CheckoutController extends Controller
         $this->cartService = new CartService();
         $this->orderRepository = new OrderRepository();
         $this->cartRepository = new CartRepository();
-        $this->invoiceRepository = new InvoiceRepository();
     }
 
     public function index(array $paramaters = [])
@@ -55,6 +52,7 @@ class CheckoutController extends Controller
     public function completePayment(array $paramaters = [])
     {
         $paymentIntent = $this->stripe->retrievePaymentIntent($_GET['payment_intent']);
+
         return $this->pageLoader->setPage('checkout/complete')->render([
             'status' => $paymentIntent->status,
         ] + $paramaters);
@@ -68,6 +66,7 @@ class CheckoutController extends Controller
     private function createCheckout(?int $invoiceId = null)
     {
         try {
+            $amount = 0;
             if (is_null($invoiceId)) {
                 $cart = $this->cartService->getSessionCart(true, true);
                 $amount = StripeHelper::calculateOrderAmount($cart);
