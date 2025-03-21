@@ -31,7 +31,7 @@ class OrderService
                     $availability = $this->orderRepository->checkDanceTicketAvailable($item->event_id, $quantity->quantity, $quantity->type);
 
                     if (!$availability) {
-                        $errors['dance'][$item->event_id] = 'Ticket not available';
+                        $errors['dance'][$item->event_id] = 'No seats available';
                     }
                     break;
                 case 'App\\Models\\EventYummy':
@@ -48,7 +48,7 @@ class OrderService
                     $availability = $this->orderRepository->checkYummyTicketAvailable($item->event_id, $childrenQuantity, $adultQuantity);
 
                     if (!$availability) {
-                        $errors['yummy'][$item->event_id] = 'Ticket not available';
+                        $errors['yummy'][$item->event_id] = 'No seats available';
                     }
                     break;
                 case 'App\\Models\\EventHistory':
@@ -56,7 +56,7 @@ class OrderService
                     $availability = $this->orderRepository->checkHistoryTicketAvailable($item->event_id, $quantity);
 
                     if (!$availability) {
-                        $errors['history'][$item->event_id] = 'Ticket not available';
+                        $errors['history'][$item->event_id] = 'No seats available';
                     }
                     break;
             }
