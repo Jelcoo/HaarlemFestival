@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enum\InvoiceStatusEnum;
 use App\Models\Cart;
 use App\Models\EventDance;
 use App\Models\EventYummy;
@@ -131,12 +132,12 @@ class OrderRepository extends Repository
         return $result['seats_remaining'] >= 0;
     }
 
-    public function updateOrderStatus(int $orderId, string $data)
+    public function updateOrderStatus(int $orderId, InvoiceStatusEnum $status)
     {
-        $sql = 'UPDATE invoices SET status = :data WHERE id = :id';
+        $sql = 'UPDATE invoices SET status = :status WHERE id = :id';
         $stmt = $this->pdoConnection->prepare($sql);
         $stmt->execute([
-            'data' => $data,
+            'status' => $status->value,
             'id' => $orderId,
         ]);
     }

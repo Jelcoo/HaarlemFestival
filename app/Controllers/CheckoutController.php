@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Config\Config;
 use App\Application\Response;
+use App\Enum\InvoiceStatusEnum;
 use App\Helpers\StripeHelper;
 use App\Services\CartService;
 use App\Services\OrderService;
@@ -122,7 +123,7 @@ class CheckoutController extends Controller
                 $paymentIntent = $event->data->object;
                 try {
                     $this->orderRepository->setStripeId(intval($paymentIntent->metadata->order_id), $paymentIntent->id);
-                    $this->orderRepository->updateOrderStatus(intval($paymentIntent->metadata->order_id), 'pending');
+                    $this->orderRepository->updateOrderStatus(intval($paymentIntent->metadata->order_id), InvoiceStatusEnum::PENDING);
                     http_response_code(200);
                 } catch (\Exception $e) {
                     http_response_code(500);
@@ -131,7 +132,7 @@ class CheckoutController extends Controller
             case 'payment_intent.succeeded':
                 /** @var \Stripe\PaymentIntent $paymentIntent */
                 $paymentIntent = $event->data->object;
-                $this->orderRepository->updateOrderStatus(intval($paymentIntent->metadata->order_id), 'completed');
+                $this->orderRepository->updateOrderStatus(intval($paymentIntent->metadata->order_id), InvoiceStatusEnum::COMPLETED);
                 $this->orderRepository->completeOrder(intval($paymentIntent->metadata->order_id));
 
                 http_response_code(200);
@@ -139,7 +140,7 @@ class CheckoutController extends Controller
             case 'payment_intent.payment_failed':
                 /** @var \Stripe\PaymentIntent $paymentIntent */
                 $paymentIntent = $event->data->object;
-                $this->orderRepository->updateOrderStatus(intval($paymentIntent->metadata->order_id), 'failed');
+                $this->orderRepository->updateOrderStatus(intval($paymentIntent->metadata->order_id), InvoiceStatusEnum::FAILED);
                 http_response_code(200);
                 break;
             default:
