@@ -17,7 +17,8 @@ class Repository
 
     protected function getConnection(): \PDO
     {
-        $GLOBALS['QUERY_COUNT']++;
+        ++$GLOBALS['QUERY_COUNT'];
+
         return $this->pdoConnection;
     }
 
