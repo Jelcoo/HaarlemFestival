@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Config\Config;
 use App\Application\Response;
 use App\Helpers\StripeHelper;
+use App\Services\CartService;
 use App\Services\OrderService;
 use App\Repositories\OrderRepository;
 
@@ -12,6 +13,7 @@ class CheckoutController extends Controller
 {
     private StripeHelper $stripe;
     private OrderService $orderService;
+    private CartService $cartService;
     private OrderRepository $orderRepository;
 
     public function __construct()
@@ -19,12 +21,17 @@ class CheckoutController extends Controller
         parent::__construct();
         $this->stripe = new StripeHelper();
         $this->orderService = new OrderService();
+        $this->cartService = new CartService();
         $this->orderRepository = new OrderRepository();
     }
 
     public function index(array $paramaters = [])
     {
-        return $this->pageLoader->setPage('checkout/index')->render($paramaters);
+        $cart = $this->cartService->getSessionCart(true, true);
+
+        return $this->pageLoader->setPage('checkout/index')->render([
+            'cartItems' => $cart->items,
+        ] + $paramaters);
     }
 
     public function checkout(array $paramaters = [])
