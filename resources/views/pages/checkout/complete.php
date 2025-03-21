@@ -21,6 +21,7 @@
             <h1>Error</h1>
             <h2>Payment is still pending</h2>
             <p>Please check your account on the status of your payment.</p>
+            <a href="/account/manage" class="btn btn-custom-yellow">Go to account</a>
             <?php break;
     }
     ?>
