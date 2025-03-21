@@ -8,7 +8,7 @@ use App\Controllers\ErrorController;
 
 class Repository
 {
-    protected \PDO $pdoConnection;
+    private \PDO $pdoConnection;
 
     public function __construct()
     {
@@ -17,10 +17,11 @@ class Repository
 
     protected function getConnection(): \PDO
     {
+        $GLOBALS['QUERY_COUNT']++;
         return $this->pdoConnection;
     }
 
-    private function connect(): \PDO
+    private function connect()
     {
         $host = Config::getKey('DB_HOST');
         $port = Config::getKey('DB_PORT');
@@ -47,8 +48,6 @@ class Repository
             $response->sendJson();
             exit;
         }
-
-        return $this->pdoConnection;
     }
 
     public function prepare($sql): \PDOStatement

@@ -47,7 +47,7 @@ $loggedIn = Session::isValidSession();
         <?php
             if (App\Config\Config::getKey('APP_ENV') === 'development') {
                 $endtime = microtime(true);
-                printf('Page loaded in %f seconds', $endtime - $GLOBALS['APP_START_TIME']);
+                printf('Page loaded in %f seconds - Query count: %d', $endtime - $GLOBALS['APP_START_TIME'], $GLOBALS['QUERY_COUNT']);
             } ?>
     </div>
 </body>
