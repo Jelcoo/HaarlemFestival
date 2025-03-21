@@ -229,4 +229,11 @@ AND cart_id = :cartId');
             'cartId' => $cartId,
         ]);
     }
+    
+    public function deleteCart(int $cartId): void
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $queryBuilder->table('cart_items')->where('cart_id', '=', $cartId)->delete();
+    }
 }

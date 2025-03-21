@@ -62,4 +62,10 @@ class CartService
 
         return $amount;
     }
+    
+    public function deleteSessionCart(): void
+    {
+        $this->cartRepository->deleteCart($_SESSION['cart_id']);
+        unset($_SESSION['cart_id']);
+    }
 }

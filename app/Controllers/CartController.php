@@ -153,6 +153,7 @@ class CartController extends Controller
             Response::redirect('/checkout');
         } else {
             $this->orderService->createOrder($cart);
+            $this->cartRepository->deleteCart($cart->id);
             Response::redirect('/checkout/pay_later');
         }
     }
