@@ -10,6 +10,7 @@ use App\Services\OrderService;
 use App\Enum\InvoiceStatusEnum;
 use App\Repositories\CartRepository;
 use App\Repositories\OrderRepository;
+use App\Adapters\InvoiceToCartAdapter;
 
 class CheckoutController extends Controller
 {
@@ -18,6 +19,7 @@ class CheckoutController extends Controller
     private CartService $cartService;
     private OrderRepository $orderRepository;
     private CartRepository $cartRepository;
+    private InvoiceToCartAdapter $invoiceToCartAdapter;
 
     public function __construct()
     {
@@ -27,6 +29,7 @@ class CheckoutController extends Controller
         $this->cartService = new CartService();
         $this->orderRepository = new OrderRepository();
         $this->cartRepository = new CartRepository();
+        $this->invoiceToCartAdapter = new InvoiceToCartAdapter();
     }
 
     public function index(array $paramaters = [])
@@ -67,12 +70,14 @@ class CheckoutController extends Controller
     {
         try {
             $amount = 0;
+
             if (is_null($invoiceId)) {
                 $cart = $this->cartService->getSessionCart(true, true);
-                $amount = StripeHelper::calculateOrderAmount($cart);
             } else {
-                // Help
+                $cart = $this->invoiceToCartAdapter->adapt($invoiceId);
             }
+
+            $amount = StripeHelper::calculateOrderAmount($cart);
             if ($amount == 0) {
                 $response = new Response();
                 $response->setStatusCode(400);
@@ -80,6 +85,7 @@ class CheckoutController extends Controller
                 $response->sendJson();
                 exit;
             }
+
             if (is_null($invoiceId)) {
                 $invoiceId = $this->orderService->createOrder($cart);
                 $this->cartRepository->deleteCart($cart->id);
@@ -91,8 +97,8 @@ class CheckoutController extends Controller
         } catch (\Error $e) {
             $response = new Response();
             $response->setStatusCode(500);
-            $response->setContent($e->getMessage());
-            $response->sendJson();
+            $response->setContent((new ErrorController())->error500($e->getMessage()));
+            $response->send();
             exit;
         }
     }

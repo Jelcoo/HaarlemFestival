@@ -2,15 +2,19 @@
 
 namespace App\Repositories;
 
-use App\Enum\InvoiceStatusEnum;
+use App\Models\Cart;
+use App\Models\EventDance;
+use App\Models\EventYummy;
+use App\Models\EventHistory;
 use App\Enum\ItemQuantityEnum;
+use App\Enum\InvoiceStatusEnum;
 
 class OrderRepository extends Repository
 {
-    public function createOrder(array $data)
+    public function createOrder(Cart $cart)
     {
+        $pdoConnection = $this->getConnection();
         try {
-            $pdoConnection = $this->getConnection();
             $pdoConnection->beginTransaction();
 
             $sql = 'INSERT INTO invoices (user_id) VALUES (:user_id)';
@@ -19,38 +23,36 @@ class OrderRepository extends Repository
 
             $invoiceId = $pdoConnection->lastInsertId();
 
-            foreach ($data['dance'] as $dance) {
-                for ($i = 0; $i < $dance['quantity']; ++$i) {
-                    $sql = 'INSERT INTO dance_tickets (dance_event_id, invoice_id, all_access) VALUES (:dance_event_id, :invoice_id, :all_access)';
+            foreach ($cart->items as $item) {
+                if ($item->event_model == EventDance::class) {
+                    for ($i = 0; $i < $item->quantity(); ++$i) {
+                        $sql = 'INSERT INTO dance_tickets (dance_event_id, invoice_id, all_access) VALUES (:dance_event_id, :invoice_id, :all_access)';
+                        $stmt = $pdoConnection->prepare($sql);
+                        $stmt->execute([
+                            'dance_event_id' => $item->event_id,
+                            'invoice_id' => $invoiceId,
+                            'all_access' => ($item->quantities[0]->type === ItemQuantityEnum::ALL_ACCESS) ? 1 : 0,
+                        ]);
+                    }
+                } elseif ($item->event_model == EventYummy::class) {
+                    $sql = 'INSERT INTO yummy_tickets (yummy_event_id, invoice_id, kids_count, adult_count) VALUES (:yummy_event_id, :invoice_id, :kids_count, :adult_count)';
                     $stmt = $pdoConnection->prepare($sql);
                     $stmt->execute([
-                        'dance_event_id' => $dance['event_id'],
+                        'yummy_event_id' => $item->event_id,
                         'invoice_id' => $invoiceId,
-                        'all_access' => ($dance['all_access'] == 1) ? 1 : 0,
+                        'kids_count' => $item->quantities[0]->quantity,
+                        'adult_count' => $item->quantities[1]->quantity,
+                    ]);
+                } elseif ($item->event_model == EventHistory::class) {
+                    $sql = 'INSERT INTO history_tickets (history_event_id, invoice_id, total_seats, family_ticket) VALUES (:history_event_id, :invoice_id, :total_seats, :family_ticket)';
+                    $stmt = $pdoConnection->prepare($sql);
+                    $stmt->execute([
+                        'history_event_id' => $item->event_id,
+                        'invoice_id' => $invoiceId,
+                        'total_seats' => $item->quantities[0]->quantity,
+                        'family_ticket' => ($item->quantities[0]->type === ItemQuantityEnum::FAMILY) ? 1 : 0,
                     ]);
                 }
-            }
-
-            foreach ($data['yummy'] as $yummy) {
-                $sql = 'INSERT INTO yummy_tickets (yummy_event_id, invoice_id, kids_count, adult_count) VALUES (:yummy_event_id, :invoice_id, :kids_count, :adult_count)';
-                $stmt = $pdoConnection->prepare($sql);
-                $stmt->execute([
-                    'yummy_event_id' => $yummy['event_id'],
-                    'invoice_id' => $invoiceId,
-                    'kids_count' => $yummy['children_quantity'],
-                    'adult_count' => $yummy['adult_quantity'],
-                ]);
-            }
-
-            foreach ($data['history'] as $history) {
-                $sql = 'INSERT INTO history_tickets (history_event_id, invoice_id, total_seats, family_ticket) VALUES (:history_event_id, :invoice_id, :total_seats, :family_ticket)';
-                $stmt = $pdoConnection->prepare($sql);
-                $stmt->execute([
-                    'history_event_id' => $history['event_id'][0],
-                    'invoice_id' => $invoiceId,
-                    'total_seats' => $history['seats'],
-                    'family_ticket' => ($history['type'] == 'family') ? 1 : 0,
-                ]);
             }
 
             $pdoConnection->commit();
