@@ -56,22 +56,6 @@ class DashboardUsersController extends DashboardController
         );
     }
 
-    public function handleAction(): void
-    {
-        $action = $_POST['action'] ?? null;
-        $userId = $_POST['id'] ?? null;
-
-        match ($action) {
-            'delete' => $userId ? $this->deleteUser($userId) : $this->redirectToUsers(false, 'Invalid user ID.'),
-            'update' => $userId ? $this->updateUser($userId) : $this->redirectToUsers(false, 'Invalid user ID.'),
-            'edit' => $userId ? $this->editUser() : $this->redirectToUsers(false, 'Invalid user ID.'),
-            'create' => $this->showForm(),
-            'createUser' => $this->createNewUser(),
-            'export' => $this->exportUsers(),
-            default => $this->redirectToUsers(false, 'Invalid action.'),
-        };
-    }
-
     public function deleteUser(): void
     {
         $userId = $_POST['id'] ?? null;
@@ -104,19 +88,7 @@ class DashboardUsersController extends DashboardController
             'postal_code' => $user->postal_code,
         ];
 
-        return $this->renderPage(
-            '/../../../components/dashboard/forms/users_form',
-            [
-                'mode' => 'edit',
-                'roles' => array_column(UserRoleEnum::cases(), 'value'),
-                'formData' => $formData,
-                'errors' => [],
-                'status' => [
-                    'status' => true,
-                    'message' => '',
-                ],
-            ]
-        );
+        return $this->showForm('edit', $formData, []);
     }
 
     public function editUserPost(): string
@@ -151,19 +123,7 @@ class DashboardUsersController extends DashboardController
             $validation = $validator->validate($_POST, $rules);
 
             if ($validation->fails()) {
-                return $this->renderPage(
-                    '/../../../components/dashboard/forms/users_form',
-                    [
-                        'mode' => 'edit',
-                        'roles' => array_column(UserRoleEnum::cases(), 'value'),
-                        'formData' => $_POST,
-                        'errors' => $validation->errors()->all(),
-                        'status' => [
-                            'status' => false,
-                            'message' => 'Validation failed.',
-                        ],
-                    ]
-                );
+                return $this->showForm('edit', $_POST, $validation->errors()->all());
             }
 
             $existingUser->firstname = $_POST['firstname'];
@@ -179,37 +139,13 @@ class DashboardUsersController extends DashboardController
 
             $this->redirectToUsers(true, 'User updated successfully.');
         } catch (\Exception $e) {
-            return $this->renderPage(
-                '/../../../components/dashboard/forms/users_form',
-                [
-                    'mode' => 'edit',
-                    'roles' => array_column(UserRoleEnum::cases(), 'value'),
-                    'formData' => $_POST,
-                    'errors' => ['Error: ' . $e->getMessage()],
-                    'status' => [
-                        'status' => false,
-                        'message' => 'Update failed.',
-                    ],
-                ]
-            );
+            return $this->showForm('edit', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 
     public function createUser(): string
     {
-        return $this->renderPage(
-            '/../../../components/dashboard/forms/users_form',
-            [
-                'mode' => 'create',
-                'roles' => array_column(UserRoleEnum::cases(), 'value'),
-                'formData' => [],
-                'errors' => [],
-                'status' => [
-                    'status' => true,
-                    'message' => '',
-                ],
-            ]
-        );
+        return $this->showForm();
     }
 
     public function createUserPost(): string
@@ -232,7 +168,7 @@ class DashboardUsersController extends DashboardController
             );
 
             if ($validation->fails()) {
-                return $this->showForm($_POST, $validation->errors()->all());
+                return $this->showForm('create', $_POST, $validation->errors()->all());
             }
 
             $userData = array_intersect_key(
@@ -257,7 +193,7 @@ class DashboardUsersController extends DashboardController
             $this->userRepository->createUser($userData);
             $this->redirectToUsers(true, "User '{$_POST['firstname']} {$_POST['lastname']}' created successfully.");
         } catch (\Exception $e) {
-            return $this->showForm($_POST, ['Error: ' . $e->getMessage()], 'Something went wrong.');
+            return $this->showForm('create', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 
@@ -282,22 +218,16 @@ class DashboardUsersController extends DashboardController
         $this->redirectTo('users', $success, $message);
     }
 
-    // private function showForm(): void
-    // {
-    //     $_SESSION['show_user_form'] = true;
-    //     $this->redirectToUsers();
-    // }
-
-    public function showForm(array $formData = [], array $errors = []): string
+    public function showForm(string $mode = 'create', array $formData = [], array $errors = [], array $status = []): string
     {
         return $this->renderPage(
             '/../../../components/dashboard/forms/users_form',
             [
-                'mode' => 'create',
+                'mode' => $mode,
                 'roles' => array_column(UserRoleEnum::cases(), 'value'),
                 'formData' => $formData,
                 'errors' => $errors,
-                'status' => [
+                'status' => $status + [
                     'status' => empty($errors),
                 ],
             ]
