@@ -70,11 +70,16 @@ class DashboardController extends Controller
     // https://phppot.com/php/php-array-to-csv/
     protected function exportToCsv(string $filename, array $data, array $columns): void
     {
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
         $timestamp = Carbon::now()->format('d-m-Y_H-i-s');
         $filename = $filename . "_$timestamp.csv";
 
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
+
         $output = fopen('php://output', 'w');
 
         fputcsv($output, array_values($columns));
@@ -106,5 +111,6 @@ class DashboardController extends Controller
         }
 
         fclose($output);
+        exit;
     }
 }
