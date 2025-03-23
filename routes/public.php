@@ -55,7 +55,12 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
         $router->get('/dashboard', [App\Controllers\DashboardController::class, 'index']);
 
         $router->get('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'index']);
-        $router->post('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'handleAction']);
+        $router->get('/dashboard/users/create', [App\Controllers\DashboardUsersController::class, 'createUser']);
+        $router->post('/dashboard/users/create', [App\Controllers\DashboardUsersController::class, 'createUserPost']);
+        $router->get('/dashboard/users/edit', [App\Controllers\DashboardUsersController::class, 'editUser']);
+        $router->post('/dashboard/users/edit', [App\Controllers\DashboardUsersController::class, 'editUserPost']);
+        $router->post('/dashboard/users/delete', [App\Controllers\DashboardUsersController::class, 'deleteUser']);
+        $router->get('/dashboard/users/export', [App\Controllers\DashboardUsersController::class, 'exportUsers']);
 
         $router->get('/dashboard/orders', [App\Controllers\DashboardOrderController::class, 'index']);
         $router->get('/dashboard/orders/tickets', [App\Controllers\DashboardOrderTicketsController::class, 'index']);
