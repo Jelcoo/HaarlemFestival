@@ -52,12 +52,16 @@ $showDetails = isset($_GET['details']) && $_GET['details'] == $location->id;
                         <?php echo $showDetails ? 'Show Less' : 'Show More'; ?>
                     </a>
 
-                    <form action="/dashboard/locations" method="POST" class="d-inline">
-                        <input type="hidden" name="id" value="<?php echo $location->id; ?>">
-                        <button type="submit" class="btn btn-warning btn-sm" name="action" value="edit">Edit</button>
-                        <button type="submit" class="btn btn-danger btn-sm ms-2" name="action"
-                            value="delete">Delete</button>
-                    </form>
+                    <div>
+                        <!-- Edit -->
+                        <a href="/dashboard/locations/edit?id=<?php echo $location->id; ?>" class="btn btn-warning btn-sm">Edit</a>
+
+                        <!-- Delete -->
+                        <form action="/dashboard/locations/delete" method="POST" class="d-inline">
+                            <input type="hidden" name="id" value="<?php echo $location->id; ?>">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

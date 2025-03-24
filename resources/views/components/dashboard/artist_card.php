@@ -47,13 +47,16 @@ $showDetails = isset($_GET['details']) && $_GET['details'] == $artist->id;
                         <?php echo $showDetails ? 'Show Less' : 'Show More'; ?>
                     </a>
 
-                    <!-- Actions -->
-                    <form action="/dashboard/artists" method="POST" class="d-inline">
-                        <input type="hidden" name="id" value="<?php echo $artist->id; ?>">
-                        <button type="submit" class="btn btn-warning btn-sm" name="action" value="edit">Edit</button>
-                        <button type="submit" class="btn btn-danger btn-sm ms-2" name="action"
-                            value="delete">Delete</button>
-                    </form>
+                    <div>
+                        <!-- Edit -->
+                        <a href="/dashboard/artists/edit?id=<?php echo $artist->id; ?>" class="btn btn-warning btn-sm">Edit</a>
+
+                        <!-- Delete -->
+                        <form action="/dashboard/artists/delete" method="POST" class="d-inline">
+                            <input type="hidden" name="id" value="<?php echo $artist->id; ?>">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
