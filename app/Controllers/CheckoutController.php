@@ -11,6 +11,7 @@ use App\Enum\InvoiceStatusEnum;
 use App\Repositories\CartRepository;
 use App\Repositories\OrderRepository;
 use App\Adapters\InvoiceToCartAdapter;
+use App\Repositories\InvoiceRepository;
 
 class CheckoutController extends Controller
 {
@@ -20,6 +21,7 @@ class CheckoutController extends Controller
     private OrderRepository $orderRepository;
     private CartRepository $cartRepository;
     private InvoiceToCartAdapter $invoiceToCartAdapter;
+    private InvoiceRepository $invoiceRepository;
 
     public function __construct()
     {
@@ -30,11 +32,21 @@ class CheckoutController extends Controller
         $this->orderRepository = new OrderRepository();
         $this->cartRepository = new CartRepository();
         $this->invoiceToCartAdapter = new InvoiceToCartAdapter();
+        $this->invoiceRepository = new InvoiceRepository();
     }
 
     public function index(array $paramaters = [])
     {
-        $cart = $this->cartService->getSessionCart(true, true);
+        if (!isset($_GET['id'])) {
+            $cart = $this->cartService->getSessionCart(true, true);
+        } else {
+            if ($this->invoiceRepository->isPayableInvoice($_GET['id'], $this->getAuthUser()->id)) {
+                $cart = $this->invoiceToCartAdapter->adapt($_GET['id']);
+            } else {
+                Response::redirect('/');
+            }
+        }
+
         $user = $this->getAuthUser();
 
         return $this->pageLoader->setPage('checkout/index')->render([
