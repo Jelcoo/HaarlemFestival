@@ -1,7 +1,7 @@
 <?php
 
-use App\Application\Session;
 use App\Config\Config;
+use App\Application\Session;
 
 $loggedIn = Session::isValidSession();
 ?>
@@ -53,7 +53,7 @@ $loggedIn = Session::isValidSession();
         {{content}}
         <?php include __DIR__ . '/../components/footer.php'; ?>
         <?php
-        if (App\Config\Config::getKey('APP_ENV') === 'development') {
+        if (Config::getKey('APP_ENV') === 'development') {
             $endtime = microtime(true);
             printf('Page loaded in %f seconds - Query count: %d', $endtime - $GLOBALS['APP_START_TIME'], $GLOBALS['QUERY_COUNT']);
         } ?>
