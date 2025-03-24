@@ -28,8 +28,8 @@ include_once __DIR__ . '/../components/header.php';
                 <img src="<?php echo $artist->assets[0]->getUrl(); ?>" alt="<?php echo htmlspecialchars($artist->name); ?>">
                 <h3><?php echo htmlspecialchars($artist->name); ?></h3>
                 <p><?php echo $artist->preview_description; ?></p>
-                <a href="/dance/<?php echo str_replace(' ', '_', htmlspecialchars($artist->name)); ?>" class="btn btn-custom-yellow"><i
-                        class="fa-solid fa-arrow-up-right-from-square"></i>
+                <a href="/dance/<?php echo str_replace(' ', '_', htmlspecialchars($artist->name)); ?>"
+                    class="btn btn-custom-yellow"><i class="fa-solid fa-arrow-up-right-from-square"></i>
                     More information</a>
             </div>
 
@@ -47,10 +47,8 @@ include_once __DIR__ . '/../components/header.php';
         <?php if ($locationCount % 2 == 0) { ?>
             <div class="row g-0">
             <?php } ?>
-            <div class="col-md-6 location-card"
-                <?php if (count($location->assets) > 0) { ?>
-                style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');"
-                <?php } ?>>
+            <div class="col-md-6 location-card" <?php if (count($location->assets) > 0) { ?>
+                    style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');" <?php } ?>>
                 <div class="location-overlay">
                     <div class="location-title"><?php echo htmlspecialchars($location->name); ?></div>
                     <div class="location-description">
@@ -111,6 +109,10 @@ include_once __DIR__ . '/../components/header.php';
         </div>
     </div>
 <?php } ?>
+
+<button data-bs-toggle="modal" data-bs-target="#socialMediaModal" class="btn btn-custom-yellow floating-button">
+    <i class="fa-solid fa-share-from-square"></i> <span>Share</span>
+</button>
 <!-- Ticket Modal -->
 <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -202,7 +204,7 @@ include_once __DIR__ . '/../components/header.php';
         basePrice = parseInt(eventData.price);
         quantity = 1;
         updateDisplay();
-        
+
         modalInstance.show();
     }
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Dashboard;
 
 use App\Enum\EventTypeEnum;
 use App\Services\AssetService;
 use Rakit\Validation\Validator;
 use App\Repositories\LocationRepository;
 
-class DashboardLocationsController extends DashboardController
+class LocationsController extends DashboardController
 {
     private LocationRepository $locationRepository;
     private AssetService $assetService;
@@ -29,21 +29,6 @@ class DashboardLocationsController extends DashboardController
             $this->redirectToLocations();
         }
 
-        if (!empty($_SESSION['show_location_form'])) {
-            unset($_SESSION['show_location_form']);
-
-            $formData = $_SESSION['form_data'] ?? [];
-            unset($_SESSION['form_data']);
-
-            return $this->renderPage(
-                '/../../../components/dashboard/forms/location_form',
-                [
-                    'formData' => $formData,
-                    'status' => $this->getStatus(),
-                ]
-            );
-        }
-
         return $this->renderPage(
             'locations',
             [
@@ -56,72 +41,57 @@ class DashboardLocationsController extends DashboardController
         );
     }
 
-    public function handleAction(): void
+    public function deleteLocation(): void
     {
-        $action = $_POST['action'] ?? null;
         $locationId = $_POST['id'] ?? null;
 
-        match ($action) {
-            'delete' => $locationId ? $this->deleteLocation($locationId) : $this->redirectToLocations(false, 'Invalid location ID.'),
-            'update' => $locationId ? $this->updateLocation($locationId) : $this->redirectToLocations(false, 'Invalid Location ID.'),
-            'create' => $this->showForm(),
-            'edit' => $locationId ? $this->editLocation() : $this->redirectToLocations(false, 'Invalid location ID.'),
-            'createLocation' => $this->createNewLocation(),
-            'export' => $this->exportLocations(),
-            default => $this->redirectToLocations(false, 'Invalid action.'),
-        };
+        if (!$locationId) {
+            $this->redirectToLocations(false, 'Invalid location ID.');
+        }
+
+        $success = (bool) $this->locationRepository->deleteLocation($locationId);
+        $this->redirectToLocations($success, $success ? 'Location deleted successfully.' : 'Failed to delete Location');
     }
 
-    private function deleteLocation(int $locationId): void
+    public function editLocation(): string
     {
-        $success = $this->locationRepository->deleteLocation($locationId);
-        $this->redirectToLocations(!empty($success), $success ? 'Location deleted successfully.' : 'Failed to delete Location');
+        $locationId = $_GET['id'] ?? null;
+        if (!$locationId) {
+            $this->redirectToLocations(false, 'Invalid location ID.');
+        }
+
+        $existingLocation = $this->locationRepository->getLocationById($locationId);
+        if (!$existingLocation) {
+            $this->redirectToLocations(false, 'Location not found.');
+        }
+
+        $locationCover = $this->assetService->resolveAssets($existingLocation, 'cover');
+
+        $formData = [
+            'id' => $existingLocation->id,
+            'name' => $existingLocation->name,
+            'event_type' => $existingLocation->event_type->value,
+            'address' => $existingLocation->address,
+            'coordinates' => $existingLocation->coordinates,
+            'preview_description' => $existingLocation->preview_description,
+            'main_description' => $existingLocation->main_description,
+            'cover' => count($locationCover) > 0 ? $locationCover[0]->getUrl() : null,
+        ];
+
+        return $this->showLocationForm('edit', $formData);
     }
 
-    private function editLocation(): void
+    public function editLocationPost()
     {
         try {
             $locationId = $_POST['id'] ?? null;
             if (!$locationId) {
-                throw new \Exception('Invalid location ID.');
+                throw new \Exception('Location not found.');
             }
 
             $existingLocation = $this->locationRepository->getLocationById($locationId);
             if (!$existingLocation) {
                 throw new \Exception('Location not found.');
-            }
-
-            $locationCover = $this->assetService->resolveAssets($existingLocation, 'cover');
-
-            $_SESSION['show_location_form'] = true;
-            $_SESSION['form_data'] = [
-                'id' => $existingLocation->id,
-                'name' => $existingLocation->name,
-                'event_type' => $existingLocation->event_type->value,
-                'address' => $existingLocation->address,
-                'coordinates' => $existingLocation->coordinates,
-                'preview_description' => $existingLocation->preview_description,
-                'main_description' => $existingLocation->main_description,
-                'cover' => count($locationCover) > 0 ? $locationCover[0]->getUrl() : null,
-            ];
-
-            $this->redirectToLocations();
-        } catch (\Exception $e) {
-            $_SESSION['form_data'] = $_POST;
-            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
-            $this->redirectToLocations(false, $e->getMessage());
-        }
-    }
-
-    private function updateLocation(int $locationId): void
-    {
-        try {
-            $existingLocation = $this->locationRepository->getLocationById($locationId);
-
-            if (!$existingLocation) {
-                $this->redirectToLocations(false, 'Location not found');
-
-                return;
             }
 
             $validator = new Validator();
@@ -139,8 +109,6 @@ class DashboardLocationsController extends DashboardController
             );
 
             if ($validation->fails()) {
-                $_SESSION['show_location_form'] = true;
-                $_SESSION['form_data'] = $_POST;
                 throw new \Exception(implode(' ', $validation->errors()->all()));
             }
 
@@ -166,15 +134,18 @@ class DashboardLocationsController extends DashboardController
                 $this->assetService->saveAsset($_FILES['location_cover'], 'cover', $existingLocation);
             }
 
-            $this->redirectTo("locations?details=$locationId", true, 'Location updated successfully');
+            $this->redirectToLocations(true, 'Location updated successfully');
         } catch (\Exception $e) {
-            $_SESSION['form_data'] = $_POST;
-            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
-            $this->redirectToLocations(false, $e->getMessage());
+            $this->showLocationForm('edit', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 
-    private function createNewLocation(): void
+    public function createLocation(): string
+    {
+        return $this->showLocationForm();
+    }
+
+    public function createLocationPost(): void
     {
         try {
             $validator = new Validator();
@@ -235,13 +206,18 @@ class DashboardLocationsController extends DashboardController
         $this->redirectTo('locations', $success, $message);
     }
 
-    private function showForm(): void
+    public function showLocationForm(string $mode = 'create', array $formData = [], array $errors = [], array $status = []): string
     {
-        $_SESSION['show_location_form'] = true;
-        $this->redirectToLocations();
+        return $this->showForm(
+            'location',
+            $mode,
+            $formData,
+            $errors,
+            $status
+        );
     }
 
-    private function exportLocations(): void
+    public function exportLocations(): void
     {
         $locations = $this->locationRepository->getAllLocations();
 

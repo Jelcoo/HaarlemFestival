@@ -52,22 +52,41 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
     });
 
     $router->middleware(EnsureAdmin::class, function () use ($router) {
-        $router->get('/dashboard', [App\Controllers\DashboardController::class, 'index']);
+        $router->get('/dashboard', [App\Controllers\Dashboard\DashboardController::class, 'index']);
 
-        $router->get('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'index']);
-        $router->post('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'handleAction']);
+        $router->get('/dashboard/users', [App\Controllers\Dashboard\UsersController::class, 'index']);
+        $router->get('/dashboard/users/create', [App\Controllers\Dashboard\UsersController::class, 'createUser']);
+        $router->post('/dashboard/users/create', [App\Controllers\Dashboard\UsersController::class, 'createUserPost']);
+        $router->get('/dashboard/users/edit', [App\Controllers\Dashboard\UsersController::class, 'editUser']);
+        $router->post('/dashboard/users/edit', [App\Controllers\Dashboard\UsersController::class, 'editUserPost']);
+        $router->post('/dashboard/users/delete', [App\Controllers\Dashboard\UsersController::class, 'deleteUser']);
+        $router->get('/dashboard/users/export', [App\Controllers\Dashboard\UsersController::class, 'exportUsers']);
 
-        $router->get('/dashboard/orders', [App\Controllers\DashboardOrderController::class, 'index']);
-        $router->get('/dashboard/orders/tickets', [App\Controllers\DashboardOrderTicketsController::class, 'index']);
+        $router->get('/dashboard/orders', [App\Controllers\Dashboard\OrderController::class, 'index']);
+        $router->get('/dashboard/orders/tickets', [App\Controllers\Dashboard\OrderTicketsController::class, 'index']);
 
-        $router->get('/dashboard/restaurants', [App\Controllers\DashboardRestaurantsController::class, 'index']);
-        $router->post('/dashboard/restaurants', [App\Controllers\DashboardRestaurantsController::class, 'handleAction']);
+        $router->get('/dashboard/restaurants', [App\Controllers\Dashboard\RestaurantsController::class, 'index']);
+        $router->get('/dashboard/restaurants/create', [App\Controllers\Dashboard\RestaurantsController::class, 'createRestaurant']);
+        $router->post('/dashboard/restaurants/create', [App\Controllers\Dashboard\RestaurantsController::class, 'createRestaurantPost']);
+        $router->get('/dashboard/restaurants/edit', [App\Controllers\Dashboard\RestaurantsController::class, 'editRestaurant']);
+        $router->post('/dashboard/restaurants/edit', [App\Controllers\Dashboard\RestaurantsController::class, 'editRestaurantPost']);
+        $router->post('/dashboard/restaurants/delete', [App\Controllers\Dashboard\RestaurantsController::class, 'deleteRestaurant']);
+        $router->get('/dashboard/restaurants/export', [App\Controllers\Dashboard\RestaurantsController::class, 'exportRestaurants']);
 
-        $router->get('/dashboard/locations', [App\Controllers\DashboardLocationsController::class, 'index']);
-        $router->post('/dashboard/locations', [App\Controllers\DashboardLocationsController::class, 'handleAction']);
+        $router->get('/dashboard/locations', [App\Controllers\Dashboard\LocationsController::class, 'index']);
+        $router->get('/dashboard/locations/create', [App\Controllers\Dashboard\LocationsController::class, 'createLocation']);
+        $router->post('/dashboard/locations/create', [App\Controllers\Dashboard\LocationsController::class, 'createLocationPost']);
+        $router->get('/dashboard/locations/edit', [App\Controllers\Dashboard\LocationsController::class, 'editLocation']);
+        $router->post('/dashboard/locations/edit', [App\Controllers\Dashboard\LocationsController::class, 'editLocationPost']);
+        $router->post('/dashboard/locations/delete', [App\Controllers\Dashboard\LocationsController::class, 'deleteLocation']);
+        $router->get('/dashboard/locations/export', [App\Controllers\Dashboard\LocationsController::class, 'exportLocations']);
 
-        $router->get('/dashboard/artists', [App\Controllers\DashboardArtistsController::class, 'index']);
-        $router->post('/dashboard/artists', [App\Controllers\DashboardArtistsController::class, 'handleAction']);
-
+        $router->get('/dashboard/artists', [App\Controllers\Dashboard\ArtistsController::class, 'index']);
+        $router->get('/dashboard/artists/create', [App\Controllers\Dashboard\ArtistsController::class, 'createArtist']);
+        $router->post('/dashboard/artists/create', [App\Controllers\Dashboard\ArtistsController::class, 'createArtistPost']);
+        $router->get('/dashboard/artists/edit', [App\Controllers\Dashboard\ArtistsController::class, 'editArtist']);
+        $router->post('/dashboard/artists/edit', [App\Controllers\Dashboard\ArtistsController::class, 'editArtistPost']);
+        $router->post('/dashboard/artists/delete', [App\Controllers\Dashboard\ArtistsController::class, 'deleteArtist']);
+        $router->get('/dashboard/artists/export', [App\Controllers\Dashboard\ArtistsController::class, 'exportArtists']);
     });
 });

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Dashboard;
 
 use App\Repositories\TicketRepository;
 
-class DashboardOrderTicketsController extends DashboardController
+class OrderTicketsController extends DashboardController
 {
     private TicketRepository $ticketRepository;
 

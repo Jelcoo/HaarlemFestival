@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Dashboard;
 
 use App\Services\AssetService;
 use Rakit\Validation\Validator;
 use App\Repositories\LocationRepository;
 use App\Repositories\RestaurantRepository;
 
-class DashboardRestaurantsController extends DashboardController
+class RestaurantsController extends DashboardController
 {
     private RestaurantRepository $restaurantRepository;
     private LocationRepository $locationRepository;
@@ -31,22 +31,6 @@ class DashboardRestaurantsController extends DashboardController
             $this->redirectToRestaurants();
         }
 
-        if (!empty($_SESSION['show_restaurant_form'])) {
-            unset($_SESSION['show_restaurant_form']);
-
-            $formData = $_SESSION['form_data'] ?? [];
-            unset($_SESSION['form_data']);
-
-            return $this->renderPage(
-                '/../../../components/dashboard/forms/restaurant_form',
-                [
-                    'locations' => $this->locationRepository->getAllLocations(),
-                    'formData' => $formData,
-                    'status' => $this->getStatus(),
-                ]
-            );
-        }
-
         return $this->renderPage(
             'restaurants',
             [
@@ -60,76 +44,55 @@ class DashboardRestaurantsController extends DashboardController
         );
     }
 
-    public function handleAction(): void
+    public function deleteRestaurant(): void
     {
-        $action = $_POST['action'] ?? null;
         $restaurantId = $_POST['id'] ?? null;
 
-        match ($action) {
-            'delete' => $restaurantId ? $this->deleteRestaurant($restaurantId) : $this->redirectToRestaurants(false, 'Invalid restaurant ID.'),
-            'update' => $restaurantId ? $this->updateRestaurant($restaurantId) : $this->redirectToRestaurants(false, 'Invalid restaurant ID.'),
-            'edit' => $restaurantId ? $this->editRestaurant() : $this->redirectToRestaurants(false, 'Invalid restaurant ID.'),
-            'create' => $this->showForm(),
-            'createNewRestaurant' => $this->createNewRestaurant(),
-            'export' => $this->exportRestaurants(),
-            default => $this->redirectToRestaurants(false, 'Invalid action.'),
-        };
-    }
-
-    private function deleteRestaurant(int $restaurantId): void
-    {
-        $deletedRestaurant = $this->restaurantRepository->deleteRestaurant($restaurantId);
-
-        if (!is_null($deletedRestaurant)) {
-            $restaurantAssets = $this->assetService->resolveAssets($deletedRestaurant);
-            foreach ($restaurantAssets as $asset) {
-                $this->assetService->deleteAsset($asset);
-            }
+        if (!$restaurantId) {
+            $this->redirectToRestaurants(false, 'Invalid restaurant ID.');
         }
 
-        $this->redirectToRestaurants(!empty($deletedRestaurant), $deletedRestaurant ? 'Restaurant deleted successfully.' : 'Failed to delete Restaurant');
+        $success = (bool) $this->restaurantRepository->deleteRestaurant($restaurantId);
+        $this->redirectToRestaurants($success, $success ? 'Restaurant deleted successfully.' : 'Failed to delete restaurant.');
     }
 
-    private function editRestaurant(): void
+    public function editRestaurant(): string
+    {
+        $restaurantId = $_GET['id'] ?? null;
+        if (!$restaurantId) {
+            $this->redirectToRestaurants(false, 'Invalid restaurant ID.');
+        }
+
+        $restaurant = $this->restaurantRepository->getRestaurantById($restaurantId);
+        if (!$restaurant) {
+            $this->redirectToRestaurants(false, 'Restaurant not found.');
+        }
+
+        $restaurantCover = $this->assetService->resolveAssets($restaurant, 'cover');
+        $restaurantIcon = $this->assetService->resolveAssets($restaurant, 'icon');
+
+        $formData = [
+            'id' => $restaurant->id,
+            'restaurant_type' => $restaurant->restaurant_type,
+            'rating' => $restaurant->rating,
+            'location_id' => $restaurant->location_id,
+            'menu' => $restaurant->menu,
+            'cover' => isset($restaurantCover[0]) ? $restaurantCover[0]->getUrl() : '',
+            'icon' => isset($restaurantIcon[0]) ? $restaurantIcon[0]->getUrl() : '',
+        ];
+
+        return $this->showRestaurantForm('edit', $formData);
+    }
+
+    public function editRestaurantPost(): void
     {
         try {
             $restaurantId = $_POST['id'] ?? null;
             if (!$restaurantId) {
-                throw new \Exception('Invalid location ID');
-            }
-
-            $existingRestaurant = $this->restaurantRepository->getRestaurantById($restaurantId);
-            if (!$existingRestaurant) {
                 throw new \Exception('Restaurant not found.');
             }
 
-            $restaurantCover = $this->assetService->resolveAssets($existingRestaurant, 'cover');
-            $restaurantIcon = $this->assetService->resolveAssets($existingRestaurant, 'icon');
-
-            $_SESSION['show_restaurant_form'] = true;
-            $_SESSION['form_data'] = [
-                'id' => $existingRestaurant->id,
-                'restaurant_type' => $existingRestaurant->restaurant_type,
-                'rating' => $existingRestaurant->rating,
-                'location_id' => $existingRestaurant->location_id,
-                'menu' => $existingRestaurant->menu,
-                'cover' => $restaurantCover[0]->getUrl(),
-                'icon' => $restaurantIcon[0]->getUrl(),
-            ];
-
-            $this->redirectToRestaurants();
-        } catch (\Exception $e) {
-            $_SESSION['form_data'] = $_POST;
-            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
-            $this->redirectToRestaurants(false, $e->getMessage());
-        }
-    }
-
-    private function updateRestaurant(int $restaurantId): void
-    {
-        try {
             $existingRestaurant = $this->restaurantRepository->getRestaurantById($restaurantId);
-
             if (!$existingRestaurant) {
                 throw new \Exception('Restaurant not found.');
             }
@@ -148,7 +111,6 @@ class DashboardRestaurantsController extends DashboardController
             );
 
             if ($validation->fails()) {
-                $_SESSION['form_data'] = $_POST;
                 throw new \Exception(implode(' ', $validation->errors()->all()));
             }
 
@@ -167,32 +129,35 @@ class DashboardRestaurantsController extends DashboardController
             $this->assetService->saveAsset($_FILES['restaurant_logo'], 'cover', $existingRestaurant);
             $this->assetService->saveAsset($_FILES['restaurant_icon'], 'icon', $existingRestaurant);
 
-            $this->redirectTo("restaurants?details=$restaurantId", true, 'Restaurant updated successfully.');
+            $this->redirectToRestaurants(true, 'Restaurant updated successfully.');
         } catch (\Exception $e) {
-            $_SESSION['form_data'] = $_POST;
-            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
-            $this->redirectTo("restaurants?details=$restaurantId", false, $e->getMessage());
+            $this->showRestaurantForm('edit', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 
-    private function createNewRestaurant(): void
+    public function createRestaurant(): string
+    {
+        return $this->showRestaurantForm();
+    }
+
+    public function createRestaurantPost()
     {
         try {
             $validator = new Validator();
             $validation = $validator->validate(
-                $_POST,
+                $_POST + $_FILES,
                 [
+                    'restaurant_logo' => 'required|uploaded_file|max:5M|mimes:jpeg,png',
+                    'restaurant_icon' => 'required|uploaded_file|max:5M|mimes:jpeg,png',
                     'location_id' => 'required|integer',
                     'rating' => 'nullable|numeric|min:0|max:5',
                     'restaurant_type' => 'nullable|max:100',
-                    'menu' => 'nullable',
+                    'menu' => 'nullable|max:5000',
                 ]
             );
 
             if ($validation->fails()) {
-                $_SESSION['show_restaurant_form'] = true;
-                $_SESSION['form_data'] = $_POST;
-                throw new \Exception(implode(' ', $validation->errors()->all()));
+                return $this->showRestaurantForm('create', $_POST, $validation->errors()->all());
             }
 
             $restaurantData = array_intersect_key(
@@ -214,10 +179,7 @@ class DashboardRestaurantsController extends DashboardController
 
             $this->redirectToRestaurants(true, 'Restaurant created successfully.');
         } catch (\Exception $e) {
-            $_SESSION['show_restaurant_form'] = true;
-            $_SESSION['form_data'] = $_POST;
-            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
-            $this->redirectToRestaurants(false, $e->getMessage());
+            return $this->showRestaurantForm('create', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 
@@ -226,13 +188,19 @@ class DashboardRestaurantsController extends DashboardController
         $this->redirectTo('restaurants', $success, $message);
     }
 
-    private function showForm(): void
+    public function showRestaurantForm(string $mode = 'create', array $formData = [], array $errors = [], array $status = []): string
     {
-        $_SESSION['show_restaurant_form'] = true;
-        $this->redirectToRestaurants();
+        return $this->showForm(
+            'restaurant',
+            $mode,
+            $formData,
+            $errors,
+            $status,
+            ['locations' => $this->locationRepository->getAllLocations()]
+        );
     }
 
-    private function exportRestaurants(): void
+    public function exportRestaurants(): void
     {
         $restaurants = $this->restaurantRepository->getAllRestaurantsWithLocations();
 

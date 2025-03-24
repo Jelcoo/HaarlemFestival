@@ -1,10 +1,10 @@
 <!-- Title and Create Button -->
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>User Management</h2>
-    <form action="/dashboard/users" method="POST">
-        <button type="submit" class="btn btn-success" name="action" value="export">Export to CSV</button>
-        <button type="submit" class="btn btn-primary" name="action" value="create">Create New User</button>
-    </form>
+    <div>
+        <a href="/dashboard/users/export" class="btn btn-success">Export to CSV</a>
+        <a href="/dashboard/users/create" class="btn btn-primary">Create New User</a>
+    </div>
 </div>
 
 <!-- Status message -->
@@ -84,31 +84,29 @@
         <?php if (!empty($users)) { ?>
             <?php foreach ($users as $user) { ?>
                 <tr id="user-row-<?php echo htmlspecialchars($user->id); ?>">
-                    <form action="/dashboard/users" method="POST">
-                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($user->id); ?>">
 
-                        <?php foreach ($columns as $columnKey => $columnData) { ?>
-                            <td>
-                                <!-- Display Values -->
-                                <?php
-                                $displayValue = $user->$columnKey instanceof BackedEnum
-                                    ? $user->$columnKey->value
-                                    : (string) $user->$columnKey;
-                            ?>
-                                <?php echo htmlspecialchars(ucfirst($displayValue)); ?>
-                            </td>
-                        <?php } ?>
-
-                        <!-- Actions -->
-                        <td class="d-flex gap-2">
-                            <form action="/dashboard/users" method="POST" class="d-inline">
-                                <input type="hidden" name="id" value="<?php echo $user->id; ?>">
-                                <button type="submit" class="btn btn-warning btn-sm" name="action" value="edit">Edit</button>
-                                <button type="submit" class="btn btn-danger btn-sm ms-2" name="action"
-                                    value="delete">Delete</button>
-                            </form>
+                    <?php foreach ($columns as $columnKey => $columnData) { ?>
+                        <td>
+                            <?php
+                            $displayValue = $user->$columnKey instanceof BackedEnum
+                                ? $user->$columnKey->value
+                                : (string) $user->$columnKey;
+                        ?>
+                            <?php echo htmlspecialchars(ucfirst($displayValue)); ?>
                         </td>
-                    </form>
+                    <?php } ?>
+
+                    <!-- Actions -->
+                    <td class="d-flex gap-2">
+                        <!-- Edit -->
+                        <a href="/dashboard/users/edit?id=<?php echo $user->id; ?>" class="btn btn-warning btn-sm">Edit</a>
+
+                        <!-- Delete -->
+                        <form action="/dashboard/users/delete" method="POST" class="d-inline">
+                            <input type="hidden" name="id" value="<?php echo $user->id; ?>">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
                 </tr>
             <?php } ?>
         <?php } else { ?>

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Dashboard;
 
 use App\Repositories\InvoiceRepository;
 
-class DashboardOrderController extends DashboardController
+class OrderController extends DashboardController
 {
     private InvoiceRepository $invoiceRepository;
 

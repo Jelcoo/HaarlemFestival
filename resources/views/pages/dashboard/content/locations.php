@@ -1,10 +1,10 @@
 <!-- Title and Create Button -->
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Location Management</h2>
-    <form action="/dashboard/locations" method="POST">
-        <button type="submit" class="btn btn-success" name="action" value="export">Export to CSV</button>
-        <button type="submit" class="btn btn-primary" name="action" value="create">Create New Location</button>
-    </form>
+    <div>
+        <a href="/dashboard/locations/export" class="btn btn-success">Export to CSV</a>
+        <a href="/dashboard/locations/create" class="btn btn-primary">Create New Location</a>
+    </div>
 </div>
 
 <!-- Status message -->

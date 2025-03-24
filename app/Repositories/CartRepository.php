@@ -50,13 +50,19 @@ class CartRepository extends Repository
         return $cart;
     }
 
-    public function getCartByUserId(int $userId): ?Cart
+    public function getCartByUserId(int $userId, bool $includeItems = false, bool $includeEvents = false): ?Cart
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
 
         $queryCart = $queryBuilder->table('carts')->where('user_id', '=', $userId)->first();
 
-        return $queryCart ? new Cart($queryCart) : null;
+        $cart = $queryCart ? new Cart($queryCart) : null;
+
+        if ($cart && $includeItems) {
+            $cart->items = $this->getCartItemsByCartId($cart->id, $includeEvents);
+        }
+
+        return $cart;
     }
 
     public function createCart(?int $user_id): Cart
@@ -217,6 +223,19 @@ AND ciq.quantity > :minQuantity');
         }
     }
 
+    public function moveCartItem(int $cartItemId, int $targetCartId): void
+    {
+        $query = $this->getConnection()->prepare('
+UPDATE cart_items
+SET cart_id = :targetCartId
+WHERE id = :cartItemId');
+
+        $query->execute([
+            'cartItemId' => $cartItemId,
+            'targetCartId' => $targetCartId,
+        ]);
+    }
+
     public function deleteCartItem(int $cartId, int $cartItemId): void
     {
         $query = $this->getConnection()->prepare('
@@ -226,6 +245,17 @@ AND cart_id = :cartId');
 
         $query->execute([
             'cartItemId' => $cartItemId,
+            'cartId' => $cartId,
+        ]);
+    }
+
+    public function deleteCart(int $cartId): void
+    {
+        $query = $this->getConnection()->prepare('
+DELETE FROM carts
+WHERE id = :cartId');
+
+        $query->execute([
             'cartId' => $cartId,
         ]);
     }

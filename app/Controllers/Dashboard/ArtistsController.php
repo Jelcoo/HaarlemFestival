@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Dashboard;
 
 use App\Services\AssetService;
 use Rakit\Validation\Validator;
 use App\Repositories\ArtistRepository;
 
-class DashboardArtistsController extends DashboardController
+class ArtistsController extends DashboardController
 {
     private ArtistRepository $artistRepository;
     private AssetService $assetService;
@@ -28,21 +28,6 @@ class DashboardArtistsController extends DashboardController
             $this->redirectToArtists();
         }
 
-        if (!empty($_SESSION['show_artist_form'])) {
-            unset($_SESSION['show_artist_form']);
-
-            $formData = $_SESSION['form_data'] ?? [];
-            unset($_SESSION['form_data']);
-
-            return $this->renderPage(
-                '/../../../components/dashboard/forms/artist_form',
-                [
-                    'formData' => $formData,
-                    'status' => $this->getStatus(),
-                ]
-            );
-        }
-
         return $this->renderPage(
             'artists',
             [
@@ -55,70 +40,54 @@ class DashboardArtistsController extends DashboardController
         );
     }
 
-    public function handleAction(): void
+    public function deleteArtist(): void
     {
-        $action = $_POST['action'] ?? null;
         $artistId = $_POST['id'] ?? null;
+        if (!$artistId) {
+            $this->redirectToArtists(false, 'Invalid artist ID.');
+        }
 
-        match ($action) {
-            'delete' => $artistId ? $this->deleteArtist($artistId) : $this->redirectToArtists(false, 'Invalid artist ID.'),
-            'update' => $artistId ? $this->updateArtist($artistId) : $this->redirectToArtists(false, 'Invalid artist ID.'),
-            'create' => $this->showForm(),
-            'edit' => $artistId ? $this->editArtist() : $this->redirectToArtists(false, 'Invalid artist ID.'),
-            'createArtist' => $this->createNewArtist(),
-            'export' => $this->exportArtists(),
-            default => $this->redirectToArtists(false, 'Invalid action.'),
-        };
+        $success = (bool) $this->artistRepository->deleteArtist($artistId);
+        $this->redirectToArtists($success, $success ? 'Artist deleted successfully.' : 'Failed to delete artist');
     }
 
-    private function deleteArtist(int $artistId): void
+    public function editArtist(): string
     {
-        $success = $this->artistRepository->deleteArtist($artistId);
-        $this->redirectToArtists(!empty($success), $success ? 'Artist deleted successfully.' : 'Failed to delete artist');
+        $artistId = $_GET['id'] ?? null;
+        if (!$artistId) {
+            $this->redirectToArtists(false, 'Invalid artist ID.');
+        }
+
+        $artist = $this->artistRepository->getArtistById($artistId);
+        if (!$artist) {
+            $this->redirectToArtists(false, 'Artist not found.');
+        }
+
+        $artistCover = $this->assetService->resolveAssets($artist, 'cover');
+
+        $formData = [
+            'id' => $artist->id,
+            'name' => $artist->name,
+            'preview_description' => $artist->preview_description,
+            'main_description' => $artist->main_description,
+            'iconic_albums' => $artist->iconic_albums,
+            'cover' => count($artistCover) > 0 ? $artistCover[0]->getUrl() : null,
+        ];
+
+        return $this->showArtistForm('edit', $formData);
     }
 
-    private function editArtist(): void
+    public function editArtistPost()
     {
         try {
             $artistId = $_POST['id'] ?? null;
             if (!$artistId) {
-                throw new \Exception('Invalid artist ID.');
+                throw new \Exception('Invalid artist ID');
             }
 
             $existingArtist = $this->artistRepository->getArtistById($artistId);
             if (!$existingArtist) {
-                throw new \Exception('Artist not found.');
-            }
-
-            $artistCover = $this->assetService->resolveAssets($existingArtist, 'cover');
-
-            $_SESSION['show_artist_form'] = true;
-            $_SESSION['form_data'] = [
-                'id' => $existingArtist->id,
-                'name' => $existingArtist->name,
-                'preview_description' => $existingArtist->preview_description,
-                'main_description' => $existingArtist->main_description,
-                'iconic_albums' => $existingArtist->iconic_albums,
-                'cover' => count($artistCover) > 0 ? $artistCover[0]->getUrl() : null,
-            ];
-
-            $this->redirectToArtists();
-        } catch (\Exception $e) {
-            $_SESSION['form_data'] = $_POST;
-            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
-            $this->redirectToArtists(false, $e->getMessage());
-        }
-    }
-
-    private function updateArtist(int $artistId): void
-    {
-        try {
-            $existingArtist = $this->artistRepository->getArtistById($artistId);
-
-            if (!$existingArtist) {
-                $this->redirectToArtists(false, 'Artist not found');
-
-                return;
+                throw new \Exception('Artist not found');
             }
 
             $validator = new Validator();
@@ -134,8 +103,6 @@ class DashboardArtistsController extends DashboardController
             );
 
             if ($validation->fails()) {
-                $_SESSION['show_artist_form'] = true;
-                $_SESSION['form_data'] = $_POST;
                 throw new \Exception(implode(' ', $validation->errors()->all()));
             }
 
@@ -153,16 +120,18 @@ class DashboardArtistsController extends DashboardController
 
             $this->assetService->saveAsset($_FILES['artist_cover'], 'cover', $existingArtist);
 
-            $this->redirectTo("artists?details=$artistId", true, 'Artist updated successfully');
             $this->redirectToArtists(true, 'Artist updated successfully.');
         } catch (\Exception $e) {
-            $_SESSION['form_data'] = $_POST;
-            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
-            $this->redirectToArtists(false, $e->getMessage());
+            $this->showArtistForm('edit', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 
-    private function createNewArtist(): void
+    public function createArtist(): string
+    {
+        return $this->showArtistForm();
+    }
+
+    public function createArtistPost()
     {
         try {
             $validator = new Validator();
@@ -178,9 +147,7 @@ class DashboardArtistsController extends DashboardController
             );
 
             if ($validation->fails()) {
-                $_SESSION['show_artist_form'] = true;
-                $_SESSION['form_data'] = $_POST;
-                throw new \Exception(implode(' ', $validation->errors()->all()));
+                return $this->showArtistForm('create', $_POST, $validation->errors()->all());
             }
 
             $artistData = array_intersect_key(
@@ -201,10 +168,7 @@ class DashboardArtistsController extends DashboardController
 
             $this->redirectToArtists(true, 'Artist created successfully.');
         } catch (\Exception $e) {
-            $_SESSION['show_artist_form'] = true;
-            $_SESSION['form_data'] = $_POST;
-            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
-            $this->redirectToArtists(false, $e->getMessage());
+            return $this->showArtistForm('create', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 
@@ -213,13 +177,18 @@ class DashboardArtistsController extends DashboardController
         $this->redirectTo('artists', $success, $message);
     }
 
-    private function showForm(): void
+    public function showArtistForm(string $mode = 'create', array $formData = [], array $errors = [], array $status = []): string
     {
-        $_SESSION['show_artist_form'] = true;
-        $this->redirectToArtists();
+        return $this->showForm(
+            'artist',
+            $mode,
+            $formData,
+            $errors,
+            $status,
+        );
     }
 
-    private function exportArtists(): void
+    public function exportArtists(): void
     {
         $artists = $this->artistRepository->getAllArtists();
 
