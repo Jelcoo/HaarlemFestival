@@ -28,21 +28,34 @@ class CartService
         // If user is logged in and has a cart
         if ($userId && $userCart) {
             // If session has a cart with items, merge them
-            if ($sessionCart && count($sessionCart->items) > 0) {
+            if ($sessionCart && count($sessionCart->items) > 0 && $userCart->id !== $sessionCart->id) {
                 return $this->mergeCarts($userCart, $sessionCart);
             }
 
             // Return user's cart if it has items, otherwise return session cart or new cart
-            return count($userCart->items) > 0 ? $userCart : ($sessionCart ?? $this->cartRepository->createCart($userId));
+            if (count($userCart->items) > 0) {
+                $_SESSION['cart_id'] = $userCart->id;
+
+                return $userCart;
+            }
+
+            $newCart = $sessionCart ?? $this->cartRepository->createCart($userId);
+            $_SESSION['cart_id'] = $newCart->id;
+
+            return $newCart;
         }
 
         // If user is not logged in or has no cart, return session cart or create new one
         if ($sessionCart) {
+            $_SESSION['cart_id'] = $sessionCart->id;
+
             return $sessionCart;
         }
 
-        // Create new cart
-        return $this->cartRepository->createCart($userId);
+        $newCart = $this->cartRepository->createCart($userId);
+        $_SESSION['cart_id'] = $newCart->id;
+
+        return $newCart;
     }
 
     private function mergeCarts(Cart $userCart, Cart $sessionCart): Cart
@@ -59,16 +72,5 @@ class CartService
         $_SESSION['cart_id'] = $userCart->id;
 
         return $userCart;
-    }
-
-    public function calculateCartAmount(Cart $cart): float
-    {
-        $amount = 0;
-
-        foreach ($cart->items as $item) {
-            $amount += $item->totalPrice();
-        }
-
-        return $amount;
     }
 }
