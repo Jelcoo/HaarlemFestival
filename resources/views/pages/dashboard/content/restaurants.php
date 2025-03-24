@@ -3,7 +3,7 @@
     <h2>Restaurant Management</h2>
     <form action="/dashboard/restaurants" method="POST">
         <button type="submit" class="btn btn-success" name="action" value="export">Export to CSV</button>
-        <button type="submit" class="btn btn-primary" name="action" value="create">Create New Restaurant</button>
+        <a href="/dashboard/restaurants/create" class="btn btn-primary">Create New Restaurant</a>
     </form>
 </div>
 

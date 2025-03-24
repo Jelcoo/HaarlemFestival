@@ -98,10 +98,10 @@
 
                     <!-- Actions -->
                     <td class="d-flex gap-2">
-                        <!-- Edit Link (GET) -->
-                            <a href="/dashboard/users/edit?id=<?= $user->id ?>" class="btn btn-warning btn-sm">Edit</a>
+                        <!-- Edit -->
+                        <a href="/dashboard/users/edit?id=<?= $user->id ?>" class="btn btn-warning btn-sm">Edit</a>
 
-                        <!-- Delete Form -->
+                        <!-- Delete -->
                         <form action="/dashboard/users/delete" method="POST" class="d-inline">
                             <input type="hidden" name="id" value="<?php echo $user->id; ?>">
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>

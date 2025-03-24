@@ -66,7 +66,12 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
         $router->get('/dashboard/orders/tickets', [App\Controllers\Dashboard\OrderTicketsController::class, 'index']);
 
         $router->get('/dashboard/restaurants', [App\Controllers\Dashboard\RestaurantsController::class, 'index']);
-        $router->post('/dashboard/restaurants', [App\Controllers\Dashboard\RestaurantsController::class, 'handleAction']);
+        $router->get('/dashboard/restaurants/create', [App\Controllers\Dashboard\RestaurantsController::class, 'createRestaurant']);
+        $router->post('/dashboard/restaurants/create', [App\Controllers\Dashboard\RestaurantsController::class, 'createRestaurantPost']);
+        $router->get('/dashboard/restaurants/edit', [App\Controllers\Dashboard\RestaurantsController::class, 'editRestaurant']);
+        $router->post('/dashboard/restaurants/edit', [App\Controllers\Dashboard\RestaurantsController::class, 'editRestaurantPost']);
+        $router->post('/dashboard/restaurants/delete', [App\Controllers\Dashboard\RestaurantsController::class, 'deleteRestaurant']);
+        $router->get('/dashboard/restaurants/export', [App\Controllers\Dashboard\RestaurantsController::class, 'exportRestaurants']);
 
         $router->get('/dashboard/locations', [App\Controllers\Dashboard\LocationsController::class, 'index']);
         $router->post('/dashboard/locations', [App\Controllers\Dashboard\LocationsController::class, 'handleAction']);

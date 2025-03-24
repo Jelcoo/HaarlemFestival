@@ -1,19 +1,24 @@
+<?php
+$isEdit = ($mode ?? 'create') === 'edit';
+?>
+
 <h2><?php echo isset($formData['id']) ? 'Update Restaurant' : 'Create New Restaurant'; ?></h2>
 
-<!-- Status message -->
-<?php if (!empty($status['message'])) { ?>
-    <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
-        <?php echo htmlspecialchars($status['message']); ?>
+<!-- Validation Errors -->
+<?php if (!empty($errors)) { ?>
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            <?php foreach ($errors as $error) { ?>
+                <li><?php echo htmlspecialchars($error); ?></li>
+            <?php } ?>
+        </ul>
     </div>
 <?php } ?>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8">
-            <form action="/dashboard/restaurants" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="action"
-                    value="<?php echo isset($formData['id']) ? 'update' : 'createNewRestaurant'; ?>">
-
+            <form action="/dashboard/restaurants/<?php echo $isEdit ? 'edit' : 'create'; ?>" method="POST" enctype="multipart/form-data">
                 <?php if (isset($formData['id'])) { ?>
                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($formData['id']); ?>">
                 <?php } ?>
@@ -78,9 +83,7 @@
 
                 <!-- Action Buttons -->
                 <div class="d-flex justify-content-between mt-4">
-                    <a href="<?php echo isset($formData['id']) ? '/dashboard/restaurants?details=' . $formData['id'] : '/dashboard/restaurants'; ?>"
-                        class="btn btn-outline-secondary">Cancel</a>
-
+                    <a href="/dashboard/restaurants" class="btn btn-outline-secondary">Cancel</a>
                     <button type="submit" class="btn btn-primary">
                         <?php echo isset($formData['id']) ? 'Update' : 'Create'; ?> Restaurant
                     </button>

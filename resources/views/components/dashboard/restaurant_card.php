@@ -18,7 +18,7 @@ if (!isset($restaurant)) {
 
                 <!-- Type -->
                 <p class="card-text"><strong>Type:</strong>
-                    <?php echo htmlspecialchars($restaurant->restaurant_type ?? 'Unknown Type'); ?>
+                    <?php echo !empty(trim($restaurant->restaurant_type)) ? strip_tags($restaurant->restaurant_type) : 'Empty'; ?>
                 </p>
                 <!-- Rating -->
                 <p class="card-text"><strong>Rating:</strong>
@@ -36,13 +36,15 @@ if (!isset($restaurant)) {
                 </p>
 
                 <!-- Actions -->
-                <div class="d-flex justify-content-end mt-3">
-                    <form action="/dashboard/restaurants" method="POST" class="d-inline">
-                        <input type="hidden" name="id" value="<?php echo $restaurant->id; ?>">
-                        <button type="submit" class="btn btn-warning btn-sm" name="action" value="edit">Edit</button>
-                        <button type="submit" class="btn btn-danger btn-sm ms-2" name="action"
-                            value="delete">Delete</button>
-                    </form>
+                <div class="d-flex gap-2 justify-content-end mt-3">
+                    <!-- Edit -->
+                    <a href="/dashboard/restaurants/edit?id=<?= $restaurant->id ?>" class="btn btn-warning btn-sm">Edit</a>
+
+                    <!-- Delete -->
+                    <form action="/dashboard/restaurants/delete" method="POST" class="d-inline">
+                            <input type="hidden" name="id" value="<?php echo $restaurant->id; ?>">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
                 </div>
             </div>
         </div>
