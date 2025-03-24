@@ -178,7 +178,7 @@ class ArtistsController extends DashboardController
         );
     }
 
-    private function exportArtists(): void
+    public function exportArtists(): void
     {
         $artists = $this->artistRepository->getAllArtists();
 

@@ -207,7 +207,7 @@ class LocationsController extends DashboardController
         );
     }
 
-    private function exportLocations(): void
+    public function exportLocations(): void
     {
         $locations = $this->locationRepository->getAllLocations();
 

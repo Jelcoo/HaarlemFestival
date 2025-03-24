@@ -215,7 +215,7 @@ class UsersController extends DashboardController
     }
 
 
-    private function exportUsers(): void
+    public function exportUsers(): void
     {
         $users = $this->userRepository->getAllUsers();
 

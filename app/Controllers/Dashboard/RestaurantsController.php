@@ -190,7 +190,7 @@ class RestaurantsController extends DashboardController
         );
     }
 
-    private function exportRestaurants(): void
+    public function exportRestaurants(): void
     {
         $restaurants = $this->restaurantRepository->getAllRestaurantsWithLocations();
 

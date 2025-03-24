@@ -1,10 +1,10 @@
 <!-- Title and Create Button -->
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Restaurant Management</h2>
-    <form action="/dashboard/restaurants" method="POST">
-        <button type="submit" class="btn btn-success" name="action" value="export">Export to CSV</button>
+    <div>
+        <a href="/dashboard/restaurants/export" class="btn btn-success">Export to CSV</a>
         <a href="/dashboard/restaurants/create" class="btn btn-primary">Create New Restaurant</a>
-    </form>
+    </div>
 </div>
 
 <!-- Status Message -->
