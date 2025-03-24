@@ -10,7 +10,7 @@
                 <p>Need help? Contact our support team at <a href="mailto:support@TheFestival.nl">support@TheFestival.nl</a></p>
             </div>
             <?php break;
-        case 'failed': ?>
+        case 'requires_payment_method': ?>
             <h1>Error</h1>
             <h2>Payment failed</h2>
             <p>Sorry, your payment failed. Please try again.</p>
@@ -24,5 +24,6 @@
             <a href="/account/manage" class="btn btn-custom-yellow">Go to account</a>
             <?php break;
     }
+    echo $status;
     ?>
 </div>
