@@ -49,7 +49,7 @@ $showDetails = isset($_GET['details']) && $_GET['details'] == $artist->id;
 
                     <div>
                         <!-- Edit -->
-                        <a href="/dashboard/artists/edit?id=<?= $artist->id ?>" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="/dashboard/artists/edit?id=<?php echo $artist->id; ?>" class="btn btn-warning btn-sm">Edit</a>
 
                         <!-- Delete -->
                         <form action="/dashboard/artists/delete" method="POST" class="d-inline">

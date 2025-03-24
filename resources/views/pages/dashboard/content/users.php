@@ -91,7 +91,7 @@
                             $displayValue = $user->$columnKey instanceof BackedEnum
                                 ? $user->$columnKey->value
                                 : (string) $user->$columnKey;
-                            ?>
+                        ?>
                             <?php echo htmlspecialchars(ucfirst($displayValue)); ?>
                         </td>
                     <?php } ?>
@@ -99,7 +99,7 @@
                     <!-- Actions -->
                     <td class="d-flex gap-2">
                         <!-- Edit -->
-                        <a href="/dashboard/users/edit?id=<?= $user->id ?>" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="/dashboard/users/edit?id=<?php echo $user->id; ?>" class="btn btn-warning btn-sm">Edit</a>
 
                         <!-- Delete -->
                         <form action="/dashboard/users/delete" method="POST" class="d-inline">

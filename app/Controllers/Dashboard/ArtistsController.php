@@ -43,7 +43,9 @@ class ArtistsController extends DashboardController
     public function deleteArtist(): void
     {
         $artistId = $_POST['id'] ?? null;
-        if (!$artistId) $this->redirectToArtists(false, 'Invalid artist ID.');
+        if (!$artistId) {
+            $this->redirectToArtists(false, 'Invalid artist ID.');
+        }
 
         $success = (bool) $this->artistRepository->deleteArtist($artistId);
         $this->redirectToArtists($success, $success ? 'Artist deleted successfully.' : 'Failed to delete artist');
@@ -52,10 +54,14 @@ class ArtistsController extends DashboardController
     public function editArtist(): string
     {
         $artistId = $_GET['id'] ?? null;
-        if (!$artistId) $this->redirectToArtists(false, 'Invalid artist ID.');
+        if (!$artistId) {
+            $this->redirectToArtists(false, 'Invalid artist ID.');
+        }
 
         $artist = $this->artistRepository->getArtistById($artistId);
-        if (!$artist) $this->redirectToArtists(false, 'Artist not found.');
+        if (!$artist) {
+            $this->redirectToArtists(false, 'Artist not found.');
+        }
 
         $artistCover = $this->assetService->resolveAssets($artist, 'cover');
 
@@ -75,10 +81,14 @@ class ArtistsController extends DashboardController
     {
         try {
             $artistId = $_POST['id'] ?? null;
-            if (!$artistId) throw new \Exception('Invalid artist ID');
+            if (!$artistId) {
+                throw new \Exception('Invalid artist ID');
+            }
 
             $existingArtist = $this->artistRepository->getArtistById($artistId);
-            if (!$existingArtist) throw new \Exception('Artist not found');
+            if (!$existingArtist) {
+                throw new \Exception('Artist not found');
+            }
 
             $validator = new Validator();
             $validation = $validator->validate(
@@ -116,7 +126,7 @@ class ArtistsController extends DashboardController
         }
     }
 
-    public function createArtist(): string 
+    public function createArtist(): string
     {
         return $this->showArtistForm();
     }

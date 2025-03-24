@@ -54,7 +54,7 @@ $showDetails = isset($_GET['details']) && $_GET['details'] == $location->id;
 
                     <div>
                         <!-- Edit -->
-                        <a href="/dashboard/locations/edit?id=<?= $location->id ?>" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="/dashboard/locations/edit?id=<?php echo $location->id; ?>" class="btn btn-warning btn-sm">Edit</a>
 
                         <!-- Delete -->
                         <form action="/dashboard/locations/delete" method="POST" class="d-inline">

@@ -45,7 +45,9 @@ class LocationsController extends DashboardController
     {
         $locationId = $_POST['id'] ?? null;
 
-        if (!$locationId) $this->redirectToLocations(false, 'Invalid location ID.');
+        if (!$locationId) {
+            $this->redirectToLocations(false, 'Invalid location ID.');
+        }
 
         $success = (bool) $this->locationRepository->deleteLocation($locationId);
         $this->redirectToLocations($success, $success ? 'Location deleted successfully.' : 'Failed to delete Location');
@@ -54,22 +56,26 @@ class LocationsController extends DashboardController
     public function editLocation(): string
     {
         $locationId = $_GET['id'] ?? null;
-        if (!$locationId) $this->redirectToLocations(false, 'Invalid location ID.');
+        if (!$locationId) {
+            $this->redirectToLocations(false, 'Invalid location ID.');
+        }
 
         $existingLocation = $this->locationRepository->getLocationById($locationId);
-        if (!$existingLocation) $this->redirectToLocations(false, 'Location not found.');
+        if (!$existingLocation) {
+            $this->redirectToLocations(false, 'Location not found.');
+        }
 
         $locationCover = $this->assetService->resolveAssets($existingLocation, 'cover');
 
         $formData = [
             'id' => $existingLocation->id,
-                'name' => $existingLocation->name,
-                'event_type' => $existingLocation->event_type->value,
-                'address' => $existingLocation->address,
-                'coordinates' => $existingLocation->coordinates,
-                'preview_description' => $existingLocation->preview_description,
-                'main_description' => $existingLocation->main_description,
-                'cover' => count($locationCover) > 0 ? $locationCover[0]->getUrl() : null,
+            'name' => $existingLocation->name,
+            'event_type' => $existingLocation->event_type->value,
+            'address' => $existingLocation->address,
+            'coordinates' => $existingLocation->coordinates,
+            'preview_description' => $existingLocation->preview_description,
+            'main_description' => $existingLocation->main_description,
+            'cover' => count($locationCover) > 0 ? $locationCover[0]->getUrl() : null,
         ];
 
         return $this->showLocationForm('edit', $formData);
@@ -79,10 +85,14 @@ class LocationsController extends DashboardController
     {
         try {
             $locationId = $_POST['id'] ?? null;
-            if (!$locationId) throw new \Exception('Location not found.');
+            if (!$locationId) {
+                throw new \Exception('Location not found.');
+            }
 
             $existingLocation = $this->locationRepository->getLocationById($locationId);
-            if (!$existingLocation) throw new \Exception('Location not found.');
+            if (!$existingLocation) {
+                throw new \Exception('Location not found.');
+            }
 
             $validator = new Validator();
             $validation = $validator->validate(

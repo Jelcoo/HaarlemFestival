@@ -48,7 +48,9 @@ class RestaurantsController extends DashboardController
     {
         $restaurantId = $_POST['id'] ?? null;
 
-        if (!$restaurantId) $this->redirectToRestaurants(false, 'Invalid restaurant ID.');
+        if (!$restaurantId) {
+            $this->redirectToRestaurants(false, 'Invalid restaurant ID.');
+        }
 
         $success = (bool) $this->restaurantRepository->deleteRestaurant($restaurantId);
         $this->redirectToRestaurants($success, $success ? 'Restaurant deleted successfully.' : 'Failed to delete restaurant.');
@@ -57,10 +59,14 @@ class RestaurantsController extends DashboardController
     public function editRestaurant(): string
     {
         $restaurantId = $_GET['id'] ?? null;
-        if (!$restaurantId) $this->redirectToRestaurants(false, 'Invalid restaurant ID.');
+        if (!$restaurantId) {
+            $this->redirectToRestaurants(false, 'Invalid restaurant ID.');
+        }
 
         $restaurant = $this->restaurantRepository->getRestaurantById($restaurantId);
-        if (!$restaurant) $this->redirectToRestaurants(false, 'Restaurant not found.');
+        if (!$restaurant) {
+            $this->redirectToRestaurants(false, 'Restaurant not found.');
+        }
 
         $restaurantCover = $this->assetService->resolveAssets($restaurant, 'cover');
         $restaurantIcon = $this->assetService->resolveAssets($restaurant, 'icon');
@@ -82,10 +88,14 @@ class RestaurantsController extends DashboardController
     {
         try {
             $restaurantId = $_POST['id'] ?? null;
-            if (!$restaurantId) throw new \Exception('Restaurant not found.');
+            if (!$restaurantId) {
+                throw new \Exception('Restaurant not found.');
+            }
 
             $existingRestaurant = $this->restaurantRepository->getRestaurantById($restaurantId);
-            if (!$existingRestaurant) throw new \Exception('Restaurant not found.');
+            if (!$existingRestaurant) {
+                throw new \Exception('Restaurant not found.');
+            }
 
             $validator = new Validator();
             $validation = $validator->validate(
@@ -125,7 +135,7 @@ class RestaurantsController extends DashboardController
         }
     }
 
-    public function createRestaurant(): string 
+    public function createRestaurant(): string
     {
         return $this->showRestaurantForm();
     }

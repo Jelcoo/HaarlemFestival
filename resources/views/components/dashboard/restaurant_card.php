@@ -38,7 +38,7 @@ if (!isset($restaurant)) {
                 <!-- Actions -->
                 <div class="d-flex gap-2 justify-content-end mt-3">
                     <!-- Edit -->
-                    <a href="/dashboard/restaurants/edit?id=<?= $restaurant->id ?>" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="/dashboard/restaurants/edit?id=<?php echo $restaurant->id; ?>" class="btn btn-warning btn-sm">Edit</a>
 
                     <!-- Delete -->
                     <form action="/dashboard/restaurants/delete" method="POST" class="d-inline">

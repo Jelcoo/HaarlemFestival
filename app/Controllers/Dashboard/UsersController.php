@@ -44,7 +44,9 @@ class UsersController extends DashboardController
     {
         $userId = $_POST['id'] ?? null;
 
-        if (!$userId) $this->redirectToUsers(false,'Invalid user ID.');
+        if (!$userId) {
+            $this->redirectToUsers(false, 'Invalid user ID.');
+        }
 
         $success = (bool) $this->userRepository->deleteUser($userId);
         $this->redirectToUsers($success, $success ? 'User deleted successfully.' : 'Failed to delete user.');
@@ -54,11 +56,15 @@ class UsersController extends DashboardController
     {
         $userId = $_GET['id'] ?? null;
 
-        if (!$userId) $this->redirectToUsers(false, 'Invalid user ID.');
+        if (!$userId) {
+            $this->redirectToUsers(false, 'Invalid user ID.');
+        }
 
         $user = $this->userRepository->getUserById($userId);
 
-        if (!$user) $this->redirectToUsers(false, 'User not found.');
+        if (!$user) {
+            $this->redirectToUsers(false, 'User not found.');
+        }
 
         $formData = [
             'id' => $user->id,
@@ -79,10 +85,14 @@ class UsersController extends DashboardController
     {
         try {
             $userId = $_POST['id'] ?? null;
-            if (!$userId) throw new \Exception('Invalid user ID.');
+            if (!$userId) {
+                throw new \Exception('Invalid user ID.');
+            }
 
             $existingUser = $this->userRepository->getUserById($userId);
-            if (!$existingUser) throw new \Exception('User not found.');
+            if (!$existingUser) {
+                throw new \Exception('User not found.');
+            }
 
             $validator = new Validator();
             $validator->addValidator('unique', new UniqueRule());
@@ -213,7 +223,6 @@ class UsersController extends DashboardController
             ['roles' => array_column(UserRoleEnum::cases(), 'value')]
         );
     }
-
 
     public function exportUsers(): void
     {

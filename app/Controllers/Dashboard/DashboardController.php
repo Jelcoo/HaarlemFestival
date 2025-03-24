@@ -2,8 +2,8 @@
 
 namespace App\Controllers\Dashboard;
 
-use App\Controllers\Controller;
 use Carbon\Carbon;
+use App\Controllers\Controller;
 
 class DashboardController extends Controller
 {
@@ -68,7 +68,8 @@ class DashboardController extends Controller
         return $status;
     }
 
-    protected function showForm(string $formName, string $mode = 'create', array $formData = [], array $errors = [], array $status = [], array $customData = []): string {
+    protected function showForm(string $formName, string $mode = 'create', array $formData = [], array $errors = [], array $status = [], array $customData = []): string
+    {
         return $this->renderPage(
             "/../../../components/dashboard/forms/{$formName}_form",
             array_merge(
