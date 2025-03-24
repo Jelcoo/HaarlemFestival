@@ -158,6 +158,55 @@ class RestaurantRepository extends Repository
         );
     }
 
+    public function getEventsByRestaurantId(int $restaurantId): array
+    {
+        $sql = "
+            SELECT 
+                ye.id AS event_id,
+                ye.start_date,
+                ye.start_time,
+                ye.end_date,
+                ye.end_time,
+                ye.total_seats,
+                ye.kids_price,
+                ye.adult_price,
+                ye.reservation_cost,
+                l.name AS location_name,
+                l.address AS location_address,
+                TIMESTAMPDIFF(MINUTE, 
+                    CONCAT(ye.start_date, ' ', ye.start_time), 
+                    CONCAT(ye.end_date, ' ', ye.end_time)
+                ) AS duration,
+                COALESCE(SUM(yt.kids_count + yt.adult_count), 0) AS reserved
+            FROM yummy_events ye
+            INNER JOIN restaurants r ON r.id = ye.restaurant_id
+            INNER JOIN locations l ON l.id = r.location_id
+            LEFT JOIN yummy_tickets yt ON yt.yummy_event_id = ye.id
+            WHERE r.id = :restaurantId
+            GROUP BY ye.id, ye.start_date, ye.start_time, ye.end_date, ye.end_time, l.name, l.address
+            ORDER BY ye.start_date, ye.start_time
+        ";
+
+        $query = $this->getConnection()->prepare($sql);
+        $query->execute(['restaurantId' => $restaurantId]);
+        $results = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+        return array_map(function ($row) {
+            return [
+                'event_id' => (int)$row['event_id'],
+                'start_datetime' => date('Y-m-d H:i', strtotime($row['start_date'] . ' ' . $row['start_time'])),
+                'duration' => (int)$row['duration'],
+                'location_name' => $row['location_name'],
+                'location_address' => $row['location_address'],
+                'tickets_available' => max(0, $row['total_seats'] - $row['reserved']),
+                'kids_price' => (float)$row['kids_price'],
+                'adult_price' => (float)$row['adult_price'],
+                'reservation_cost' => (float)$row['reservation_cost'],
+            ];
+        }, $results);
+    }
+
+
     public function deleteRestaurant(int $id): ?Restaurant
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
@@ -185,31 +234,6 @@ class RestaurantRepository extends Repository
             ]
         );
     }
+    
 
-    public function getRestaurantWithLocationById(int $id): ?Restaurant
-    {
-        $query = $this->getConnection()->prepare("
-            SELECT 
-                r.*, 
-                l.name, 
-                l.address, 
-                l.coordinates,
-                l.event_type, 
-                l.preview_description, 
-                l.main_description 
-            FROM restaurants r
-            INNER JOIN locations l ON r.location_id = l.id
-            WHERE r.id = :id
-        ");
-
-        $query->bindParam(':id', $id, type: \PDO::PARAM_INT);
-        $query->execute();
-        $restaurantWithLocation = $query->fetch(\PDO::FETCH_ASSOC);
-
-        $restaurant = new Restaurant($restaurantWithLocation);
-        $location = new Location($restaurantWithLocation);
-        $restaurant->location = $location;
-
-        return $restaurant ?: null;
-    }                                           
 }
