@@ -9,6 +9,8 @@ $router = App\Application\Router::getInstance();
 
 $router->get('/', [App\Controllers\HomeController::class, 'index']);
 
+$router->get('/pdf/example', [App\Controllers\PdfController::class, 'generateExample']);
+
 $router->get('/dance', [App\Controllers\HomeController::class, 'dance']);
 $router->get('/yummy', [App\Controllers\HomeController::class, 'yummy']);
 $router->get('/history', [App\Controllers\HomeController::class, 'history']);
