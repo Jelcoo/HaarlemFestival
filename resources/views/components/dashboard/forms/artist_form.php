@@ -1,19 +1,24 @@
+<?php
+$isEdit = ($mode ?? 'create') === 'edit';
+?>
+
 <h2><?php echo isset($formData['id']) ? 'Update Artist' : 'Create Artist'; ?></h2>
 
-<!-- Status message -->
-<?php if (!empty($status['message'])) { ?>
-<div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
-    <?php echo htmlspecialchars($status['message']); ?>
-</div>
+<!-- Validation Errors -->
+<?php if (!empty($errors)) { ?>
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            <?php foreach ($errors as $error) { ?>
+                <li><?php echo htmlspecialchars($error); ?></li>
+            <?php } ?>
+        </ul>
+    </div>
 <?php } ?>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8">
-            <form action="/dashboard/artists" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="action"
-                    value="<?php echo isset($formData['id']) ? 'update' : 'createArtist'; ?>">
-
+            <form action="/dashboard/artists/<?php echo $isEdit ? 'edit' : 'create'; ?>" method="POST" enctype="multipart/form-data">
                 <?php if (isset($formData['id'])) { ?>
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($formData['id']); ?>">
                 <?php } ?>

@@ -3,7 +3,7 @@
     <h2>Artist Management</h2>
     <form action="/dashboard/artists" method="POST">
         <button type="submit" class="btn btn-success" name="action" value="export">Export to CSV</button>
-        <button type="submit" class="btn btn-primary" name="action" value="create">Create New Artist</button>
+        <a href="/dashboard/artists/create" class="btn btn-primary">Create New Artist</a>
     </form>
 </div>
 

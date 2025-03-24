@@ -82,7 +82,11 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
         $router->get('/dashboard/locations/export', [App\Controllers\Dashboard\LocationsController::class, 'exportLocations']);
 
         $router->get('/dashboard/artists', [App\Controllers\Dashboard\ArtistsController::class, 'index']);
-        $router->post('/dashboard/artists', [App\Controllers\Dashboard\ArtistsController::class, 'handleAction']);
-
+        $router->get('/dashboard/artists/create', [App\Controllers\Dashboard\ArtistsController::class, 'createArtist']);
+        $router->post('/dashboard/artists/create', [App\Controllers\Dashboard\ArtistsController::class, 'createArtistPost']);
+        $router->get('/dashboard/artists/edit', [App\Controllers\Dashboard\ArtistsController::class, 'editArtist']);
+        $router->post('/dashboard/artists/edit', [App\Controllers\Dashboard\ArtistsController::class, 'editArtistPost']);
+        $router->post('/dashboard/artists/delete', [App\Controllers\Dashboard\ArtistsController::class, 'deleteArtist']);
+        $router->get('/dashboard/artists/export', [App\Controllers\Dashboard\ArtistsController::class, 'exportArtists']);
     });
 });
