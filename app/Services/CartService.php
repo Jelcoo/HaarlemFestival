@@ -60,32 +60,4 @@ class CartService
 
         return $userCart;
     }
-
-    public function calculateCartAmount(Cart $cart): float
-    {
-        $amount = 0;
-
-        foreach ($cart->items as $item) {
-            $amount += $item->totalPrice();
-        }
-
-        return $amount;
-    }
-
-    public function calculateCartAmountExclVAT(Cart $cart): float
-    {
-        $amount = 0;
-
-        foreach ($cart->items as $item) {
-            $amount += $item->totalPriceExclVAT();
-        }
-
-        return $amount;
-    }
-
-    public function deleteSessionCart(): void
-    {
-        $this->cartRepository->deleteCart($_SESSION['cart_id']);
-        unset($_SESSION['cart_id']);
-    }
 }
