@@ -1,10 +1,10 @@
 <footer class="bg-light py-3">
     <div class="container d-flex justify-content-between align-items-center">
         <div>
-            <a href="#" class="me-2"><i class="fab fa-tiktok fa-2xl"></i></a>
-            <a href="#" class="me-2"><i class="fab fa-facebook fa-2xl"></i></a>
-            <a href="#" class="me-2"><i class="fab fa-instagram fa-2xl"></i></a>
-            <a href="#"><i class="fab fa-spotify fa-2xl"></i></a>
+            <a href="#" class="me-2"><img src="/assets/img/icons/tiktok.svg" /></a>
+            <a href="#" class="me-2"><img src="/assets/img/icons/facebook.svg" /></a>
+            <a href="#" class="me-2"><img src="/assets/img/icons/instagram.svg" /></a>
+            <a href="#"><img src="/assets/img/icons/spotify.svg" /></a>
         </div>
 
         <div>
@@ -21,21 +21,5 @@
 <style>
     footer {
         margin-top: auto;
-    }
-
-    .fa-tiktok {
-        color: #000000;
-    }
-
-    .fa-facebook {
-        color: #3b5998;
-    }
-
-    .fa-instagram {
-        color: #c13584;
-    }
-
-    .fa-spotify {
-        color: #1DB954;
     }
 </style>
