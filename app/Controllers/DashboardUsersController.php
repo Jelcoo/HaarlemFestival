@@ -27,22 +27,6 @@ class DashboardUsersController extends DashboardController
             $this->redirectToUsers();
         }
 
-        if (!empty($_SESSION['show_user_form'])) {
-            unset($_SESSION['show_user_form']);
-
-            $formData = $_SESSION['form_data'] ?? [];
-            unset($_SESSION['form_data']);
-
-            return $this->renderPage(
-                '/../../../components/dashboard/forms/users_form',
-                [
-                    'roles' => array_column(UserRoleEnum::cases(), 'value'),
-                    'formData' => $formData,
-                    'status' => $this->getStatus(),
-                ]
-            );
-        }
-
         return $this->renderPage(
             'users',
             [
