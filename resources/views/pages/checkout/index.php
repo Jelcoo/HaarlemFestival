@@ -154,6 +154,9 @@ $total = array_reduce($cartItems, function ($carry, $item) {
             <hr>
             <form action="/checkout/pay" method="POST" class="d-flex gap-2 flex-column mt-4">
                 <?php include __DIR__ . '/../../components/errordisplay.php'; ?>
+                <?php if (isset($_GET['id']) || isset($fields['id'])) { ?>
+                    <input type="hidden" name="id" value="<?php echo $_GET['id'] ?? $fields['id']; ?>">
+                <?php } ?>
                 <p class="fs-5 my-0">First name: <?php echo $user->firstname; ?></p>
                 <p class="fs-5 my-0">Last name: <?php echo $user->lastname; ?></p>
                 <p class="fs-5 my-0">Email: <?php echo $user->email; ?></p>
