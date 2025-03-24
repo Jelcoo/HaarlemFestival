@@ -2,6 +2,8 @@
 
 use App\Enum\EventTypeEnum;
 
+$isEdit = ($mode ?? 'create') === 'edit';
+
 ?>
 
 <h2><?php echo isset($formData['id']) ? 'Update Location' : 'Create Location'; ?></h2>
@@ -15,7 +17,7 @@ use App\Enum\EventTypeEnum;
 
 <div class="container-fluid">
     <div class="col-md-8">
-        <form action="/dashboard/locations" method="POST" enctype="multipart/form-data">
+        <form action="/dashboard/locations/<?php echo $isEdit ? 'edit' : 'create'; ?>" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="action"
                 value="<?php echo isset($formData['id']) ? 'update' : 'createLocation'; ?>">
 

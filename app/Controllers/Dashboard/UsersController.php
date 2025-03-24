@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Dashboard;
 
 use App\Enum\UserRoleEnum;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
 use App\Repositories\UserRepository;
 
-class DashboardUsersController extends DashboardController
+class UsersController extends DashboardController
 {
     private UserRepository $userRepository;
 
@@ -27,22 +27,6 @@ class DashboardUsersController extends DashboardController
             $this->redirectToUsers();
         }
 
-        if (!empty($_SESSION['show_user_form'])) {
-            unset($_SESSION['show_user_form']);
-
-            $formData = $_SESSION['form_data'] ?? [];
-            unset($_SESSION['form_data']);
-
-            return $this->renderPage(
-                '/../../../components/dashboard/forms/users_form',
-                [
-                    'roles' => array_column(UserRoleEnum::cases(), 'value'),
-                    'formData' => $formData,
-                    'status' => $this->getStatus(),
-                ]
-            );
-        }
-
         return $this->renderPage(
             'users',
             [
@@ -56,29 +40,48 @@ class DashboardUsersController extends DashboardController
         );
     }
 
-    public function handleAction(): void
+    public function deleteUser(): void
     {
-        $action = $_POST['action'] ?? null;
         $userId = $_POST['id'] ?? null;
 
-        match ($action) {
-            'delete' => $userId ? $this->deleteUser($userId) : $this->redirectToUsers(false, 'Invalid user ID.'),
-            'update' => $userId ? $this->updateUser($userId) : $this->redirectToUsers(false, 'Invalid user ID.'),
-            'edit' => $userId ? $this->editUser() : $this->redirectToUsers(false, 'Invalid user ID.'),
-            'create' => $this->showForm(),
-            'createUser' => $this->createNewUser(),
-            'export' => $this->exportUsers(),
-            default => $this->redirectToUsers(false, 'Invalid action.'),
-        };
+        if (!$userId) {
+            $this->redirectToUsers(false, 'Invalid user ID.');
+        }
+
+        $success = (bool) $this->userRepository->deleteUser($userId);
+        $this->redirectToUsers($success, $success ? 'User deleted successfully.' : 'Failed to delete user.');
     }
 
-    private function deleteUser(int $userId): void
+    public function editUser(): string
     {
-        $success = $this->userRepository->deleteUser($userId);
-        $this->redirectToUsers(!empty($success), $success ? 'User deleted successfully.' : 'Failed to delete user.');
+        $userId = $_GET['id'] ?? null;
+
+        if (!$userId) {
+            $this->redirectToUsers(false, 'Invalid user ID.');
+        }
+
+        $user = $this->userRepository->getUserById($userId);
+
+        if (!$user) {
+            $this->redirectToUsers(false, 'User not found.');
+        }
+
+        $formData = [
+            'id' => $user->id,
+            'firstname' => $user->firstname,
+            'lastname' => $user->lastname,
+            'email' => $user->email,
+            'role' => $user->role->value,
+            'phone_number' => $user->phone_number,
+            'address' => $user->address,
+            'city' => $user->city,
+            'postal_code' => $user->postal_code,
+        ];
+
+        return $this->showUserForm('edit', $formData);
     }
 
-    private function editUser(): void
+    public function editUserPost()
     {
         try {
             $userId = $_POST['id'] ?? null;
@@ -91,40 +94,8 @@ class DashboardUsersController extends DashboardController
                 throw new \Exception('User not found.');
             }
 
-            $_SESSION['show_user_form'] = true;
-            $_SESSION['form_data'] = [
-                'id' => $existingUser->id,
-                'firstname' => $existingUser->firstname,
-                'lastname' => $existingUser->lastname,
-                'email' => $existingUser->email,
-                'password' => $existingUser->password,
-                'role' => $existingUser->role->value,
-                'phone_number' => $existingUser->phone_number,
-                'address' => $existingUser->address,
-                'city' => $existingUser->city,
-                'postal_code' => $existingUser->postal_code,
-            ];
-
-            $this->redirectToUsers();
-        } catch (\Exception $e) {
-            $_SESSION['form_data'] = $_POST;
-            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
-            $this->redirectToUsers(false, $e->getMessage());
-        }
-    }
-
-    private function updateUser(int $userId): void
-    {
-        try {
-            $existingUser = $this->userRepository->getUserById($userId);
-
-            if (!$existingUser) {
-                throw new \Exception('User not found.');
-            }
-
             $validator = new Validator();
             $validator->addValidator('unique', new UniqueRule());
-
             $rules = [
                 'firstname' => 'required|max:255',
                 'lastname' => 'required|max:255',
@@ -135,41 +106,43 @@ class DashboardUsersController extends DashboardController
             ];
             if ($existingUser->email !== $_POST['email']) {
                 $rules['email'] = 'required|email|unique:users,email|max:255';
-            }
-
-            $validation = $validator->validate($_POST, $rules);
-
-            if ($validation->fails()) {
-                $_SESSION['show_user_form'] = true;
-                $_SESSION['form_data'] = $_POST;
-                throw new \Exception(implode(' ', $validation->errors()->all()));
+            } else {
+                $rules['email'] = 'required|email|max:255';
             }
 
             if (!isset($_POST['role']) || !in_array($_POST['role'], array_column(UserRoleEnum::cases(), 'value'))) {
                 throw new \Exception('Invalid or missing role');
             }
 
-            $existingUser->id = $_POST['id'];
+            $validation = $validator->validate($_POST, $rules);
+
+            if ($validation->fails()) {
+                return $this->showUserForm('edit', $_POST, $validation->errors()->all());
+            }
+
             $existingUser->firstname = $_POST['firstname'];
             $existingUser->lastname = $_POST['lastname'];
             $existingUser->email = $_POST['email'];
-            $existingUser->role = UserRoleEnum::from(strtolower($_POST['role']));
+            $existingUser->role = UserRoleEnum::from($_POST['role']);
             $existingUser->phone_number = $_POST['phone_number'] ?? null;
             $existingUser->address = $_POST['address'] ?? null;
             $existingUser->city = $_POST['city'] ?? null;
             $existingUser->postal_code = $_POST['postal_code'] ?? null;
 
-            $this->userRepository->updateUser($existingUser);
+            $this->userRepository->updateUserAdmin($existingUser);
+
             $this->redirectToUsers(true, 'User updated successfully.');
         } catch (\Exception $e) {
-            $_SESSION['show_edit_user_form'] = true;
-            $_SESSION['form_data'] = $_POST;
-            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
-            $this->redirectToUsers(false, $e->getMessage());
+            return $this->showUserForm('edit', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 
-    private function createNewUser(): void
+    public function createUser(): string
+    {
+        return $this->showUserForm();
+    }
+
+    public function createUserPost()
     {
         try {
             $validator = new Validator();
@@ -179,6 +152,7 @@ class DashboardUsersController extends DashboardController
                     'firstname' => 'required|alpha|max:255',
                     'lastname' => 'required|alpha|max:255',
                     'email' => 'required|email|max:255',
+                    'password' => 'required|min:6',
                     'role' => 'required|in:' . implode(',', array_column(UserRoleEnum::cases(), 'value')),
                     'phone_number' => 'nullable|max:255',
                     'address' => 'nullable|max:255',
@@ -188,9 +162,7 @@ class DashboardUsersController extends DashboardController
             );
 
             if ($validation->fails()) {
-                $_SESSION['show_create_user_form'] = true;
-                $_SESSION['form_data'] = $_POST;
-                throw new \Exception(implode(' ', $validation->errors()->all()));
+                return $this->showUserForm('create', $_POST, $validation->errors()->all());
             }
 
             $userData = array_intersect_key(
@@ -210,15 +182,12 @@ class DashboardUsersController extends DashboardController
                 )
             );
 
-            $userData['password'] = password_hash($_POST['password'] ?? '', PASSWORD_DEFAULT);
+            $userData['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
             $this->userRepository->createUser($userData);
             $this->redirectToUsers(true, "User '{$_POST['firstname']} {$_POST['lastname']}' created successfully.");
         } catch (\Exception $e) {
-            $_SESSION['show_create_user_form'] = true;
-            $_SESSION['form_data'] = $_POST;
-            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
-            $this->redirectToUsers(false, $e->getMessage());
+            return $this->showUserForm('create', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 
@@ -243,13 +212,19 @@ class DashboardUsersController extends DashboardController
         $this->redirectTo('users', $success, $message);
     }
 
-    private function showForm(): void
+    public function showUserForm(string $mode = 'create', array $formData = [], array $errors = [], array $status = []): string
     {
-        $_SESSION['show_user_form'] = true;
-        $this->redirectToUsers();
+        return $this->showForm(
+            'users',
+            $mode,
+            $formData,
+            $errors,
+            $status,
+            ['roles' => array_column(UserRoleEnum::cases(), 'value')]
+        );
     }
 
-    private function exportUsers(): void
+    public function exportUsers(): void
     {
         $users = $this->userRepository->getAllUsers();
 

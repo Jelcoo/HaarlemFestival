@@ -2,23 +2,26 @@
 
 use App\Enum\UserRoleEnum;
 
+$isEdit = ($mode ?? 'create') === 'edit';
 ?>
 
-<h2><?php echo isset($formData['id']) ? 'Update User' : 'Create User'; ?></h2>
+<h2><?php echo $isEdit ? 'Update User' : 'Create User'; ?></h2>
 
-<!-- Status message -->
-<?php if (!empty($status['message'])) { ?>
-    <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
-        <?php echo htmlspecialchars($status['message']); ?>
+<!-- Validation Errors -->
+<?php if (!empty($errors)) { ?>
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            <?php foreach ($errors as $error) { ?>
+                <li><?php echo htmlspecialchars($error); ?></li>
+            <?php } ?>
+        </ul>
     </div>
 <?php } ?>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8">
-            <form action="/dashboard/users" method="POST">
-                <input type="hidden" name="action"
-                    value="<?php echo isset($formData['id']) ? 'update' : 'createUser'; ?>">
+            <form action="/dashboard/users/<?php echo $isEdit ? 'edit' : 'create'; ?>" method="POST">
 
                 <?php if (isset($formData['id'])) { ?>
                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($formData['id']); ?>">
