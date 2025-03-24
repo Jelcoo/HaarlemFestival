@@ -28,7 +28,7 @@ class CartService
         // If user is logged in and has a cart
         if ($userId && $userCart) {
             // If session has a cart with items, merge them
-            if ($sessionCart && count($sessionCart->items) > 0) {
+            if ($sessionCart && count($sessionCart->items) > 0 && $userCart->id !== $sessionCart->id) {
                 return $this->mergeCarts($userCart, $sessionCart);
             }
 
