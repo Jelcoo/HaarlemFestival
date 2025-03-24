@@ -130,7 +130,7 @@ class RestaurantsController extends DashboardController
         return $this->showRestaurantForm();
     }
 
-    public function createRestaurantPost(): string
+    public function createRestaurantPost()
     {
         try {
             $validator = new Validator();

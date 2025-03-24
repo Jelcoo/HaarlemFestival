@@ -71,7 +71,7 @@ class ArtistsController extends DashboardController
         return $this->showArtistForm('edit', $formData);
     }
 
-    public function editArtistPost(): string
+    public function editArtistPost()
     {
         try {
             $artistId = $_POST['id'] ?? null;
@@ -121,7 +121,7 @@ class ArtistsController extends DashboardController
         return $this->showArtistForm();
     }
 
-    public function createArtistPost(): string
+    public function createArtistPost()
     {
         try {
             $validator = new Validator();

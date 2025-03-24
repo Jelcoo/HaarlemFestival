@@ -75,7 +75,7 @@ class UsersController extends DashboardController
         return $this->showUserForm('edit', $formData);
     }
 
-    public function editUserPost(): string
+    public function editUserPost()
     {
         try {
             $userId = $_POST['id'] ?? null;
@@ -132,7 +132,7 @@ class UsersController extends DashboardController
         return $this->showUserForm();
     }
 
-    public function createUserPost(): string
+    public function createUserPost()
     {
         try {
             $validator = new Validator();
