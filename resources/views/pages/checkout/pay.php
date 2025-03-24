@@ -11,7 +11,7 @@
 </form>
 <script>
     const stripe = Stripe(
-        "pk_test_51QoOnyHKpjmVeEwAktqvUQhe6wN7jBATgJz2N0wBBW7UHWjWJklfgY03X5dc5rnaldAEQOybPATXf9WdiL65hZI000pz0NFyea"
+        "<?php echo \App\Config\Config::getKey('STRIPE_PUBLIC_KEY'); ?>"
     );
 
     let elements;
