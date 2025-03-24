@@ -35,17 +35,20 @@ class CartService
             // Return user's cart if it has items, otherwise return session cart or new cart
             if (count($userCart->items) > 0) {
                 $_SESSION['cart_id'] = $userCart->id;
+
                 return $userCart;
             }
 
             $newCart = $sessionCart ?? $this->cartRepository->createCart($userId);
             $_SESSION['cart_id'] = $newCart->id;
+
             return $newCart;
         }
 
         // If user is not logged in or has no cart, return session cart or create new one
         if ($sessionCart) {
             $_SESSION['cart_id'] = $sessionCart->id;
+
             return $sessionCart;
         }
 
