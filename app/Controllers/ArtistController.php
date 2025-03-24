@@ -20,24 +20,31 @@ class ArtistController extends Controller
         $this->scheduleService = new ScheduleService();
     }
 
-    public function show(int $id): string
+    public function show(string $slug, int $id): string
     {
         $artist = $this->artistRepository->getArtistById($id);
         if (!$artist) {
             return $this->pageLoader->setPage('_404')->render();
         }
-
-        // Fetch artist schedule from DanceRepository
+    
+        // Expected slug based on name (does not handle special characters)
+        $expectedSlug = str_replace(' ', '_', $artist->name);
+    
+        // Redirect if incorrect URL
+        if (urldecode($slug) !== $expectedSlug) {
+            header("Location: /dance/{$expectedSlug}_{$id}", true, 301);
+            exit;
+        }
+    
+        // Fetch artist schedule
         $schedule = $this->danceRepository->getScheduleByArtistId($id);
-
-        // Split iconic_albums into an array
         $albums = explode("\r\n", $artist->iconic_albums);
-
+    
         return $this->pageLoader->setPage('artist-detail')->render([
             'artist' => $artist,
             'schedule' => $schedule,
             'albums' => $albums,
             'placeholder_image' => '/assets/img/artists/placeholder-artist.png'
         ]);
-    }
+    }    
 }

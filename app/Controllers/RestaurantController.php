@@ -14,16 +14,25 @@ class RestaurantController extends Controller
         $this->restaurantRepository = new RestaurantRepository();
     }
 
-    public function show(int $id): string
+    public function show(string $slug, int $id): string
     {
         $restaurant = $this->restaurantRepository->getRestaurantWithLocationById($id);
         if (!$restaurant) {
             return $this->pageLoader->setPage('_404')->render();
         }
-        
-
+    
+        // Expected slug based on name (does not handle special characters)
+        $expectedSlug = str_replace(' ', '_', $restaurant->location->name) ;
+    
+        // Redirect if incorrect URL
+        if (urldecode($slug) !== $expectedSlug) {
+            header("Location: /yummy/{$expectedSlug}_{$id}", true, 301);
+            exit;
+        }
+    
         return $this->pageLoader->setPage('restaurant-detail')->render([
             'restaurant' => $restaurant
         ]);
-    }                                                               
+    }
+    
 }

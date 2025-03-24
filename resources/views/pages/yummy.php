@@ -55,9 +55,10 @@ include_once __DIR__ . '/../components/header.php';
                                     </div>
                                 </div>
                                 <div class="button-container">
-                                    <a href="/yummy/<?= $restaurant->id ?>" class="btn btn-primary visit-btn">
-                                        Visit <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                    </a>
+                                <a href="/yummy/<?= str_replace(' ', '_', $restaurant->location->name) . '_' . $restaurant->id ?>" 
+                                    class="btn btn-primary visit-btn">
+                                    Visit <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
                                 </div>
                             </div>
                         </div>
@@ -75,13 +76,14 @@ include_once __DIR__ . '/../components/header.php';
                             <div class="restaurant-footer">
                                 <div class="cuisine-container">
                                     <div class="cuisine">
-                                    <em><?php echo htmlspecialchars($restaurant->restaurant_type); ?></em>
+                                        <em><?php echo htmlspecialchars($restaurant->restaurant_type); ?></em>
                                     </div>
                                 </div>
                                 <div class="button-container">
-                                    <a href="/yummy/<?= $restaurant->id ?>" class="btn btn-primary visit-btn">
-                                        Visit <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                    </a>
+                                <a href="/yummy/<?= str_replace(' ', '_', $restaurant->location->name) . '_' . $restaurant->id ?>" 
+                                    class="btn btn-primary visit-btn">
+                                    Visit <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
                                 </div>
                             </div>
                         </div>

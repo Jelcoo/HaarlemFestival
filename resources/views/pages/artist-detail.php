@@ -108,5 +108,3 @@ include_once __DIR__ . '/../components/header.php';
         background-color: #1F4E66;
     }
 </style>
-
-<?php include 'components/footer.php'; ?>
