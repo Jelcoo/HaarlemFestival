@@ -66,7 +66,7 @@ $totalItems = array_sum(array_map(function ($item) {
                             you don't have an account)</em></p>
                     <p><em>after logging in you will be redirected back to this page</em></p>
                     <button type="button" class="btn btn-custom-yellow" data-bs-dismiss="modal">Go back</button>
-                    <button type="submit" class="btn btn-custom-yellow">Save changes</button>
+                    <button type="submit" class="btn btn-custom-yellow">Continue</button>
                 </form>
             </div>
         </div>
