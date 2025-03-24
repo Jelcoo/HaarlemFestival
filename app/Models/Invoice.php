@@ -13,7 +13,7 @@ class Invoice
     public ?string $stripe_payment_id;
     public Carbon $created_at;
     public Carbon $completed_at;
-    public bool $is_payable;
+    public ?bool $is_payable;
 
     public function __construct(array $collection)
     {
@@ -23,6 +23,6 @@ class Invoice
         $this->stripe_payment_id = $collection['stripe_payment_id'];
         $this->created_at = Carbon::parse($collection['created_at']);
         $this->completed_at = Carbon::parse($collection['completed_at']);
-        $this->is_payable = $collection['is_payable'];
+        $this->is_payable = $collection['is_payable'] ?? false;
     }
 }
