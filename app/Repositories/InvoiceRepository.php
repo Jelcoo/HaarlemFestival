@@ -29,7 +29,7 @@ class InvoiceRepository extends Repository
             ->where('user_id', '=', $userId)
             ->get();
 
-        foreach ($invoices as $invoice) {
+        foreach ($invoices as &$invoice) {
             $invoice['is_payable'] = $this->isPayableInvoice($invoice['id'], $userId);
         }
 

@@ -8,7 +8,9 @@ use App\Helpers\StripeHelper;
 use App\Services\CartService;
 use App\Services\OrderService;
 use App\Enum\InvoiceStatusEnum;
+use Rakit\Validation\Validator;
 use App\Repositories\CartRepository;
+use App\Repositories\UserRepository;
 use App\Repositories\OrderRepository;
 use App\Adapters\InvoiceToCartAdapter;
 use App\Repositories\InvoiceRepository;
@@ -22,6 +24,7 @@ class CheckoutController extends Controller
     private CartRepository $cartRepository;
     private InvoiceToCartAdapter $invoiceToCartAdapter;
     private InvoiceRepository $invoiceRepository;
+    private UserRepository $userRepository;
 
     public function __construct()
     {
@@ -33,15 +36,16 @@ class CheckoutController extends Controller
         $this->cartRepository = new CartRepository();
         $this->invoiceToCartAdapter = new InvoiceToCartAdapter();
         $this->invoiceRepository = new InvoiceRepository();
+        $this->userRepository = new UserRepository();
     }
 
     public function index(array $paramaters = [])
     {
-        if (!isset($_GET['id'])) {
+        if (!isset($_GET['id']) && !isset($paramaters['fields']['id'])) {
             $cart = $this->cartService->getSessionCart(true, true);
         } else {
-            if ($this->invoiceRepository->isPayableInvoice($_GET['id'], $this->getAuthUser()->id)) {
-                $cart = $this->invoiceToCartAdapter->adapt($_GET['id']);
+            if ($this->invoiceRepository->isPayableInvoice($_GET['id'] ?? $paramaters['fields']['id'], $this->getAuthUser()->id)) {
+                $cart = $this->invoiceToCartAdapter->adapt($_GET['id'] ?? $paramaters['fields']['id']);
             } else {
                 Response::redirect('/');
             }
@@ -57,7 +61,40 @@ class CheckoutController extends Controller
 
     public function checkout(array $paramaters = [])
     {
-        $secret = $this->createCheckout();
+        $validator = new Validator();
+
+        $rules = [
+            'phone_number' => 'required|max:255',
+            'address' => 'required|max:255',
+            'city' => 'required|max:255',
+            'postal_code' => 'required|max:255',
+        ];
+
+        $validation = $validator->validate($_POST, $rules);
+
+        if ($validation->fails()) {
+            return $this->index([
+                'error' => $validation->errors()->toArray(),
+                'fields' => $_POST,
+            ]);
+        }
+
+        try {
+            $user = $this->getAuthUser();
+            $user->phone_number = $_POST['phone_number'];
+            $user->address = $_POST['address'];
+            $user->city = $_POST['city'];
+            $user->postal_code = $_POST['postal_code'];
+
+            $this->userRepository->updateUser($user);
+        } catch (\Exception $e) {
+            return $this->index([
+                'error' => $e->getMessage(),
+                'fields' => $_POST,
+            ]);
+        }
+
+        $secret = $this->createCheckout($_POST['id'] ?? null);
 
         return $this->pageLoader->setPage('checkout/pay')->render([
             'clientSecret' => $secret,
