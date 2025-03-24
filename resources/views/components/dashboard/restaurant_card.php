@@ -42,9 +42,9 @@ if (!isset($restaurant)) {
 
                     <!-- Delete -->
                     <form action="/dashboard/restaurants/delete" method="POST" class="d-inline">
-                            <input type="hidden" name="id" value="<?php echo $restaurant->id; ?>">
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
+                        <input type="hidden" name="id" value="<?php echo $restaurant->id; ?>">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
                 </div>
             </div>
         </div>

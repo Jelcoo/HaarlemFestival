@@ -101,7 +101,6 @@ class RestaurantsController extends DashboardController
             );
 
             if ($validation->fails()) {
-                $_SESSION['form_data'] = $_POST;
                 throw new \Exception(implode(' ', $validation->errors()->all()));
             }
 

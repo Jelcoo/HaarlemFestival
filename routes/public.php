@@ -52,7 +52,7 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
     });
 
     $router->middleware(EnsureAdmin::class, function () use ($router) {
-        $router->get('/dashboard', [App\Controllers\DashboardController::class, 'index']);
+        $router->get('/dashboard', [App\Controllers\Dashboard\DashboardController::class, 'index']);
 
         $router->get('/dashboard/users', [App\Controllers\Dashboard\UsersController::class, 'index']);
         $router->get('/dashboard/users/create', [App\Controllers\Dashboard\UsersController::class, 'createUser']);
@@ -74,7 +74,12 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
         $router->get('/dashboard/restaurants/export', [App\Controllers\Dashboard\RestaurantsController::class, 'exportRestaurants']);
 
         $router->get('/dashboard/locations', [App\Controllers\Dashboard\LocationsController::class, 'index']);
-        $router->post('/dashboard/locations', [App\Controllers\Dashboard\LocationsController::class, 'handleAction']);
+        $router->get('/dashboard/locations/create', [App\Controllers\Dashboard\LocationsController::class, 'createLocation']);
+        $router->post('/dashboard/locations/create', [App\Controllers\Dashboard\LocationsController::class, 'createLocationPost']);
+        $router->get('/dashboard/locations/edit', [App\Controllers\Dashboard\LocationsController::class, 'editLocation']);
+        $router->post('/dashboard/locations/edit', [App\Controllers\Dashboard\LocationsController::class, 'editLocationPost']);
+        $router->post('/dashboard/locations/delete', [App\Controllers\Dashboard\LocationsController::class, 'deleteLocation']);
+        $router->get('/dashboard/locations/export', [App\Controllers\Dashboard\LocationsController::class, 'exportLocations']);
 
         $router->get('/dashboard/artists', [App\Controllers\Dashboard\ArtistsController::class, 'index']);
         $router->post('/dashboard/artists', [App\Controllers\Dashboard\ArtistsController::class, 'handleAction']);

@@ -3,7 +3,7 @@
     <h2>Location Management</h2>
     <form action="/dashboard/locations" method="POST">
         <button type="submit" class="btn btn-success" name="action" value="export">Export to CSV</button>
-        <button type="submit" class="btn btn-primary" name="action" value="create">Create New Location</button>
+        <a href="/dashboard/locations/create" class="btn btn-primary">Create New Location</a>
     </form>
 </div>
 

@@ -72,7 +72,7 @@ class UsersController extends DashboardController
             'postal_code' => $user->postal_code,
         ];
 
-        return $this->showForm('edit', $formData, []);
+        return $this->showUserForm('edit', $formData);
     }
 
     public function editUserPost(): string
@@ -107,7 +107,7 @@ class UsersController extends DashboardController
             $validation = $validator->validate($_POST, $rules);
 
             if ($validation->fails()) {
-                return $this->showForm('edit', $_POST, $validation->errors()->all());
+                return $this->showUserForm('edit', $_POST, $validation->errors()->all());
             }
 
             $existingUser->firstname = $_POST['firstname'];
@@ -123,13 +123,13 @@ class UsersController extends DashboardController
 
             $this->redirectToUsers(true, 'User updated successfully.');
         } catch (\Exception $e) {
-            return $this->showForm('edit', $_POST, ['Error: ' . $e->getMessage()]);
+            return $this->showUserForm('edit', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 
     public function createUser(): string
     {
-        return $this->showForm();
+        return $this->showUserForm();
     }
 
     public function createUserPost(): string
@@ -152,7 +152,7 @@ class UsersController extends DashboardController
             );
 
             if ($validation->fails()) {
-                return $this->showForm('create', $_POST, $validation->errors()->all());
+                return $this->showUserForm('create', $_POST, $validation->errors()->all());
             }
 
             $userData = array_intersect_key(
@@ -177,7 +177,7 @@ class UsersController extends DashboardController
             $this->userRepository->createUser($userData);
             $this->redirectToUsers(true, "User '{$_POST['firstname']} {$_POST['lastname']}' created successfully.");
         } catch (\Exception $e) {
-            return $this->showForm('create', $_POST, ['Error: ' . $e->getMessage()]);
+            return $this->showUserForm('create', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 
@@ -202,21 +202,18 @@ class UsersController extends DashboardController
         $this->redirectTo('users', $success, $message);
     }
 
-    public function showForm(string $mode = 'create', array $formData = [], array $errors = [], array $status = []): string
+    public function showUserForm(string $mode = 'create', array $formData = [], array $errors = [], array $status = []): string
     {
-        return $this->renderPage(
-            '/../../../components/dashboard/forms/users_form',
-            [
-                'mode' => $mode,
-                'roles' => array_column(UserRoleEnum::cases(), 'value'),
-                'formData' => $formData,
-                'errors' => $errors,
-                'status' => $status + [
-                    'status' => empty($errors),
-                ],
-            ]
+        return $this->showForm(
+            'users',
+            $mode,
+            $formData,
+            $errors,
+            $status,
+            ['roles' => array_column(UserRoleEnum::cases(), 'value')]
         );
     }
+
 
     private function exportUsers(): void
     {
