@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Dashboard;
 
 use App\Enum\UserRoleEnum;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
 use App\Repositories\UserRepository;
 
-class DashboardUsersController extends DashboardController
+class UsersController extends DashboardController
 {
     private UserRepository $userRepository;
 

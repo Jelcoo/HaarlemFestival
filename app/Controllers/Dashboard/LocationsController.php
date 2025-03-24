@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Dashboard;
 
 use App\Enum\EventTypeEnum;
 use App\Services\AssetService;
 use Rakit\Validation\Validator;
 use App\Repositories\LocationRepository;
 
-class DashboardLocationsController extends DashboardController
+class LocationsController extends DashboardController
 {
     private LocationRepository $locationRepository;
     private AssetService $assetService;

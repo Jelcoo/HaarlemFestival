@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Dashboard;
 
+use App\Controllers\Controller;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -47,7 +48,7 @@ class DashboardController extends Controller
         extract($data);
 
         ob_start();
-        include __DIR__ . "/../../resources/views/pages/dashboard/content/{$view}.php";
+        include __DIR__ . "/../../../resources/views/pages/dashboard/content/{$view}.php";
 
         return ob_get_clean();
     }

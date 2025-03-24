@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Dashboard;
 
 use App\Services\AssetService;
 use Rakit\Validation\Validator;
 use App\Repositories\ArtistRepository;
 
-class DashboardArtistsController extends DashboardController
+class ArtistsController extends DashboardController
 {
     private ArtistRepository $artistRepository;
     private AssetService $assetService;

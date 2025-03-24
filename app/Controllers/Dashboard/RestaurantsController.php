@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Dashboard;
 
 use App\Services\AssetService;
 use Rakit\Validation\Validator;
 use App\Repositories\LocationRepository;
 use App\Repositories\RestaurantRepository;
 
-class DashboardRestaurantsController extends DashboardController
+class RestaurantsController extends DashboardController
 {
     private RestaurantRepository $restaurantRepository;
     private LocationRepository $locationRepository;
