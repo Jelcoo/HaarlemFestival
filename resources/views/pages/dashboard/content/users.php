@@ -2,7 +2,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>User Management</h2>
     <div>
-        <a href="/dashboard/artists/export" class="btn btn-success">Export to CSV</a>
+        <a href="/dashboard/users/export" class="btn btn-success">Export to CSV</a>
         <a href="/dashboard/users/create" class="btn btn-primary">Create New User</a>
     </div>
 </div>
