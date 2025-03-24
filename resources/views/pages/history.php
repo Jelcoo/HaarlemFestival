@@ -20,18 +20,19 @@ include_once __DIR__ . '/../components/header.php';
 <h2 class="text-center mt-5">Locations</h2>
 <div class="container-fluid p-0">
     <div class="swiper">
-        <div class="swiper-wrapper">
-            <?php foreach ($locations as $location) { ?>
-                <div class="swiper-slide" <?php if (count($location->assets) > 0) { ?>
-                style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');"
-                <?php } ?>>
-                    <div class="slide-content">
-                        <h2><?php echo htmlspecialchars($location->name); ?></h2>
-                    </div>
+    <div class="swiper-wrapper">
+        <?php foreach ($locations as $location) { ?>
+            <a href="/history/<?= str_replace(' ', '_', $location->name) . '_' . $location->id ?>"
+            class="swiper-slide"
+            <?php if (count($location->assets) > 0) { ?>
+                style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>'); text-decoration: none; color: inherit;"
+            <?php } ?>>
+                <div class="slide-content">
+                    <h2><?php echo htmlspecialchars($location->name); ?></h2>
                 </div>
-            <?php } ?>
-        </div>
-
+            </a>
+        <?php } ?>
+    </div>
         <div class="swiper-button-next"></div>
         <div class="swiper-button-prev"></div>
 
