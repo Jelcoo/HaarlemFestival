@@ -1,4 +1,4 @@
-<nav class="col-lg-2 bg-light text-black min-vh-100 p-3">
+<nav class="col-lg-2 bg-light text-black p-3 admin-sidebar">
     <h4 class="text-center">Dashboard</h4>
     <ul class="nav flex-column">
         <?php foreach ($sidebarItems as $key => $item) { ?>
@@ -11,3 +11,11 @@
         <?php } ?>
     </ul>
 </nav>
+
+<style>
+    @media screen and (min-width: 768px) {
+        .admin-sidebar {
+            min-height: 100vh;
+        }
+    }
+</style>
