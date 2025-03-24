@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Cart;
 use App\Config\Config;
 use Stripe\StripeClient;
 
@@ -30,11 +31,7 @@ class StripeHelper
 
         $paymentIntent = $this->stripe->paymentIntents->create($paymentIntent);
 
-        $clientSecret = [
-            'clientSecret' => $paymentIntent->client_secret,
-        ];
-
-        return $clientSecret;
+        return $paymentIntent->client_secret;
     }
 
     public function createCustomer(string $email, string $name)
@@ -47,35 +44,17 @@ class StripeHelper
         return $customer->id;
     }
 
-    public static function calculateOrderAmount(array $items)
+    public static function calculateOrderAmount(Cart $cart)
     {
-        $amount = 0;
+        $total = array_reduce($cart->items, function ($carry, $item) {
+            return $carry + $item->totalPrice();
+        }, 0);
 
-        // Calculate dance events
-        if (!empty($items['dance'])) {
-            foreach ($items['dance'] as $danceItem) {
-                $amount += $danceItem['price'] * $danceItem['quantity'];
-            }
-        }
+        return intval(number_format($total, 2, '', ''));
+    }
 
-        // Calculate yummy (restaurant) reservations
-        if (!empty($items['yummy'])) {
-            foreach ($items['yummy'] as $yummyItem) {
-                $amount += $yummyItem['reservationcost'];
-            }
-        }
-
-        // Calculate history tours
-        if (!empty($items['history'])) {
-            foreach ($items['history'] as $historyItem) {
-                if ($historyItem['type'] === 'family') {
-                    $amount += $historyItem['price'];
-                } else {
-                    $amount += $historyItem['price'] * $historyItem['seats'];
-                }
-            }
-        }
-
-        return intval(number_format($amount, 2, '', ''));
+    public function retrievePaymentIntent(string $paymentIntentId)
+    {
+        return $this->stripe->paymentIntents->retrieve($paymentIntentId);
     }
 }
