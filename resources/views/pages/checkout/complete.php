@@ -24,6 +24,5 @@
             <a href="/account/manage" class="btn btn-custom-yellow">Go to account</a>
             <?php break;
     }
-    echo $status;
     ?>
 </div>
