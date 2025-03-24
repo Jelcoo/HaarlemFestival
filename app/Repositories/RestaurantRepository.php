@@ -9,12 +9,14 @@ use App\Helpers\QueryBuilder;
 class RestaurantRepository extends Repository
 {
     private AssetRepository $assetRepository;
+    private LocationRepository $locationRepository;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->assetRepository = new AssetRepository();
+        $this->locationRepository = new LocationRepository();
     }
 
     public function createRestaurant(array $data): Restaurant
@@ -34,6 +36,17 @@ class RestaurantRepository extends Repository
         $queryRestaurant = $queryBuilder->table('restaurants')->where('id', '=', $id)->first();
 
         return $queryRestaurant ? new Restaurant($queryRestaurant) : null;
+    }
+
+    public function getRestaurantByIdWithLocation(int $id): ?Restaurant
+    {
+        $restaurant = $this->getRestaurantById($id);
+
+        if ($restaurant) {
+            $restaurant->location = $this->locationRepository->getLocationById($restaurant->location_id);
+        }
+
+        return $restaurant;
     }
 
     public function getAllRestaurants(): array

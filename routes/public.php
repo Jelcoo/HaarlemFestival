@@ -17,7 +17,13 @@ $router->get('/yummy/{slug}_{id}', [App\Controllers\RestaurantController::class,
 
 $router->get('/history', [App\Controllers\HomeController::class, 'history']);
 $router->get('/magic', [App\Controllers\HomeController::class, 'magic']);
+
 $router->get('/cart', [App\Controllers\CartController::class, 'index']);
+$router->post('/cart/increase', [App\Controllers\CartController::class, 'increaseQuantity']);
+$router->post('/cart/decrease', [App\Controllers\CartController::class, 'decreaseQuantity']);
+$router->post('/cart/add', [App\Controllers\CartController::class, 'addItem']);
+$router->post('/cart/remove', [App\Controllers\CartController::class, 'removeItem']);
+
 $router->post('/stripe/webhook', [App\Controllers\CheckoutController::class, 'webhook']);
 
 $router->get('/program', [App\Controllers\ProgramController::class, 'index']);

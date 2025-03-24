@@ -100,13 +100,6 @@ include_once __DIR__ . '/../components/header.php';
 </div>
 
 <style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f5f5;
-}
-
 .mt-5 {
     margin-top: 2rem;
 }

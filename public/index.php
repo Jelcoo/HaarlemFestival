@@ -1,6 +1,7 @@
 <?php
 
 $GLOBALS['APP_START_TIME'] = microtime(true);
+$GLOBALS['QUERY_COUNT'] = 0;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../bootstrap/app.php';

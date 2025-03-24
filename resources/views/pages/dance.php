@@ -7,6 +7,16 @@ $header_image = '/assets/img/events/slider/dance.png';
 include_once __DIR__ . '/../components/header.php';
 ?>
 
+<?php if (isset($_GET['message'])) { ?>
+    <?php include __DIR__ . '/../components/toast.php'; ?>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var successToast = new bootstrap.Toast(document.getElementById("successToast"));
+            successToast.show();
+        });
+    </script>
+<?php } ?>
+
 <div class="container artist-grid">
     <?php $artistCount = 0; ?>
     <?php foreach ($artists as $artist) { ?>
@@ -116,16 +126,21 @@ include_once __DIR__ . '/../components/header.php';
 
                 <div class="section-title">Total</div>
                 <div class="quantity-control">
-                    <button class="quantity-btn decrease-btn">−</button>
-                    <span class="quantity-display" id="modal-quantity">1</span>
+                    <button class="quantity-btn decrease-btn">-</button>
+                    <span class="quantity-display" id="modal-quantity-display">1</span>
                     <button class="quantity-btn increase-btn">+</button>
                 </div>
 
                 <div class="price-text">Total price: €110</div>
 
-                <button class="book-btn" onclick="bookTickets()">
-                    <i class="bi bi-cart"></i> Book Tickets
-                </button>
+                <form action="/cart/add" method="POST">
+                    <button type="submit" class="book-btn">
+                        <i class="fa fa-ticket"></i> Book Tickets
+                    </button>
+                    <input type="hidden" id="modal-event-type" name="event_type" value="dance">
+                    <input type="hidden" id="modal-event-id" name="event_id" value="1">
+                    <input type="hidden" id="modal-quantity" name="quantity" value="1">
+                </form>
             </div>
         </div>
     </div>
@@ -133,7 +148,6 @@ include_once __DIR__ . '/../components/header.php';
 <script>
     const decreaseBtn = document.querySelector('.decrease-btn');
     const increaseBtn = document.querySelector('.increase-btn');
-    const quantityDisplay = document.querySelector('.quantity-display');
     const priceText = document.querySelector('.price-text');
     let eventData;
     let basePrice = 0;
@@ -153,59 +167,45 @@ include_once __DIR__ . '/../components/header.php';
     });
 
     function updateDisplay() {
-        quantityDisplay.textContent = quantity;
+        document.getElementById('modal-quantity-display').textContent = quantity;
+        document.getElementById('modal-quantity').value = quantity;
         priceText.textContent = `Total price: €${basePrice * quantity}`;
     }
+
     function openModal() {
-        let modalInstance = bootstrap.Modal.getInstance(document.getElementById('ticketModal'));
-        if (!modalInstance) {
-            modalInstance = new bootstrap.Modal(document.getElementById('ticketModal'));
-        }
-        eventData = event.target.dataset;
-        if (eventData.start === undefined) {
+        const modalElement = document.getElementById('ticketModal');
+        let modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+
+        let eventData = event.target.dataset;
+        if (!eventData.start) {
             eventData = event.target.parentElement.dataset;
         }
-        let dateString = `${eventData.day} ${getNextOccurrence(`${eventData.day} ${eventData.start}`)} ${eventData.start}`;
-        let date = new Date(dateString + ' UTC');
-        let future = new Date(new Date(dateString + ' UTC').setUTCMinutes(date.getUTCMinutes() + parseInt(eventData.duration)));
-        document.getElementById('modal-time').textContent = `${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')} - ${future.getUTCHours().toString().padStart(2, '0')}:${future.getUTCMinutes().toString().padStart(2, '0')}`;
-        document.getElementById('modal-artists').innerHTML = eventData.artists.replaceAll(', ', ' <br> ');
+
+        // Construct the date string and convert to UTC
+        const eventDateTime = `${eventData.day} ${getNextOccurrence(`${eventData.day} ${eventData.start}`)} ${eventData.start}`;
+        const startDate = new Date(eventDateTime + ' UTC');
+
+        // Calculate event end time
+        const durationMinutes = parseInt(eventData.duration, 10);
+        const endDate = new Date(startDate.getTime() + durationMinutes * 60000);
+
+        // Format and display event time & artist in modal
+        document.getElementById('modal-time').textContent = `${formatTime(startDate)} - ${formatTime(endDate)}`;
+        document.getElementById('modal-artists').innerHTML = eventData.artists.replace(/, /g, ' <br> ');
+
+        // Set invible form elements
+        document.getElementById('modal-event-id').value = eventData.event_id;
+        document.getElementById('modal-quantity').value = 1;
+
         basePrice = parseInt(eventData.price);
+        quantity = 1;
         updateDisplay();
+        
         modalInstance.show();
     }
-    function closeModal() {
-        let modalInstance = bootstrap.Modal.getInstance(document.getElementById('ticketModal'));
-        if (!modalInstance) {
-            modalInstance = new bootstrap.Modal(document.getElementById('ticketModal'));
-        }
-        modalInstance.hide();
-    }
-    function bookTickets() {
-        let dateString = `${eventData.day} ${getNextOccurrence(`${eventData.day} ${eventData.start}`)} ${eventData.start}`;
-        let date = new Date(dateString + ' UTC');
-        let json = {
-            "event_id": parseInt(eventData.event_id),
-            "date": new Date(new Date(dateString + ' UTC').setUTCHours(0, 0, 0, 0)).toISOString(),
-            "image": "placeholder.png",
-            "name": eventData.venue,
-            "artist": [],
-            "starttime": date.toISOString(),
-            "endtime": new Date(date.setUTCMinutes(date.getUTCMinutes() + parseInt(eventData.duration))).toISOString(),
-            "price": basePrice,
-            "quantity": quantity,
-            "all_access": 0
-        };
-        const artists = eventData.artists.split(', ');
-        for (let i = 0; i < artists.length; i++) {
-            json.artist.push({
-                "name": artists[i]
-            });
-        }
-        const items = getStoredItems();
-        items.dance.push(json);
-        localStorage.setItem('orderedItems', JSON.stringify(items));
-        closeModal();
+
+    function formatTime(date) {
+        return date.getUTCHours().toString().padStart(2, '0') + ':' + date.getUTCMinutes().toString().padStart(2, '0');
     }
 </script>
 

@@ -7,6 +7,16 @@ $header_image = '/assets/img/events/slider/history.png';
 include_once __DIR__ . '/../components/header.php';
 ?>
 
+<?php if (isset($_GET['message'])) { ?>
+    <?php include __DIR__ . '/../components/toast.php'; ?>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var successToast = new bootstrap.Toast(document.getElementById("successToast"));
+            successToast.show();
+        });
+    </script>
+<?php } ?>
+
 <h2 class="text-center mt-5">Locations</h2>
 <div class="container-fluid p-0">
     <div class="swiper">
@@ -152,16 +162,22 @@ include_once __DIR__ . '/../components/header.php';
                     </select>
 
                     <div class="quantity-control">
-                        <button class="quantity-btn decrease-btn">−</button>
+                        <button class="quantity-btn decrease-btn">-</button>
                         <span class="quantity-display">1</span>
                         <button class="quantity-btn increase-btn">+</button>
                     </div>
 
                     <div class="price-text">Total price: €0</div>
 
-                    <button class="book-btn" disabled onclick="bookTour()">
-                        <i class="bi bi-cart"></i> Book Tickets
-                    </button>
+                    <form action="/cart/add" method="POST">
+                        <button type="submit" class="book-btn" disabled>
+                            <i class="bi bi-cart"></i> Book Tickets
+                        </button>
+                        <input type="hidden" id="modal-event-type" name="event_type" value="history">
+                        <input type="hidden" id="modal-event-ids" name="event_ids" value="1">
+                        <input type="hidden" id="modal-ticket-type" name="ticket_type" value="single">
+                        <input type="hidden" id="modal-quantity" name="quantity" value="1">
+                    </form>
                 </div>
             </div>
         </div>
@@ -244,14 +260,6 @@ include_once __DIR__ . '/../components/header.php';
 
         initializeLanguageDropdown();
         modalInstance.show();
-    }
-
-    function closeModal() {
-        let modalInstance = bootstrap.Modal.getInstance(document.getElementById('ticketModal'));
-        if (!modalInstance) {
-            modalInstance = new bootstrap.Modal(document.getElementById('ticketModal'));
-        }
-        modalInstance.hide();
     }
 
     // Function to reset modal when it opens again
@@ -345,6 +353,8 @@ include_once __DIR__ . '/../components/header.php';
         } else {
             selectedTourId = null;
         }
+
+        document.getElementById('modal-event-ids').value = selectedTourId;
     }
 
     // Update price display
@@ -366,6 +376,8 @@ include_once __DIR__ . '/../components/header.php';
         } else {
             priceText.textContent = `Total price: €${ticketPrice * quantity}`;
         }
+
+        document.getElementById('modal-quantity').value = quantity;
     }
 
     // Quantity control
@@ -400,33 +412,9 @@ include_once __DIR__ . '/../components/header.php';
     });
 
     ticketSelect.addEventListener('change', function () {
+        document.getElementById('modal-ticket-type').value = ticketSelect.value;
         updatePriceDisplay();
     });
-
-    // Book tickets button
-    function bookTour() {
-        if (selectedTourId && ticketSelect.value) {
-            let dateString = `${eventData.date} ${getNextOccurrence(`${eventData.date} ${sessionSelect.value}`)} ${sessionSelect.value}`;
-            let date = new Date(dateString + ' UTC');
-            const json = {
-                event_id: selectedTourId,
-                date: new Date(new Date(dateString + ' UTC').setUTCHours(0, 0, 0, 0)).toISOString(),
-                image: "placeholder.png",
-                name: `History tour (${languageSelect.value})`,
-                starttime: date.toISOString(),
-                // TODO: make time dynamic from db
-                endtime: new Date(date.setUTCMinutes(date.getUTCMinutes() + parseInt(120))).toISOString(),
-                price: ticketSelect.options[ticketSelect.selectedIndex].dataset.price,
-                type: ticketSelect.value,
-                seats: quantity
-            };
-
-            const items = getStoredItems();
-            items.history.push(json);
-            localStorage.setItem('orderedItems', JSON.stringify(items));
-            closeModal();
-        }
-    };
 
     function parseData(event) {
         let eventData = event.target.dataset;
@@ -601,6 +589,11 @@ include_once __DIR__ . '/../components/header.php';
 
     .book-btn:hover {
         background-color: var(--buttons-accent);
+    }
+
+    .book-btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
     }
 
     .modal-body {

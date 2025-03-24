@@ -24,4 +24,16 @@ return $config = [
     
     'STRIPE_SECRET_KEY' => '',
     'STRIPE_WEBHOOK_SECRET' => '',
+
+    // Set to null for no limit
+    'CART_DANCE_MIN' => 1,
+    'CART_DANCE_MAX' => null,
+    'CART_YUMMY_CHILD_MIN' => 0,
+    'CART_YUMMY_CHILD_MAX' => null,
+    'CART_YUMMY_ADULT_MIN' => 1,
+    'CART_YUMMY_ADULT_MAX' => null,
+    'CART_HISTORY_SINGLE_MIN' => 1,
+    'CART_HISTORY_SINGLE_MAX' => null,
+    'CART_HISTORY_FAMILY_MIN' => 1,
+    'CART_HISTORY_FAMILY_MAX' => 4,
 ];
