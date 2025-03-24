@@ -41,6 +41,7 @@ class CheckoutController extends Controller
 
     public function index(array $paramaters = [])
     {
+        $cart = null;
         if (!isset($_GET['id']) && !isset($paramaters['fields']['id'])) {
             $cart = $this->cartService->getSessionCart(true, true);
         } else {
