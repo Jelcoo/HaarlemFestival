@@ -23,8 +23,7 @@ include_once __DIR__ . '/../components/header.php';
         <div class="swiper-wrapper">
             <?php foreach ($locations as $location) { ?>
                 <div class="swiper-slide" <?php if (count($location->assets) > 0) { ?>
-                style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');"
-                <?php } ?>>
+                        style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');" <?php } ?>>
                     <div class="slide-content">
                         <h2><?php echo htmlspecialchars($location->name); ?></h2>
                     </div>
@@ -79,7 +78,8 @@ include_once __DIR__ . '/../components/header.php';
                             <?php foreach ($schedule['guides'] as $guide) { ?>
                                 <div class="row mb-1">
                                     <div class="col-5 text-muted"><?php echo htmlspecialchars($guide['language']); ?></div>
-                                    <div class="col-7 text-end"><?php echo htmlspecialchars(implode(', ', $guide['names'])); ?></div>
+                                    <div class="col-7 text-end"><?php echo htmlspecialchars(implode(', ', $guide['names'])); ?>
+                                    </div>
                                 </div>
                             <?php } ?>
                         </div>
@@ -183,6 +183,10 @@ include_once __DIR__ . '/../components/header.php';
         </div>
     </div>
 </div>
+
+<button data-bs-toggle="modal" data-bs-target="#socialMediaModal" class="btn btn-custom-yellow floating-button">
+    <i class="fa-solid fa-share-from-square"></i> <span>Share</span>
+</button>
 
 <script src="/assets/js/utils.js"></script>
 <script>
