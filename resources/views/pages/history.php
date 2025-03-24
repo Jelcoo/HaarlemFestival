@@ -23,8 +23,7 @@ include_once __DIR__ . '/../components/header.php';
         <div class="swiper-wrapper">
             <?php foreach ($locations as $location) { ?>
                 <div class="swiper-slide" <?php if (count($location->assets) > 0) { ?>
-                style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');"
-                <?php } ?>>
+                        style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>');" <?php } ?>>
                     <div class="slide-content">
                         <h2><?php echo htmlspecialchars($location->name); ?></h2>
                     </div>
@@ -79,7 +78,8 @@ include_once __DIR__ . '/../components/header.php';
                             <?php foreach ($schedule['guides'] as $guide) { ?>
                                 <div class="row mb-1">
                                     <div class="col-5 text-muted"><?php echo htmlspecialchars($guide['language']); ?></div>
-                                    <div class="col-7 text-end"><?php echo htmlspecialchars(implode(', ', $guide['names'])); ?></div>
+                                    <div class="col-7 text-end"><?php echo htmlspecialchars(implode(', ', $guide['names'])); ?>
+                                    </div>
                                 </div>
                             <?php } ?>
                         </div>
@@ -95,8 +95,8 @@ include_once __DIR__ . '/../components/header.php';
                                             $tours = array_map(function ($lang, $count) {
                                                 return count($count) . "x $lang";
                                             }, array_keys($start['tours']), array_values($start['tours']));
-                                    echo implode('<br>', $tours);
-                                    ?>
+                                            echo implode('<br>', $tours);
+                                            ?>
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -108,19 +108,19 @@ include_once __DIR__ . '/../components/header.php';
                     <button class="btn btn-custom-yellow w-100"
                         data-price-family="<?php echo $schedule['prices']['family']; ?>"
                         data-price-single="<?php echo $schedule['prices']['single']; ?>" data-tours="<?php foreach ($schedule['start'] as $start) {
-                            // Start with the time followed by a dot
-                            echo $start['time'] . '.';
+                               // Start with the time followed by a dot
+                               echo $start['time'] . '.';
 
-                            $langStrings = [];
-                            // Loop through each language and its array of tour IDs
-                            foreach ($start['tours'] as $lang => $ids) {
-                                // Build a string in the format "Language:id1,id2"
-                                $langStrings[] = $lang . ':' . implode(',', $ids);
-                            }
+                               $langStrings = [];
+                               // Loop through each language and its array of tour IDs
+                               foreach ($start['tours'] as $lang => $ids) {
+                                   // Build a string in the format "Language:id1,id2"
+                                   $langStrings[] = $lang . ':' . implode(',', $ids);
+                               }
 
-                            // Join all language strings with a "?" delimiter, and end with a semicolon
-                            echo implode('?', $langStrings) . ';';
-                        } ?>" data-date="<?php echo $schedule['date']; ?>" onclick="openModal()"><i
+                               // Join all language strings with a "?" delimiter, and end with a semicolon
+                               echo implode('?', $langStrings) . ';';
+                           } ?>" data-date="<?php echo $schedule['date']; ?>" onclick="openModal()"><i
                             class="fa-solid fa-ticket"></i>
                         Buy Ticket</button>
                 </div>
@@ -183,6 +183,10 @@ include_once __DIR__ . '/../components/header.php';
         </div>
     </div>
 </div>
+
+<button data-bs-toggle="modal" data-bs-target="#socialMediaModal" class="btn btn-custom-yellow floating-button">
+    <i class="fa-solid fa-share-from-square"></i> <span>Share</span>
+</button>
 
 <script src="/assets/js/utils.js"></script>
 <script>
