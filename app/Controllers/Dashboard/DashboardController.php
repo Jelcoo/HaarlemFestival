@@ -68,6 +68,21 @@ class DashboardController extends Controller
         return $status;
     }
 
+    protected function showForm(string $formName, string $mode = 'create', array $formData = [], array $errors = [], array $status = [], array $customData = []): string {
+        return $this->renderPage(
+            "/../../../components/dashboard/forms/{$formName}_form",
+            array_merge(
+                [
+                    'mode' => $mode,
+                    'formData' => $formData,
+                    'errors' => $errors,
+                    'status' => $status + ['status' => empty($errors)],
+                ],
+                $customData
+            )
+        );
+    }
+
     // https://phppot.com/php/php-array-to-csv/
     protected function exportToCsv(string $filename, array $data, array $columns): void
     {

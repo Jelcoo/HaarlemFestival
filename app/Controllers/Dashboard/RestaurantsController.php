@@ -75,7 +75,7 @@ class RestaurantsController extends DashboardController
             'icon' => isset($restaurantIcon[0]) ? $restaurantIcon[0]->getUrl() : '',
         ];
 
-        return $this->showForm('edit', $formData);
+        return $this->showRestaurantForm('edit', $formData);
     }
 
     public function editRestaurantPost(): void
@@ -122,13 +122,13 @@ class RestaurantsController extends DashboardController
 
             $this->redirectToRestaurants(true, 'Restaurant updated successfully.');
         } catch (\Exception $e) {
-            $this->showForm('edit', $_POST, ['Error: ' . $e->getMessage()]);
+            $this->showRestaurantForm('edit', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 
     public function createRestaurant(): string 
     {
-        return $this->showForm();
+        return $this->showRestaurantForm();
     }
 
     public function createRestaurantPost(): string
@@ -148,7 +148,7 @@ class RestaurantsController extends DashboardController
             );
 
             if ($validation->fails()) {
-                return $this->showForm('create', $_POST, $validation->errors()->all());
+                return $this->showRestaurantForm('create', $_POST, $validation->errors()->all());
             }
 
             $restaurantData = array_intersect_key(
@@ -170,7 +170,7 @@ class RestaurantsController extends DashboardController
 
             $this->redirectToRestaurants(true, 'Restaurant created successfully.');
         } catch (\Exception $e) {
-            return $this->showForm('create', $_POST, ['Error: ' . $e->getMessage()]);
+            return $this->showRestaurantForm('create', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 
@@ -179,19 +179,15 @@ class RestaurantsController extends DashboardController
         $this->redirectTo('restaurants', $success, $message);
     }
 
-    public function showForm(string $mode = 'create', array $formData = [], array $errors = [], array $status = []): string
+    public function showRestaurantForm(string $mode = 'create', array $formData = [], array $errors = [], array $status = []): string
     {
-        return $this->renderPage(
-            '/../../../components/dashboard/forms/restaurant_form',
-            [
-                'mode' => $mode,
-                'locations' => $this->locationRepository->getAllLocations(),
-                'formData' => $formData,
-                'errors' => $errors,
-                'status' => $status + [
-                    'status' => empty($errors),
-                ],
-            ]
+        return $this->showForm(
+            'restaurant',
+            $mode,
+            $formData,
+            $errors,
+            $status,
+            ['locations' => $this->locationRepository->getAllLocations()]
         );
     }
 
