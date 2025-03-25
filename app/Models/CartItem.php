@@ -77,4 +77,16 @@ class CartItem
 
         return round($price, 2);
     }
+
+    public function totalPriceExclVAT(): float
+    {
+        $price = match($this->event_model) {
+            EventDance::class => $this->basePrice() * $this->quantity(),
+            EventYummy::class => $this->basePrice(),
+            EventHistory::class => $this->quantities[0]->type === ItemQuantityEnum::FAMILY ? $this->basePrice() : $this->basePrice() * $this->quantity(),
+            default => $this->basePrice(),
+        };
+
+        return round($price, 2);
+    }
 }

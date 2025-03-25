@@ -10,6 +10,7 @@ use App\Application\Response;
 use App\Services\CartService;
 use App\Enum\ItemQuantityEnum;
 use App\Services\OrderService;
+use App\Enum\InvoiceStatusEnum;
 use App\Models\CartItemQuantity;
 use App\Repositories\CartRepository;
 use App\Repositories\OrderRepository;
@@ -152,7 +153,9 @@ class CartController extends Controller
         if ($_POST['paymentChoice'] == 'payNow') {
             Response::redirect('/checkout');
         } else {
-            $this->orderService->createOrder($_POST['order']);
+            $invoiceId = $this->orderService->createOrder($cart);
+            $this->orderRepository->updateOrderStatus($invoiceId, InvoiceStatusEnum::LATER);
+            $this->cartRepository->deleteCart($cart->id);
             Response::redirect('/checkout/pay_later');
         }
     }

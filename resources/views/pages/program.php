@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
-    <div class="card shadow-lg p-4" style="max-width: 450px; width: 100%;">
+    <div class="card shadow-lg p-4" style="max-width: 600px; width: 100%;">
         <h2 class="text-center mb-4">Your Tickets</h2>
         <?php if (empty($invoices)) { ?>
             <div class="alert alert-warning text-center">It seems like you have no Tickets.</div>
@@ -8,7 +8,11 @@
                 <?php foreach ($invoices as $invoice) { ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span><strong>Your order bought:</strong> <?php echo $invoice->created_at->format('d-m H:i'); ?></span>
-                        <button class="btn btn-primary btn-sm tickets" data-id="<?php echo $invoice->id; ?>">View Tickets</button>
+                        <button class="btn btn-primary btn-sm tickets" data-id="<?php echo $invoice->id; ?>">View
+                            Tickets</button>
+                        <?php if ($invoice->is_payable) { ?>
+                            <a href="/checkout?id=<?php echo $invoice->id; ?>" class="btn btn-custom-yellow btn-sm">Pay invoice</a>
+                        <?php } ?>
                     </li>
                 <?php } ?>
             </ul>

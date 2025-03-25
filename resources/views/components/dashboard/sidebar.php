@@ -39,3 +39,11 @@
         <?php endforeach; ?>
     </ul>
 </nav>
+
+<style>
+    @media screen and (min-width: 768px) {
+        .admin-sidebar {
+            min-height: 100vh;
+        }
+    }
+</style>

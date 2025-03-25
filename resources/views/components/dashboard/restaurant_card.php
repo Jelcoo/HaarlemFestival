@@ -6,9 +6,9 @@ if (!isset($restaurant)) {
 
 <div class="col-md-4">
     <div class="card mb-4">
-        <div class="card-body d-flex align-items-start">
+        <div class="card-body d-block d-md-flex align-items-start">
             <!-- Restaurant Logo -->
-            <img src="<?php echo $restaurant->logo; ?>" alt="Restaurant Image" class="img-fluid restaurant-logo me-3">
+            <img src="<?php echo $restaurant->logo; ?>" alt="Restaurant Image" class="img-fluid restaurant-logo me-3 mb-2">
 
             <!-- Restaurant Details -->
             <div class="w-100">
@@ -38,7 +38,7 @@ if (!isset($restaurant)) {
                 <!-- Actions -->
                 <div class="d-flex gap-2 justify-content-end mt-3">
                     <!-- Edit -->
-                    <a href="/dashboard/restaurants/edit?id=<?= $restaurant->id ?>" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="/dashboard/restaurants/edit?id=<?php echo $restaurant->id; ?>" class="btn btn-warning btn-sm">Edit</a>
 
                     <!-- Delete -->
                     <form action="/dashboard/restaurants/delete" method="POST" class="d-inline">

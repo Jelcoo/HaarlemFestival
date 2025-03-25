@@ -43,8 +43,7 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
 
     $router->post('/cart', [App\Controllers\CartController::class, 'checkout']);
     $router->get('/checkout', [App\Controllers\CheckoutController::class, 'index']);
-    $router->get('/checkout/pay', [App\Controllers\CheckoutController::class, 'checkout']);
-    $router->post('/checkout/create', [App\Controllers\CheckoutController::class, 'createCheckout']);
+    $router->post('/checkout/pay', [App\Controllers\CheckoutController::class, 'checkout']);
     $router->get('/checkout/complete', [App\Controllers\CheckoutController::class, 'completePayment']);
     $router->get('/checkout/pay_later', [App\Controllers\CheckoutController::class, 'payLater']);
     $router->middleware(EnsureEmployee::class, function () use ($router) {

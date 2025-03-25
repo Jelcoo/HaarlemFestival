@@ -1,7 +1,7 @@
 <!-- Title and Create Button -->
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class="d-block d-md-flex justify-content-between align-items-center mb-3">
     <h2>Artist Management</h2>
-    <div>
+    <div class="d-flex gap-2">
         <a href="/dashboard/artists/export" class="btn btn-success">Export to CSV</a>
         <a href="/dashboard/artists/create" class="btn btn-primary">Create New Artist</a>
     </div>
@@ -15,7 +15,7 @@
 <?php } ?>
 
 <!-- Sort -->
-<form method="GET" action="/dashboard/artists" class="mb-3 d-flex justify-content-between align-items-center">
+<form method="GET" action="/dashboard/artists" class="mb-3 d-block d-md-flex justify-content-between align-items-center">
     <!-- Search -->
     <div class="d-flex align-items-center gap-2">
         <input type="text" name="search" placeholder="Search artists..."
@@ -28,7 +28,7 @@
     </div>
 
     <!-- Sort -->
-    <div class="d-flex align-items-center gap-2">
+    <div class="mt-2 mt-md-0 d-flex flex-wrap align-items-center gap-2">
         <select name="sort" id="sortSelect" class="form-select" style="width: 150px;">
             <option value="" disabled selected>Sort by...</option>
             <option value="name" <?php echo ($sortColumn == 'name') ? 'selected' : ''; ?>>Name</option>
