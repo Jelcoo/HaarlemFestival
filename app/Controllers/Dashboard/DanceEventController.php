@@ -52,7 +52,7 @@ class DanceEventController extends DashboardController
 
         try {
             
-            $success = (bool) $this->danceRepository->deleteDanceEvent($eventId);
+            $success = (bool) $this->danceRepository->deleteEvent($eventId);
             $this->danceRepository->detachArtistsFromEvent($eventId);
             $this->redirectToDanceEvents($success, $success ? 'Dance event deleted successfully.' : 'Failed to delete dance event.');
         } catch (\PDOException $e) {
@@ -128,7 +128,7 @@ class DanceEventController extends DashboardController
             $existingEvent->price = $_POST['price'];
             $existingEvent->vat = $_POST['vat'];
 
-            $this->danceRepository->updateDanceEvent($existingEvent);
+            $this->danceRepository->updateEvent($existingEvent);
 
             $this->danceRepository->detachArtistsFromEvent($eventId);
             if (!empty($_POST['artist_ids']) && is_array($_POST['artist_ids'])) {
@@ -181,7 +181,7 @@ class DanceEventController extends DashboardController
                 'vat',
             ]));
 
-            $newEvent = $this->danceRepository->createDanceEvent($eventData);
+            $newEvent = $this->danceRepository->createEvent($eventData);
 
             if (!empty($_POST['artist_ids']) && is_array($_POST['artist_ids'])) {
                 $this->danceRepository->attachArtistsToEvent($newEvent->id, $_POST['artist_ids']);

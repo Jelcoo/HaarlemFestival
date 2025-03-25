@@ -70,7 +70,7 @@ GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, d
         return $queryEvents;
     }
 
-    public function createDanceEvent(array $data): EventDance 
+    public function createEvent(array $data): EventDance 
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
 
@@ -91,7 +91,7 @@ GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, d
         return $event;
     }
 
-    public function deleteDanceEvent(int $id): ?EventDance
+    public function deleteEvent(int $id): ?EventDance
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
 
@@ -106,7 +106,7 @@ GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, d
         return null;
     }
 
-    public function updateDanceEvent(EventDance $event): void 
+    public function updateEvent(EventDance $event): void 
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
         $queryBuilder->table('dance_events')->where('id', '=', $event->id)->update(
