@@ -35,11 +35,23 @@ class DashboardController extends Controller
     {
         return [
             'home' => ['label' => 'Home', 'url' => '/dashboard'],
-            'users' => ['label' => 'Users', 'url' => '/dashboard/users'],
-            'orders' => ['label' => 'Orders', 'url' => '/dashboard/orders'],
-            'restaurants' => ['label' => 'Restaurants', 'url' => '/dashboard/restaurants'],
-            'locations' => ['label' => 'Locations', 'url' => '/dashboard/locations'],
-            'artists' => ['label' => 'Artists', 'url' => '/dashboard/artists'],
+            'general' => [
+                'label' => 'General',
+                'users' => ['label' => 'Users', 'url' => '/dashboard/users'],
+                'restaurants' => ['label' => 'Restaurants', 'url' => '/dashboard/restaurants'],
+                'locations' => ['label' => 'Locations', 'url' => '/dashboard/locations'],
+                'artists' => ['label' => 'Artists', 'url' => '/dashboard/artists'],
+            ],
+            'events' => [
+                'label' => 'Events',
+                'dance_events' => ['label' => 'Dance', 'url' => '/dashboard/events/dance'],
+                'yummy_events' => ['label' => 'Yummy', 'url' => '/dashboard/events/yummy'],
+                'history_events' => ['label' => 'History', 'url' => '/dashboard/events/history'],
+            ],
+            'orders' => [
+                'label' => 'Orders',
+                'orders' => ['label' => 'Orders', 'url' => '/dashboard/orders'],
+            ],
         ];
     }
 
