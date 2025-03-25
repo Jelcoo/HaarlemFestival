@@ -66,6 +66,7 @@ class YummyEventController extends DashboardController
         if (!$eventId) $this->redirectToYummyEvents(false, 'Invalid yummy event ID.');
 
         $event = $this->yummyRepository->getEventById($eventId);
+        if (!$event) $this->redirectToYummyEvents(false, 'Yummy event not found.');
 
         $formData = [
             'id' => $event->id,
@@ -91,6 +92,7 @@ class YummyEventController extends DashboardController
             if (!$eventId) $this->redirectToYummyEvents(false, 'Invalid yummy event ID.');
 
             $existingEvent = $this->yummyRepository->getEventById($eventId);
+            if (!$existingEvent) $this->redirectToYummyEvents(false, 'Yummy event not found.');
 
             $validator = new Validator();
             $validation = $validator->make($_POST, [

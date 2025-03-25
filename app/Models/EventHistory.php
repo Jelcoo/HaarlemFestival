@@ -9,6 +9,7 @@ class EventHistory extends Event
     public string $guide;
     public float $family_price;
     public float $single_price;
+    public string $start_location;
 
     public function __construct()
     {
@@ -28,5 +29,6 @@ class EventHistory extends Event
         $this->guide = $collection['guide'];
         $this->family_price = $collection['family_price'];
         $this->single_price = $collection['single_price'];
+        $this->start_location = $collection['start_location'];
     }
 }
