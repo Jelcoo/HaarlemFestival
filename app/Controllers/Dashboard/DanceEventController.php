@@ -36,7 +36,7 @@ class DanceEventController extends DashboardController
         return $this->renderPage(
             'dance_events',
             [
-                'events' => $this->danceRepository->getAllEvents(),
+                'events' => $this->danceRepository->getSortedEvents($searchQuery, $sortColumn, $sortDirection),
                 'status' => $this->getStatus(),
                 'columns' => $this->getColumns(),
                 'sortColumn' => $sortColumn,

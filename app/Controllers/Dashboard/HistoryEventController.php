@@ -32,7 +32,7 @@ class HistoryEventController extends DashboardController
         return $this->renderPage(
             'history_events',
             [
-                'events' => $this->historyRepository->getAllEvents(),
+                'events' => $this->historyRepository->getSortedEvents($searchQuery, $sortColumn, $sortDirection),
                 'status' => $this->getStatus(),
                 'columns' => $this->getColumns(),
                 'sortColumn' => $sortColumn,

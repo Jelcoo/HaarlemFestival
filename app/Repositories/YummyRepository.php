@@ -16,12 +16,54 @@ class YummyRepository extends Repository
         return $queryEvent ? new EventYummy($queryEvent) : null;
     }
 
-    public function getAllEvents(): array
+    public function getSortedEvents(string $searchQuery, string $sortColumn = 'id', string $sortDirection = 'asc'): array
     {
-        $queryBuilder = new QueryBuilder($this->getConnection());
-        $events = $queryBuilder->table('yummy_events')->get();
+        $allowedColumns = [
+            'id', 'restaurant_name', 'total_seats', 'kids_price', 'adult_price',
+            'reservation_cost', 'vat', 'start_time', 'start_date', 'end_time', 'end_date'
+        ];
 
-        return $events ? array_map(fn ($eventData) => new EventYummy($eventData), $events) : [];
+        if (!in_array($sortColumn, $allowedColumns)) {
+            $sortColumn = 'id';
+        }
+
+        if (!in_array(strtolower($sortDirection), ['asc', 'desc'])) {
+            $sortDirection = 'asc';
+        }
+
+        $query = $this->getConnection()->prepare("
+            SELECT 
+                ye.*, 
+                l.name AS restaurant_name
+            FROM yummy_events ye
+            JOIN locations l ON ye.restaurant_id = l.id
+            WHERE 
+                l.name LIKE :search OR
+                total_seats LIKE :search2 OR
+                kids_price LIKE :search3 OR
+                adult_price LIKE :search4 OR
+                reservation_cost LIKE :search5 OR
+                vat LIKE :search6 OR
+                start_time LIKE :search7 OR
+                start_date LIKE :search8 OR
+                end_time LIKE :search9 OR
+                end_date LIKE :search10
+            ORDER BY {$sortColumn} {$sortDirection}
+        ");
+
+        $params = array_fill_keys([
+            'search', 'search2', 'search3', 'search4', 'search5',
+            'search6', 'search7', 'search8', 'search9', 'search10'
+        ], '%' . $searchQuery . '%');
+
+        $query->execute($params);
+        $results = $query->fetchAll();
+
+        return array_map(function ($eventData) {
+            $event = new EventYummy($eventData);
+            $event->restaurant_name = $eventData['restaurant_name'] ?? '-';
+            return $event;
+        }, $results);
     }
 
     public function createEvent(array $data): bool

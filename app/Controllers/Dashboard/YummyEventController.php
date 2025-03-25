@@ -32,7 +32,7 @@ class YummyEventController extends DashboardController
         return $this->renderPage(
             'yummy_events',
             [
-                'events' => $this->yummyRepository->getAllEvents(),
+                'events' => $this->yummyRepository->getSortedEvents($searchQuery, $sortColumn, $sortDirection),
                 'restaurants' => $this->locationRepository->getYummyLocations(),
                 'status' => $this->getStatus(),
                 'columns' => $this->getColumns(),
@@ -185,7 +185,7 @@ class YummyEventController extends DashboardController
     {
         return [
             'id' => ['label' => 'ID', 'sortable' => true],
-            'restaurant_name' => ['label' => 'Restaurant ID', 'sortable' => true],
+            'restaurant_name' => ['label' => 'Restaurant Name', 'sortable' => true],
             'total_seats' => ['label' => 'Seats', 'sortable' => true],
             'kids_price' => ['label' => 'Kids Price', 'sortable' => true],
             'adult_price' => ['label' => 'Adult Price', 'sortable' => true],
@@ -223,7 +223,7 @@ class YummyEventController extends DashboardController
 
         $columns = [
             'id' => 'ID',
-            'restaurant_id' => 'Restaurant ID',
+            'restaurant_name' => 'Restaurant Name',
             'total_seats' => 'Total Seats',
             'kids_price' => 'Kids Price',
             'adult_price' => 'Adult Price',

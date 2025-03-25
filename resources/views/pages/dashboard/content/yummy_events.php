@@ -42,19 +42,23 @@ foreach ($events as $event) {
 
     <!-- Sort -->
     <div class="d-flex align-items-center gap-2">
-        <select name="sort" class="form-select" style="width: 150px;">
+        <select name="sort" id="sortSelect" class="form-select" style="width: 150px;">
             <option value="" disabled selected>Sort by...</option>
-            <option value="start_date" <?php echo ($sortColumn == 'start_date') ? 'selected' : ''; ?>>Start Date</option>
-            <option value="location_name" <?php echo ($sortColumn == 'location_name') ? 'selected' : ''; ?>>Location</option>
-            <option value="artist_names" <?php echo ($sortColumn == 'artist_names') ? 'selected' : ''; ?>>Artists</option>
+            <?php foreach ($columns as $key => $data): ?>
+                <?php if ($data['sortable']): ?>
+                    <option value="<?= $key ?>" <?= ($sortColumn === $key) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($data['label']) ?>
+                    </option>
+                <?php endif; ?>
+            <?php endforeach; ?>
         </select>
 
-        <select name="direction" class="form-select" style="width: 150px;">
+        <select name="direction" id="directionSelect" class="form-select" style="width: 150px;">
             <option value="asc" <?php echo ($sortDirection == 'asc') ? 'selected' : ''; ?>>Ascending</option>
             <option value="desc" <?php echo ($sortDirection == 'desc') ? 'selected' : ''; ?>>Descending</option>
         </select>
 
-        <button type="submit" class="btn btn-primary">Apply</button>
+        <button type="button" class="btn btn-primary" onclick="updateURL()">Apply</button>
         <a href="/dashboard/events/yummy" class="btn btn-secondary">Reset</a>
     </div>
 </form>

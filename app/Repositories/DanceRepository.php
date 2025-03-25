@@ -42,33 +42,64 @@ GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, d
         return $queryEvents;
     }
 
-    public function getAllEvents(): array
+    public function getSortedEvents(string $searchQuery, string $sortColumn = 'event_id', string $sortDirection = 'asc'): array
     {
+        $allowedColumns = [
+            'event_id', 'start_date', 'start_time', 'end_date', 'end_time',
+            'location_name', 'artist_names', 'session', 'duration',
+            'tickets_available', 'price', 'vat',
+        ];
+
+        if (!in_array($sortColumn, $allowedColumns)) {
+            $sortColumn = 'event_id';
+        }
+
+        if (!in_array(strtolower($sortDirection), ['asc', 'desc'])) {
+            $sortDirection = 'asc';
+        }
+
         $query = $this->getConnection()->prepare("
-SELECT
-    de.id AS event_id,
-    de.start_date AS start_date,
-    de.start_time AS start_time,
-    de.end_date AS end_date,
-    de.end_time AS end_time,
-    de.vat AS vat,
-    l.name AS location_name,
-    GROUP_CONCAT(DISTINCT a.name ORDER BY a.name SEPARATOR ', ') AS artist_names,
-    de.session AS session,
-    TIMESTAMPDIFF(MINUTE, CONCAT(de.start_date, ' ', de.start_time), CONCAT(de.end_date, ' ', de.end_time)) AS duration,
-    de.total_tickets - COALESCE(COUNT(DISTINCT dt.id), 0) AS tickets_available,
-    ROUND(de.price * (de.vat + 1), 2) AS price
-FROM dance_events de
-JOIN locations l ON de.location_id = l.id
-LEFT JOIN dance_event_artists dea ON de.id = dea.event_id
-LEFT JOIN artists a ON dea.artist_id = a.id
-LEFT JOIN dance_tickets dt ON de.id = dt.dance_event_id
-GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, de.end_time, de.total_tickets, de.price, de.vat");
+            SELECT
+                de.id AS event_id,
+                de.start_date,
+                de.start_time,
+                de.end_date,
+                de.end_time,
+                de.vat,
+                l.name AS location_name,
+                GROUP_CONCAT(DISTINCT a.name ORDER BY a.name SEPARATOR ', ') AS artist_names,
+                de.session,
+                TIMESTAMPDIFF(MINUTE, CONCAT(de.start_date, ' ', de.start_time), CONCAT(de.end_date, ' ', de.end_time)) AS duration,
+                de.total_tickets - COALESCE(COUNT(DISTINCT dt.id), 0) AS tickets_available,
+                ROUND(de.price * (de.vat + 1), 2) AS price
+            FROM dance_events de
+            JOIN locations l ON de.location_id = l.id
+            LEFT JOIN dance_event_artists dea ON de.id = dea.event_id
+            LEFT JOIN artists a ON dea.artist_id = a.id
+            LEFT JOIN dance_tickets dt ON de.id = dt.dance_event_id
+            WHERE (
+                l.name LIKE :search OR 
+                a.name LIKE :search2 OR 
+                de.session LIKE :search3 OR 
+                de.total_tickets LIKE :search4 OR 
+                de.price LIKE :search5 OR 
+                de.vat LIKE :search6 OR 
+                de.start_date LIKE :search7 OR 
+                de.end_date LIKE :search8 OR 
+                de.start_time LIKE :search9 OR 
+                de.end_time LIKE :search10
+            )
+            GROUP BY de.id
+            ORDER BY {$sortColumn} {$sortDirection}
+        ");
 
-        $query->execute();
-        $queryEvents = $query->fetchAll();
+        $params = array_fill_keys([
+            'search', 'search2', 'search3', 'search4', 'search5',
+            'search6', 'search7', 'search8', 'search9', 'search10'
+        ], '%' . $searchQuery . '%');
 
-        return $queryEvents;
+        $query->execute($params);
+        return $query->fetchAll();
     }
 
     public function createEvent(array $data): EventDance 
