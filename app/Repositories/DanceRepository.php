@@ -51,6 +51,7 @@ SELECT
     de.start_time AS start_time,
     de.end_date AS end_date,
     de.end_time AS end_time,
+    de.vat AS vat,
     l.name AS location_name,
     GROUP_CONCAT(DISTINCT a.name ORDER BY a.name SEPARATOR ', ') AS artist_names,
     de.session AS session,

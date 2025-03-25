@@ -46,11 +46,63 @@
     </div>
 </form>
 
-<!-- Event Cards -->
-
-<?php if (!isset($events) || !is_array($events)) return; ?>
-<div class="row">
-    <?php foreach ($events as $event): ?>
-        <?php include __DIR__ . '/../../../components/dashboard/dance_event_card.php'; ?>
-    <?php endforeach; ?>
-</div>
+<!-- Dance Events Table View -->
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php foreach ($columns as $key => $data): ?>
+                <?php
+                    $newDirection = ($sortColumn === $key && $sortDirection === 'asc') ? 'desc' : 'asc';
+                    $sortUrl = "?sort={$key}&direction={$newDirection}";
+                    if (!empty($searchQuery)) {
+                        $sortUrl .= '&search=' . urlencode($searchQuery);
+                    }
+                ?>
+                <th>
+                    <?php if ($data['sortable']): ?>
+                        <a href="<?= $sortUrl ?>"><?= htmlspecialchars($data['label']) ?></a>
+                    <?php else: ?>
+                        <?= htmlspecialchars($data['label']) ?>
+                    <?php endif; ?>
+                </th>
+            <?php endforeach; ?>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (!empty($events)): ?>
+            <?php foreach ($events as $event): ?>
+                <tr>
+                    <?php foreach ($columns as $key => $col): ?>
+                        <td>
+                            <?php
+                                $value = $event[$key] ?? '';
+                                if (in_array($key, ['start_date', 'end_date']) && $value) {
+                                    $value = \Carbon\Carbon::parse($value)->format('d-m-Y');
+                                } elseif (in_array($key, ['start_time', 'end_time']) && $value) {
+                                    $value = \Carbon\Carbon::parse($value)->format('H:i');
+                                } elseif ($key === 'price' && is_numeric($value)) {
+                                    $value = '€' . number_format($value, 2);
+                                } elseif ($key === 'vat') {
+                                    $value = number_format((float) $value * 100, 0) . '%';
+                                }
+                            ?>
+                            <?= htmlspecialchars($value) ?>
+                        </td>
+                    <?php endforeach; ?>
+                    <td class="d-flex gap-2">
+                        <a href="/dashboard/events/dance/edit?id=<?= $event['event_id'] ?>" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="/dashboard/events/dance/delete" method="POST" class="d-inline">
+                            <input type="hidden" name="id" value="<?= $event['event_id'] ?>">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="<?= count($columns) + 1 ?>">No dance events found.</td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+</table>

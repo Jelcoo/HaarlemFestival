@@ -38,6 +38,7 @@ class DanceEventController extends DashboardController
             [
                 'events' => $this->danceRepository->getAllEvents(),
                 'status' => $this->getStatus(),
+                'columns' => $this->getColumns(),
                 'sortColumn' => $sortColumn,
                 'sortDirection' => $sortDirection,
                 'searchQuery' => $searchQuery,
@@ -198,6 +199,24 @@ class DanceEventController extends DashboardController
         } catch (\Exception $e) {
             return $this->showDanceEventForm('create', $_POST, ['Error: ' . $e->getMessage()]);
         }
+    }
+
+    private function getColumns(): array
+    {
+        return [
+            'event_id' => ['label' => 'ID', 'sortable' => true],
+            'location_name' => ['label' => 'Location', 'sortable' => true],
+            'artist_names' => ['label' => 'Artists', 'sortable' => true],
+            'session' => ['label' => 'Session', 'sortable' => true],
+            'duration' => ['label' => 'Duration (min)', 'sortable' => true],
+            'tickets_available' => ['label' => 'Tickets', 'sortable' => true],
+            'price' => ['label' => 'Price', 'sortable' => true],
+            'vat' => ['label' => 'VAT', 'sortable' => true],
+            'start_date' => ['label' => 'Start Date', 'sortable' => true],
+            'start_time' => ['label' => 'Start Time', 'sortable' => true],
+            'end_date' => ['label' => 'End Date', 'sortable' => true],
+            'end_time' => ['label' => 'End Time', 'sortable' => true],
+        ];
     }
 
     private function redirectToDanceEvents(bool $success = false, string $message = ''): void
