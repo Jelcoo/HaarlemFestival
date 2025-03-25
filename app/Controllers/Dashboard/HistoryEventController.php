@@ -217,4 +217,28 @@ class HistoryEventController extends DashboardController
             ['locations' => $this->locationRepository->getAllLocations()]
         );
     }
+
+    public function exportHistoryEvents(): void
+    {
+        $eventsArray = $this->historyRepository->getAllEvents();
+
+        $events = array_map(fn($row) => (object) $row, $eventsArray);
+
+        $columns = [
+            'id' => 'ID',
+            'language' => 'Language',
+            'guide' => 'Guide',
+            'seats_per_tour' => 'Seats per Tour',
+            'single_price' => 'Single Price',
+            'family_price' => 'Family Price',
+            'vat' => 'VAT',
+            'start_location' => 'Start Location',
+            'start_time' => 'Start Time',
+            'start_date' => 'Start Date',
+            'end_time' => 'End Time',
+            'end_date' => 'End Date',
+        ];
+
+        $this->exportToCsv('history_events', $events, $columns);
+    }
 }

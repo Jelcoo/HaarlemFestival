@@ -212,4 +212,27 @@ class YummyEventController extends DashboardController
             ['restaurants' => $this->locationRepository->getYummyLocations()]
         );
     }
+
+    public function exportYummyEvents(): void
+    {
+        $eventsArray = $this->yummyRepository->getAllEvents();
+
+        $events = array_map(fn($row) => (object) $row, $eventsArray);
+
+        $columns = [
+            'id' => 'ID',
+            'restaurant_id' => 'Restaurant ID',
+            'total_seats' => 'Total Seats',
+            'kids_price' => 'Kids Price',
+            'adult_price' => 'Adult Price',
+            'reservation_cost' => 'Reservation Fee',
+            'vat' => 'VAT',
+            'start_time' => 'Start Time',
+            'start_date' => 'Start Date',
+            'end_time' => 'End Time',
+            'end_date' => 'End Date',
+        ];
+
+        $this->exportToCsv('yummy_events', $events, $columns);
+    }
 }
