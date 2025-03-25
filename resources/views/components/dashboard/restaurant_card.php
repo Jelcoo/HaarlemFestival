@@ -6,9 +6,9 @@ if (!isset($restaurant)) {
 
 <div class="col-md-4">
     <div class="card mb-4">
-        <div class="card-body d-flex align-items-start">
+        <div class="card-body d-block d-md-flex align-items-start">
             <!-- Restaurant Logo -->
-            <img src="<?php echo $restaurant->logo; ?>" alt="Restaurant Image" class="img-fluid restaurant-logo me-3">
+            <img src="<?php echo $restaurant->logo; ?>" alt="Restaurant Image" class="img-fluid restaurant-logo me-3 mb-2">
 
             <!-- Restaurant Details -->
             <div class="w-100">

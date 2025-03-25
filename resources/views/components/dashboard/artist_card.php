@@ -7,10 +7,10 @@ $showDetails = isset($_GET['details']) && $_GET['details'] == $artist->id;
 
 <div class="col-md-4">
     <div class="card mb-4">
-        <div class="card-body d-flex align-items-start">
+        <div class="card-body d-block d-md-flex align-items-start">
             <?php if (count($artist->assets) > 0) { ?>
                 <!-- Artist Cover -->
-                <img src="<?php echo $artist->assets[0]->getUrl(); ?>" alt="Artist Cover" class="img-fluid artist-cover me-3">
+                <img src="<?php echo $artist->assets[0]->getUrl(); ?>" alt="Artist Cover" class="img-fluid artist-cover me-3 mb-2">
             <?php } ?>
 
             <!-- Artist Details -->

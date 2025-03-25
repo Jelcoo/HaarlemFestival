@@ -1,7 +1,7 @@
 <!-- Title and Create Button -->
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class="d-block d-md-flex justify-content-between align-items-center mb-3">
     <h2>Restaurant Management</h2>
-    <div>
+    <div class="d-flex gap-2">
         <a href="/dashboard/restaurants/export" class="btn btn-success">Export to CSV</a>
         <a href="/dashboard/restaurants/create" class="btn btn-primary">Create New Restaurant</a>
     </div>
@@ -15,7 +15,7 @@
 <?php } ?>
 
 <!-- Sort -->
-<form method="GET" action="/dashboard/restaurants" class="mb-3 d-flex justify-content-between align-items-center">
+<form method="GET" action="/dashboard/restaurants" class="mb-3 d-block d-md-flex justify-content-between align-items-center">
     <!-- Search -->
     <div class="d-flex align-items-center gap-2">
         <input type="text" name="search" placeholder="Search restaurants..."
@@ -28,7 +28,7 @@
     </div>
 
     <!-- Sort -->
-    <div class="d-flex align-items-center gap-2">
+    <div class="mt-2 mt-md-0 d-flex flex-wrap align-items-center gap-2">
         <select name="sort" id="sortSelect" class="form-select" style="width: 150px;">
             <option value="" disabled selected>Sort by...</option>
             <option value="restaurant_type" <?php echo ($sortColumn == 'restaurant_type') ? 'selected' : ''; ?>>Type
