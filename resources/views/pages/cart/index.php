@@ -23,11 +23,11 @@ $totalItems = array_sum(array_map(function ($item) {
 
 <div class="container mt-4">
     <?php include __DIR__ . '/../../components/errordisplay.php'; ?>
-    <div class="row justify-content-center">
-        <div class="col-6">
+    <div class="row d-block d-md-flex justify-content-center">
+        <div class="col-12 col-md-6">
             <h1>Cart - Overview</h1>
         </div>
-        <div class="col-6 d-flex gap-3 justify-content-end px-0 align-items-center">
+        <div class="col-12 col-md-6 d-flex gap-3 justify-content-md-end pb-1 pb-md-0 px-md-0 align-items-center">
             <h2>Total items: <span id="total-items"><?php echo $totalItems; ?></span></h2>
             <button type="button" class="btn btn-custom-yellow" data-bs-toggle="modal"
                 data-bs-target="#confirmModal">Place order <i
@@ -66,7 +66,7 @@ $totalItems = array_sum(array_map(function ($item) {
                             you don't have an account)</em></p>
                     <p><em>after logging in you will be redirected back to this page</em></p>
                     <button type="button" class="btn btn-custom-yellow" data-bs-dismiss="modal">Go back</button>
-                    <button type="submit" class="btn btn-custom-yellow">Save changes</button>
+                    <button type="submit" class="btn btn-custom-yellow">Continue</button>
                 </form>
             </div>
         </div>
