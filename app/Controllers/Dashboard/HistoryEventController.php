@@ -222,7 +222,7 @@ class HistoryEventController extends DashboardController
 
     public function exportHistoryEvents(): void
     {
-        $eventsArray = $this->historyRepository->getAllEvents();
+        $eventsArray = $this->historyRepository->getSortedEvents('', 'id', 'asc');
 
         $events = array_map(fn($row) => (object) $row, $eventsArray);
 

@@ -217,7 +217,7 @@ class YummyEventController extends DashboardController
 
     public function exportYummyEvents(): void
     {
-        $eventsArray = $this->yummyRepository->getAllEvents();
+        $eventsArray = $this->yummyRepository->getSortedEvents('', 'id', 'asc');
 
         $events = array_map(fn($row) => (object) $row, $eventsArray);
 

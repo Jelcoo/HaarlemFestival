@@ -244,7 +244,7 @@ class DanceEventController extends DashboardController
 
     public function exportDanceEvents(): void 
     {
-        $eventsArray = $this->danceRepository->getAllEvents();
+        $eventsArray = $this->danceRepository->getSortedEvents('', 'id', 'asc');
 
         $events = array_map(fn($row) => (object) $row, $eventsArray);
 
