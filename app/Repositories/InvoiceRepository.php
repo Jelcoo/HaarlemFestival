@@ -20,6 +20,17 @@ class InvoiceRepository extends Repository
         return array_map(fn ($invoice) => new Invoice($invoice), $invoices);
     }
 
+    public function getAllInvoices(): array
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $invoices = $queryBuilder
+            ->table('invoices')
+            ->get();
+
+        return array_map(fn ($invoice) => new Invoice($invoice), $invoices);
+    }
+
     public function getInvoicesByUserId(int $userId): array
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
@@ -35,6 +46,19 @@ class InvoiceRepository extends Repository
 
         return array_map(fn ($invoice) => new Invoice($invoice), $invoices);
     }
+
+    public function getInvoiceById(int $invoiceId): ?Invoice
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $invoice = $queryBuilder
+            ->table('invoices')
+            ->where('id', '=', $invoiceId)
+            ->first();
+
+        return $invoice ? new Invoice($invoice) : null;
+    }
+
 
     public function isPayableInvoice(int $invoiceId, int $userId): bool
     {
