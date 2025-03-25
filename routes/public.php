@@ -96,5 +96,13 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
         $router->post('/dashboard/events/dance/edit', [App\Controllers\Dashboard\DanceEventController::class, 'editDanceEventPost']);
         $router->post('/dashboard/events/dance/delete', [App\Controllers\Dashboard\DanceEventController::class, 'deleteDanceEvent']);
         $router->get('/dashboard/events/dance/export', [App\Controllers\Dashboard\DanceEventController::class, 'exportDanceEvents']);
+
+        $router->get('/dashboard/events/yummy', [App\Controllers\Dashboard\YummyEventController::class, 'index']);
+        $router->get('/dashboard/events/yummy/create', [App\Controllers\Dashboard\YummyEventController::class, 'createYummyEvent']);
+        $router->post('/dashboard/events/yummy/create', [App\Controllers\Dashboard\YummyEventController::class, 'createYummyEventPost']);
+        $router->get('/dashboard/events/yummy/edit', [App\Controllers\Dashboard\YummyEventController::class, 'editYummyEvent']);
+        $router->post('/dashboard/events/yummy/edit', [App\Controllers\Dashboard\YummyEventController::class, 'editYummyEventPost']);
+        $router->post('/dashboard/events/yummy/delete', [App\Controllers\Dashboard\YummyEventController::class, 'deleteYummyEvent']);
+        $router->get('/dashboard/events/yummy/export', [App\Controllers\Dashboard\YummyEventController::class, 'exportYummyEvents']);
     });
 });

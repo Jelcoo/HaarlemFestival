@@ -50,9 +50,18 @@ class DanceEventController extends DashboardController
         $eventId = $_POST['id'] ?? null;
         if (!$eventId) $this->redirectToDanceEvents(false, 'Invalid dance event ID.');
 
-        $this->danceRepository->detachArtistsFromEvent($eventId);
-        $success = (bool) $this->danceRepository->deleteDanceEvent($eventId);
-        $this->redirectToDanceEvents($success, $success ? 'Dance event deleted successfully.' : 'Failed to delete dance event.');
+        try {
+            
+            $success = (bool) $this->danceRepository->deleteDanceEvent($eventId);
+            $this->danceRepository->detachArtistsFromEvent($eventId);
+            $this->redirectToDanceEvents($success, $success ? 'Dance event deleted successfully.' : 'Failed to delete dance event.');
+        } catch (\PDOException $e) {
+            if ($e->getCode() === '23000') { // SQLSTATE[23000] => integrity constraint violation
+                $this->redirectToDanceEvents(false, 'Cannot delete this event because it has tickets or other data linked.');
+            } else {
+                $this->redirectToDanceEvents(false, 'Database error: ' . $e->getMessage());
+            }
+        }
     }
 
     public function editDanceEvent(): string
