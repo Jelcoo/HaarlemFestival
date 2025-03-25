@@ -88,7 +88,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                 <div class="col-md-3">
                     <label for="vat">VAT (%)</label>
                     <input type="number" id="vat" name="vat" class="form-control" step="0.01"
-                        value="<?php echo htmlspecialchars($formData['vat'] ?? ''); ?>" required>
+                        value="<?php echo htmlspecialchars($formData['vat'] ?? '') * 100; ?>" required>
                 </div>
                 <div class="col-md-3">
                     <label for="total_price">Total Price (€)</label>
@@ -140,7 +140,7 @@ const list = document.getElementById('selected-artists');
 // Update total price when base price or vat changes
 function updateTotalPrice() {
     const price = parseFloat(document.getElementById('price').value) || 0;
-    const vat = parseFloat(document.getElementById('vat').value) || 0;
+    const vat = parseFloat(document.getElementById('vat').value) / 100 || 0;
     const total = price * (1 + vat);
     document.getElementById('total_price').value = total.toFixed(2);
 }

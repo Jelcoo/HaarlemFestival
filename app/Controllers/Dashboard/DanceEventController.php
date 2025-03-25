@@ -134,7 +134,7 @@ class DanceEventController extends DashboardController
             $existingEvent->session = DanceSessionEnum::from($_POST['session']);
             $existingEvent->total_tickets = $_POST['total_tickets'];
             $existingEvent->price = $_POST['price'];
-            $existingEvent->vat = $_POST['vat'];
+            $existingEvent->vat = $_POST['vat'] / 100;
 
             $this->danceRepository->updateEvent($existingEvent);
 
@@ -188,6 +188,8 @@ class DanceEventController extends DashboardController
                 'price',
                 'vat',
             ]));
+
+            $eventData['vat'] /= 100;
 
             $newEvent = $this->danceRepository->createEvent($eventData);
 

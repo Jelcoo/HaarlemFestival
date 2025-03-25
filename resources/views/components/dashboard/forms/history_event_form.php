@@ -64,7 +64,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                 <div class="col-md-4">
                     <label for="vat">VAT (decimal)</label>
                     <input type="number" step="0.01" name="vat" class="form-control"
-                        value="<?= htmlspecialchars($formData['vat'] ?? '0.21') ?>" required>
+                        value="<?= htmlspecialchars($formData['vat'] ?? '0.21') * 100; ?>" required>
                 </div>
             </div>
 

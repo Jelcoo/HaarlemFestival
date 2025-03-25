@@ -117,7 +117,7 @@ class YummyEventController extends DashboardController
             $existingEvent->kids_price = $_POST['kids_price'];
             $existingEvent->adult_price = $_POST['adult_price'];
             $existingEvent->reservation_cost = $_POST['reservation_cost'];
-            $existingEvent->vat = $_POST['vat'];
+            $existingEvent->vat = $_POST['vat'] / 100;
             $existingEvent->start_date = Carbon::parse($_POST['start_date']);
             $existingEvent->start_time = Carbon::parse($_POST['start_time']);
             $existingEvent->end_date = Carbon::parse($_POST['end_date']);
@@ -170,6 +170,8 @@ class YummyEventController extends DashboardController
                 'end_time',
                 'end_date',
             ]));
+
+            $eventData['vat'] /= 100;
 
             $newEvent = $this->yummyRepository->createEvent($eventData);
 

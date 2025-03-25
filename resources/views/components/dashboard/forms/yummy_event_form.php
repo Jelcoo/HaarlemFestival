@@ -60,9 +60,9 @@ $isEdit = ($mode ?? 'create') === 'edit';
                         value="<?= htmlspecialchars($formData['reservation_cost'] ?? '') ?>" required>
                 </div>
                 <div class="col-md-3">
-                    <label for="vat">VAT (decimal)</label>
+                    <label for="vat">VAT (%)</label>
                     <input type="number" step="0.01" name="vat" class="form-control"
-                        value="<?= htmlspecialchars($formData['vat'] ?? '0.21') ?>" required>
+                        value="<?= htmlspecialchars($formData['vat'] ?? '0.21') * 100 ?>" required>
                 </div>
             </div>
 

@@ -118,7 +118,7 @@ class HistoryEventController extends DashboardController
             $existingEvent->seats_per_tour = $_POST['seats_per_tour'];
             $existingEvent->family_price = $_POST['family_price'];
             $existingEvent->single_price = $_POST['single_price'];
-            $existingEvent->vat = $_POST['vat'];
+            $existingEvent->vat = $_POST['vat'] / 100;
             $existingEvent->start_location = $_POST['start_location'];
             $existingEvent->start_time = Carbon::parse($_POST['start_time']);
             $existingEvent->start_date = Carbon::parse($_POST['start_date']);
@@ -174,6 +174,8 @@ class HistoryEventController extends DashboardController
                 'end_time',
                 'end_date',
             ]));
+
+            $eventData['vat'] /= 100;
 
             $newEvent = $this->historyRepository->createEvent($eventData);
 
