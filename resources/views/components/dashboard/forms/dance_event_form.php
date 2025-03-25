@@ -88,7 +88,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                 <div class="col-md-3">
                     <label for="vat">VAT (%)</label>
                     <input type="number" id="vat" name="vat" class="form-control" step="0.01"
-                        value="<?php echo htmlspecialchars($formData['vat'] ?? '') * 100; ?>" required>
+                        value="<?php echo isset($formData['vat']) ? htmlspecialchars($formData['vat'] * 100) : '0'; ?>" required>
                 </div>
                 <div class="col-md-3">
                     <label for="total_price">Total Price (€)</label>
