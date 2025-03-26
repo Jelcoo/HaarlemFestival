@@ -4,9 +4,9 @@ WORKDIR /app
 
 RUN docker-php-ext-install pdo_mysql
 
-RUN apk add --no-cache git unzip zip libpng-dev libjpeg-turbo-dev freetype-dev libwebp-dev zlib-dev \
+RUN apk add --no-cache git unzip zip libzip-dev libpng-dev libjpeg-turbo-dev freetype-dev libwebp-dev zlib-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
-    && docker-php-ext-install gd
+    && docker-php-ext-install gd zip
 
 COPY . .
 

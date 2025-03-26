@@ -9,7 +9,7 @@ class TicketDance
     public string $qrcode;
     public bool $ticket_used;
     public int $dance_event_id;
-    public bool $all_access;
+    public string $all_access;
 
     public function __construct(array $collection)
     {

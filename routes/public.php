@@ -20,9 +20,10 @@ $router->post('/stripe/webhook', [App\Controllers\CheckoutController::class, 'we
 $router->get('/editor', [App\Controllers\EditorController::class, 'index']);
 $router->post('/editor', [App\Controllers\EditorController::class, 'editPost']);
 
-$router->get('/program', [App\Controllers\ProgramController::class, 'index']);
-$router->get('/program/tickets', [App\Controllers\ProgramController::class, 'tickets']);
-$router->get('/program/tickets/qrcode', [App\Controllers\ProgramController::class, 'qrcode']);
+$router->get('/program', [App\Controllers\ProgramController::class, 'program']);
+$router->get('/order', [App\Controllers\ProgramController::class, 'index']);
+$router->get('/order/tickets', [App\Controllers\ProgramController::class, 'tickets']);
+$router->get('/order/tickets/qrcode', [App\Controllers\ProgramController::class, 'qrcode']);
 
 
 $router->middleware(EnsureNotLoggedIn::class, function () use ($router) {
@@ -47,7 +48,11 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
     $router->get('/checkout/complete', [App\Controllers\CheckoutController::class, 'completePayment']);
     $router->get('/checkout/pay_later', [App\Controllers\CheckoutController::class, 'payLater']);
     $router->middleware(EnsureEmployee::class, function () use ($router) {
-        $router->get('/qrcode', [App\Controllers\QrController::class, 'index']);
+    
+    $router->get('/qrcode', [App\Controllers\QrController::class, 'index']);
+    $router->get('/scannedqrcode', [App\Controllers\QrController::class, 'scannerqrcode']);
+    $router->post('/useTicket', [App\Controllers\QrController::class, 'useTicket']);
+
     });
 
     $router->middleware(EnsureAdmin::class, function () use ($router) {
@@ -59,7 +64,9 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
         $router->post('/dashboard/users', [App\Controllers\DashboardUsersController::class, 'handleAction']);
 
         $router->get('/dashboard/orders', [App\Controllers\DashboardOrderController::class, 'index']);
-        $router->get('/dashboard/orders/tickets', [App\Controllers\DashboardOrderTicketsController::class, 'index']);
+        $router->get('/dashboard/orders/tickets', [App\Controllers\DashboardOrderController::class, 'tickets']);
+        $router->post('/dashboard/orders/excel', [App\Controllers\QrController::class, 'excel']);
+
 
         $router->get('/dashboard/restaurants', [App\Controllers\DashboardRestaurantsController::class, 'index']);
         $router->post('/dashboard/restaurants', [App\Controllers\DashboardRestaurantsController::class, 'handleAction']);

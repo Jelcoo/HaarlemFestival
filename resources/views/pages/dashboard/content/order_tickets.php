@@ -7,7 +7,7 @@
             <li>
                 <strong>Ticket ID:</strong> <?php echo $ticket->id; ?> |
                 <strong>Event ID:</strong> <?php echo $ticket->dance_event_id; ?> |
-                <strong>All Access:</strong> <?php echo $ticket->all_access ? 'Yes' : 'No'; ?> |
+                <strong>All Access:</strong> <?php echo $ticket->all_access?> |
                 <strong>Used:</strong> <?php echo $ticket->ticket_used ? 'Yes' : 'No'; ?>
             </li>
         <?php } ?>
@@ -42,7 +42,6 @@
                 <strong>Event ID:</strong> <?php echo $ticket->yummy_event_id; ?> |
                 <strong>Kids:</strong> <?php echo $ticket->kids_count; ?> |
                 <strong>Adults:</strong> <?php echo $ticket->adult_count; ?> |
-                <strong>QR Code:</strong> <?php echo $ticket->qrcode; ?> |
                 <strong>Used:</strong> <?php echo $ticket->ticket_used ? 'Yes' : 'No'; ?>
             </li>
         <?php } ?>
@@ -52,12 +51,39 @@
 <?php } ?>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".back").forEach(button => {
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".tickets").forEach(button => {
         button.addEventListener("click", function () {
-            window.location.href = "/dashboard/orders"; 
+            const invoiceId = this.getAttribute("data-id");
+            window.location.href = `/dashboard/orders/tickets?invoice_id=${invoiceId}`;
+        });
+    });
+
+    document.querySelectorAll(".confirm").forEach(button => {
+        button.addEventListener("click", function () {
+            const invoiceId = this.getAttribute("data-id");
+            fetch(`/dashboard/orders/excel`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ invoiceId: invoiceId })
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `tickets_invoice_${invoiceId}.xlsx`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Something went wrong generating Excel.');
+            });
         });
     });
 });
+
 
 </script>

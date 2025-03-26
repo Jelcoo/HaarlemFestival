@@ -14,6 +14,60 @@ use App\Models\DTO\RestaurantInformation;
 
 class TicketRepository extends Repository
 {
+    public function checkDanceTicketFromEvent(int $eventId, string $ticketId): bool
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+    
+        $danceTicket = $queryBuilder
+            ->table('dance_tickets')
+            ->where('dance_event_id', '=', $eventId)
+            ->where('qrcode', '=', $ticketId)
+            ->where('ticket_used', '=', false)
+            ->first();
+    
+        return !empty($danceTicket);
+    }
+    public function checkAllAccesTicketFromEvent(int $eventId, string $ticketId): bool
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+    
+        $danceTicket = $queryBuilder
+            ->table('dance_tickets')
+            ->where('dance_event_id', '=', $eventId)
+            ->where('qrcode', '=', $ticketId)
+            ->where('ticket_used', '=', false)
+            ->first();
+    
+        return !empty($danceTicket);
+    }
+    
+    
+    public function checkHistoryTicketFromEvent(int $eventId, string $ticketId): bool
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $historyTicket = $queryBuilder
+            ->table('history_tickets')
+            ->where('history_event_id', '=', $eventId)
+            ->where('ticket_used', '=', false)
+            ->first();
+
+        return !empty($historyTicket); 
+    }
+
+    public function checkYummyTicketFromEvent(int $eventId, string $ticketId): bool
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $yummyTicket = $queryBuilder
+            ->table('yummy_tickets')
+            ->where('yummy_event_id', '=', $eventId)
+            ->where('ticket_used', '=', false)
+            ->first();
+        var_dump($yummyTicket);
+        return !empty($yummyTicket); 
+    }
+
     public function getDanceTickets(int $invoiceId): array
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
@@ -22,7 +76,6 @@ class TicketRepository extends Repository
             ->table('dance_tickets')
             ->where('invoice_id', '=', $invoiceId)
             ->get();
-
         return array_map(fn ($danceTicket) => new TicketDance($danceTicket), $danceTickets);
     }
 
@@ -64,10 +117,10 @@ class TicketRepository extends Repository
         }
 
         $query = $this->getConnection()->prepare('
-SELECT a.id, a.name, a.preview_description, a.main_description, a.iconic_albums
-FROM artists a
-JOIN dance_event_artists dea ON a.id = dea.artist_id
-WHERE dea.event_id = :eventId;');
+        SELECT a.id, a.name, a.preview_description, a.main_description, a.iconic_albums
+        FROM artists a
+        JOIN dance_event_artists dea ON a.id = dea.artist_id
+        WHERE dea.event_id = :eventId;');
 
         $query->bindValue(':eventId', $eventId, \PDO::PARAM_INT);
         $query->execute();
@@ -180,4 +233,131 @@ WHERE dea.event_id = :eventId;');
             'location' => $locationObject,
         ]);
     }
+    public function useRestaurantTicket($id):bool{
+        $query = "SELECT ticket_used FROM yummy_tickets WHERE id = $id";
+        $ticket = $this->getConnection()->query($query)->fetch();
+
+        if ($ticket) {
+            if (!$ticket['ticket_used']) {
+                $updateQuery = "UPDATE yummy_tickets SET ticket_used = TRUE WHERE id = $id";
+                $this->getConnection()->query($updateQuery);
+                return true; 
+            } else {
+                return false; 
+            }
+        }
+        return false; 
+    }
+    public function useHistoryTicket($id):bool{
+        $query = "SELECT ticket_used FROM history_tickets WHERE id = $id";
+        $ticket = $this->getConnection()->query($query)->fetch();
+    
+        if ($ticket) {
+            if (!$ticket['ticket_used']) {
+                $updateQuery = "UPDATE history_tickets SET ticket_used = TRUE WHERE id = $id";
+                $this->getConnection()->query($updateQuery);
+                return true; 
+            } else {
+                return false;
+            }
+        }
+        return false; 
+    }
+    public function useDanceTicket($id, $eventId): bool {
+        $conn = $this->getConnection();
+        $query = "SELECT ticket_used, all_access FROM dance_tickets WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([$id]);
+        $ticket = $stmt->fetch();
+    
+        if ($ticket) {
+            if (!$ticket['ticket_used']) {
+                if ($ticket['all_access'] !== 'false') {
+                    $insertQuery = "INSERT INTO all_access_used (ticket_id, dance_event_id) VALUES (?, ?)";
+                    $insertStmt = $conn->prepare($insertQuery);
+                    $insertStmt->execute([$id, $eventId]);
+                    return true;
+                } else {
+                    $updateQuery = "UPDATE dance_tickets SET ticket_used = TRUE WHERE id = ?";
+                    $updateStmt = $conn->prepare($updateQuery);
+                    $updateStmt->execute([$id]);
+                    return true;
+                }
+            }
+        }
+    
+        return false;
+    }
+    
+    public function useAllAccesTicket($ticketId, $eventId):bool
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $ticket = $queryBuilder->table('dance_tickets')->where('id', $ticketId)->first();
+        if (!$ticket) {
+            return false;
+        }
+
+        $event = $queryBuilder->table('dance_events')->where('id', $eventId)->first();
+        if (!$event) {
+            return false;
+        }
+
+        $existingEntry = $queryBuilder->table('all_access_used')
+            ->where('ticket_id', $ticketId)
+            ->where('dance_event_id', $eventId)
+            ->first();
+
+        if ($existingEntry) {
+            return false;
+        }
+
+        $queryBuilder->table('all_access_used')->insert([
+            'ticket_id' => $ticketId,
+            'dance_event_id' => $eventId
+        ]);
+        return true;
+    }
+    public function checkifAllAcces($id): bool {
+        $query = "SELECT all_access FROM dance_tickets WHERE id = $id";
+        $ticket = $this->getConnection()->query($query)->fetch();
+        if ($ticket) {
+            return $ticket['all_access'] !== 'false';
+        }
+        return false; 
+    }
+    public function checkValidityAllAcces(int $ticketId, int $eventId){
+        /* true is used because the question is is used */ 
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        $ticket = $queryBuilder
+            ->table('dance_tickets')
+            ->where('id', '=', $ticketId)
+            ->first();
+
+        if (!$ticket) {
+            return true;
+        }
+        if ($ticket['ticket_used'] == true) {
+            return true;
+        }    
+        $event = $queryBuilder
+            ->table('dance_events')
+            ->where('id', '=', $eventId)
+            ->first();
+
+        if (!$event) {
+            return true;
+        }
+        if ($ticket['all_access'] === 'false') {
+            var_dump('hi');
+            return true;
+        }
+
+        if ($ticket['all_access'] === 'all' || ($ticket['all_access'] == $event['start_date'])) {
+            return false;
+        }
+        var_dump('hi');
+        return true;
+        }
 }

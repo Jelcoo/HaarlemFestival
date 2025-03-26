@@ -14,7 +14,7 @@
                 </div>
                 <div class="mt-2">
                     <button class="btn btn-primary btn-sm tickets" data-id="<?php echo $invoice->id; ?>">See Tickets</button>
-                    <button class="btn btn-success btn-sm confirm" data-id="<?php echo $invoice->id; ?>">Confirm</button>
+                    <button class="btn btn-success btn-sm confirm" data-id="<?php echo $invoice->id; ?>">excel</button>
                 </div>
             </li>
         <?php } ?>
@@ -40,5 +40,33 @@
                 window.location.href = `/dashboard/orders/tickets?invoice_id=${invoiceId}`;
             });
         });
+
+        document.querySelectorAll(".confirm").forEach(button => {
+            button.addEventListener("click", function () {
+                const invoiceId = this.getAttribute("data-id");
+                createExcel(invoiceId);
+            });
+        });
     });
+
+    function createExcel(invoiceId) {
+        fetch('/dashboard/orders/excel', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ invoiceId: invoiceId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Server Response:", data);
+            if (data.success) {
+                window.location.href = "/qrcode";
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Something went wrong');
+        });
+    }
 </script>

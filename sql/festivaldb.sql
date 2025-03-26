@@ -287,16 +287,28 @@ CREATE TABLE dance_tickets (
     id INT PRIMARY KEY AUTO_INCREMENT,
     dance_event_id INT,
     invoice_id INT,
-    all_access BOOLEAN DEFAULT false,
+    all_access ENUM('2025-07-23', '2025-07-24', '2025-07-25', '2025-07-26', '2025-07-27', '2025-07-28', 'false') DEFAULT 'false',
     qrcode VARCHAR(255),
     ticket_used BOOLEAN DEFAULT false,
     FOREIGN KEY (dance_event_id) REFERENCES dance_events(id),
     FOREIGN KEY (invoice_id) REFERENCES invoices(id)
 );
+
+
 INSERT INTO `dance_tickets` (`id`, `dance_event_id`, `invoice_id`, `all_access`, `qrcode`, `ticket_used`) VALUES
-(1, 1, 1, 1, 'QR123DANCE', 0),
-(2, 2, 1, 0, 'QR456DANCE', 1),
-(3, 3, 1, 1, 'QR789DANCE', 0);
+(1, 1, 1, '2025-07-23', 'QR123DANCE', 0),
+(2, 2, 1, 'false', 'QR456DANCE', 1),
+(3, 3, 1, '2025-07-24', 'QR789DANCE', 0);
+
+CREATE TABLE all_access_used (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    ticket_id INT,
+    dance_event_id INT,
+    FOREIGN KEY (ticket_id) REFERENCES dance_tickets(id),
+    FOREIGN KEY (dance_event_id) REFERENCES dance_events(id)
+);
+
+
 
 CREATE TABLE yummy_tickets (
     id INT PRIMARY KEY AUTO_INCREMENT,
