@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <div class="row header-section">
+    <div class="row header-section d-block d-md-flex">
         <div class="col-md-6 header-content">
             <h1><?php echo $header_name; ?></h1>
             <p><?php echo $header_description; ?></p>
@@ -11,7 +11,6 @@
 
 <style>
     .header-section {
-        display: flex;
         align-items: center;
         background-color: var(--primary);
         color: white;

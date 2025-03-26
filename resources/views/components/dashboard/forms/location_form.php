@@ -18,9 +18,6 @@ $isEdit = ($mode ?? 'create') === 'edit';
 <div class="container-fluid">
     <div class="col-md-8">
         <form action="/dashboard/locations/<?php echo $isEdit ? 'edit' : 'create'; ?>" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="action"
-                value="<?php echo isset($formData['id']) ? 'update' : 'createLocation'; ?>">
-
             <?php if (isset($formData['id'])) { ?>
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($formData['id']); ?>">
             <?php } ?>
@@ -58,7 +55,6 @@ $isEdit = ($mode ?? 'create') === 'edit';
                     <?php } ?>
                 </select>
             </div>
-
 
             <!-- Address -->
             <div class="form-group mt-3">

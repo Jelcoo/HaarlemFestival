@@ -163,8 +163,6 @@ class LocationsController extends DashboardController
             );
 
             if ($validation->fails()) {
-                $_SESSION['show_location_form'] = true;
-                $_SESSION['form_data'] = $_POST;
                 throw new \Exception(implode(' ', $validation->errors()->all()));
             }
 
@@ -194,10 +192,7 @@ class LocationsController extends DashboardController
 
             $this->redirectToLocations(true, 'Location created successfully.');
         } catch (\Exception $e) {
-            $_SESSION['show_location_form'] = true;
-            $_SESSION['form_data'] = $_POST;
-            $_SESSION['form_errors'] = ['Error: ' . $e->getMessage()];
-            $this->redirectToLocations(false, $e->getMessage());
+            $this->showLocationForm('edit', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 

@@ -1,7 +1,7 @@
 <!-- Title and Create Button -->
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class="d-block d-md-flex justify-content-between align-items-center mb-3">
     <h2>User Management</h2>
-    <div>
+    <div class="d-flex gap-2">
         <a href="/dashboard/users/export" class="btn btn-success">Export to CSV</a>
         <a href="/dashboard/users/create" class="btn btn-primary">Create New User</a>
     </div>
@@ -15,7 +15,7 @@
 <?php } ?>
 
 <!-- Search and Sort -->
-<form method="GET" action="/dashboard/users" class="mb-3 d-flex justify-content-between align-items-center">
+<form method="GET" action="/dashboard/users" class="mb-3 d-block d-md-flex justify-content-between align-items-center">
     <!-- Search -->
     <div class="d-flex align-items-center gap-2">
         <input type="text" name="search" placeholder="Search users..."
@@ -28,7 +28,7 @@
     </div>
 
     <!-- Sort -->
-    <div class="d-flex align-items-center gap-2">
+    <div class="mt-2 mt-md-0 d-flex flex-wrap align-items-center gap-2">
         <select name="sort" id="sortSelect" class="form-select" style="width: 150px;">
             <option value="" disabled selected>Sort by...</option>
             <option value="firstname" <?php echo ($sortColumn == 'firstname') ? 'selected' : ''; ?>>First Name</option>
@@ -54,68 +54,69 @@
     </div>
 </form>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <?php foreach ($columns as $column => $data) { ?>
-                <?php
-                $newDirection = ($sortColumn == $column && $sortDirection == 'asc') ? 'desc' : 'asc';
-                $sortUrl = "?sort={$column}&direction={$newDirection}";
-                if (!empty($searchQuery)) {
-                    $sortUrl .= '&search=' . htmlspecialchars($searchQuery);
-                }
-                ?>
-                <th>
-                    <?php if ($data['sortable']) { ?>
-                        <a href="<?php echo $sortUrl; ?>">
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <?php foreach ($columns as $column => $data) { ?>
+                    <?php
+                    $newDirection = ($sortColumn == $column && $sortDirection == 'asc') ? 'desc' : 'asc';
+                    $sortUrl = "?sort={$column}&direction={$newDirection}";
+                    if (!empty($searchQuery)) {
+                        $sortUrl .= '&search=' . htmlspecialchars($searchQuery);
+                    }
+                    ?>
+                    <th>
+                        <?php if ($data['sortable']) { ?>
+                            <a href="<?php echo $sortUrl; ?>">
+                                <?php echo htmlspecialchars($data['label']); ?>
+                            </a>
+                        <?php } else { ?>
                             <?php echo htmlspecialchars($data['label']); ?>
-                        </a>
-                    <?php } else { ?>
-                        <?php echo htmlspecialchars($data['label']); ?>
-                    <?php } ?>
-                </th>
-            <?php } ?>
+                        <?php } ?>
+                    </th>
+                <?php } ?>
 
-            <th>Actions</th>
-        </tr>
-    </thead>
+                <th>Actions</th>
+            </tr>
+        </thead>
 
-    <tbody>
-        <?php if (!empty($users)) { ?>
-            <?php foreach ($users as $user) { ?>
-                <tr id="user-row-<?php echo htmlspecialchars($user->id); ?>">
+        <tbody>
+            <?php if (!empty($users)) { ?>
+                <?php foreach ($users as $user) { ?>
+                    <tr id="user-row-<?php echo htmlspecialchars($user->id); ?>">
 
-                    <?php foreach ($columns as $columnKey => $columnData) { ?>
-                        <td>
-                            <?php
-                            $displayValue = $user->$columnKey instanceof BackedEnum
-                                ? $user->$columnKey->value
-                                : (string) $user->$columnKey;
-                        ?>
-                            <?php echo htmlspecialchars(ucfirst($displayValue)); ?>
+                        <?php foreach ($columns as $columnKey => $columnData) { ?>
+                            <td>
+                                <?php
+                                $displayValue = $user->$columnKey instanceof BackedEnum
+                                    ? $user->$columnKey->value
+                                    : (string) $user->$columnKey;
+                            ?>
+                                <?php echo htmlspecialchars(ucfirst($displayValue)); ?>
+                            </td>
+                        <?php } ?>
+
+                        <!-- Actions -->
+                        <td class="d-flex gap-2">
+                            <!-- Edit -->
+                            <a href="/dashboard/users/edit?id=<?php echo $user->id; ?>" class="btn btn-warning btn-sm">Edit</a>
+
+                            <!-- Delete -->
+                            <form action="/dashboard/users/delete" method="POST" class="d-inline">
+                                <input type="hidden" name="id" value="<?php echo $user->id; ?>">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
                         </td>
-                    <?php } ?>
-
-                    <!-- Actions -->
-                    <td class="d-flex gap-2">
-                        <!-- Edit -->
-                        <a href="/dashboard/users/edit?id=<?php echo $user->id; ?>" class="btn btn-warning btn-sm">Edit</a>
-
-                        <!-- Delete -->
-                        <form action="/dashboard/users/delete" method="POST" class="d-inline">
-                            <input type="hidden" name="id" value="<?php echo $user->id; ?>">
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
-                    </td>
+                    </tr>
+                <?php } ?>
+            <?php } else { ?>
+                <tr>
+                    <td colspan="<?php echo count($columns); ?>">No users found.</td>
                 </tr>
             <?php } ?>
-        <?php } else { ?>
-            <tr>
-                <td colspan="<?php echo count($columns); ?>">No users found.</td>
-            </tr>
-        <?php } ?>
-    </tbody>
-
-</table>
+        </tbody>
+    </table>
+</div>
 
 <script src="/assets/js/utils.js"></script>

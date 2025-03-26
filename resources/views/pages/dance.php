@@ -70,41 +70,43 @@ include_once __DIR__ . '/../components/header.php';
 <?php foreach ($schedules as $schedule) { ?>
     <div class="container table-container">
         <h2 class="text-center"><?php echo htmlspecialchars($schedule['date']); ?></h2>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Starting Time</th>
-                    <th>Venue</th>
-                    <th>Artists</th>
-                    <th>Session</th>
-                    <th>Duration</th>
-                    <th>Tickets Available</th>
-                    <th>Price</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($schedule['rows'] as $row) { ?>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
                     <tr>
-                        <td><?php echo htmlspecialchars($row['start']); ?></td>
-                        <td><?php echo htmlspecialchars($row['venue']); ?></td>
-                        <td><?php echo htmlspecialchars(implode(', ', $row['artists'])); ?></td>
-                        <td><?php echo htmlspecialchars($row['session']); ?></td>
-                        <td><?php echo htmlspecialchars($row['duration']); ?> min</td>
-                        <td><?php echo htmlspecialchars($row['tickets_available']); ?></td>
-                        <td>&euro;<?php echo htmlspecialchars($row['price']); ?></td>
-                        <td><button class="btn btn-custom-yellow" onclick="openModal()"
-                                data-event_id="<?php echo $row['event_id']; ?>" data-start="<?php echo $row['start']; ?>"
-                                data-venue="<?php echo $row['venue']; ?>"
-                                data-artists="<?php echo implode(', ', $row['artists']); ?>"
-                                data-price="<?php echo $row['price']; ?>" data-day="<?php echo $schedule['date']; ?>"
-                                data-duration="<?php echo $row['duration']; ?>">
-                                <i class="fa fa-ticket"></i> Buy now</button>
-                        </td>
+                        <th>Starting Time</th>
+                        <th>Venue</th>
+                        <th>Artists</th>
+                        <th>Session</th>
+                        <th>Duration</th>
+                        <th>Tickets Available</th>
+                        <th>Price</th>
+                        <th></th>
                     </tr>
-                <?php } ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($schedule['rows'] as $row) { ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($row['start']); ?></td>
+                            <td><?php echo htmlspecialchars($row['venue']); ?></td>
+                            <td><?php echo htmlspecialchars(implode(', ', $row['artists'])); ?></td>
+                            <td><?php echo htmlspecialchars($row['session']); ?></td>
+                            <td><?php echo htmlspecialchars($row['duration']); ?> min</td>
+                            <td><?php echo htmlspecialchars($row['tickets_available']); ?></td>
+                            <td>&euro;<?php echo htmlspecialchars($row['price']); ?></td>
+                            <td><button class="btn btn-custom-yellow" onclick="openModal()"
+                                    data-event_id="<?php echo $row['event_id']; ?>" data-start="<?php echo $row['start']; ?>"
+                                    data-venue="<?php echo $row['venue']; ?>"
+                                    data-artists="<?php echo implode(', ', $row['artists']); ?>"
+                                    data-price="<?php echo $row['price']; ?>" data-day="<?php echo $schedule['date']; ?>"
+                                    data-duration="<?php echo $row['duration']; ?>">
+                                    <i class="fa fa-ticket"></i> Buy now</button>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 <?php } ?>
 

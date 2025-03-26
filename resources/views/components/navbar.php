@@ -27,7 +27,7 @@ $pages = [
                 <?php } ?>
             </ul>
 
-            <a href="/cart" class="btn btn-custom-yellow ms-3">
+            <a href="/cart" class="btn btn-custom-yellow ms-lg-3">
                 <i class="fa-solid fa-cart-shopping"></i> Cart
             </a>
             <?php if (App\Application\Session::isValidSession()) { ?>
