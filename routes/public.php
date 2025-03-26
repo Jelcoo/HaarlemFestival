@@ -87,5 +87,29 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
         $router->post('/dashboard/artists/edit', [App\Controllers\Dashboard\ArtistsController::class, 'editArtistPost']);
         $router->post('/dashboard/artists/delete', [App\Controllers\Dashboard\ArtistsController::class, 'deleteArtist']);
         $router->get('/dashboard/artists/export', [App\Controllers\Dashboard\ArtistsController::class, 'exportArtists']);
+
+        $router->get('/dashboard/events/dance', [App\Controllers\Dashboard\DanceEventController::class, 'index']);
+        $router->get('/dashboard/events/dance/create', [App\Controllers\Dashboard\DanceEventController::class, 'createDanceEvent']);
+        $router->post('/dashboard/events/dance/create', [App\Controllers\Dashboard\DanceEventController::class, 'createDanceEventPost']);
+        $router->get('/dashboard/events/dance/edit', [App\Controllers\Dashboard\DanceEventController::class, 'editDanceEvent']);
+        $router->post('/dashboard/events/dance/edit', [App\Controllers\Dashboard\DanceEventController::class, 'editDanceEventPost']);
+        $router->post('/dashboard/events/dance/delete', [App\Controllers\Dashboard\DanceEventController::class, 'deleteDanceEvent']);
+        $router->get('/dashboard/events/dance/export', [App\Controllers\Dashboard\DanceEventController::class, 'exportDanceEvents']);
+
+        $router->get('/dashboard/events/yummy', [App\Controllers\Dashboard\YummyEventController::class, 'index']);
+        $router->get('/dashboard/events/yummy/create', [App\Controllers\Dashboard\YummyEventController::class, 'createYummyEvent']);
+        $router->post('/dashboard/events/yummy/create', [App\Controllers\Dashboard\YummyEventController::class, 'createYummyEventPost']);
+        $router->get('/dashboard/events/yummy/edit', [App\Controllers\Dashboard\YummyEventController::class, 'editYummyEvent']);
+        $router->post('/dashboard/events/yummy/edit', [App\Controllers\Dashboard\YummyEventController::class, 'editYummyEventPost']);
+        $router->post('/dashboard/events/yummy/delete', [App\Controllers\Dashboard\YummyEventController::class, 'deleteYummyEvent']);
+        $router->get('/dashboard/events/yummy/export', [App\Controllers\Dashboard\YummyEventController::class, 'exportYummyEvents']);
+
+        $router->get('/dashboard/events/history', [App\Controllers\Dashboard\HistoryEventController::class, 'index']);
+        $router->get('/dashboard/events/history/create', [App\Controllers\Dashboard\HistoryEventController::class, 'createHistoryEvent']);
+        $router->post('/dashboard/events/history/create', [App\Controllers\Dashboard\HistoryEventController::class, 'createHistoryEventPost']);
+        $router->get('/dashboard/events/history/edit', [App\Controllers\Dashboard\HistoryEventController::class, 'editHistoryEvent']);
+        $router->post('/dashboard/events/history/edit', [App\Controllers\Dashboard\HistoryEventController::class, 'editHistoryEventPost']);
+        $router->post('/dashboard/events/history/delete', [App\Controllers\Dashboard\HistoryEventController::class, 'deleteHistoryEvent']);
+        $router->get('/dashboard/events/history/export', [App\Controllers\Dashboard\HistoryEventController::class, 'exportHistoryEvents']);
     });
 });
