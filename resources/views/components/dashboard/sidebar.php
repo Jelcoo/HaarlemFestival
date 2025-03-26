@@ -1,4 +1,4 @@
-<nav class="col-lg-2 bg-light text-black min-vh-100 p-3">
+<nav class="col-lg-2 bg-light text-black p-3 admin-sidebar">
     <!-- Title -->
     <h4 class="text-center">
         <a href="/dashboard" class="text-decoration-none">Dashboard</a>
