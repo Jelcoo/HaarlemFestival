@@ -36,7 +36,8 @@ class YummyRepository extends Repository
                 ye.*, 
                 l.name AS restaurant_name
             FROM yummy_events ye
-            JOIN locations l ON ye.restaurant_id = l.id
+            JOIN restaurants r ON ye.restaurant_id = r.id
+            JOIN locations l ON r.location_id = l.id
             WHERE 
                 l.name LIKE :search OR
                 total_seats LIKE :search2 OR
