@@ -48,7 +48,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                 <div class="col-md-3">
                     <label for="kids_price">Kids Price (€)</label>
                     <input type="number" step="0.01" id="kids_price" name="kids_price" class="form-control"
-                        value="<?= htmlspecialchars($formData['kids_price'] ?? '') ?>" required>
+                        value="<?php echo htmlspecialchars($formData['kids_price'] ?? ''); ?>" required>
                 </div>
                 <div class="col-md-3">
                     <label for="kids_price_vat">Kids Price (incl. VAT)</label>
@@ -59,7 +59,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                 <div class="col-md-3">
                     <label for="adult_price">Adult Price (€)</label>
                     <input type="number" step="0.01" id="adult_price" name="adult_price" class="form-control"
-                        value="<?= htmlspecialchars($formData['adult_price'] ?? '') ?>" required>
+                        value="<?php echo htmlspecialchars($formData['adult_price'] ?? ''); ?>" required>
                 </div>
                 <div class="col-md-3">
                     <label for="adult_price_vat">Adult Price (incl. VAT)</label>
@@ -71,7 +71,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                 <div class="col-md-3">
                     <label for="reservation_cost">Reservation Fee (€)</label>
                     <input type="number" step="0.01" id="reservation_cost" name="reservation_cost" class="form-control"
-                        value="<?= htmlspecialchars($formData['reservation_cost'] ?? '') ?>" required>
+                        value="<?php echo htmlspecialchars($formData['reservation_cost'] ?? ''); ?>" required>
                 </div>
                 <div class="col-md-3">
                     <label for="reservation_cost_vat">Reservation Fee (incl. VAT)</label>
@@ -82,7 +82,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                 <div class="col-md-6">
                     <label for="vat">VAT (%)</label>
                     <input type="number" step="0.01" id="vat" name="vat" class="form-control"
-                        value="<?= isset($formData['vat']) ? htmlspecialchars($formData['vat'] * 100) : '' ?>" required>
+                        value="<?php echo isset($formData['vat']) ? htmlspecialchars($formData['vat'] * 100) : ''; ?>" required>
                 </div>
             </div>
 
