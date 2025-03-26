@@ -2,8 +2,8 @@
 
 namespace App\Controllers\Dashboard;
 
-use Rakit\Validation\Validator;
 use Carbon\Carbon;
+use Rakit\Validation\Validator;
 use App\Repositories\HistoryRepository;
 use App\Repositories\LocationRepository;
 
@@ -26,7 +26,7 @@ class HistoryEventController extends DashboardController
         $searchQuery = $_GET['search'] ?? '';
 
         if (isset($_GET['search']) && $searchQuery === '') {
-            $this->redirectToDanceEvents();
+            $this->redirectToHistoryEvents();
         }
 
         return $this->renderPage(
@@ -45,7 +45,9 @@ class HistoryEventController extends DashboardController
     public function deleteHistoryEvent(): void
     {
         $eventId = $_POST['id'] ?? null;
-        if (!$eventId) $this->redirectToHistoryEvents(false, 'Invalid history event ID.');
+        if (!$eventId) {
+            $this->redirectToHistoryEvents(false, 'Invalid history event ID.');
+        }
 
         try {
             $success = (bool) $this->historyRepository->deleteEvent($eventId);
@@ -62,10 +64,14 @@ class HistoryEventController extends DashboardController
     public function editHistoryEvent(): string
     {
         $eventId = $_GET['id'] ?? null;
-        if (!$eventId) $this->redirectToHistoryEvents(false, 'Invalid history event ID.');
+        if (!$eventId) {
+            $this->redirectToHistoryEvents(false, 'Invalid history event ID.');
+        }
 
         $event = $this->historyRepository->getEventById($eventId);
-        if (!$event) $this->redirectToHistoryEvents(false, 'History event not found.');
+        if (!$event) {
+            $this->redirectToHistoryEvents(false, 'History event not found.');
+        }
 
         $formData = [
             'id' => $event->id,
@@ -89,10 +95,14 @@ class HistoryEventController extends DashboardController
     {
         try {
             $eventId = $_POST['id'] ?? null;
-            if (!$eventId) $this->redirectToHistoryEvents(false, 'Invalid history event ID.');
+            if (!$eventId) {
+                $this->redirectToHistoryEvents(false, 'Invalid history event ID.');
+            }
 
             $existingEvent = $this->historyRepository->getEventById($eventId);
-            if (!$existingEvent) $this->redirectToHistoryEvents(false, 'History event not found.');
+            if (!$existingEvent) {
+                $this->redirectToHistoryEvents(false, 'History event not found.');
+            }
 
             $validator = new Validator();
             $validation = $validator->make($_POST, [
@@ -138,7 +148,7 @@ class HistoryEventController extends DashboardController
         return $this->showHistoryEventForm();
     }
 
-    public function createHistoryEventPost(): string
+    public function createHistoryEventPost()
     {
         try {
             $validator = new Validator();
@@ -157,8 +167,7 @@ class HistoryEventController extends DashboardController
             ]);
 
             if ($validation->fails()) {
-                $errors = $validation->errors();
-                return $this->showHistoryEventForm('create', $_POST, $errors);
+                return $this->showHistoryEventForm('create', $_POST, $validation->errors()->all());
             }
 
             $eventData = array_intersect_key($_POST, array_flip([
@@ -224,7 +233,7 @@ class HistoryEventController extends DashboardController
     {
         $eventsArray = $this->historyRepository->getSortedEvents('', 'id', 'asc');
 
-        $events = array_map(fn($row) => (object) $row, $eventsArray);
+        $events = array_map(fn ($row) => (object) $row, $eventsArray);
 
         $columns = [
             'id' => 'ID',

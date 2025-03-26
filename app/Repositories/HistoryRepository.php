@@ -7,7 +7,7 @@ use App\Helpers\QueryBuilder;
 
 class HistoryRepository extends Repository
 {
-    public function getEventById(int $id): EventHistory
+    public function getEventById(int $id): ?EventHistory
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
 
@@ -43,7 +43,7 @@ FROM history_events he');
             'id', 'language', 'guide', 'seats_per_tour',
             'family_price', 'single_price', 'vat',
             'start_location', 'start_time', 'start_date',
-            'end_time', 'end_date'
+            'end_time', 'end_date',
         ];
 
         if (!in_array($sortColumn, $allowedColumns)) {
@@ -90,6 +90,7 @@ FROM history_events he');
         );
 
         $query->execute($params);
+
         return $query->fetchAll();
     }
 
@@ -109,7 +110,7 @@ FROM history_events he');
         return true;
     }
 
-    public function updateEvent(EventHistory $event): bool 
+    public function updateEvent(EventHistory $event): bool
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
 

@@ -87,7 +87,7 @@ $router->middleware(EnsureLoggedIn::class, function () use ($router) {
         $router->post('/dashboard/artists/edit', [App\Controllers\Dashboard\ArtistsController::class, 'editArtistPost']);
         $router->post('/dashboard/artists/delete', [App\Controllers\Dashboard\ArtistsController::class, 'deleteArtist']);
         $router->get('/dashboard/artists/export', [App\Controllers\Dashboard\ArtistsController::class, 'exportArtists']);
-    
+
         $router->get('/dashboard/events/dance', [App\Controllers\Dashboard\DanceEventController::class, 'index']);
         $router->get('/dashboard/events/dance/create', [App\Controllers\Dashboard\DanceEventController::class, 'createDanceEvent']);
         $router->post('/dashboard/events/dance/create', [App\Controllers\Dashboard\DanceEventController::class, 'createDanceEventPost']);

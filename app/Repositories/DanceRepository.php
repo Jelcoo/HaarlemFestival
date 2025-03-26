@@ -7,7 +7,7 @@ use App\Helpers\QueryBuilder;
 
 class DanceRepository extends Repository
 {
-    public function getEventById(int $id): EventDance
+    public function getEventById(int $id): ?EventDance
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
 
@@ -95,14 +95,15 @@ GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, d
 
         $params = array_fill_keys([
             'search', 'search2', 'search3', 'search4', 'search5',
-            'search6', 'search7', 'search8', 'search9', 'search10'
+            'search6', 'search7', 'search8', 'search9', 'search10',
         ], '%' . $searchQuery . '%');
 
         $query->execute($params);
+
         return $query->fetchAll();
     }
 
-    public function createEvent(array $data): EventDance 
+    public function createEvent(array $data): EventDance
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
 
@@ -138,7 +139,7 @@ GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, d
         return null;
     }
 
-    public function updateEvent(EventDance $event): void 
+    public function updateEvent(EventDance $event): void
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
         $queryBuilder->table('dance_events')->where('id', '=', $event->id)->update(
@@ -158,14 +159,15 @@ GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, d
 
     public function getEventArtists(int $eventId): array
     {
-        $query = $this->getConnection()->prepare("
+        $query = $this->getConnection()->prepare('
             SELECT a.id, a.name 
             FROM dance_event_artists dea 
             JOIN artists a ON dea.artist_id = a.id 
             WHERE dea.event_id = :eventId
-        ");
+        ');
 
         $query->execute(['eventId' => $eventId]);
+
         return $query->fetchAll();
     }
 

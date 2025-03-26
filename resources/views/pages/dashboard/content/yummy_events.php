@@ -44,13 +44,13 @@ foreach ($events as $event) {
     <div class="mt-2 mt-md-0 d-flex flex-wrap align-items-center gap-2">
         <select name="sort" id="sortSelect" class="form-select" style="width: 150px;">
             <option value="" disabled selected>Sort by...</option>
-            <?php foreach ($columns as $key => $data): ?>
-                <?php if ($data['sortable']): ?>
-                    <option value="<?= $key ?>" <?= ($sortColumn === $key) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($data['label']) ?>
+            <?php foreach ($columns as $key => $data) { ?>
+                <?php if ($data['sortable']) { ?>
+                    <option value="<?php echo $key; ?>" <?php echo ($sortColumn === $key) ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($data['label']); ?>
                     </option>
-                <?php endif; ?>
-            <?php endforeach; ?>
+                <?php } ?>
+            <?php } ?>
         </select>
 
         <select name="direction" id="directionSelect" class="form-select" style="width: 150px;">
@@ -68,62 +68,62 @@ foreach ($events as $event) {
     <table class="table table-bordered">
         <thead>
             <tr>
-                <?php foreach ($columns as $key => $data): ?>
+                <?php foreach ($columns as $key => $data) { ?>
                     <?php
                         $newDirection = ($sortColumn === $key && $sortDirection === 'asc') ? 'desc' : 'asc';
-                        $sortUrl = "?sort={$key}&direction={$newDirection}";
-                        if (!empty($searchQuery)) {
-                            $sortUrl .= '&search=' . urlencode($searchQuery);
-                        }
+                    $sortUrl = "?sort={$key}&direction={$newDirection}";
+                    if (!empty($searchQuery)) {
+                        $sortUrl .= '&search=' . urlencode($searchQuery);
+                    }
                     ?>
                     <th>
-                        <?php if ($data['sortable']): ?>
-                            <a href="<?= $sortUrl ?>"><?= htmlspecialchars($data['label']) ?></a>
-                        <?php else: ?>
-                            <?= htmlspecialchars($data['label']) ?>
-                        <?php endif; ?>
+                        <?php if ($data['sortable']) { ?>
+                            <a href="<?php echo $sortUrl; ?>"><?php echo htmlspecialchars($data['label']); ?></a>
+                        <?php } else { ?>
+                            <?php echo htmlspecialchars($data['label']); ?>
+                        <?php } ?>
                     </th>
-                <?php endforeach; ?>
+                <?php } ?>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            <?php if (!empty($events)): ?>
-                <?php foreach ($events as $event): ?>
+            <?php if (!empty($events)) { ?>
+                <?php foreach ($events as $event) { ?>
                     <tr>
-                        <?php foreach ($columns as $key => $col): ?>
+                        <?php foreach ($columns as $key => $col) { ?>
                             <td>
                                 <?php
                                     $value = $event->$key ?? '';
-                                    if ($value instanceof BackedEnum) {
-                                        $value = $value->value;
-                                    } elseif (in_array($key, ['start_date', 'end_date']) && $value) {
-                                        $value = \Carbon\Carbon::parse($value)->format('d-m-Y');
-                                    } elseif (in_array($key, ['start_time', 'end_time']) && $value) {
-                                        $value = \Carbon\Carbon::parse($value)->format('H:i');
-                                    } elseif (in_array($key, ['kids_price', 'adult_price', 'reservation_cost']) && is_numeric($value)) {
-                                        $value = '€' . number_format($value, 2);
-                                    } elseif ($key === 'vat') {
-                                        $value = number_format($value * 100, 0) . '%';
-                                    }
-                                ?>
-                                <?= htmlspecialchars($value) ?>
+                            if ($value instanceof BackedEnum) {
+                                $value = $value->value;
+                            } elseif (in_array($key, ['start_date', 'end_date']) && $value) {
+                                $value = Carbon\Carbon::parse($value)->format('d-m-Y');
+                            } elseif (in_array($key, ['start_time', 'end_time']) && $value) {
+                                $value = Carbon\Carbon::parse($value)->format('H:i');
+                            } elseif (in_array($key, ['kids_price', 'adult_price', 'reservation_cost']) && is_numeric($value)) {
+                                $value = '€' . number_format($value, 2);
+                            } elseif ($key === 'vat') {
+                                $value = number_format($value * 100, 0) . '%';
+                            }
+                            ?>
+                                <?php echo htmlspecialchars($value); ?>
                             </td>
-                        <?php endforeach; ?>
+                        <?php } ?>
                         <td class="d-flex gap-2">
-                            <a href="/dashboard/events/yummy/edit?id=<?= $event->id ?>" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="/dashboard/events/yummy/edit?id=<?php echo $event->id; ?>" class="btn btn-warning btn-sm">Edit</a>
                             <form action="/dashboard/events/yummy/delete" method="POST" class="d-inline">
-                                <input type="hidden" name="id" value="<?= $event->id ?>">
+                                <input type="hidden" name="id" value="<?php echo $event->id; ?>">
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>
                         </td>
                     </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
+                <?php } ?>
+            <?php } else { ?>
                 <tr>
-                    <td colspan="<?= count($columns) + 1 ?>">No events found.</td>
+                    <td colspan="<?php echo count($columns) + 1; ?>">No events found.</td>
                 </tr>
-            <?php endif; ?>
+            <?php } ?>
         </tbody>
     </table>
 </div>

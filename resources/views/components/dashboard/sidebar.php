@@ -6,9 +6,9 @@
 
     <!-- Navigation -->
     <ul class="nav flex-column">
-        <?php foreach ($sidebarItems as $key => $item): 
+        <?php foreach ($sidebarItems as $key => $item) {
             $isNested = array_filter($item, 'is_array');
-        ?>
+            ?>
             <?php if (!empty($isNested)) { ?>
                 <li class="nav-item">
                     <!-- Parent Label -->
@@ -17,7 +17,9 @@
                     <!-- Nested Items -->
                     <ul class="nav flex-column ms-3">
                         <?php foreach ($item as $nestedKey => $nestedItem) {
-                            if (!is_array($nestedItem) || $nestedKey === 'label') continue; ?>
+                            if (!is_array($nestedItem) || $nestedKey === 'label') {
+                                continue;
+                            } ?>
                             <li class="nav-item">
                                 <a href="<?php echo $nestedItem['url']; ?>"
                                    class="nav-link text-black <?php echo ($activePage === $nestedKey) ? 'bg-primary text-white' : ''; ?>">
@@ -36,7 +38,7 @@
                 </li>
             <?php } ?>
 
-        <?php endforeach; ?>
+        <?php } ?>
     </ul>
 </nav>
 
