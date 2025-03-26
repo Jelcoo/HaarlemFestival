@@ -42,13 +42,32 @@ class YummyController extends Controller
     $header_image = count($headerAssets) > 0 ? $headerAssets[0]->getUrl() : '/assets/img/placeholder-restaurant.png';
     $logo_image = count($coverAssets) > 0 ? $coverAssets[0]->getUrl() : '/assets/img/placeholder-restaurant.png';
 
+    function getMostCommonValue(array $values): float
+    {
+        $counts = array_count_values(array_map(fn($v) => number_format((float)$v, 2, '.', ''), $values));
+        arsort($counts); // sort descending by frequency
+        return (float) array_key_first($counts);
+    }
+
+    $adultPrices = array_map(fn($e) => $e->adult_price, $events);
+    $kidsPrices = array_map(fn($e) => $e->kids_price, $events);
+
+    $mostCommonAdultPrice = getMostCommonValue($adultPrices);
+    $mostCommonKidsPrice = getMostCommonValue($kidsPrices);
+
+    $hasPriceVariation = count(array_unique($adultPrices)) > 1 || count(array_unique($kidsPrices)) > 1;
+
     return $this->pageLoader->setPage('restaurant-detail')->render([
         'restaurant' => $restaurant,
         'events' => $events,
         'header_image' => $header_image,
         'logo_image' => $logo_image,
         'restaurant_images' => $restaurant_images,
+        'adult_price' => $mostCommonAdultPrice,
+        'kids_price' => $mostCommonKidsPrice,
+        'has_price_variation' => $hasPriceVariation,
     ]);
+    
 }
 
 

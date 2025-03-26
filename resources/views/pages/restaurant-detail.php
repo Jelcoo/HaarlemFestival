@@ -42,16 +42,24 @@ include_once __DIR__ . '/../components/header.php';
 
     <!-- Session Times -->
     <section class="session-times text-center">
-        <h3>Sessions of 1.5 hours</h3>
+        <h3>Session Times by Day</h3>
         <div class="session-bar">
             <?php
-            $shownTimes = [];
+            $days = [];
+
             foreach ($events as $event) {
-                $startTime = date('H:i', strtotime($event->start_time));
-                if (!in_array($startTime, $shownTimes)) {
-                    echo "<span class='session-time'>{$startTime}</span>";
-                    $shownTimes[] = $startTime;
+                $dateKey = date('l j', strtotime($event->start_date)); // e.g. "Friday 25"
+                $time = date('H.i', strtotime($event->start_time));    // e.g. "18.00"
+
+                $days[$dateKey][] = $time;
+            }
+
+            foreach ($days as $day => $times) {
+                echo "<div class='session-day'><strong>{$day}</strong><br><br>";
+                foreach (array_unique($times) as $time) {
+                    echo "<span class='session-time'>{$time}</span> ";
                 }
+                echo "</div><br>";
             }
             ?>
         </div>
@@ -69,9 +77,13 @@ include_once __DIR__ . '/../components/header.php';
     <!-- Price & Reserve -->
     <section class="reservation-box">
         <div class="price-info">
-            <div><i class="fa fa-user"></i> &nbsp; € <?= number_format($restaurant->price_adults, 2) ?></div>
-            <div><i class="fa fa-child"></i> &nbsp; € <?= number_format($restaurant->price_children, 2) ?> <small>* Children under 12</small></div>
+            <div><i class="fa fa-user"></i> &nbsp; € <?= number_format($adult_price, 2) ?></div>
+            <div><i class="fa fa-child"></i> &nbsp; € <?= number_format($kids_price, 2) ?> <small>* Children under 12</small></div>
+            <?php if ($has_price_variation): ?>
+                <p class="text-warning mt-2"><small>* Prices may vary slightly depending on the session</small></p>
+            <?php endif; ?>
         </div>
+
         <div class="logo-box text-center">
             <img src="<?= htmlspecialchars($logo_image) ?>" alt="Restaurant Logo">
             <p>Seats Available<br><strong><?= $restaurant->seats_available ?></strong></p>
