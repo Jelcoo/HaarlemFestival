@@ -114,3 +114,64 @@ function fillFileInput(input, url) {
             input.files = dataTransfer.files;
         });
 }
+
+class VatPriceHelper {
+    constructor(configs) {
+        this.vatField = document.getElementById(configs.vatFieldId);
+        this.bindings = configs.bindings;
+
+        this.bindEvents();
+        this.autoCalculate();
+    }
+
+    getVatDecimal() {
+        return parseFloat(this.vatField.value) / 100 || 0;
+    }
+
+    calcWithVat(base) {
+        return base * (1 + this.getVatDecimal());
+    }
+
+    calcBaseFromVat(inclVat) {
+        return inclVat / (1 + this.getVatDecimal());
+    }
+
+    bindEvents() {
+        this.bindings.forEach(binding => {
+            document.getElementById(binding.base).addEventListener('input', () => this.updateIncl(binding));
+            document.getElementById(binding.incl).addEventListener('input', () => this.updateBase(binding));
+        });
+
+        this.vatField.addEventListener('input', () => this.updateAllIncl());
+    }
+
+    updateIncl(binding) {
+        const baseVal = parseFloat(document.getElementById(binding.base).value) || 0;
+        document.getElementById(binding.incl).value = this.calcWithVat(baseVal).toFixed(2);
+    }
+
+    updateBase(binding) {
+        const inclVal = parseFloat(document.getElementById(binding.incl).value) || 0;
+        document.getElementById(binding.base).value = this.calcBaseFromVat(inclVal).toFixed(2);
+    }
+
+    updateAllIncl() {
+        this.bindings.forEach(binding => this.updateIncl(binding));
+    }
+
+    autoCalculate() {
+        this.updateAllIncl();
+    }
+}
+
+// Example usage:
+// new VatPriceHelper({
+//     vatFieldId: 'vat',
+//     bindings: [
+//         { base: 'kids_price', incl: 'kids_price_vat' },
+//         { base: 'adult_price', incl: 'adult_price_vat' },
+//         { base: 'reservation_cost', incl: 'reservation_cost_vat' },
+//         { base: 'single_price', incl: 'single_price_vat' },
+//         { base: 'family_price', incl: 'family_price_vat' },
+//     ]
+// });
