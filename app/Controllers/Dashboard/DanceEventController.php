@@ -2,12 +2,12 @@
 
 namespace App\Controllers\Dashboard;
 
-use Rakit\Validation\Validator;
 use Carbon\Carbon;
 use App\Enum\DanceSessionEnum;
+use Rakit\Validation\Validator;
 use App\Repositories\DanceRepository;
-use App\Repositories\LocationRepository;
 use App\Repositories\ArtistRepository;
+use App\Repositories\LocationRepository;
 
 class DanceEventController extends DashboardController
 {
@@ -46,14 +46,16 @@ class DanceEventController extends DashboardController
         );
     }
 
-    public function deleteDanceEvent(): void 
+    public function deleteDanceEvent(): void
     {
         $eventId = $_POST['id'] ?? null;
-        if (!$eventId) $this->redirectToDanceEvents(false, 'Invalid dance event ID.');
+        if (!$eventId) {
+            $this->redirectToDanceEvents(false, 'Invalid dance event ID.');
+        }
 
         try {
             $eventArtists = $this->danceRepository->getEventArtists($eventId);
-            
+
             $this->danceRepository->detachArtistsFromEvent($eventId);
             $success = (bool) $this->danceRepository->deleteEvent($eventId);
 
@@ -75,10 +77,14 @@ class DanceEventController extends DashboardController
     public function editDanceEvent(): string
     {
         $eventId = $_GET['id'] ?? null;
-        if (!$eventId) $this->redirectToDanceEvents(false, 'Invalid dance event ID.');
+        if (!$eventId) {
+            $this->redirectToDanceEvents(false, 'Invalid dance event ID.');
+        }
 
         $event = $this->danceRepository->getEventById($eventId);
-        if (!$event) $this->redirectToDanceEvents(false, 'Dance event not found.');
+        if (!$event) {
+            $this->redirectToDanceEvents(false, 'Dance event not found.');
+        }
 
         $formData = [
             'id' => $event->id,
@@ -93,7 +99,7 @@ class DanceEventController extends DashboardController
             'vat' => $event->vat,
             'selected_artists' => $this->danceRepository->getEventArtists($eventId),
         ];
-        
+
         return $this->showDanceEventForm('edit', $formData);
     }
 
@@ -101,10 +107,14 @@ class DanceEventController extends DashboardController
     {
         try {
             $eventId = $_POST['id'] ?? null;
-            if (!$eventId) throw new \Exception('Invalid dance event ID.');
+            if (!$eventId) {
+                throw new \Exception('Invalid dance event ID.');
+            }
 
             $existingEvent = $this->danceRepository->getEventById($eventId);
-            if (!$existingEvent) throw new \Exception('Dance event not found.');
+            if (!$existingEvent) {
+                throw new \Exception('Dance event not found.');
+            }
 
             $validator = new Validator();
             $validation = $validator->validate(
@@ -154,7 +164,7 @@ class DanceEventController extends DashboardController
         return $this->showDanceEventForm();
     }
 
-    public function createDanceEventPost(): string
+    public function createDanceEventPost()
     {
         try {
             $validator = new Validator();
@@ -242,11 +252,11 @@ class DanceEventController extends DashboardController
         );
     }
 
-    public function exportDanceEvents(): void 
+    public function exportDanceEvents(): void
     {
         $eventsArray = $this->danceRepository->getSortedEvents('', 'id', 'asc');
 
-        $events = array_map(fn($row) => (object) $row, $eventsArray);
+        $events = array_map(fn ($row) => (object) $row, $eventsArray);
 
         $columns = [
             'event_id' => 'Event ID',

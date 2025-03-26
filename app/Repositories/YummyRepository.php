@@ -7,7 +7,7 @@ use App\Helpers\QueryBuilder;
 
 class YummyRepository extends Repository
 {
-    public function getEventById(int $id): EventYummy
+    public function getEventById(int $id): ?EventYummy
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
 
@@ -20,7 +20,7 @@ class YummyRepository extends Repository
     {
         $allowedColumns = [
             'id', 'restaurant_name', 'total_seats', 'kids_price', 'adult_price',
-            'reservation_cost', 'vat', 'start_time', 'start_date', 'end_time', 'end_date'
+            'reservation_cost', 'vat', 'start_time', 'start_date', 'end_time', 'end_date',
         ];
 
         if (!in_array($sortColumn, $allowedColumns)) {
@@ -53,7 +53,7 @@ class YummyRepository extends Repository
 
         $params = array_fill_keys([
             'search', 'search2', 'search3', 'search4', 'search5',
-            'search6', 'search7', 'search8', 'search9', 'search10'
+            'search6', 'search7', 'search8', 'search9', 'search10',
         ], '%' . $searchQuery . '%');
 
         $query->execute($params);
@@ -62,6 +62,7 @@ class YummyRepository extends Repository
         return array_map(function ($eventData) {
             $event = new EventYummy($eventData);
             $event->restaurant_name = $eventData['restaurant_name'] ?? '-';
+
             return $event;
         }, $results);
     }

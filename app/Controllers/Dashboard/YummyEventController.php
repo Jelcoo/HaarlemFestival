@@ -2,8 +2,8 @@
 
 namespace App\Controllers\Dashboard;
 
-use Rakit\Validation\Validator;
 use Carbon\Carbon;
+use Rakit\Validation\Validator;
 use App\Repositories\YummyRepository;
 use App\Repositories\LocationRepository;
 
@@ -26,7 +26,7 @@ class YummyEventController extends DashboardController
         $searchQuery = $_GET['search'] ?? '';
 
         if (isset($_GET['search']) && $searchQuery === '') {
-            $this->redirectToDanceEvents();
+            $this->redirectToYummyEvents();
         }
 
         return $this->renderPage(
@@ -43,10 +43,12 @@ class YummyEventController extends DashboardController
         );
     }
 
-    public function deleteYummyEvent(): void 
+    public function deleteYummyEvent(): void
     {
         $eventId = $_POST['id'] ?? null;
-        if (!$eventId) $this->redirectToYummyEvents(false, 'Invalid yummy event ID.');
+        if (!$eventId) {
+            $this->redirectToYummyEvents(false, 'Invalid yummy event ID.');
+        }
 
         try {
             $success = (bool) $this->yummyRepository->deleteEvent($eventId);
@@ -60,13 +62,17 @@ class YummyEventController extends DashboardController
         }
     }
 
-    public function editYummyEvent(): string 
+    public function editYummyEvent(): string
     {
         $eventId = $_GET['id'] ?? null;
-        if (!$eventId) $this->redirectToYummyEvents(false, 'Invalid yummy event ID.');
+        if (!$eventId) {
+            $this->redirectToYummyEvents(false, 'Invalid yummy event ID.');
+        }
 
         $event = $this->yummyRepository->getEventById($eventId);
-        if (!$event) $this->redirectToYummyEvents(false, 'Yummy event not found.');
+        if (!$event) {
+            $this->redirectToYummyEvents(false, 'Yummy event not found.');
+        }
 
         $formData = [
             'id' => $event->id,
@@ -89,10 +95,14 @@ class YummyEventController extends DashboardController
     {
         try {
             $eventId = $_POST['id'] ?? null;
-            if (!$eventId) $this->redirectToYummyEvents(false, 'Invalid yummy event ID.');
+            if (!$eventId) {
+                $this->redirectToYummyEvents(false, 'Invalid yummy event ID.');
+            }
 
             $existingEvent = $this->yummyRepository->getEventById($eventId);
-            if (!$existingEvent) $this->redirectToYummyEvents(false, 'Yummy event not found.');
+            if (!$existingEvent) {
+                $this->redirectToYummyEvents(false, 'Yummy event not found.');
+            }
 
             $validator = new Validator();
             $validation = $validator->make($_POST, [
@@ -136,7 +146,7 @@ class YummyEventController extends DashboardController
         return $this->showYummyEventForm();
     }
 
-    public function createYummyEventPost(): string
+    public function createYummyEventPost()
     {
         try {
             $validator = new Validator();
@@ -154,8 +164,7 @@ class YummyEventController extends DashboardController
             ]);
 
             if ($validation->fails()) {
-                $errors = $validation->errors();
-                return $this->showYummyEventForm('create', $_POST, $errors);
+                return $this->showYummyEventForm('create', $_POST, $validation->errors()->all());
             }
 
             $eventData = array_intersect_key($_POST, array_flip([
@@ -219,7 +228,7 @@ class YummyEventController extends DashboardController
     {
         $eventsArray = $this->yummyRepository->getSortedEvents('', 'id', 'asc');
 
-        $events = array_map(fn($row) => (object) $row, $eventsArray);
+        $events = array_map(fn ($row) => (object) $row, $eventsArray);
 
         $columns = [
             'id' => 'ID',
