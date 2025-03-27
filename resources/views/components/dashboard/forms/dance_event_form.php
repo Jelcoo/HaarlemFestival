@@ -13,7 +13,8 @@ $isEdit = ($mode ?? 'create') === 'edit';
 
 <div class="container-fluid">
     <div class="col-md-8">
-        <form action="/dashboard/events/dance/<?php echo $isEdit ? 'edit' : 'create'; ?>" method="POST" enctype="multipart/form-data">
+        <form action="/dashboard/events/dance/<?php echo $isEdit ? 'edit' : 'create'; ?>" method="POST"
+            enctype="multipart/form-data">
             <?php if (isset($formData['id'])) { ?>
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($formData['id']); ?>">
             <?php } ?>
@@ -24,8 +25,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                 <select name="location_id" id="location_id" class="form-control" required>
                     <option value="" disabled selected>Select a location</option>
                     <?php foreach ($locations as $location) { ?>
-                        <option value="<?php echo $location->id; ?>"
-                            <?php echo (isset($formData['location_id']) && $formData['location_id'] == $location->id) ? 'selected' : ''; ?>>
+                        <option value="<?php echo $location->id; ?>" <?php echo (isset($formData['location_id']) && $formData['location_id'] == $location->id) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($location->name); ?>
                         </option>
                     <?php } ?>
@@ -65,8 +65,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                 <select id="session" name="session" class="form-control" required>
                     <option value="" disabled selected>Select a session</option>
                     <?php foreach ($sessions as $session) { ?>
-                        <option value="<?php echo $session->value; ?>"
-                            <?php echo (isset($formData['session']) && $formData['session'] === $session->value) ? 'selected' : ''; ?>>
+                        <option value="<?php echo $session->value; ?>" <?php echo (isset($formData['session']) && $formData['session'] === $session->value) ? 'selected' : ''; ?>>
                             <?php echo ucfirst(str_replace('_', ' ', $session->name)); ?>
                         </option>
                     <?php } ?>
@@ -92,7 +91,8 @@ $isEdit = ($mode ?? 'create') === 'edit';
                 <div class="col-md-3">
                     <label for="vat">VAT (%)</label>
                     <input type="number" id="vat" name="vat" class="form-control" step="0.01"
-                        value="<?php echo isset($formData['vat']) ? htmlspecialchars($formData['vat'] * 100) : '0'; ?>" required>
+                        value="<?php echo isset($formData['vat']) ? htmlspecialchars($formData['vat'] * 100) : '0'; ?>"
+                        required>
                 </div>
             </div>
 
@@ -114,7 +114,8 @@ $isEdit = ($mode ?? 'create') === 'edit';
                     <?php foreach ($formData['selected_artists'] ?? [] as $artist) { ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <?php echo htmlspecialchars($artist['name']); ?>
-                            <button type="button" class="btn btn-sm btn-danger remove-artist" data-id="<?php echo $artist['id']; ?>">Remove</button>
+                            <button type="button" class="btn btn-sm btn-danger remove-artist"
+                                data-id="<?php echo $artist['id']; ?>">Remove</button>
                             <input type="hidden" name="artist_ids[]" value="<?php echo $artist['id']; ?>">
                         </li>
                     <?php } ?>
@@ -134,10 +135,53 @@ $isEdit = ($mode ?? 'create') === 'edit';
 </div>
 
 <script>
-new VatPriceHelper({
-    vatFieldId: 'vat',
-    bindings: [
-        { base: 'price', incl: 'total_price' },
-    ]
-});
+    const selector = document.getElementById('artist_selector');
+    const list = document.getElementById('selected-artists');
+
+    // Disable already selected artists
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('input[name="artist_ids[]"]').forEach(input => {
+            const option = selector.querySelector(`option[value="${input.value}"]`);
+            if (option) option.disabled = true;
+        });
+    });
+
+    // Add artist to the list
+    selector.addEventListener('change', function () {
+        const id = this.value;
+        const name = this.options[this.selectedIndex].text;
+        if (!id) return;
+
+        // Disable selected artist in dropdown
+        this.options[this.selectedIndex].disabled = true;
+
+        // Create list item with remove button and hidden input
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.innerHTML = `
+            ${name}
+    <button type="button" class="btn btn-sm btn-danger remove-artist" data-id="${id}">Remove</button>
+    <input type="hidden" name="artist_ids[]" value="${id}">
+`;
+        list.appendChild(li);
+        this.selectedIndex = 0;
+    });
+
+    // Remove artist from the list
+    document.addEventListener('click', function (e) {
+        if (!e.target.classList.contains('remove-artist')) return;
+
+        const id = e.target.dataset.id;
+        const option = [...selector.options].find(opt => opt.value === id);
+        if (option) option.disabled = false;
+
+        e.target.closest('li').remove();
+    });
+
+    new VatPriceHelper({
+        vatFieldId: 'vat',
+        bindings: [
+            { base: 'price', incl: 'total_price' },
+        ]
+    });
 </script>
