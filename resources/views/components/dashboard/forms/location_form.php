@@ -100,7 +100,9 @@ $isEdit = ($mode ?? 'create') === 'edit';
 
 <script>
     const coverInput = document.getElementById('location_cover');
-    fillFileInput(coverInput, '<?php echo $formData['cover']; ?>');
+    <?php if (!empty($formData['cover'])) { ?>
+        fillFileInput(coverInput, '<?php echo $formData['cover']; ?>');
+    <?php } ?>
 
     initEditor('preview_description');
     initEditor('main_description');
