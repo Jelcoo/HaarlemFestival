@@ -47,13 +47,20 @@ class RestaurantsController extends DashboardController
     public function deleteRestaurant(): void
     {
         $restaurantId = $_POST['id'] ?? null;
-
         if (!$restaurantId) {
             $this->redirectToRestaurants(false, 'Invalid restaurant ID.');
         }
 
-        $success = (bool) $this->restaurantRepository->deleteRestaurant($restaurantId);
-        $this->redirectToRestaurants($success, $success ? 'Restaurant deleted successfully.' : 'Failed to delete restaurant.');
+        try {
+            $success = (bool) $this->restaurantRepository->deleteRestaurant($restaurantId);
+            $this->redirectToRestaurants($success, $success ? 'Restaurant deleted successfully.' : 'Failed to delete restaurant.');
+        } catch (\PDOException $e) {
+            if ($e->getCode() === '23000') { // SQLSTATE[23000] => integrity constraint violation
+                $this->redirectToRestaurants(false, 'Cannot delete this restaurant because it has an event connected.');
+            } else {
+                $this->redirectToRestaurants(false, 'Database error: ' . $e->getMessage());
+            }
+        }
     }
 
     public function editRestaurant(): string
