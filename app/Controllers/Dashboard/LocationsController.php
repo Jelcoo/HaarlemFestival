@@ -88,7 +88,7 @@ class LocationsController extends DashboardController
         return $this->showLocationForm('edit', $formData);
     }
 
-    public function editLocationPost()
+    public function editLocationPost() : string
     {
         try {
             $locationId = $_POST['id'] ?? null;
@@ -143,7 +143,7 @@ class LocationsController extends DashboardController
 
             $this->redirectToLocations(true, 'Location updated successfully');
         } catch (\Exception $e) {
-            $this->showLocationForm('edit', $_POST, ['Error: ' . $e->getMessage()]);
+            return $this->showLocationForm('edit', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 
@@ -152,7 +152,7 @@ class LocationsController extends DashboardController
         return $this->showLocationForm();
     }
 
-    public function createLocationPost(): void
+    public function createLocationPost(): string
     {
         try {
             $validator = new Validator();
@@ -199,7 +199,7 @@ class LocationsController extends DashboardController
 
             $this->redirectToLocations(true, 'Location created successfully.');
         } catch (\Exception $e) {
-            $this->showLocationForm('edit', $_POST, ['Error: ' . $e->getMessage()]);
+            return $this->showLocationForm('create', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 

@@ -8,10 +8,14 @@ $isEdit = ($mode ?? 'create') === 'edit';
 
 <h2><?php echo isset($formData['id']) ? 'Update Location' : 'Create Location'; ?></h2>
 
-<!-- Status message -->
-<?php if (!empty($status['message'])) { ?>
-    <div class="alert alert-<?php echo $status['status'] ? 'success' : 'danger'; ?>">
-        <?php echo htmlspecialchars($status['message']); ?>
+<!-- Validation Errors -->
+<?php if (!empty($errors)) { ?>
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            <?php foreach ($errors as $error) { ?>
+                <li><?php echo htmlspecialchars($error); ?></li>
+            <?php } ?>
+        </ul>
     </div>
 <?php } ?>
 
