@@ -38,6 +38,11 @@ $router->middleware(EnsureNotLoggedIn::class, function () use ($router) {
 
     $router->get('/login', [App\Controllers\AuthController::class, 'login']);
     $router->post('/login', [App\Controllers\AuthController::class, 'loginPost']);
+
+    $router->get('/forgot-password', [App\Controllers\AuthController::class, 'forgotPassword']);
+    $router->post('/forgot-password', [App\Controllers\AuthController::class, 'forgotPasswordPost']);
+    $router->get('/reset-password', [App\Controllers\AuthController::class, 'resetPassword']);
+    $router->post('/reset-password', [App\Controllers\AuthController::class, 'resetPasswordPost']);
 });
 
 $router->middleware(EnsureLoggedIn::class, function () use ($router) {

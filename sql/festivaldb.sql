@@ -438,3 +438,12 @@ CREATE TABLE cart_item_quantities (
     quantity INT NOT NULL,
     FOREIGN KEY (cart_item_id) REFERENCES cart_items(id) ON DELETE CASCADE
 );
+
+CREATE TABLE password_reset_tokens (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    expires_at TIMESTAMP NOT NULL
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+)

@@ -41,7 +41,7 @@ class UserRepository extends Repository
 
         $queryUsers = $queryBuilder->table('users')->get();
 
-        return $queryUsers ? array_map(fn ($userData) => new User($userData), $queryUsers) : [];
+        return $queryUsers ? array_map(fn($userData) => new User($userData), $queryUsers) : [];
     }
 
     public function getSortedUsers(string $searchQuery, string $sortColumn = 'id', string $sortDirection = 'asc'): array
@@ -58,7 +58,7 @@ class UserRepository extends Repository
 
         $queryUsers = $query->orderBy($sortColumn, $sortDirection)->get();
 
-        return $queryUsers ? array_map(fn ($userData) => new User($userData), $queryUsers) : [];
+        return $queryUsers ? array_map(fn($userData) => new User($userData), $queryUsers) : [];
     }
 
     public function deleteUser(int $id): ?User
@@ -120,5 +120,32 @@ class UserRepository extends Repository
                 'password' => $newPassword,
             ]
         );
+    }
+
+    public function createPasswordResetToken(int $userId, string $token, string $expiresAt): void
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+        $queryBuilder->table('password_reset_tokens')->insert([
+            'user_id' => $userId,
+            'token' => $token,
+            'expires_at' => $expiresAt,
+        ]);
+    }
+
+    public function getValidPasswordResetToken(string $token): ?array
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+        return $queryBuilder->table('password_reset_tokens')
+            ->where('token', '=', $token)
+            ->where('expires_at', '>', date('Y-m-d H:i:s'))
+            ->first();
+    }
+
+    public function deletePasswordResetToken(string $token): void
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+        $queryBuilder->table('password_reset_tokens')
+            ->where('token', '=', $token)
+            ->delete();
     }
 }

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Application\Request;
 use App\Application\Session;
 use App\Application\Response;
+use App\Config\Config;
 use App\Helpers\StripeHelper;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
@@ -161,5 +162,134 @@ class AuthController extends Controller
     {
         Session::destroy();
         Response::redirect('/');
+    }
+
+    public function forgotPassword(array $parameters = []): string
+    {
+        return $this->pageLoader->setPage('auth/forgot-password')->render($parameters);
+    }
+
+    public function forgotPasswordPost(): string
+    {
+        $token = $_POST['cf-turnstile-response'];
+
+        if (TurnstileHelper::verify($token) === false) {
+            return $this->forgotPassword([
+                'error' => 'Turnstile verification failed',
+                'fields' => $_POST,
+            ]);
+        }
+
+        $validator = new Validator();
+        $validation = $validator->validate($_POST, [
+            'email' => 'required|email',
+        ]);
+
+        if ($validation->fails()) {
+            return $this->forgotPassword([
+                'error' => $validation->errors()->toArray(),
+                'fields' => $_POST,
+            ]);
+        }
+
+        try {
+            $email = Request::getPostField('email');
+            $user = $this->userRepository->getUserByEmail($email);
+
+            if ($user) {
+                $token = bin2hex(random_bytes(32));
+                $expiresAt = date('Y-m-d H:i:s', strtotime('+1 hour'));
+
+                $this->userRepository->createPasswordResetToken($user->id, $token, $expiresAt);
+
+                $resetLink = Config::getKey('APP_URL') . '/reset-password?token=' . $token;
+
+                $this->emailWriterService->sendPasswordResetEmail($user, $resetLink);
+            }
+
+            // Always return success to prevent email enumeration
+            return $this->forgotPassword([
+                'success' => 'If an account exists with this email, you will receive password reset instructions.',
+            ]);
+        } catch (\Exception $e) {
+            return $this->forgotPassword([
+                'error' => $e->getMessage(),
+                'fields' => $_POST,
+            ]);
+        }
+    }
+
+    public function resetPassword(array $parameters = []): string
+    {
+        $token = $_GET['token'] ?? null;
+
+        if (!$token) {
+            return $this->login([
+                'error' => 'Invalid or missing reset token',
+            ]);
+        }
+
+        $resetToken = $this->userRepository->getValidPasswordResetToken($token);
+
+        if (!$resetToken) {
+            return $this->login([
+                'error' => 'Invalid or expired reset token',
+            ]);
+        }
+
+        return $this->pageLoader->setPage('auth/reset-password')->render(array_merge($parameters, [
+            'token' => $token,
+        ]));
+    }
+
+    public function resetPasswordPost(): string
+    {
+        $token = $_POST['token'] ?? null;
+
+        if (!$token) {
+            return $this->login([
+                'error' => 'Invalid or missing reset token',
+            ]);
+        }
+
+        $resetToken = $this->userRepository->getValidPasswordResetToken($token);
+
+        if (!$resetToken) {
+            return $this->login([
+                'error' => 'Invalid or expired reset token',
+            ]);
+        }
+
+        $validator = new Validator();
+        $validation = $validator->validate($_POST, [
+            'password' => 'required|min:6',
+            'password_verify' => 'required|same:password',
+        ]);
+
+        if ($validation->fails()) {
+            return $this->resetPassword([
+                'error' => $validation->errors()->toArray(),
+                'fields' => $_POST,
+                'token' => $token,
+            ]);
+        }
+
+        try {
+            $user = $this->userRepository->getUserById($resetToken['user_id']);
+            $newPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+            $this->userRepository->updatePassword($user->id, $newPassword);
+            $this->userRepository->deletePasswordResetToken($token);
+
+            return $this->login([
+                'success' => 'Your password has been reset successfully. Please login with your new password.',
+            ]);
+        } catch (\Exception $e) {
+            return $this->resetPassword([
+                'error' => $e->getMessage(),
+                'fields' => $_POST,
+                'token' => $token,
+            ]);
+        }
     }
 }
