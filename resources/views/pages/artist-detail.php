@@ -14,13 +14,14 @@ include_once __DIR__ . '/../components/header.php';
     <?php } else { ?>
         <div class="row mb-5">
             <div class="col-md-7 artist-details">
-                <h1 class="artist-title"><?= htmlspecialchars($artist->name) ?></h1>
-                <p><?= nl2br(htmlspecialchars($artist->main_description)) ?></p>
+                <h1 class="artist-title"><?php echo htmlspecialchars($artist->name); ?></h1>
+                <p><?php echo nl2br(htmlspecialchars($artist->main_description)); ?></p>
             </div>
             <div class="col-md-5 d-flex flex-column align-items-center justify-content-center">
                 <?php foreach (array_slice($extraAssets ?? [], 0) as $img) { ?>
                     <div class="artist-img-wrapper mb-3 w-100">
-                        <img src="<?= htmlspecialchars($img->getUrl()) ?>" alt="Artist Image" class="img-fluid rounded stacked-artist-img">
+                        <img src="<?php echo htmlspecialchars($img->getUrl()); ?>" alt="Artist Image"
+                            class="img-fluid rounded stacked-artist-img">
                     </div>
                 <?php } ?>
             </div>
@@ -42,50 +43,55 @@ include_once __DIR__ . '/../components/header.php';
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($schedule as $event) { ?>
-                        <tr>
-                            <td><?= htmlspecialchars($event['starting_time_formatted']) ?></td>
-                            <td><?= htmlspecialchars($event['location_name']) ?></td>
-                            <td><?= htmlspecialchars($event['artist_names']) ?></td>
-                            <td><?= \App\Enum\DanceSessionEnum::tryFrom($event['session'])?->toString() ?? htmlspecialchars($event['session']) ?></td>
-                            <td><?= htmlspecialchars($event['duration']) ?> min</td>
-                            <td><?= htmlspecialchars($event['tickets_available']) ?></td>
-                            <td>&euro;<?= htmlspecialchars(number_format($event['price'], 2)) ?></td>
-                            <td>
-                                <button class="btn btn-custom-yellow" onclick="openModal()"
-                                    data-event_id="<?= $event['event_id'] ?>"
-                                    data-start="<?= $event['starting_time_formatted'] ?>"
-                                    data-venue="<?= htmlspecialchars($event['location_name']) ?>"
-                                    data-artists="<?= htmlspecialchars($event['artist_names']) ?>"
-                                    data-price="<?= $event['price'] ?>"
-                                    data-day="<?= $header_dates ?>"
-                                    data-duration="<?= $event['duration'] ?>">
-                                    <i class="fa fa-ticket"></i> Buy now
-                                </button>
-                            </td>
-                        </tr>
+                    <?php foreach ($schedules as $schedule) { ?>
+                        <?php foreach ($schedule['rows'] as $row) { ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($schedule['date']) . ' - ' . htmlspecialchars($row['start']); ?>
+                                </td>
+                                <td><?php echo htmlspecialchars($row['venue']); ?></td>
+                                <td><?php echo htmlspecialchars(implode(', ', $row['artists'])); ?></td>
+                                <td><?php echo htmlspecialchars($row['session']); ?></td>
+                                <td><?php echo htmlspecialchars($row['duration']); ?> min</td>
+                                <td><?php echo htmlspecialchars($row['tickets_available']); ?></td>
+                                <td>&euro;<?php echo htmlspecialchars($row['price']); ?></td>
+                                <td><button class="btn btn-custom-yellow" onclick="openModal()"
+                                        data-event_id="<?php echo $row['event_id']; ?>" data-start="<?php echo $row['start']; ?>"
+                                        data-venue="<?php echo $row['venue']; ?>"
+                                        data-artists="<?php echo implode(', ', $row['artists']); ?>"
+                                        data-price="<?php echo $row['price']; ?>" data-day="<?php echo $schedule['date']; ?>"
+                                        data-duration="<?php echo $row['duration']; ?>">
+                                        <i class="fa fa-ticket"></i> Buy now</button>
+                                </td>
+                            </tr>
+                        <?php } ?>
                     <?php } ?>
                 </tbody>
             </table>
         </div>
         <div class="text-black mt-3" style="font-size: 0.9rem;">
             <p><strong>* All-Access pass for this day €150,00, All-Access pass for Fri, Sat,Sun: €250,00.</strong><br>
-            The capacity of the Club sessions is very limited. Availability for All-Access pass holders cannot be guaranteed due to safety regulations.<br>
-            Tickets available represent total capacity. (90% is sold as single tickets. 10% of total capacity is left for Walk-ins/All-Access passholders.)</p>
-            
-            <?php
-            $hasTiestoWorld = false;
-            foreach ($schedule as $event) {
-                if (stripos($event['session'], 'tiesto_world') !== false) {
-                    $hasTiestoWorld = true;
-                    break;
-                }
-            }
-            ?>
+                The capacity of the Club sessions is very limited. Availability for All-Access pass holders cannot be
+                guaranteed due to safety regulations.<br>
+                Tickets available represent total capacity. (90% is sold as single tickets. 10% of total capacity is left
+                for Walk-ins/All-Access passholders.)</p>
 
-            <?php if ($hasTiestoWorld): ?>
-                <p><strong>** TiëstoWorld is a special session spanning his career's work. There will also be some special guests.</strong></p>
-            <?php endif; ?>
+            <?php foreach ($schedules as $schedule) { ?>
+
+                <?php foreach ($schedule['rows'] as $row) {
+                    $hasTiestoWorld = false;
+
+                    if (stripos($row['session'], 'tiesto_world') !== false) {
+                        $hasTiestoWorld = true;
+                        break;
+                    }
+                } ?>
+            <?php } ?>
+
+
+            <?php if ($hasTiestoWorld) { ?>
+                <p><strong>** TiëstoWorld is a special session spanning his career's work. There will also be some special
+                        guests.</strong></p>
+            <?php } ?>
 
         </div>
 
@@ -93,7 +99,7 @@ include_once __DIR__ . '/../components/header.php';
             <h2 class="text-center mt-5">Iconic Albums</h2>
             <ul>
                 <?php foreach ($albums as $albumText) { ?>
-                    <li><?= htmlspecialchars($albumText) ?></li>
+                    <li><?php echo htmlspecialchars($albumText); ?></li>
                 <?php } ?>
             </ul>
         <?php } ?>
@@ -101,7 +107,8 @@ include_once __DIR__ . '/../components/header.php';
             <div class="row text-center">
                 <?php foreach ($albumAssets as $album) { ?>
                     <div class="col-md-4 col-sm-6 mb-4">
-                        <img src="<?= htmlspecialchars($album->getUrl()) ?>" alt="Album Cover" class="img-fluid rounded album-img">
+                        <img src="<?php echo htmlspecialchars($album->getUrl()); ?>" alt="Album Cover"
+                            class="img-fluid rounded album-img">
                     </div>
                 <?php } ?>
             </div>
@@ -247,7 +254,8 @@ include_once __DIR__ . '/../components/header.php';
         border-radius: 10px;
     }
 
-    th, td {
+    th,
+    td {
         text-align: left;
         vertical-align: middle;
         color: white;

@@ -2,17 +2,16 @@
 
 namespace App\Controllers\EventControllers;
 
-use App\Controllers\Controller;
-use App\Repositories\ArtistRepository;
-use App\Repositories\DanceRepository;
-use App\Repositories\LocationRepository;
-use App\Services\ScheduleService;
 use App\Services\AssetService;
+use App\Controllers\Controller;
+use App\Services\ScheduleService;
+use App\Repositories\DanceRepository;
+use App\Repositories\ArtistRepository;
+use App\Repositories\LocationRepository;
 
 class DanceController extends Controller
 {
     private ArtistRepository $artistRepository;
-    private DanceRepository $danceRepository;
     private LocationRepository $locationRepository;
     private ScheduleService $scheduleService;
     private AssetService $assetService;
@@ -21,7 +20,6 @@ class DanceController extends Controller
     {
         parent::__construct();
         $this->artistRepository = new ArtistRepository();
-        $this->danceRepository = new DanceRepository();
         $this->locationRepository = new LocationRepository();
         $this->scheduleService = new ScheduleService();
         $this->assetService = new AssetService();
@@ -33,32 +31,31 @@ class DanceController extends Controller
         if (!$artist) {
             return $this->pageLoader->setPage('_404')->render();
         }
-    
+
         $expectedSlug = str_replace(' ', '_', $artist->name);
         if (urldecode($slug) !== $expectedSlug) {
             header("Location: /dance/{$expectedSlug}_{$id}", true, 301);
             exit;
         }
-    
-        $schedule = $this->danceRepository->getScheduleByArtistId($id);
+
+        $schedule = $this->scheduleService->getDanceScheduleForArtist($artist->id);
         $albums = explode("\r\n", $artist->iconic_albums ?? '');
-    
+
         $headerAsset = $this->assetService->resolveAssets($artist, 'header');
         $extraAssets = $this->assetService->resolveAssets($artist, 'extra');
         $albumAssets = $this->assetService->resolveAssets($artist, 'album');
 
-    
+
         return $this->pageLoader->setPage('artist-detail')->render([
             'artist' => $artist,
-            'schedule' => $schedule,
+            'schedules' => $schedule,
             'albums' => $albums,
             'headerAsset' => $headerAsset,
             'extraAssets' => $extraAssets,
-            'albumAssets' => $albumAssets
+            'albumAssets' => $albumAssets,
         ]);
     }
-    
-    
+
     public function showMain(): string
     {
         $artists = $this->artistRepository->getAllArtists();

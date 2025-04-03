@@ -22,7 +22,7 @@ include_once __DIR__ . '/../components/header.php';
     <div class="swiper">
     <div class="swiper-wrapper">
         <?php foreach ($locations as $location) { ?>
-            <a href="/history/<?= str_replace(' ', '_', $location->name) . '_' . $location->id ?>"
+            <a href="/history/<?php echo str_replace(' ', '_', $location->name) . '_' . $location->id; ?>"
             class="swiper-slide"
             <?php if (count($location->assets) > 0) { ?>
                 style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>'); text-decoration: none; color: inherit;"

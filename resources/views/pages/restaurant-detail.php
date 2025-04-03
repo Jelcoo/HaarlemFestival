@@ -9,7 +9,7 @@ include_once __DIR__ . '/../components/header.php';
 
 <div class="yummy-detail-wrapper">
     <section class="welcome-section text-center">
-        <h2>Welcome to <strong><?= htmlspecialchars($restaurant->location->name) ?></strong></h2>
+        <h2>Welcome to <strong><?php echo htmlspecialchars($restaurant->location->name); ?></strong></h2>
         <p>During the Festival, you can reserve a table for one of our exclusive sessions,<br>
             where we’ll serve a specially crafted festival menu.<br>
             You’ll find the prices and reservation fees listed here.<br>
@@ -21,14 +21,14 @@ include_once __DIR__ . '/../components/header.php';
 
     <section class="description-map-box">
         <div class="info-box">
-            <p><?= nl2br(htmlspecialchars($restaurant->location->main_description)) ?></p>
+            <p><?php echo nl2br(htmlspecialchars($restaurant->location->main_description)); ?></p>
             <strong>Reservation is mandatory.</strong>
             <div class="rating-stars mt-2">
-                <?php for ($i = 0; $i < $restaurant->rating; $i++): ?>
+                <?php for ($i = 0; $i < $restaurant->rating; ++$i) { ?>
                     <span class="star">★</span>
-                <?php endfor; ?>
+                <?php } ?>
             </div>
-            <div class="cuisine-box"><?= htmlspecialchars($restaurant->restaurant_type) ?></div>
+            <div class="cuisine-box"><?php echo htmlspecialchars($restaurant->restaurant_type); ?></div>
         </div>
         <div class="map-box">
             <div id="map" style="height: 100%; min-height: 240px;"></div>
@@ -40,19 +40,19 @@ include_once __DIR__ . '/../components/header.php';
         <div class="session-bar">
             <?php
             $days = [];
-            foreach ($events as $event) {
-                $day = date('l j', strtotime($event->start_date));
-                $time = date('H.i', strtotime($event->start_time));
-                $days[$day][] = $time;
-            }
-            foreach ($days as $day => $times) {
-                echo "<div class='session-day'><strong>{$day}</strong><br><br>";
-                foreach (array_unique($times) as $time) {
-                    echo "<span class='session-time'>{$time}</span> ";
-                }
-                echo "</div>";
-            }
-            ?>
+foreach ($events as $event) {
+    $day = date('l j', strtotime($event->start_date));
+    $time = date('H.i', strtotime($event->start_time));
+    $days[$day][] = $time;
+}
+foreach ($days as $day => $times) {
+    echo "<div class='session-day'><strong>{$day}</strong><br><br>";
+    foreach (array_unique($times) as $time) {
+        echo "<span class='session-time'>{$time}</span> ";
+    }
+    echo '</div>';
+}
+?>
         </div>
     </section>
 
@@ -60,30 +60,30 @@ include_once __DIR__ . '/../components/header.php';
         <div class="menu-box">
             <h4>Festival Menu</h4>
             <?php
-            $menu = $restaurant->menu;
-            $sections = ['Starter', 'Main Course', 'Dessert'];
-            foreach ($sections as $section) {
-                if (stripos($menu, $section) !== false) {
-                    preg_match("/$section\s+(.*?)(?=(Starter|Main Course|Dessert|$))/si", $menu, $match);
-                    if (!empty($match[1])) {
-                        echo "<h5 class='menu-section-title'>{$section}</h5>";
-                        echo "<p class='menu-item'>" . htmlspecialchars(trim($match[1])) . "</p>";
-                    }
-                }
-            }
-            ?>
+$menu = $restaurant->menu;
+$sections = ['Starter', 'Main Course', 'Dessert'];
+foreach ($sections as $section) {
+    if (stripos($menu, $section) !== false) {
+        preg_match("/$section\s+(.*?)(?=(Starter|Main Course|Dessert|$))/si", $menu, $match);
+        if (!empty($match[1])) {
+            echo "<h5 class='menu-section-title'>{$section}</h5>";
+            echo "<p class='menu-item'>" . htmlspecialchars(trim($match[1])) . '</p>';
+        }
+    }
+}
+?>
         </div>
 
         <div class="sidebar-right">
-            <?php if (!empty($logoAsset)): ?>
-                <img src="<?= htmlspecialchars($logoAsset[0]->getUrl()) ?>" alt="Restaurant Logo" class="logo-img">
-            <?php endif; ?>
+            <?php if (!empty($logoAsset)) { ?>
+                <img src="<?php echo htmlspecialchars($logoAsset[0]->getUrl()); ?>" alt="Restaurant Logo" class="logo-img">
+            <?php } ?>
             <div class="prices mt-2">
-                <div><i class="fa fa-user"></i> &euro; <?= number_format($adult_price, 2) ?></div>
-                <div><i class="fa fa-child"></i> &euro; <?= number_format($kids_price, 2) ?> <small>* Children under 12</small></div>
-                <?php if ($has_price_variation): ?>
+                <div><i class="fa fa-user"></i> &euro; <?php echo number_format($adult_price, 2); ?></div>
+                <div><i class="fa fa-child"></i> &euro; <?php echo number_format($kids_price, 2); ?> <small>* Children under 12</small></div>
+                <?php if ($has_price_variation) { ?>
                     <p class="text-warning"><small>* Prices may vary slightly</small></p>
-                <?php endif; ?>
+                <?php } ?>
             </div>
             <a href="#" class="btn btn-warning mt-3">+ Reserve Table</a>
         </div>
@@ -94,13 +94,13 @@ include_once __DIR__ . '/../components/header.php';
         <p>Please share any special requests such as allergies or wheelchair access to ensure a great experience.</p>
     </section>
 
-    <?php if (!empty($extraAssets)): ?>
+    <?php if (!empty($extraAssets)) { ?>
         <section class="restaurant-images text-center">
-            <?php foreach ($extraAssets as $img): ?>
-                <img src="<?= htmlspecialchars($img->getUrl()) ?>" class="restaurant-photo" alt="Restaurant photo">
-            <?php endforeach; ?>
+            <?php foreach ($extraAssets as $img) { ?>
+                <img src="<?php echo htmlspecialchars($img->getUrl()); ?>" class="restaurant-photo" alt="Restaurant photo">
+            <?php } ?>
         </section>
-    <?php endif; ?>
+    <?php } ?>
 </div>
 
 <style>
@@ -200,9 +200,9 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
 }).addTo(map);
 
-<?php if ($restaurant->location->coordinates): ?>
-    const coords = "<?= $restaurant->location->coordinates ?>".split(',').map(Number);
-    L.marker(coords).addTo(map).bindPopup(`<strong><?= htmlspecialchars($restaurant->location->name) ?></strong><br><?= htmlspecialchars($restaurant->location->address) ?>`);
+<?php if ($restaurant->location->coordinates) { ?>
+    const coords = "<?php echo $restaurant->location->coordinates; ?>".split(',').map(Number);
+    L.marker(coords).addTo(map).bindPopup(`<strong><?php echo htmlspecialchars($restaurant->location->name); ?></strong><br><?php echo htmlspecialchars($restaurant->location->address); ?>`);
     setTimeout(() => map.invalidateSize(), 200);
-<?php endif; ?>
+<?php } ?>
 </script>

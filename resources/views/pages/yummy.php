@@ -61,7 +61,7 @@ include_once __DIR__ . '/../components/header.php';
                                     </div>
                                 </div>
                                 <div class="button-container">
-                                <a href="/yummy/<?= str_replace(' ', '_', $restaurant->location->name) . '_' . $restaurant->id ?>" 
+                                <a href="/yummy/<?php echo str_replace(' ', '_', $restaurant->location->name) . '_' . $restaurant->id; ?>" 
                                     class="btn btn-primary visit-btn">
                                     Visit <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                 </a>
@@ -86,7 +86,7 @@ include_once __DIR__ . '/../components/header.php';
                                     </div>
                                 </div>
                                 <div class="button-container">
-                                <a href="/yummy/<?= str_replace(' ', '_', $restaurant->location->name) . '_' . $restaurant->id ?>" 
+                                <a href="/yummy/<?php echo str_replace(' ', '_', $restaurant->location->name) . '_' . $restaurant->id; ?>" 
                                     class="btn btn-primary visit-btn">
                                     Visit <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                 </a>

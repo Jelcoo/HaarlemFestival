@@ -41,49 +41,50 @@ GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, d
 
         return $queryEvents;
     }
-
-    public function getScheduleByArtistId(int $artistId): array
+    public function getScheduleFromArtistId(int $artistId): array
     {
         $query = $this->getConnection()->prepare("
-            SELECT
-                de.id AS event_id,
-                DATE_FORMAT(de.start_date, '%e %M') AS day,
-                DATE_FORMAT(de.start_time, '%H:%i') AS time,
-                CONCAT(DATE_FORMAT(de.start_date, '%e %M'), ' ', DATE_FORMAT(de.start_time, '%H:%i')) AS starting_time_formatted,
-                l.name AS location_name,
-                (
-                    SELECT GROUP_CONCAT(DISTINCT a.name ORDER BY a.name SEPARATOR ', ')
-                    FROM dance_event_artists dea
-                    JOIN artists a ON dea.artist_id = a.id
-                    WHERE dea.event_id = de.id
-                ) AS artist_names,
-                de.session,
-                TIMESTAMPDIFF(MINUTE, CONCAT(de.start_date, ' ', de.start_time), CONCAT(de.end_date, ' ', de.end_time)) AS duration,
-                de.total_tickets - COALESCE((
-                    SELECT COUNT(*) FROM dance_tickets dt WHERE dt.dance_event_id = de.id
-                ), 0) AS tickets_available,
-                ROUND(de.price * (de.vat + 1), 2) AS price
-            FROM dance_events de
-            JOIN dance_event_artists filter_dea ON de.id = filter_dea.event_id
-            JOIN locations l ON de.location_id = l.id
-            WHERE filter_dea.artist_id = :artistId
-            GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, de.end_time, de.total_tickets, de.price, de.vat
-            ORDER BY de.start_date, de.start_time
-        ");
-    
-        $query->execute(['artistId' => $artistId]);
-    
-        return $query->fetchAll();
-    }
-    
+SELECT
+    de.id AS event_id,
+    de.start_date AS start_date,
+    de.start_time AS start_time,
+    l.name AS location_name,
+    GROUP_CONCAT(DISTINCT a.name ORDER BY a.name SEPARATOR ', ') AS artist_names,
+    de.session AS session,
+    TIMESTAMPDIFF(MINUTE, CONCAT(de.start_date, ' ', de.start_time), CONCAT(de.end_date, ' ', de.end_time)) AS duration,
+    de.total_tickets - COALESCE(COUNT(DISTINCT dt.id), 0) AS tickets_available,
+    ROUND(de.price * (de.vat + 1), 2) AS price
+FROM dance_events de
+JOIN locations l ON de.location_id = l.id
+JOIN dance_event_artists dea ON de.id = dea.event_id
+JOIN artists a ON dea.artist_id = a.id
+LEFT JOIN dance_tickets dt ON de.id = dt.dance_event_id
+WHERE dea.artist_id = :artistId
+GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, de.end_time, de.total_tickets, de.price, de.vat");
 
+        $query->execute([
+            'artistId' => $artistId
+        ]);
+        $queryEvents = $query->fetchAll();
+
+        return $queryEvents;
+    }
 
     public function getSortedEvents(string $searchQuery, string $sortColumn = 'event_id', string $sortDirection = 'asc'): array
     {
         $allowedColumns = [
-            'event_id', 'start_date', 'start_time', 'end_date', 'end_time',
-            'location_name', 'artist_names', 'session', 'duration',
-            'tickets_available', 'price', 'vat',
+            'event_id',
+            'start_date',
+            'start_time',
+            'end_date',
+            'end_time',
+            'location_name',
+            'artist_names',
+            'session',
+            'duration',
+            'tickets_available',
+            'price',
+            'vat',
         ];
 
         if (!in_array($sortColumn, $allowedColumns)) {
@@ -130,8 +131,16 @@ GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, d
         ");
 
         $params = array_fill_keys([
-            'search', 'search2', 'search3', 'search4', 'search5',
-            'search6', 'search7', 'search8', 'search9', 'search10',
+            'search',
+            'search2',
+            'search3',
+            'search4',
+            'search5',
+            'search6',
+            'search7',
+            'search8',
+            'search9',
+            'search10',
         ], '%' . $searchQuery . '%');
 
         $query->execute($params);

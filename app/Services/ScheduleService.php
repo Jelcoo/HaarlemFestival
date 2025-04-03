@@ -34,12 +34,53 @@ class ScheduleService
     public function getDanceSchedule(): array
     {
         $querySchedule = $this->danceRepository->getSchedule();
+
+        return $this->createDanceSchedule($querySchedule);
+    }
+
+    /**
+     * Parse the schedule for the dance page.
+     *
+     * Format:
+     * $event['date']: Date events are held on
+     * $event['rows']['event_id']: ID of event
+     * $event['rows']['start']: Start time of event formatted as 00:00
+     * $event['rows']['venue']: Location name
+     * $event['rows']['artists']: Comma seperated list of artist names
+     * $event['rows']['session']: Name of the session
+     * $event['rows']['duration']: Duration of the session in minutes
+     * $event['rows']['tickets_available']: How many tickets are still available
+     * $event['rows']['price']: The price calculated with VAT (in SQL query)
+     */
+    public function getDanceScheduleForArtist(int $artistId): array
+    {
+        $querySchedule = $this->danceRepository->getScheduleFromArtistID($artistId);
+
+        return $this->createDanceSchedule($querySchedule);
+    }
+
+    /**
+     * Parse the schedule for the dance page.
+     *
+     * Format:
+     * $event['date']: Date events are held on
+     * $event['rows']['event_id']: ID of event
+     * $event['rows']['start']: Start time of event formatted as 00:00
+     * $event['rows']['venue']: Location name
+     * $event['rows']['artists']: Comma seperated list of artist names
+     * $event['rows']['session']: Name of the session
+     * $event['rows']['duration']: Duration of the session in minutes
+     * $event['rows']['tickets_available']: How many tickets are still available
+     * $event['rows']['price']: The price calculated with VAT (in SQL query)
+     */
+    private function createDanceSchedule(array $schedule)
+    {
         $scheduleList = [];
 
-        $eventDates = $this->getScheduleDates($querySchedule);
+        $eventDates = $this->getScheduleDates($schedule);
 
         foreach ($eventDates as $date) {
-            $eventsOnDate = $this->getScheduleByDate($querySchedule, $date);
+            $eventsOnDate = $this->getScheduleByDate($schedule, $date);
 
             $dailySchedule = [
                 'date' => date('l F j', strtotime($date)),
@@ -108,7 +149,7 @@ class ScheduleService
                 // Organize guides by language
                 $guides = [];
                 foreach ($languages as $language) {
-                    $filteredTours = array_filter($tourGroup, fn ($tour) => $tour['language'] === $language);
+                    $filteredTours = array_filter($tourGroup, fn($tour) => $tour['language'] === $language);
                     $guideNames = array_unique(array_column($filteredTours, 'guide'));
 
                     $guides[] = [
@@ -124,7 +165,7 @@ class ScheduleService
                 // Organize tours by start time and language
                 $start = [];
                 foreach ($startTimes as $time) {
-                    $filteredTours = array_filter($tourGroup, fn ($tour) => $tour['start_time'] === $time);
+                    $filteredTours = array_filter($tourGroup, fn($tour) => $tour['start_time'] === $time);
                     $toursByLanguage = [];
 
                     foreach ($filteredTours as $tour) {
