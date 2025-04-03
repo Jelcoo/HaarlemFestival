@@ -2,10 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Config\Config;
 use App\Application\Request;
 use App\Application\Session;
 use App\Application\Response;
-use App\Config\Config;
 use App\Helpers\StripeHelper;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;

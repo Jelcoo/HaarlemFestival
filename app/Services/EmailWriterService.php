@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Config\Config;
 use App\Models\User;
+use App\Config\Config;
 use App\Helpers\InvoiceHelper;
 
 class EmailWriterService
