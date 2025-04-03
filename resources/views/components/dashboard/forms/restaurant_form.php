@@ -96,8 +96,13 @@ $isEdit = ($mode ?? 'create') === 'edit';
 <script>
     const logoInput = document.getElementById('restaurant_logo');
     const iconInput = document.getElementById('restaurant_icon');
-    fillFileInput(logoInput, '<?php echo $formData['cover']; ?>');
-    fillFileInput(iconInput, '<?php echo $formData['icon']; ?>');
+    <?php if (!empty($formData['cover'])) { ?>
+        fillFileInput(logoInput, '<?php echo $formData['cover']; ?>');
+    <?php } ?>
+    
+    <?php if (!empty($formData['icon'])) { ?>
+        fillFileInput(iconInput, '<?php echo $formData['icon']; ?>');
+    <?php } ?>
 
     initEditor('menu');
 </script>

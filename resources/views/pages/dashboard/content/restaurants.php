@@ -50,7 +50,7 @@
 <div class="row">
     <?php if (!empty($restaurants)) { ?>
         <?php foreach ($restaurants as $restaurant) { ?>
-            <?php include __DIR__ . '/../../../components/dashboard/restaurant_card.php'; ?>
+            <?php include __DIR__ . '/../../../components/dashboard/cards/restaurant_card.php'; ?>
         <?php } ?>
     <?php } else { ?>
         <p>No restaurants found.</p>

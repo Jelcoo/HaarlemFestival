@@ -47,8 +47,16 @@ class ArtistsController extends DashboardController
             $this->redirectToArtists(false, 'Invalid artist ID.');
         }
 
-        $success = (bool) $this->artistRepository->deleteArtist($artistId);
-        $this->redirectToArtists($success, $success ? 'Artist deleted successfully.' : 'Failed to delete artist');
+        try {
+            $success = (bool) $this->artistRepository->deleteArtist($artistId);
+            $this->redirectToArtists($success, $success ? 'Artist deleted successfully.' : 'Failed to delete artist');
+        } catch (\PDOException $e) {
+            if ($e->getCode() === '23000') { // SQLSTATE[23000] => integrity constraint violation
+                $this->redirectToArtists(false, 'Cannot delete this artist because it has an event connected.');
+            } else {
+                $this->redirectToArtists(false, 'Database error: ' . $e->getMessage());
+            }
+        }
     }
 
     public function editArtist(): string
