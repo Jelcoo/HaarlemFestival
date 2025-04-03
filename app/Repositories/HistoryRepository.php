@@ -130,4 +130,10 @@ FROM history_events he');
 
         return true;
     }
+
+    public function eventHasTickets(int $eventId): bool
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+        return (bool) $queryBuilder->table('history_tickets')->where('history_event_id', '=', $eventId)->first();
+    }
 }
