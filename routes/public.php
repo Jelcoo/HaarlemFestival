@@ -7,7 +7,25 @@ use App\Middleware\EnsureNotLoggedIn;
 
 $router = App\Application\Router::getInstance();
 
+$router->get('/test/invoice-email', [new class {
+    public function __invoke() {
+        $userRepo = new \App\Repositories\UserRepository();
+        $emailService = new \App\Services\EmailWriterService();
+
+        $user = $userRepo->getUserById(2);
+        $invoiceId = 1;
+
+        $emailService->sendInvoiceWithTickets($user, $invoiceId);
+
+        echo 'Email with invoice + tickets sent!';
+    }
+}, '__invoke']);
+
 $router->get('/', [App\Controllers\HomeController::class, 'index']);
+
+$router->get('/invoices', [App\Controllers\InvoicesController::class, 'index']);
+$router->get('/invoices/pdf', [App\Controllers\InvoicesController::class, 'generatePdf']);
+
 
 $router->get('/dance', [App\Controllers\HomeController::class, 'dance']);
 $router->get('/yummy', [App\Controllers\HomeController::class, 'yummy']);

@@ -3,14 +3,17 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Helpers\InvoiceHelper;
 
 class EmailWriterService
 {
     private EmailService $emailService;
+    private InvoiceHelper $invoiceHelper;
 
     public function __construct()
     {
         $this->emailService = new EmailService();
+        $this->invoiceHelper = new InvoiceHelper();
     }
 
     public function sendWelcomeEmail(User $user): void
@@ -55,5 +58,25 @@ class EmailWriterService
                 "Hello {$user->firstname} {$user->lastname}, your password has been updated."
             )
             ->send();
+    }
+
+    public function sendInvoiceWithTickets(User $user, int $invoiceId): void
+    {
+        $invoicePath = $this->invoiceHelper->generateInvoicePdf($invoiceId);
+        $ticketPaths = $this->invoiceHelper->generateAllTicketsForInvoice($invoiceId);
+
+        $this->emailService
+            ->addRecipient($user->email)
+            ->setContent(
+                'Your invoice and tickets',
+                "Hello {$user->firstname} {$user->lastname},\n\nPlease find attached your invoice and tickets for your recent order."
+            )
+            ->addAttachment($invoicePath);
+
+        foreach ($ticketPaths as $ticketPath) {
+            $this->emailService->addAttachment($ticketPath);
+        }
+
+        $this->emailService->send();
     }
 }

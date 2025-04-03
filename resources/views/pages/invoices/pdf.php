@@ -1,7 +1,7 @@
 <h1>Invoice #<?= htmlspecialchars($invoice->id) ?></h1>
 
 <p>
-    <strong>User:</strong> <?= htmlspecialchars($user->firstname . ' ' . $user->lastname) ?><br>
+    <strong>Name:</strong> <?= htmlspecialchars($user->firstname . ' ' . $user->lastname) ?><br>
     <strong>Email:</strong> <?= htmlspecialchars($user->email) ?><br>
     <strong>Address:</strong> <?= htmlspecialchars($user->address ?? 'N/A') ?><br>
     <strong>Invoice Date:</strong> <?= htmlspecialchars($invoice->created_at) ?><br>

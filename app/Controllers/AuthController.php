@@ -15,7 +15,7 @@ use App\Services\EmailWriterService;
 class AuthController extends Controller
 {
     private UserRepository $userRepository;
-    private StripeHelper $stripeHelper;
+    // private StripeHelper $stripeHelper;
     private EmailWriterService $emailWriterService;
 
     public function __construct()
@@ -23,7 +23,7 @@ class AuthController extends Controller
         parent::__construct();
 
         $this->userRepository = new UserRepository();
-        $this->stripeHelper = new StripeHelper();
+        // $this->stripeHelper = new StripeHelper();
         $this->emailWriterService = new EmailWriterService();
     }
 
@@ -66,17 +66,16 @@ class AuthController extends Controller
             $email = Request::getPostField('email');
             $password = Request::getPostField('password');
 
-            $stripeCustomer = $this->stripeHelper->createCustomer(
-                $email,
-                "$firstname $lastname"
-            );
+            // $stripeCustomer = $this->stripeHelper->createCustomer(
+            //     $email,
+            //     "$firstname $lastname"
+            // );
 
             $createdUser = $this->userRepository->createUser([
                 'firstname' => $firstname,
                 'lastname' => $lastname,
                 'email' => $email,
                 'password' => password_hash($password, PASSWORD_DEFAULT),
-                'stripe_customer_id' => $stripeCustomer,
             ]);
 
             $this->emailWriterService->sendWelcomeEmail($createdUser);
