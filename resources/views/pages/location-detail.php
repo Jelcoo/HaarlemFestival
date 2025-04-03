@@ -50,6 +50,9 @@ setTimeout(() => map.invalidateSize(), 200);
 </script>
 <?php endif; ?>
 
+
+
+
 <style>
     .header-section {
         background-color: #1F4E66;
@@ -84,4 +87,72 @@ setTimeout(() => map.invalidateSize(), 200);
     .location-details ul li {
         margin-bottom: 10px;
     }
+
+    .modal-content {
+        background-color: var(--secondary-accent);
+        color: white;
+        border-radius: 10px;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+        font-weight: 500;
+        margin-bottom: 10px;
+    }
+
+    .section-content {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
+
+    .quantity-control {
+        background-color: white;
+        border-radius: 5px;
+        padding: 5px 15px;
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .quantity-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+        cursor: pointer;
+        padding: 0 10px;
+    }
+
+    .quantity-display {
+        font-size: 1.2rem;
+        margin: 0 15px;
+        color: #333;
+    }
+
+    .book-btn {
+        background-color: var(--buttons);
+        border: none;
+        color: black;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 5px;
+        width: 100%;
+        font-size: 1.2rem;
+    }
+
+    .book-btn:hover {
+        background-color: var(--buttons-accent);
+    }
+
+    .modal-body {
+        padding: 30px;
+        text-align: center;
+    }
+
+    .price-text {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
+
 </style>
