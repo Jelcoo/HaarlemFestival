@@ -9,10 +9,16 @@ $router = App\Application\Router::getInstance();
 
 $router->get('/', [App\Controllers\HomeController::class, 'index']);
 
-$router->get('/dance', [App\Controllers\HomeController::class, 'dance']);
-$router->get('/yummy', [App\Controllers\HomeController::class, 'yummy']);
-$router->get('/history', [App\Controllers\HomeController::class, 'history']);
-$router->get('/magic', [App\Controllers\HomeController::class, 'magic']);
+$router->get('/dance', [App\Controllers\EventControllers\DanceController::class, 'showMain']);
+$router->get('/dance/{slug}_{id}', [App\Controllers\EventControllers\DanceController::class, 'showDetail']);
+
+$router->get('/yummy', [App\Controllers\EventControllers\YummyController::class, 'showMain']);
+$router->get('/yummy/{slug}_{id}', [App\Controllers\EventControllers\YummyController::class, 'showDetail']);
+
+$router->get('/history', [App\Controllers\EventControllers\HistoryController::class, 'showMain']);
+$router->get('/history/{slug}_{id}', [App\Controllers\EventControllers\HistoryController::class, 'showDetail']);
+
+$router->get('/magic', [App\Controllers\EventControllers\MagicController::class, 'show']);
 
 $router->get('/cart', [App\Controllers\CartController::class, 'index']);
 $router->post('/cart/increase', [App\Controllers\CartController::class, 'increaseQuantity']);

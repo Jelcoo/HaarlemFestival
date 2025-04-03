@@ -24,21 +24,18 @@ include_once __DIR__ . '/../components/header.php';
 </div>
 
 <div class="container">
-    <h2 class="text-center restaurants-title">Our Restaurants</h2>
+    <h2 class="restaurants">Our Restaurants</h2>
     <div class="restaurant-container">
         <?php foreach ($restaurants as $key => $restaurant) {
             $isEven = $key % 2 == 0;
             ?>
             <div class="restaurant-row <?php echo $isEven ? 'even-row' : 'odd-row'; ?>">
-                <!-- Icon section outside the card -->
                 <div class="icon-wrapper <?php echo $isEven ? 'icon-left' : 'icon-right'; ?>">
                     <div class="restaurant-icon">
                         <img src="<?php echo $restaurant->assets[1]->getUrl(); ?>"
                             alt="<?php echo htmlspecialchars($restaurant->location->name); ?> Icon">
                     </div>
                 </div>
-
-                <!-- Restaurant card -->
                 <div class="restaurant-card <?php echo $isEven ? 'card-right' : 'card-left'; ?>">
                     <?php if ($isEven) { ?>
                         <div class="restaurant-image">
@@ -64,8 +61,10 @@ include_once __DIR__ . '/../components/header.php';
                                     </div>
                                 </div>
                                 <div class="button-container">
-                                    <button class="btn btn-primary visit-btn">Visit <i
-                                            class="fa-solid fa-arrow-up-right-from-square"></i></button>
+                                <a href="/yummy/<?php echo str_replace(' ', '_', $restaurant->location->name) . '_' . $restaurant->id; ?>" 
+                                    class="btn btn-primary visit-btn">
+                                    Visit <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
                                 </div>
                             </div>
                         </div>
@@ -87,8 +86,10 @@ include_once __DIR__ . '/../components/header.php';
                                     </div>
                                 </div>
                                 <div class="button-container">
-                                    <button class="btn btn-primary visit-btn">Visit <i
-                                            class="fa-solid fa-arrow-up-right-from-square"></i></button>
+                                <a href="/yummy/<?php echo str_replace(' ', '_', $restaurant->location->name) . '_' . $restaurant->id; ?>" 
+                                    class="btn btn-primary visit-btn">
+                                    Visit <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
                                 </div>
                             </div>
                         </div>
@@ -110,8 +111,235 @@ include_once __DIR__ . '/../components/header.php';
 </button>
 
 <style>
-    .mt-5 {
-        margin-top: 2rem;
+.mt-5 {
+    margin-top: 2rem;
+}
+
+/* Info Box */
+.info-box {
+    background-color: #2c4d69;
+    color: white;
+    padding: 20px 30px;
+    margin-bottom: 50px;
+    text-align: center;
+    border-radius: 10px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.info-box p {
+    margin: 10px 0;
+}
+
+.restaurants {
+    text-align: center;
+    margin: 50px 0 60px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* Restaurant Section */
+.restaurants-title {
+    margin: 50px 0 60px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.restaurant-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-bottom: 60px;
+    position: relative;
+}
+
+.restaurant-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+/* Icon styles */
+.icon-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.restaurant-icon {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    overflow: visible;
+}
+
+.restaurant-icon img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Restaurant card styles */
+.restaurant-card {
+    display: flex;
+    background-color: #2c4d69;
+    color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.restaurant-image {
+    flex: 0 0 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 20px;
+}
+
+.image-wrapper {
+    width: 100%;
+    height: 130px;
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+}
+
+.restaurant-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin: 0 10px;
+}
+
+.restaurant-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.restaurant-header h3 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.stars {
+    display: flex;
+}
+
+.stars span {
+    color: gold;
+    font-size: 24px;
+}
+
+.restaurant-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.cuisine-container {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.cuisine {
+    font-style: italic;
+    color: white;
+    background-color: #226C92;
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.button-container {
+    display: flex;
+}
+
+.visit-btn {
+    background-color: #E6A640;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: black;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.visit-btn:hover {
+    background-color: #CC9439;
+    color: black;
+}
+
+/* Alternating left-right icons and content */
+.even-row {
+    flex-direction: row-reverse;
+}
+
+.odd-row {
+    flex-direction: row;
+}
+
+/* Even row (right-positioned boxes) specific styles */
+.even-row .restaurant-footer {
+    flex-direction: row;
+}
+
+.even-row .button-container {
+    justify-content: flex-start;
+}
+
+.even-row .cuisine-container {
+    justify-content: flex-end;
+}
+
+/* Odd row (left-positioned boxes) specific styles */
+.odd-row .restaurant-content {
+    text-align: right;
+}
+
+.odd-row .restaurant-footer {
+    flex-direction: row-reverse;
+}
+
+.odd-row .button-container {
+    justify-content: flex-start;
+}
+
+.odd-row .cuisine-container {
+    justify-content: flex-end;
+}
+
+/* Restaurant logo images */
+.restaurant-image img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+@media (max-width: 768px) {
+    .restaurant-card {
+        flex-direction: column;
+        width: 100%;
+        margin: 0;
     }
 
     /* Info Box */
