@@ -22,7 +22,7 @@ $total = array_reduce($cartItems, function ($carry, $item) {
 <div class="container py-4">
     <h1>Checkout</h1>
     <div class="row">
-        <div class="col-6">
+        <div class="col-12 col-md-6">
             <?php foreach ($eventDates as $date) { ?>
                 <?php $cartForDate = getScheduleByDate($cartItems, $date); ?>
                 <h3 class="mt-4 mb-3 border-bottom pb-2"><?php echo date('l F j', strtotime($date)); ?></h3>
@@ -147,7 +147,7 @@ $total = array_reduce($cartItems, function ($carry, $item) {
                 </div>
             <?php } ?>
         </div>
-        <div class="col-6">
+        <div class="col-12 col-md-6">
             <p class="fs-5 my-0">Subtotal &euro;<?php echo formatMoney($totalExclVat); ?></p>
             <p class="fs-5 my-0">VAT &euro;<?php echo formatMoney($total - $totalExclVat); ?></p>
             <p class="fs-5 my-0">total &euro;<?php echo formatMoney($total); ?></p>

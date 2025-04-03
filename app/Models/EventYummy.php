@@ -10,6 +10,7 @@ class EventYummy extends Event
     public float $adult_price;
     public float $reservation_cost;
     public ?Restaurant $restaurant = null;
+    public ?string $restaurant_name = null;
 
     public function __construct()
     {

@@ -48,8 +48,8 @@ include_once __DIR__ . '/../components/header.php';
     <?php $scheduleCount = 0; ?>
     <?php foreach ($schedules as $schedule) { ?>
         <?php if ($scheduleCount % 4 == 0) { ?>
-            <div class="row g-0 gap-2">
-            <?php } ?>
+            <div class="row g-0 gap-2 justify-content-center">
+        <?php } ?>
 
             <div class="tour-ticket-card card shadow-sm">
                 <div class="card-header text-center">

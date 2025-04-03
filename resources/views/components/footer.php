@@ -1,5 +1,5 @@
 <footer class="bg-light py-3">
-    <div class="container d-flex justify-content-between align-items-center">
+    <div class="container d-grid d-md-flex gap-3 justify-content-between align-items-center">
         <div>
             <a href="#" class="me-2"><img src="/assets/img/icons/tiktok.svg" /></a>
             <a href="#" class="me-2"><img src="/assets/img/icons/facebook.svg" /></a>
