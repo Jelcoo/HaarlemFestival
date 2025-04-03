@@ -5,7 +5,6 @@ namespace App\Controllers\EventControllers;
 use App\Services\AssetService;
 use App\Controllers\Controller;
 use App\Services\ScheduleService;
-use App\Repositories\DanceRepository;
 use App\Repositories\ArtistRepository;
 use App\Repositories\LocationRepository;
 

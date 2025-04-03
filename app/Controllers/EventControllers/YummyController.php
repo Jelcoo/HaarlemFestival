@@ -39,19 +39,11 @@ class YummyController extends Controller
         $extraAssets = $this->assetService->resolveAssets($restaurant, 'extra');
         $logoAsset = $this->assetService->resolveAssets($restaurant, 'logo');
 
-        function getMostCommonValue(array $values): float
-        {
-            $counts = array_count_values(array_map(fn ($v) => number_format((float) $v, 2, '.', ''), $values));
-            arsort($counts);
-
-            return (float) array_key_first($counts);
-        }
-
         $adultPrices = array_map(fn ($e) => $e->adult_price, $events);
         $kidsPrices = array_map(fn ($e) => $e->kids_price, $events);
 
-        $mostCommonAdultPrice = getMostCommonValue($adultPrices);
-        $mostCommonKidsPrice = getMostCommonValue($kidsPrices);
+        $mostCommonAdultPrice = $this->getMostCommonValue($adultPrices);
+        $mostCommonKidsPrice = $this->getMostCommonValue($kidsPrices);
 
         $hasPriceVariation = count(array_unique($adultPrices)) > 1 || count(array_unique($kidsPrices)) > 1;
 
@@ -66,6 +58,14 @@ class YummyController extends Controller
             'has_price_variation' => $hasPriceVariation,
         ]);
 
+    }
+
+    private function getMostCommonValue(array $values): float
+    {
+        $counts = array_count_values(array_map(fn ($v) => number_format((float) $v, 2, '.', ''), $values));
+        arsort($counts);
+
+        return (float) array_key_first($counts);
     }
 
     public function showMain(): string

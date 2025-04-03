@@ -41,6 +41,7 @@ GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, d
 
         return $queryEvents;
     }
+
     public function getScheduleFromArtistId(int $artistId): array
     {
         $query = $this->getConnection()->prepare("
@@ -63,7 +64,7 @@ WHERE dea.artist_id = :artistId
 GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, de.end_time, de.total_tickets, de.price, de.vat");
 
         $query->execute([
-            'artistId' => $artistId
+            'artistId' => $artistId,
         ]);
         $queryEvents = $query->fetchAll();
 
