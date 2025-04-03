@@ -161,7 +161,7 @@ class RestaurantRepository extends Repository
     {
         $sql = '
             SELECT 
-                ye.id AS event_id,
+                ye.id,
                 ye.start_time,
                 ye.start_date,
                 ye.end_time,
@@ -181,19 +181,9 @@ class RestaurantRepository extends Repository
         $results = $query->fetchAll(\PDO::FETCH_ASSOC);
 
         return array_map(function ($row) use ($restaurantId) {
-            return new \App\Models\EventYummy([
-                'id' => (int) $row['event_id'],
-                'restaurant_id' => $restaurantId,
-                'start_time' => $row['start_time'],
-                'start_date' => $row['start_date'],
-                'end_time' => $row['end_time'],
-                'end_date' => $row['end_date'],
-                'total_seats' => (int) $row['total_seats'],
-                'kids_price' => (float) $row['kids_price'],
-                'adult_price' => (float) $row['adult_price'],
-                'reservation_cost' => (float) $row['reservation_cost'],
-                'vat' => (float) $row['vat'],
-            ]);
+            $row['restaurant_id'] = $restaurantId;
+
+            return new \App\Models\EventYummy($row);
         }, $results);
     }
 
