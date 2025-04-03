@@ -10,7 +10,7 @@ class PdfHelper
     public static function generatePdfFromView(string $view, array $data = [], string $filename = 'file.pdf'): void
     {
         extract($data);
-        
+
         ob_start();
         include __DIR__ . "/../../resources/views/{$view}.php"; // ✅ Correct path
         $html = ob_get_clean();

@@ -4,10 +4,10 @@ namespace App\Helpers;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use App\Repositories\InvoiceRepository;
-use App\Application\PageLoader;
 use App\Models\Location;
 use App\Models\Restaurant;
+use App\Application\PageLoader;
+use App\Repositories\InvoiceRepository;
 
 class InvoiceHelper
 {
@@ -144,7 +144,7 @@ class InvoiceHelper
             ->setPage("tickets/pdf_{$type}.php")
             ->render([
                 'entry' => $entry,
-                'qrPath' => $qrCodePath
+                'qrPath' => $qrCodePath,
             ]);
 
         $options = new Options();

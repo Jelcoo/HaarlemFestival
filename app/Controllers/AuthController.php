@@ -66,9 +66,9 @@ class AuthController extends Controller
             $email = Request::getPostField('email');
             $password = Request::getPostField('password');
 
-             $stripeCustomer = $this->stripeHelper->createCustomer(
-                 $email,
-                 "$firstname $lastname"
+            $stripeCustomer = $this->stripeHelper->createCustomer(
+                $email,
+                "$firstname $lastname"
             );
 
             $createdUser = $this->userRepository->createUser([

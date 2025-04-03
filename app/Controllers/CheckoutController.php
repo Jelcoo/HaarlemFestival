@@ -11,10 +11,10 @@ use App\Enum\InvoiceStatusEnum;
 use Rakit\Validation\Validator;
 use App\Repositories\CartRepository;
 use App\Repositories\UserRepository;
+use App\Services\EmailWriterService;
 use App\Repositories\OrderRepository;
 use App\Adapters\InvoiceToCartAdapter;
 use App\Repositories\InvoiceRepository;
-use App\Services\EmailWriterService;
 
 class CheckoutController extends Controller
 {

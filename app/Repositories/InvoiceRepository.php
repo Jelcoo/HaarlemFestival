@@ -2,21 +2,19 @@
 
 namespace App\Repositories;
 
-use App\Models\Invoice;
-use App\Helpers\QueryBuilder;
-use App\Enum\InvoiceStatusEnum;
 use App\Models\User;
-use App\Models\TicketDance;
-use App\Models\TicketYummy;
-use App\Models\TicketHistory;
+use App\Models\Artist;
+use App\Models\Invoice;
+use App\Models\Location;
 use App\Models\EventDance;
 use App\Models\EventYummy;
-use App\Models\EventHistory;
-use App\Models\Location;
 use App\Models\Restaurant;
-use App\Models\Artist;
-
-
+use App\Models\TicketDance;
+use App\Models\TicketYummy;
+use App\Models\EventHistory;
+use App\Helpers\QueryBuilder;
+use App\Models\TicketHistory;
+use App\Enum\InvoiceStatusEnum;
 
 class InvoiceRepository extends Repository
 {
@@ -24,7 +22,6 @@ class InvoiceRepository extends Repository
     {
         parent::__construct();
     }
-
 
     public function getInvoices(int $offset = 10, int $limit = 10): array
     {
@@ -77,7 +74,6 @@ class InvoiceRepository extends Repository
         return $invoice ? new Invoice($invoice) : null;
     }
 
-
     public function isPayableInvoice(int $invoiceId, int $userId): bool
     {
         $sql = 'SELECT * FROM invoices WHERE id = :id AND user_id = :user_id AND (status = :later OR status = :failed) AND created_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)';
@@ -97,9 +93,11 @@ class InvoiceRepository extends Repository
     public function getInvoiceWithAllTickets(int $invoiceId): ?array
     {
         $invoice = $this->getInvoiceById($invoiceId);
-        if (!$invoice) return null;
+        if (!$invoice) {
+            return null;
+        }
 
-        $user = $this->fetchOne("SELECT * FROM users WHERE id = :id", ['id' => $invoice->user_id]);
+        $user = $this->fetchOne('SELECT * FROM users WHERE id = :id', ['id' => $invoice->user_id]);
 
         return [
             'invoice' => $invoice,
@@ -112,7 +110,7 @@ class InvoiceRepository extends Repository
 
     public function getDanceTickets(int $invoiceId): array
     {
-        $sql = "
+        $sql = '
             SELECT t.*, e.*, l.*, a.*
             FROM dance_tickets t
             JOIN dance_events e ON e.id = t.dance_event_id
@@ -120,7 +118,7 @@ class InvoiceRepository extends Repository
             LEFT JOIN dance_event_artists da ON da.event_id = e.id
             LEFT JOIN artists a ON a.id = da.artist_id
             WHERE t.invoice_id = :invoiceId
-        ";
+        ';
 
         $rows = $this->fetchAll($sql, ['invoiceId' => $invoiceId]);
         $grouped = [];
@@ -146,14 +144,14 @@ class InvoiceRepository extends Repository
 
     public function getYummyTickets(int $invoiceId): array
     {
-        $sql = "
+        $sql = '
             SELECT t.*, e.*, r.*, l.*
             FROM yummy_tickets t
             JOIN yummy_events e ON e.id = t.yummy_event_id
             JOIN restaurants r ON r.id = e.restaurant_id
             JOIN locations l ON l.id = r.location_id
             WHERE t.invoice_id = :invoiceId
-        ";
+        ';
 
         $rows = $this->fetchAll($sql, ['invoiceId' => $invoiceId]);
         $tickets = [];
@@ -172,12 +170,12 @@ class InvoiceRepository extends Repository
 
     public function getHistoryTickets(int $invoiceId): array
     {
-        $sql = "
+        $sql = '
             SELECT t.*, e.*
             FROM history_tickets t
             JOIN history_events e ON e.id = t.history_event_id
             WHERE t.invoice_id = :invoiceId
-        ";
+        ';
 
         $rows = $this->fetchAll($sql, ['invoiceId' => $invoiceId]);
         $tickets = [];
@@ -196,6 +194,7 @@ class InvoiceRepository extends Repository
     {
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->execute($params);
+
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
@@ -203,6 +202,7 @@ class InvoiceRepository extends Repository
     {
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->execute($params);
+
         return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
     }
 }
