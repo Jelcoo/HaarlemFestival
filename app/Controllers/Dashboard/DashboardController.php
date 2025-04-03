@@ -34,7 +34,6 @@ class DashboardController extends Controller
     protected function getSidebarItems(): array
     {
         return [
-            'home' => ['label' => 'Home', 'url' => '/dashboard'],
             'general' => [
                 'label' => 'General',
                 'users' => ['label' => 'Users', 'url' => '/dashboard/users'],
