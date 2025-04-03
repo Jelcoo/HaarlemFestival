@@ -96,8 +96,11 @@ class InvoiceRepository extends Repository
         if (!$invoice) {
             return null;
         }
+        $sql = 'SELECT * FROM users WHERE id = :id';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->execute(['id' => $invoice->user_id]);
 
-        $user = $this->fetchOne('SELECT * FROM users WHERE id = :id', ['id' => $invoice->user_id]);
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         return [
             'invoice' => $invoice,
@@ -120,7 +123,10 @@ class InvoiceRepository extends Repository
             WHERE t.invoice_id = :invoiceId
         ';
 
-        $rows = $this->fetchAll($sql, ['invoiceId' => $invoiceId]);
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->execute(['invoiceId' => $invoiceId]);
+
+        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $grouped = [];
 
         foreach ($rows as $row) {
@@ -153,7 +159,10 @@ class InvoiceRepository extends Repository
             WHERE t.invoice_id = :invoiceId
         ';
 
-        $rows = $this->fetchAll($sql, ['invoiceId' => $invoiceId]);
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->execute(['invoiceId' => $invoiceId]);
+
+        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $tickets = [];
 
         foreach ($rows as $row) {
@@ -176,8 +185,10 @@ class InvoiceRepository extends Repository
             JOIN history_events e ON e.id = t.history_event_id
             WHERE t.invoice_id = :invoiceId
         ';
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->execute(['invoiceId' => $invoiceId]);
 
-        $rows = $this->fetchAll($sql, ['invoiceId' => $invoiceId]);
+        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $tickets = [];
 
         foreach ($rows as $row) {
@@ -188,21 +199,5 @@ class InvoiceRepository extends Repository
         }
 
         return $tickets;
-    }
-
-    private function fetchAll(string $sql, array $params = []): array
-    {
-        $stmt = $this->getConnection()->prepare($sql);
-        $stmt->execute($params);
-
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    private function fetchOne(string $sql, array $params = []): ?array
-    {
-        $stmt = $this->getConnection()->prepare($sql);
-        $stmt->execute($params);
-
-        return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
     }
 }
