@@ -82,7 +82,6 @@ class AuthController extends Controller
             $this->emailWriterService->sendWelcomeEmail($createdUser);
 
             $_SESSION['user_id'] = $createdUser->id;
-            // TODO: Temporary solution
             if (isset($_SESSION['cart'])) {
                 Response::redirect('/cart');
             } else {
