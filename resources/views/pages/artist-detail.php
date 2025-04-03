@@ -75,12 +75,11 @@ include_once __DIR__ . '/../components/header.php';
                 Tickets available represent total capacity. (90% is sold as single tickets. 10% of total capacity is left
                 for Walk-ins/All-Access passholders.)</p>
 
+            <?php $hasTiestoWorld = false; ?>
             <?php foreach ($schedules as $schedule) { ?>
 
                 <?php foreach ($schedule['rows'] as $row) {
-                    $hasTiestoWorld = false;
-
-                    if (stripos($row['session'], 'tiesto_world') !== false) {
+                    if (stripos($row['session'], 'Tiesto World') !== false) {
                         $hasTiestoWorld = true;
                         break;
                     }
