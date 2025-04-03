@@ -99,7 +99,7 @@ class UsersController extends DashboardController
             $rules = [
                 'firstname' => 'required|max:255',
                 'lastname' => 'required|max:255',
-                'phone_number' => 'max:255',
+                'phone_number' => 'nullable|regex:/^\+?[0-9]{10,15}$/',
                 'address' => 'max:255',
                 'city' => 'max:255',
                 'postal_code' => 'max:255',

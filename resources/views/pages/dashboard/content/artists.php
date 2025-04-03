@@ -47,7 +47,7 @@
 <div class="row">
     <?php if (!empty($artists)) { ?>
         <?php foreach ($artists as $artist) { ?>
-            <?php include __DIR__ . '/../../../components/dashboard/artist_card.php'; ?>
+            <?php include __DIR__ . '/../../../components/dashboard/cards/artist_card.php'; ?>
         <?php } ?>
     <?php } else { ?>
         <p>No artists found.</p>

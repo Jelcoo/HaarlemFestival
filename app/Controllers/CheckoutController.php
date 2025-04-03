@@ -11,6 +11,7 @@ use App\Enum\InvoiceStatusEnum;
 use Rakit\Validation\Validator;
 use App\Repositories\CartRepository;
 use App\Repositories\UserRepository;
+use App\Services\EmailWriterService;
 use App\Repositories\OrderRepository;
 use App\Adapters\InvoiceToCartAdapter;
 use App\Repositories\InvoiceRepository;
@@ -189,6 +190,14 @@ class CheckoutController extends Controller
                 $paymentIntent = $event->data->object;
                 $this->orderRepository->updateOrderStatus(intval($paymentIntent->metadata->order_id), InvoiceStatusEnum::COMPLETED);
                 $this->orderRepository->completeOrder(intval($paymentIntent->metadata->order_id));
+
+                try {
+                    $invoice = $this->invoiceRepository->getInvoiceById($orderId = intval($paymentIntent->metadata->order_id));
+                    $user = $this->userRepository->getUserById($invoice->user_id);
+                    (new EmailWriterService())->sendInvoiceWithTickets($user, $invoice->id);
+                } catch (\Throwable $e) {
+                    error_log('Failed to send invoice email: ' . $e->getMessage());
+                }
 
                 http_response_code(200);
                 break;

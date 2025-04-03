@@ -157,6 +157,36 @@ class RestaurantRepository extends Repository
         );
     }
 
+    public function getEventsByRestaurantId(int $restaurantId): array
+    {
+        $sql = '
+            SELECT 
+                ye.id,
+                ye.start_time,
+                ye.start_date,
+                ye.end_time,
+                ye.end_date,
+                ye.total_seats,
+                ye.kids_price,
+                ye.adult_price,
+                ye.reservation_cost,
+                ye.vat
+            FROM yummy_events ye
+            WHERE ye.restaurant_id = :restaurantId
+            ORDER BY ye.start_date, ye.start_time
+        ';
+
+        $query = $this->getConnection()->prepare($sql);
+        $query->execute(['restaurantId' => $restaurantId]);
+        $results = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+        return array_map(function ($row) use ($restaurantId) {
+            $row['restaurant_id'] = $restaurantId;
+
+            return new \App\Models\EventYummy($row);
+        }, $results);
+    }
+
     public function deleteRestaurant(int $id): ?Restaurant
     {
         $queryBuilder = new QueryBuilder($this->getConnection());

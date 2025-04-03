@@ -134,10 +134,53 @@ $isEdit = ($mode ?? 'create') === 'edit';
 </div>
 
 <script>
-new VatPriceHelper({
-    vatFieldId: 'vat',
-    bindings: [
-        { base: 'price', incl: 'total_price' },
-    ]
-});
+    const selector = document.getElementById('artist_selector');
+    const list = document.getElementById('selected-artists');
+
+    // Disable already selected artists
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('input[name="artist_ids[]"]').forEach(input => {
+            const option = selector.querySelector(`option[value="${input.value}"]`);
+            if (option) option.disabled = true;
+        });
+    });
+
+    // Add artist to the list
+    selector.addEventListener('change', function () {
+        const id = this.value;
+        const name = this.options[this.selectedIndex].text;
+        if (!id) return;
+
+        // Disable selected artist in dropdown
+        this.options[this.selectedIndex].disabled = true;
+
+        // Create list item with remove button and hidden input
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.innerHTML = `
+            ${name}
+    <button type="button" class="btn btn-sm btn-danger remove-artist" data-id="${id}">Remove</button>
+    <input type="hidden" name="artist_ids[]" value="${id}">
+`;
+        list.appendChild(li);
+        this.selectedIndex = 0;
+    });
+
+    // Remove artist from the list
+    document.addEventListener('click', function (e) {
+        if (!e.target.classList.contains('remove-artist')) return;
+
+        const id = e.target.dataset.id;
+        const option = [...selector.options].find(opt => opt.value === id);
+        if (option) option.disabled = false;
+
+        e.target.closest('li').remove();
+    });
+
+    new VatPriceHelper({
+        vatFieldId: 'vat',
+        bindings: [
+            { base: 'price', incl: 'total_price' },
+        ]
+    });
 </script>

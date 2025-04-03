@@ -16,9 +16,19 @@ $dashboardCards = [
         'url' => '/dashboard/locations',
     ],
     [
-        'title' => 'Artist Dashboard',
+        'title' => 'Artist Management',
         'description' => 'Manage and view all your artists in one place. Easily update artist information, add new artists, or delete existing ones.',
         'url' => '/dashboard/artists',
+    ],
+    [
+        'title' => 'Dance Events Management',
+        'description' => 'Create and manage dance events. Update event details, manage participants, and track performances.',
+        'url' => '/dashboard/dance-events',
+    ],
+    [
+        'title' => 'Yummy Events Management',
+        'description' => 'Oversee Yummy Events, manage food vendors, and update event information for an organized experience.',
+        'url' => '/dashboard/yummy-events',
     ],
 ];
 ?>
@@ -29,7 +39,7 @@ $dashboardCards = [
     <!-- Dynamic Cards -->
     <div class="row">
         <?php foreach ($dashboardCards as $card) { ?>
-            <?php include __DIR__ . '/../../../components/dashboard/dashboard_card.php'; ?>
+            <?php include __DIR__ . '/../../../components/dashboard/cards/dashboard_card.php'; ?>
         <?php } ?>
     </div>
 </div>

@@ -44,13 +44,20 @@ class LocationsController extends DashboardController
     public function deleteLocation(): void
     {
         $locationId = $_POST['id'] ?? null;
-
         if (!$locationId) {
             $this->redirectToLocations(false, 'Invalid location ID.');
         }
 
-        $success = (bool) $this->locationRepository->deleteLocation($locationId);
-        $this->redirectToLocations($success, $success ? 'Location deleted successfully.' : 'Failed to delete Location');
+        try {
+            $success = (bool) $this->locationRepository->deleteLocation($locationId);
+            $this->redirectToLocations($success, $success ? 'Location deleted successfully.' : 'Failed to delete Location');
+        } catch (\PDOException $e) {
+            if ($e->getCode() === '23000') { // SQLSTATE[23000] => integrity constraint violation
+                $this->redirectToLocations(false, 'Cannot delete this location because it has an restaurant connected.');
+            } else {
+                $this->redirectToLocations(false, 'Database error: ' . $e->getMessage());
+            }
+        }
     }
 
     public function editLocation(): string
@@ -136,7 +143,7 @@ class LocationsController extends DashboardController
 
             $this->redirectToLocations(true, 'Location updated successfully');
         } catch (\Exception $e) {
-            $this->showLocationForm('edit', $_POST, ['Error: ' . $e->getMessage()]);
+            return $this->showLocationForm('edit', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 
@@ -145,7 +152,7 @@ class LocationsController extends DashboardController
         return $this->showLocationForm();
     }
 
-    public function createLocationPost(): void
+    public function createLocationPost()
     {
         try {
             $validator = new Validator();
@@ -192,7 +199,7 @@ class LocationsController extends DashboardController
 
             $this->redirectToLocations(true, 'Location created successfully.');
         } catch (\Exception $e) {
-            $this->showLocationForm('edit', $_POST, ['Error: ' . $e->getMessage()]);
+            return $this->showLocationForm('create', $_POST, ['Error: ' . $e->getMessage()]);
         }
     }
 
