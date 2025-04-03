@@ -16,7 +16,7 @@ include_once __DIR__ . '/../components/header.php';
         });
     </script>
 <?php } ?>
-
+<link rel="stylesheet" href="/assets/css/dance.css">
 <div class="container artist-grid">
     <?php $artistCount = 0; ?>
     <?php foreach ($artists as $artist) { ?>
@@ -28,7 +28,7 @@ include_once __DIR__ . '/../components/header.php';
                 <img src="<?php echo $artist->assets[0]->getUrl(); ?>" alt="<?php echo htmlspecialchars($artist->name); ?>">
                 <h3><?php echo htmlspecialchars($artist->name); ?></h3>
                 <p><?php echo $artist->preview_description; ?></p>
-                <a href="/dance/<?php echo str_replace(' ', '_', $artist->name) . '_' . $artist->id; ?>" 
+                <a href="/dance/<?php echo str_replace(' ', '_', $artist->name) . '_' . $artist->id; ?>"
                     class="btn btn-custom-yellow">
                     More information <i class="fa-solid fa-arrow-up-right-from-square"></i>
                 </a>
@@ -212,179 +212,3 @@ include_once __DIR__ . '/../components/header.php';
         return date.getUTCHours().toString().padStart(2, '0') + ':' + date.getUTCMinutes().toString().padStart(2, '0');
     }
 </script>
-
-<style>
-    .header-section {
-        display: flex;
-        align-items: center;
-        background-color: var(--primary);
-        color: white;
-        padding: 50px;
-    }
-
-    .header-content {
-        flex: 1;
-        padding-right: 30px;
-    }
-
-    .header-image {
-        flex: 1;
-        background: url('/assets/img/events/slider/dance.png') no-repeat center center;
-        background-size: cover;
-        min-height: 400px;
-    }
-
-    .header-content h1 {
-        font-weight: bold;
-    }
-
-    .header-content p {
-        margin-bottom: 20px;
-    }
-
-    .header-content strong {
-        font-weight: bold;
-    }
-
-    .artist-grid {
-        padding: 50px 0;
-    }
-
-    .artist-card {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .artist-card img {
-        width: 100%;
-        height: auto;
-        border-radius: 10px;
-    }
-
-    .artist-card button {
-        margin-top: 10px;
-        background-color: var(--buttons);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        font-weight: bold;
-    }
-
-    .location-card {
-        position: relative;
-        overflow: hidden;
-        background-size: cover;
-        background-position: center;
-        min-height: 400px;
-    }
-
-    .location-overlay {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: rgba(0, 0, 0, 0.6);
-        padding: 20px;
-    }
-
-    .location-title {
-        color: white;
-        font-size: 2rem;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    .location-description {
-        color: white;
-        font-size: 1rem;
-    }
-
-    .location-address {
-        color: white;
-        margin-top: 10px;
-        font-size: 0.9rem;
-    }
-
-    .table-container {
-        margin: 30px auto;
-        width: 90%;
-        background: var(--secondary-accent);
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-    }
-
-    th,
-    td {
-        text-align: center;
-        vertical-align: middle;
-        color: white;
-    }
-
-    .modal-content {
-        background-color: var(--secondary-accent);
-        color: white;
-        border-radius: 10px;
-    }
-
-    .section-title {
-        font-size: 1.8rem;
-        font-weight: 500;
-        margin-bottom: 10px;
-    }
-
-    .section-content {
-        font-size: 1.2rem;
-        margin-bottom: 20px;
-    }
-
-    .quantity-control {
-        background-color: white;
-        border-radius: 5px;
-        padding: 5px 15px;
-        display: inline-flex;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .quantity-btn {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #333;
-        cursor: pointer;
-        padding: 0 10px;
-    }
-
-    .quantity-display {
-        font-size: 1.2rem;
-        margin: 0 15px;
-        color: #333;
-    }
-
-    .book-btn {
-        background-color: var(--buttons);
-        border: none;
-        color: black;
-        font-weight: bold;
-        padding: 10px 20px;
-        border-radius: 5px;
-        width: 100%;
-        font-size: 1.2rem;
-    }
-
-    .book-btn:hover {
-        background-color: var(--buttons-accent);
-    }
-
-    .modal-body {
-        padding: 30px;
-        text-align: center;
-    }
-
-    .price-text {
-        font-size: 1.2rem;
-        margin-bottom: 20px;
-    }
-</style>

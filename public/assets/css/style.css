@@ -33,6 +33,7 @@ input[disabled] {
 /* Button styles are !important to force override Bootstrap */
 .btn-custom-yellow {
     background-color: var(--buttons) !important;
+    border-color: var(--buttons) !important;
     color: black !important;
     font-weight: bold !important;
     border-radius: 8px !important;
@@ -78,4 +79,134 @@ input[disabled] {
     .floating-button span {
         display: initial;
     }
+}
+
+.festival-logo {
+    font-weight: bold;
+    color: var(--buttons);
+}
+
+.nav-item a {
+    color: var(--primary);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.nav-item .active {
+    color: var(--secondary);
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.header-section {
+    align-items: center;
+    background-color: var(--primary);
+    color: white;
+    padding: 50px;
+}
+
+.header-content {
+    flex: 1;
+    padding-right: 30px;
+}
+
+.header-image {
+    flex: 1;
+    background: url('<?php echo $header_image; ?>') no-repeat center center;
+    background-size: cover;
+    min-height: 400px;
+}
+
+.header-content h1 {
+    font-weight: bold;
+}
+
+.header-content p {
+    margin-bottom: 20px;
+}
+
+.header-content strong {
+    font-weight: bold;
+}
+
+.artist-cover {
+    width: 8rem;
+    height: auto;
+}
+
+.location-cover {
+    width: 8rem;
+    height: auto;
+}
+
+.restaurant-logo {
+    width: 8rem;
+    height: auto;
+}
+
+.book-btn {
+    background-color: var(--buttons) !important;
+    border: none !important;
+    color: black !important;
+    font-weight: bold !important;
+    padding: 10px 20px !important;
+    border-radius: 5px !important;
+    width: 100% !important;
+    font-size: 1.2rem !important;
+}
+
+.book-btn:hover {
+    background-color: var(--buttons-accent) !important;
+}
+
+.quantity-control {
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px 15px;
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.quantity-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+.quantity-display {
+    font-size: 1.2rem;
+    margin: 0 15px;
+    color: #333;
+}
+
+.modal-body {
+    padding: 30px !important;
+    text-align: center !important;
+}
+
+.price-text {
+    font-size: 1.2rem !important;
+    margin-bottom: 20px !important;
+}
+
+.modal-content {
+    background-color: var(--secondary-accent) !important;
+    color: white !important;
+    border-radius: 10px !important;
+}
+
+.section-title {
+    font-size: 1.8rem !important;
+    font-weight: 500 !important;
+    margin-bottom: 10px !important;
+}
+
+.section-content {
+    font-size: 1.2rem !important;
+    margin-bottom: 20px !important;
 }

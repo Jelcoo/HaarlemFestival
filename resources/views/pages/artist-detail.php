@@ -6,7 +6,7 @@ $header_image = !empty($headerAsset) ? $headerAsset[0]->getUrl() : '/assets/img/
 
 include_once __DIR__ . '/../components/header.php';
 ?>
-
+<link rel="stylesheet" href="/assets/css/dance.css">
 <div class="container artist-grid">
     <?php if (!$artist) { ?>
         <h2 class="text-center">Artist Not Found</h2>
@@ -220,64 +220,7 @@ include_once __DIR__ . '/../components/header.php';
 </script>
 
 <style>
-    .artist-grid {
-        padding: 50px 0;
-    }
-
-    .artist-img-container {
-        text-align: center;
-    }
-
-    .artist-img-container img {
-        width: 100%;
-        max-height: 400px;
-        object-fit: cover;
-        border-radius: 10px;
-    }
-
-    .artist-details {
-        padding: 20px;
-    }
-
-    .artist-title {
-        font-size: 2rem;
-        font-weight: bold;
-    }
-
-    .table-container {
-        margin: 30px auto;
-        width: 90%;
-        background: var(--secondary-accent);
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-    }
-
-    th,
-    td {
-        text-align: left;
-        vertical-align: middle;
-        color: white;
-    }
-
-    .btn-custom-yellow {
-        background-color: #f1c40f;
-        border: none;
-        padding: 10px 20px;
-        font-weight: bold;
-        border-radius: 5px;
-    }
-
-    .btn-custom-yellow:hover {
-        background-color: #e1b30f;
-    }
-
     .header-section {
         background-color: #1F4E66;
-    }
-
-    .album-img {
-        max-height: 300px;
-        object-fit: contain;
     }
 </style>

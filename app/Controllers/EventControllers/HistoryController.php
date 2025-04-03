@@ -3,8 +3,8 @@
 namespace App\Controllers\EventControllers;
 
 use App\Controllers\Controller;
-use App\Repositories\LocationRepository;
 use App\Services\ScheduleService;
+use App\Repositories\LocationRepository;
 
 class HistoryController extends Controller
 {

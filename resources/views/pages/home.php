@@ -39,7 +39,7 @@ $events = [
     ],
 ];
 ?>
-
+<link rel="stylesheet" href="/assets/css/home.css">
 <div class="container-fluid p-0">
     <div class="swiper">
         <div class="swiper-wrapper">
@@ -48,7 +48,8 @@ $events = [
                     <div class="slide-content">
                         <h2><?php echo $event['name']; ?></h2>
                         <p><?php echo $event['short_description']; ?></p>
-                        <a href="<?php echo $event['button_link']; ?>" class="btn btn-primary"><i class="fa fa-arrow-right me-2"></i><?php echo $event['button_text']; ?></a>
+                        <a href="<?php echo $event['button_link']; ?>" class="btn btn-primary"><i
+                                class="fa fa-arrow-right me-2"></i><?php echo $event['button_text']; ?></a>
                     </div>
                 </div>
             <?php } ?>
@@ -64,18 +65,25 @@ $events = [
 <h2 class="text-center mt-5">Welcome to The Festival 2025!</h2>
 <div class="container">
     <p>
-        Experience the vibrant culture, history, and creativity of Haarlem in a celebration like no other! From July 24th to July 27th, 2025, the heart of Haarlem comes alive with music, food, dance, history, and storytelling. The Festival offers something for everyone—whether you're a jazz enthusiast, a foodie, a history buff, or a family looking for fun-filled adventures.
-        <br/>
+        Experience the vibrant culture, history, and creativity of Haarlem in a celebration like no other! From July
+        24th to July 27th, 2025, the heart of Haarlem comes alive with music, food, dance, history, and storytelling.
+        The Festival offers something for everyone—whether you're a jazz enthusiast, a foodie, a history buff, or a
+        family looking for fun-filled adventures.
+        <br />
         Here's a glimpse of what's in store:
-        <ul>
-            <li>Yummy!: Savor exclusive festival menus from Haarlem's best restaurants at unbeatable prices.</li>
-            <li>DANCE!: Party to world-class DJs in unique locations with back-to-back sessions that will keep you on your feet.</li>
-            <li>A Stroll Through History: Discover the rich history of Haarlem with guided tours through iconic landmarks.</li>
-            <li>Magic@Teylers: Engage in thrilling science challenges and interactive exhibits perfect for kids and families.</li>
-        </ul>
-        Join us for this extraordinary journey through the sights, sounds, and flavors of Haarlem. Whether you're exploring with family, meeting friends, or embarking on a solo adventure, The Festival promises unforgettable memories.
-        <br/>
-        Plan your visit now, and let the festivities begin!
+    <ul>
+        <li>Yummy!: Savor exclusive festival menus from Haarlem's best restaurants at unbeatable prices.</li>
+        <li>DANCE!: Party to world-class DJs in unique locations with back-to-back sessions that will keep you on your
+            feet.</li>
+        <li>A Stroll Through History: Discover the rich history of Haarlem with guided tours through iconic landmarks.
+        </li>
+        <li>Magic@Teylers: Engage in thrilling science challenges and interactive exhibits perfect for kids and
+            families.</li>
+    </ul>
+    Join us for this extraordinary journey through the sights, sounds, and flavors of Haarlem. Whether you're exploring
+    with family, meeting friends, or embarking on a solo adventure, The Festival promises unforgettable memories.
+    <br />
+    Plan your visit now, and let the festivities begin!
     </p>
 </div>
 
@@ -84,24 +92,24 @@ $events = [
     <?php foreach ($events as $event) { ?>
         <?php if ($count % 2 == 0) { ?>
             <div class="row g-0">
-        <?php } ?>
+            <?php } ?>
 
-        <div class="col-md-6 col-lg-6 event-card" style="background-image: url('<?php echo $event['image']; ?>');">
-            <div class="overlay">
-                <div>
-                    <h2><?php echo $event['name']; ?></h2>
-                    <p><?php echo $event['description']; ?></p>
-                </div>
-                <div>
-                    <a href="<?php echo $event['button_link']; ?>" class="btn btn-custom-yellow">
-                        <i class="fa fa-arrow-right me-2"></i><?php echo $event['button_text']; ?>
-                    </a>
+            <div class="col-md-6 col-lg-6 event-card" style="background-image: url('<?php echo $event['image']; ?>');">
+                <div class="overlay">
+                    <div>
+                        <h2><?php echo $event['name']; ?></h2>
+                        <p><?php echo $event['description']; ?></p>
+                    </div>
+                    <div>
+                        <a href="<?php echo $event['button_link']; ?>" class="btn btn-custom-yellow">
+                            <i class="fa fa-arrow-right me-2"></i><?php echo $event['button_text']; ?>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <?php ++$count; ?>
-        <?php if ($count % 2 == 0 || $count == count($events)) { ?>
+            <?php ++$count; ?>
+            <?php if ($count % 2 == 0 || $count == count($events)) { ?>
             </div>
         <?php } ?>
     <?php } ?>
@@ -140,116 +148,45 @@ $events = [
 </div>
 
 <script>
-const swiper = new Swiper('.swiper', {
-    direction: 'horizontal',
-    loop: true,
+    const swiper = new Swiper('.swiper', {
+        direction: 'horizontal',
+        loop: true,
 
-    navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-    },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
 
-    pagination: {
-        el: '.swiper-pagination',
-        clickable: true
-    },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true
+        },
 
-    autoplay: {
-        delay: 5000,
-        disableOnInteraction: false,
-    }
-});
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        }
+    });
 
-const map = L.map('map').setView([52.39330619537042, 4.635887145996095], 14);
+    const map = L.map('map').setView([52.39330619537042, 4.635887145996095], 14);
 
-L.tileLayer(`https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png`, {
-    minZoom: 12,
-    maxZoom: 18,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
+    L.tileLayer(`https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png`, {
+        minZoom: 12,
+        maxZoom: 18,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
 
-const locations = <?php echo json_encode($locations); ?>;
+    const locations = <?php echo json_encode($locations); ?>;
 
-locations.forEach(location => {
-    const coords = location.coordinates.split(',');
-    L.marker(coords).addTo(map)
-        .bindPopup(`
+    locations.forEach(location => {
+        const coords = location.coordinates.split(',');
+        L.marker(coords).addTo(map)
+            .bindPopup(`
             <h4>${location.name}</h4>
             <p>${location.preview_description}</p>
             <p><em>Address: ${location.address}</em></p>
         `);
-});
+    });
 
-setTimeout(() => map.invalidateSize(), 100);
+    setTimeout(() => map.invalidateSize(), 100);
 </script>
-
-<style>
-.swiper {
-    width: 100%;
-    height: 500px;
-}
-.swiper-slide {
-    position: relative;
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.slide-content {
-    text-align: center;
-    color: white;
-    background: rgba(0,0,0,0.5);
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 80%;
-}
-
-.event-card {
-    background-size: cover;
-    background-position: center;
-    color: white;
-    position: relative;
-    height: 400px;
-    transition: transform 0.3s ease;
-}
-.event-card .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.4);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 20px;
-}
-
-.schedule-container {
-    max-width: 1200px;
-    margin: 30px auto;
-    padding: 0 15px;
-}
-.schedule-header {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 24px;
-    font-weight: bold;
-}
-.schedule-day {
-    margin-bottom: 15px;
-}
-.schedule-day-header {
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-.event-bar {
-    background-color: var(--secondary);
-    color: white;
-    padding: 12px 15px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    text-align: center;
-}
-</style>

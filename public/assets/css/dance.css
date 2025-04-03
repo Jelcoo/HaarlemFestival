@@ -1,0 +1,131 @@
+.header-section {
+    display: flex;
+    align-items: center;
+    background-color: var(--primary);
+    color: white;
+    padding: 50px;
+}
+
+.header-content {
+    flex: 1;
+    padding-right: 30px;
+}
+
+.header-image {
+    flex: 1;
+    background: url('/assets/img/events/slider/dance.png') no-repeat center center;
+    background-size: cover;
+    min-height: 400px;
+}
+
+.header-content h1 {
+    font-weight: bold;
+}
+
+.header-content p {
+    margin-bottom: 20px;
+}
+
+.header-content strong {
+    font-weight: bold;
+}
+
+.artist-grid {
+    padding: 50px 0;
+}
+
+.artist-card {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.artist-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.artist-card button {
+    margin-top: 10px;
+    background-color: var(--buttons);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.location-card {
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    min-height: 400px;
+}
+
+.location-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+}
+
+.location-title {
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.location-description {
+    color: white;
+    font-size: 1rem;
+}
+
+.location-address {
+    color: white;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+.table-container {
+    margin: 30px auto;
+    width: 90%;
+    background: var(--secondary-accent);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+th,
+td {
+    text-align: center;
+    vertical-align: middle;
+    color: white;
+}
+
+.artist-img-container {
+    text-align: center;
+}
+
+.artist-img-container img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.artist-details {
+    padding: 20px;
+}
+
+.artist-title {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.album-img {
+    max-height: 300px;
+    object-fit: contain;
+}
