@@ -76,12 +76,12 @@ class AuthController extends Controller
                 'lastname' => $lastname,
                 'email' => $email,
                 'password' => password_hash($password, PASSWORD_DEFAULT),
+                'stripe_customer_id' => $stripeCustomer,
             ]);
 
             $this->emailWriterService->sendWelcomeEmail($createdUser);
 
             $_SESSION['user_id'] = $createdUser->id;
-            // TODO: Temporary solution
             if (isset($_SESSION['cart'])) {
                 Response::redirect('/cart');
             } else {
