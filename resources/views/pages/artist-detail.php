@@ -2,7 +2,7 @@
 $header_name = htmlspecialchars($artist->name ?? 'Artist Not Found');
 $header_description = $artist ? htmlspecialchars($artist->preview_description) : "The artist you're looking for doesn't exist.";
 $header_dates = 'July 25 – 27, 2025';
-$header_image = $header_image ?? '/assets/img/artists/placeholder-artist.png';
+$header_image = !empty($headerAsset) ? $headerAsset[0]->getUrl() : '/assets/img/placeholder2.png';
 
 include_once __DIR__ . '/../components/header.php';
 ?>
@@ -18,7 +18,7 @@ include_once __DIR__ . '/../components/header.php';
                 <p><?= nl2br(htmlspecialchars($artist->main_description)) ?></p>
             </div>
             <div class="col-md-5 d-flex flex-column align-items-center justify-content-center">
-                <?php foreach (array_slice($artistImages ?? [], 0, 2) as $img) { ?>
+                <?php foreach (array_slice($extraAssets ?? [], 0) as $img) { ?>
                     <div class="artist-img-wrapper mb-3 w-100">
                         <img src="<?= htmlspecialchars($img->getUrl()) ?>" alt="Artist Image" class="img-fluid rounded stacked-artist-img">
                     </div>
@@ -86,10 +86,9 @@ include_once __DIR__ . '/../components/header.php';
                 <?php } ?>
             </ul>
         <?php } ?>
-
-        <?php if (!empty($albumImages)) { ?>
+        <?php if (!empty($albumAssets)) { ?>
             <div class="row text-center">
-                <?php foreach ($albumImages as $album) { ?>
+                <?php foreach ($albumAssets as $album) { ?>
                     <div class="col-md-4 col-sm-6 mb-4">
                         <img src="<?= htmlspecialchars($album->getUrl()) ?>" alt="Album Cover" class="img-fluid rounded album-img">
                     </div>
@@ -98,6 +97,10 @@ include_once __DIR__ . '/../components/header.php';
         <?php } ?>
     <?php } ?>
 </div>
+
+<button data-bs-toggle="modal" data-bs-target="#socialMediaModal" class="btn btn-custom-yellow floating-button">
+    <i class="fa-solid fa-share-from-square"></i> <span>Share</span>
+</button>
 
 <style>
     .artist-grid {

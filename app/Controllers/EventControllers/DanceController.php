@@ -43,22 +43,18 @@ class DanceController extends Controller
         $schedule = $this->danceRepository->getScheduleByArtistId($id);
         $albums = explode("\r\n", $artist->iconic_albums ?? '');
     
-        $coverAssets = $this->assetService->resolveAssets($artist, 'cover');
-        $artistImages = $this->assetService->resolveAssets($artist, 'artist_image');
-        $albumImages = $this->assetService->resolveAssets($artist, 'album');
-
-        // Get cover or fallback for banner
-        $header_image = count($coverAssets) > 0 ? $coverAssets[0]->getUrl() : '/assets/img/artists/placeholder-artist.png';
+        $headerAsset = $this->assetService->resolveAssets($artist, 'header');
+        $extraAssets = $this->assetService->resolveAssets($artist, 'extra');
+        $albumAssets = $this->assetService->resolveAssets($artist, 'album');
 
     
         return $this->pageLoader->setPage('artist-detail')->render([
             'artist' => $artist,
             'schedule' => $schedule,
             'albums' => $albums,
-            'placeholder_image' => '/assets/img/artists/placeholder-artist.png',
-            'header_image' => $header_image,
-            'artistImages' => $artistImages,
-            'albumImages' => $albumImages
+            'headerAsset' => $headerAsset,
+            'extraAssets' => $extraAssets,
+            'albumAssets' => $albumAssets
         ]);
     }
     

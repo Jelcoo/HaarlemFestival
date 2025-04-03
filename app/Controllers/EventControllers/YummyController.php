@@ -35,17 +35,14 @@ class YummyController extends Controller
     }
 
     $events = $this->restaurantRepository->getEventsByRestaurantId($id);
-    $coverAssets = $this->assetService->resolveAssets($restaurant, 'cover');
-    $headerAssets = $this->assetService->resolveAssets($restaurant, 'header');
-    $restaurant_images = $this->assetService->resolveAssets($restaurant, 'restaurant_image');
-
-    $header_image = count($headerAssets) > 0 ? $headerAssets[0]->getUrl() : '/assets/img/placeholder-restaurant.png';
-    $logo_image = count($coverAssets) > 0 ? $coverAssets[0]->getUrl() : '/assets/img/placeholder-restaurant.png';
+    $headerAsset = $this->assetService->resolveAssets($restaurant, 'header');
+    $extraAssets = $this->assetService->resolveAssets($restaurant, 'extra');
+    $logoAsset = $this->assetService->resolveAssets($restaurant, 'logo');
 
     function getMostCommonValue(array $values): float
     {
         $counts = array_count_values(array_map(fn($v) => number_format((float)$v, 2, '.', ''), $values));
-        arsort($counts); // sort descending by frequency
+        arsort($counts);
         return (float) array_key_first($counts);
     }
 
@@ -60,9 +57,9 @@ class YummyController extends Controller
     return $this->pageLoader->setPage('restaurant-detail')->render([
         'restaurant' => $restaurant,
         'events' => $events,
-        'header_image' => $header_image,
-        'logo_image' => $logo_image,
-        'restaurant_images' => $restaurant_images,
+        'headerAsset' => $headerAsset,
+        'logoAsset' => $logoAsset,
+        'extraAssets' => $extraAssets,
         'adult_price' => $mostCommonAdultPrice,
         'kids_price' => $mostCommonKidsPrice,
         'has_price_variation' => $hasPriceVariation,

@@ -2,14 +2,12 @@
 $header_name = htmlspecialchars($restaurant->location->name);
 $header_description = htmlspecialchars($restaurant->location->preview_description);
 $header_dates = 'July 25 – 27, 2025';
-$header_image = $header_image ?? '/assets/img/placeholder-restaurant.png';
+$header_image = !empty($headerAsset) ? $headerAsset[0]->getUrl() : '/assets/img/placeholder2.png';
 
 include_once __DIR__ . '/../components/header.php';
 ?>
 
 <div class="yummy-detail-wrapper">
-
-    <!-- Welcome Message -->
     <section class="welcome-section text-center">
         <h2>Welcome to <strong><?= htmlspecialchars($restaurant->location->name) ?></strong></h2>
         <p>During the Festival, you can reserve a table for one of our exclusive sessions,<br>
@@ -21,107 +19,98 @@ include_once __DIR__ . '/../components/header.php';
         </p>
     </section>
 
-    <!-- Description & Map -->
     <section class="description-map-box">
         <div class="info-box">
             <p><?= nl2br(htmlspecialchars($restaurant->location->main_description)) ?></p>
-            <div class="rating-stars">
+            <strong>Reservation is mandatory.</strong>
+            <div class="rating-stars mt-2">
                 <?php for ($i = 0; $i < $restaurant->rating; $i++): ?>
-                    <span class="star">&#9733;</span>
+                    <span class="star">★</span>
                 <?php endfor; ?>
             </div>
-            <em><?= htmlspecialchars($restaurant->restaurant_type) ?></em>
+            <div class="cuisine-box"><?= htmlspecialchars($restaurant->restaurant_type) ?></div>
         </div>
         <div class="map-box">
-            <div id="map" style="height: 200px;"></div>
-            <p class="mt-2 text-center">
-                <strong><?= htmlspecialchars($restaurant->location->address) ?></strong>
-            </p>
+            <div id="map" style="height: 100%; min-height: 240px;"></div>
         </div>
     </section>
 
-    <!-- Session Times -->
     <section class="session-times text-center">
         <h3>Session Times by Day</h3>
         <div class="session-bar">
             <?php
             $days = [];
-
             foreach ($events as $event) {
-                $dateKey = date('l j', strtotime($event->start_date)); // e.g. "Friday 25"
-                $time = date('H.i', strtotime($event->start_time));    // e.g. "18.00"
-
-                $days[$dateKey][] = $time;
+                $day = date('l j', strtotime($event->start_date));
+                $time = date('H.i', strtotime($event->start_time));
+                $days[$day][] = $time;
             }
-
             foreach ($days as $day => $times) {
                 echo "<div class='session-day'><strong>{$day}</strong><br><br>";
                 foreach (array_unique($times) as $time) {
                     echo "<span class='session-time'>{$time}</span> ";
                 }
-                echo "</div><br>";
+                echo "</div>";
             }
             ?>
         </div>
     </section>
 
-    <!-- Restaurant Images -->
-    <?php if (!empty($restaurant_images)): ?>
+    <section class="menu-reservation-section">
+        <div class="menu-box">
+            <h4>Festival Menu</h4>
+            <?php
+            $menu = $restaurant->menu;
+            $sections = ['Starter', 'Main Course', 'Dessert'];
+            foreach ($sections as $section) {
+                if (stripos($menu, $section) !== false) {
+                    preg_match("/$section\s+(.*?)(?=(Starter|Main Course|Dessert|$))/si", $menu, $match);
+                    if (!empty($match[1])) {
+                        echo "<h5 class='menu-section-title'>{$section}</h5>";
+                        echo "<p class='menu-item'>" . htmlspecialchars(trim($match[1])) . "</p>";
+                    }
+                }
+            }
+            ?>
+        </div>
+
+        <div class="sidebar-right">
+            <?php if (!empty($logoAsset)): ?>
+                <img src="<?= htmlspecialchars($logoAsset[0]->getUrl()) ?>" alt="Restaurant Logo" class="logo-img">
+            <?php endif; ?>
+            <div class="prices mt-2">
+                <div><i class="fa fa-user"></i> &euro; <?= number_format($adult_price, 2) ?></div>
+                <div><i class="fa fa-child"></i> &euro; <?= number_format($kids_price, 2) ?> <small>* Children under 12</small></div>
+                <?php if ($has_price_variation): ?>
+                    <p class="text-warning"><small>* Prices may vary slightly</small></p>
+                <?php endif; ?>
+            </div>
+            <a href="#" class="btn btn-warning mt-3">+ Reserve Table</a>
+        </div>
+    </section>
+
+    <section class="reservation-info-box">
+        <p>A reservation fee of &euro;10 per person will be charged when booking through the Festival site. This will be deducted from the final bill at the restaurant.</p>
+        <p>Please share any special requests such as allergies or wheelchair access to ensure a great experience.</p>
+    </section>
+
+    <?php if (!empty($extraAssets)): ?>
         <section class="restaurant-images text-center">
-            <?php foreach ($restaurant_images as $img): ?>
+            <?php foreach ($extraAssets as $img): ?>
                 <img src="<?= htmlspecialchars($img->getUrl()) ?>" class="restaurant-photo" alt="Restaurant photo">
             <?php endforeach; ?>
         </section>
     <?php endif; ?>
-
-    <!-- Price & Reserve -->
-    <section class="reservation-box">
-        <div class="price-info">
-            <div><i class="fa fa-user"></i> &nbsp; € <?= number_format($adult_price, 2) ?></div>
-            <div><i class="fa fa-child"></i> &nbsp; € <?= number_format($kids_price, 2) ?> <small>* Children under 12</small></div>
-            <?php if ($has_price_variation): ?>
-                <p class="text-warning mt-2"><small>* Prices may vary slightly depending on the session</small></p>
-            <?php endif; ?>
-        </div>
-
-        <div class="logo-box text-center">
-            <img src="<?= htmlspecialchars($logo_image) ?>" alt="Restaurant Logo">
-            <p>Seats Available<br><strong><?= $restaurant->seats_available ?></strong></p>
-            <a href="#" class="btn btn-warning mt-2">+ Reserve Table</a>
-        </div>
-        <div class="info-text">
-            <p>Reservation is mandatory. A reservation fee of €10 per person will be charged when a reservation is made on The Festival site. This will be deducted from the final check on visiting the restaurant.</p>
-            <p>When reserving, please share any special requests, like wheelchair access or allergies, to ensure a comfortable experience.</p>
-        </div>
-    </section>
-
-    <!-- Festival Menu -->
-    <section class="menu-box">
-        <h4>Festival Menu</h4>
-        <div class="menu-group">
-            <strong>Starter</strong>
-            <p><?= nl2br(htmlspecialchars($restaurant->menu_starter)) ?></p>
-        </div>
-        <div class="menu-group">
-            <strong>Main Course</strong>
-            <p><?= nl2br(htmlspecialchars($restaurant->menu_main)) ?></p>
-        </div>
-        <div class="menu-group">
-            <strong>Dessert</strong>
-            <p><?= nl2br(htmlspecialchars($restaurant->menu_dessert)) ?></p>
-        </div>
-    </section>
 </div>
 
-<!-- 🍽️ STYLING -->
 <style>
+.header-section {
+    background-color: #1F4E66;
+}
 .yummy-detail-wrapper {
     padding: 40px 20px;
     max-width: 1000px;
     margin: auto;
-}
-.welcome-section {
-    margin-bottom: 40px;
 }
 .description-map-box {
     display: flex;
@@ -136,70 +125,73 @@ include_once __DIR__ . '/../components/header.php';
     padding: 20px;
     border-radius: 10px;
 }
-.rating-stars {
-    margin: 10px 0;
-}
-.star {
-    color: gold;
-    font-size: 20px;
-}
-.session-times {
-    margin: 40px 0;
-}
+.rating-stars { margin-top: 10px; }
+.star { color: gold; font-size: 20px; }
 .session-bar {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 15px;
-    margin-top: 15px;
+    margin: 20px 0;
 }
 .session-time {
     background-color: #226C92;
     color: white;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-radius: 25px;
     font-weight: bold;
 }
-.restaurant-images {
-    margin: 30px 0;
-}
-.restaurant-photo {
-    max-width: 100%;
-    border-radius: 10px;
-    margin-bottom: 15px;
-}
-.reservation-box {
+.menu-reservation-section {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    background-color: #e6f0f7;
-    padding: 25px;
-    border-radius: 10px;
-    margin-bottom: 40px;
-}
-.price-info, .logo-box, .info-text {
-    flex: 1 1 30%;
-}
-.logo-box img {
-    max-width: 120px;
-    margin-bottom: 10px;
+    gap: 30px;
+    margin-bottom: 0;
 }
 .menu-box {
+    flex: 1 1 60%;
     background-color: #2c4d69;
     color: white;
-    padding: 25px;
+    padding: 20px;
     border-radius: 10px;
-    margin-bottom: 60px;
 }
-.menu-box h4 {
-    margin-bottom: 20px;
+.menu-section-title {
+    font-weight: bold;
+    margin-top: 15px;
 }
-.menu-group {
-    margin-bottom: 15px;
+.sidebar-right {
+    flex: 1 1 35%;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+}
+.logo-img {
+    max-width: 100px;
+    margin-bottom: 10px;
+}
+.cuisine-box {
+    margin-top: 10px;
+    background-color: #226C92;
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-style: italic;
+}
+.reservation-info-box {
+    margin-top: 30px;
+    background-color: #e6f0f7;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 1em;
+    line-height: 1.6em;
+}
+.restaurant-photo {
+    max-width: 40%;
+    border-radius: 10px;
+    margin: 10px;
 }
 </style>
 
-<!-- 🗺️ MAP SCRIPT (Leaflet) -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
