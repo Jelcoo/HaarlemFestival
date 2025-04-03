@@ -4,15 +4,18 @@ namespace App\Controllers\EventControllers;
 
 use App\Controllers\Controller;
 use App\Repositories\LocationRepository;
+use App\Services\ScheduleService;
 
 class HistoryController extends Controller
 {
     private LocationRepository $locationRepository;
+    private ScheduleService $scheduleService;
 
     public function __construct()
     {
         parent::__construct();
         $this->locationRepository = new LocationRepository();
+        $this->scheduleService = new ScheduleService();
     }
 
     public function showMain(): string
@@ -21,6 +24,7 @@ class HistoryController extends Controller
 
         return $this->pageLoader->setPage('history')->render([
             'locations' => $locations,
+            'schedules' => $this->scheduleService->getHistorySchedule(),
         ]);
     }
 

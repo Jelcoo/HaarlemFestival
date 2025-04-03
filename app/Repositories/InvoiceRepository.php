@@ -32,18 +32,7 @@ class InvoiceRepository extends Repository
             ->limit($limit, $offset)
             ->get();
 
-        return array_map(fn ($invoice) => new Invoice($invoice), $invoices);
-    }
-
-    public function getAllInvoices(): array
-    {
-        $queryBuilder = new QueryBuilder($this->getConnection());
-
-        $invoices = $queryBuilder
-            ->table('invoices')
-            ->get();
-
-        return array_map(fn ($invoice) => new Invoice($invoice), $invoices);
+        return array_map(fn($invoice) => new Invoice($invoice), $invoices);
     }
 
     public function getInvoicesByUserId(int $userId): array
@@ -59,7 +48,7 @@ class InvoiceRepository extends Repository
             $invoice['is_payable'] = $this->isPayableInvoice($invoice['id'], $userId);
         }
 
-        return array_map(fn ($invoice) => new Invoice($invoice), $invoices);
+        return array_map(fn($invoice) => new Invoice($invoice), $invoices);
     }
 
     public function getInvoiceById(int $invoiceId): ?Invoice

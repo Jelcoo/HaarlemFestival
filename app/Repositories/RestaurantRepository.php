@@ -48,15 +48,6 @@ class RestaurantRepository extends Repository
         return $restaurant;
     }
 
-    public function getAllRestaurants(): array
-    {
-        $queryBuilder = new QueryBuilder($this->getConnection());
-
-        $queryRestaurants = $queryBuilder->table('restaurants')->get();
-
-        return $queryRestaurants ? array_map(fn ($restaurantData) => new Restaurant($restaurantData), $queryRestaurants) : [];
-    }
-
     public function getSortedRestaurants(string $searchQuery, string $sortColumn = 'id', string $sortDirection = 'asc'): array
     {
         $allowedColumns = ['restaurants.id', 'restaurants.restaurant_type', 'locations.name', 'locations.address'];
