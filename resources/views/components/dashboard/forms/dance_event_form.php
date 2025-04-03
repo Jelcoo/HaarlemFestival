@@ -86,13 +86,13 @@ $isEdit = ($mode ?? 'create') === 'edit';
                         value="<?php echo htmlspecialchars($formData['price'] ?? ''); ?>" required>
                 </div>
                 <div class="col-md-3">
+                    <label for="total_price">Total Price (€)</label>
+                    <input type="number" id="total_price" class="form-control" step="0.01" required>
+                </div>
+                <div class="col-md-3">
                     <label for="vat">VAT (%)</label>
                     <input type="number" id="vat" name="vat" class="form-control" step="0.01"
                         value="<?php echo isset($formData['vat']) ? htmlspecialchars($formData['vat'] * 100) : '0'; ?>" required>
-                </div>
-                <div class="col-md-3">
-                    <label for="total_price">Total Price (€)</label>
-                    <input type="number" id="total_price" class="form-control" step="0.01" required>
                 </div>
             </div>
 
@@ -134,60 +134,10 @@ $isEdit = ($mode ?? 'create') === 'edit';
 </div>
 
 <script>
-const selector = document.getElementById('artist_selector');
-const list = document.getElementById('selected-artists');
-
-// Update total price when base price or vat changes
-function updateTotalPrice() {
-    const price = parseFloat(document.getElementById('price').value) || 0;
-    const vat = parseFloat(document.getElementById('vat').value) / 100 || 0;
-    const total = price * (1 + vat);
-    document.getElementById('total_price').value = total.toFixed(2);
-}
-
-// Update base price when total price is changed manually
-function updateBasePriceFromTotal() {
-    const total = parseFloat(document.getElementById('total_price').value) || 0;
-    const vat = parseFloat(document.getElementById('vat').value) || 0;
-    const price = total / (1 + vat);
-    document.getElementById('price').value = price.toFixed(2);
-}
-
-document.getElementById('price').addEventListener('input', updateTotalPrice);
-document.getElementById('vat').addEventListener('input', updateTotalPrice);
-document.getElementById('total_price').addEventListener('input', updateBasePriceFromTotal);
-
-updateTotalPrice();
-
-// Add artist to the list
-selector.addEventListener('change', function () {
-    const id = this.value;
-    const name = this.options[this.selectedIndex].text;
-    if (!id) return;
-
-    // Disable selected artist in dropdown
-    this.options[this.selectedIndex].disabled = true;
-
-    // Create list item with remove button and hidden input
-    const li = document.createElement('li');
-    li.className = 'list-group-item d-flex justify-content-between align-items-center';
-    li.innerHTML = `
-        ${name}
-        <button type="button" class="btn btn-sm btn-danger remove-artist" data-id="${id}">Remove</button>
-        <input type="hidden" name="artist_ids[]" value="${id}">
-    `;
-    list.appendChild(li);
-    this.selectedIndex = 0;
-});
-
-// Remove artist from the list
-document.addEventListener('click', function (e) {
-    if (!e.target.classList.contains('remove-artist')) return;
-
-    const id = e.target.dataset.id;
-    const option = [...selector.options].find(opt => opt.value === id);
-    if (option) option.disabled = false;
-
-    e.target.closest('li').remove();
+new VatPriceHelper({
+    vatFieldId: 'vat',
+    bindings: [
+        { base: 'price', incl: 'total_price' },
+    ]
 });
 </script>

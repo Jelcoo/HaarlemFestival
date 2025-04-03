@@ -44,24 +44,44 @@ $isEdit = ($mode ?? 'create') === 'edit';
 
             <!-- Pricing and VAT -->
             <div class="row mt-3">
+                <!-- Kids Price -->
                 <div class="col-md-3">
-                    <label for="kids_price">Kids Price</label>
-                    <input type="number" step="0.01" name="kids_price" class="form-control"
+                    <label for="kids_price">Kids Price (€)</label>
+                    <input type="number" step="0.01" id="kids_price" name="kids_price" class="form-control"
                         value="<?php echo htmlspecialchars($formData['kids_price'] ?? ''); ?>" required>
                 </div>
                 <div class="col-md-3">
-                    <label for="adult_price">Adult Price</label>
-                    <input type="number" step="0.01" name="adult_price" class="form-control"
+                    <label for="kids_price_vat">Kids Price (incl. VAT)</label>
+                    <input type="number" step="0.01" id="kids_price_vat" class="form-control" required>
+                </div>
+
+                <!-- Adult Price -->
+                <div class="col-md-3">
+                    <label for="adult_price">Adult Price (€)</label>
+                    <input type="number" step="0.01" id="adult_price" name="adult_price" class="form-control"
                         value="<?php echo htmlspecialchars($formData['adult_price'] ?? ''); ?>" required>
                 </div>
                 <div class="col-md-3">
-                    <label for="reservation_cost">Reservation Fee</label>
-                    <input type="number" step="0.01" name="reservation_cost" class="form-control"
+                    <label for="adult_price_vat">Adult Price (incl. VAT)</label>
+                    <input type="number" step="0.01" id="adult_price_vat" class="form-control" required>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <!-- Reservation -->
+                <div class="col-md-3">
+                    <label for="reservation_cost">Reservation Fee (€)</label>
+                    <input type="number" step="0.01" id="reservation_cost" name="reservation_cost" class="form-control"
                         value="<?php echo htmlspecialchars($formData['reservation_cost'] ?? ''); ?>" required>
                 </div>
                 <div class="col-md-3">
+                    <label for="reservation_cost_vat">Reservation Fee (incl. VAT)</label>
+                    <input type="number" step="0.01" id="reservation_cost_vat" class="form-control" required>
+                </div>
+
+                <!-- VAT -->
+                <div class="col-md-6">
                     <label for="vat">VAT (%)</label>
-                    <input type="number" step="0.01" name="vat" class="form-control"
+                    <input type="number" step="0.01" id="vat" name="vat" class="form-control"
                         value="<?php echo isset($formData['vat']) ? htmlspecialchars($formData['vat'] * 100) : ''; ?>" required>
                 </div>
             </div>
@@ -103,3 +123,14 @@ $isEdit = ($mode ?? 'create') === 'edit';
         </form>
     </div>
 </div>
+
+<script>
+new VatPriceHelper({
+    vatFieldId: 'vat',
+    bindings: [
+        { base: 'kids_price', incl: 'kids_price_vat' },
+        { base: 'adult_price', incl: 'adult_price_vat' },
+        { base: 'reservation_cost', incl: 'reservation_cost_vat' },
+    ]
+});
+</script>

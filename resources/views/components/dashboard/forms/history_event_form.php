@@ -49,21 +49,35 @@ $isEdit = ($mode ?? 'create') === 'edit';
                 </div>
             </div>
 
-            <!-- Prices and VAT -->
             <div class="row mt-3">
-                <div class="col-md-4">
-                    <label for="single_price">Single Price</label>
-                    <input type="number" step="0.01" name="single_price" class="form-control"
+                <!-- Single Price -->
+                <div class="col-md-3">
+                    <label for="single_price">Single Price (€)</label>
+                    <input type="number" step="0.01" id="single_price" name="single_price" class="form-control"
                         value="<?php echo htmlspecialchars($formData['single_price'] ?? ''); ?>" required>
                 </div>
-                <div class="col-md-4">
-                    <label for="family_price">Family Price</label>
-                    <input type="number" step="0.01" name="family_price" class="form-control"
+                <div class="col-md-3">
+                    <label for="single_price_vat">Single Price (incl. VAT)</label>
+                    <input type="number" step="0.01" id="single_price_vat" class="form-control" required>
+                </div>
+
+                <!-- Family Price -->
+                <div class="col-md-3">
+                    <label for="family_price">Family Price (€)</label>
+                    <input type="number" step="0.01" id="family_price" name="family_price" class="form-control"
                         value="<?php echo htmlspecialchars($formData['family_price'] ?? ''); ?>" required>
                 </div>
-                <div class="col-md-4">
-                    <label for="vat">VAT (decimal)</label>
-                    <input type="number" step="0.01" name="vat" class="form-control"
+                <div class="col-md-3">
+                    <label for="family_price_vat">Family Price (incl. VAT)</label>
+                    <input type="number" step="0.01" id="family_price_vat" class="form-control" required>
+                </div>
+            </div>
+
+            <!-- VAT input -->
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <label for="vat">VAT (%)</label>
+                    <input type="number" step="0.01" id="vat" name="vat" class="form-control"
                         value="<?php echo isset($formData['vat']) ? htmlspecialchars($formData['vat'] * 100) : ''; ?>" required>
                 </div>
             </div>
@@ -105,3 +119,13 @@ $isEdit = ($mode ?? 'create') === 'edit';
         </form>
     </div>
 </div>
+
+<script>
+new VatPriceHelper({
+    vatFieldId: 'vat',
+    bindings: [
+        { base: 'single_price', incl: 'single_price_vat' },
+        { base: 'family_price', incl: 'family_price_vat' },
+    ]
+});
+</script>
