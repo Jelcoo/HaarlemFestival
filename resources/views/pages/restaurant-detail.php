@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \App\Models\Restaurant $restaurant
+ * @var App\Models\Restaurant $restaurant
  */
 $header_name = htmlspecialchars($restaurant->location->name);
 $header_description = htmlspecialchars($restaurant->location->preview_description);
@@ -43,19 +43,19 @@ include_once __DIR__ . '/../components/header.php';
         <div class="session-bar">
             <?php
             $days = [];
-            foreach ($events as $event) {
-                $day = date('l j', strtotime($event->start_date));
-                $time = date('H.i', strtotime($event->start_time));
-                $days[$day][] = $time;
-            }
-            foreach ($days as $day => $times) {
-                echo "<div class='session-day'><strong>{$day}</strong><br><br>";
-                foreach (array_unique($times) as $time) {
-                    echo "<span class='session-time'>{$time}</span> ";
-                }
-                echo '</div>';
-            }
-            ?>
+foreach ($events as $event) {
+    $day = date('l j', strtotime($event->start_date));
+    $time = date('H.i', strtotime($event->start_time));
+    $days[$day][] = $time;
+}
+foreach ($days as $day => $times) {
+    echo "<div class='session-day'><strong>{$day}</strong><br><br>";
+    foreach (array_unique($times) as $time) {
+        echo "<span class='session-time'>{$time}</span> ";
+    }
+    echo '</div>';
+}
+?>
         </div>
     </section>
 
@@ -63,18 +63,18 @@ include_once __DIR__ . '/../components/header.php';
         <div class="menu-box">
             <h4>Festival Menu</h4>
             <?php
-            $menu = $restaurant->menu;
-            $sections = ['Starter', 'Main Course', 'Dessert'];
-            foreach ($sections as $section) {
-                if (stripos($menu, $section) !== false) {
-                    preg_match("/$section\s+(.*?)(?=(Starter|Main Course|Dessert|$))/si", $menu, $match);
-                    if (!empty($match[1])) {
-                        echo "<h5 class='menu-section-title'>{$section}</h5>";
-                        echo "<p class='menu-item'>" . htmlspecialchars(trim($match[1])) . '</p>';
-                    }
-                }
-            }
-            ?>
+$menu = $restaurant->menu;
+$sections = ['Starter', 'Main Course', 'Dessert'];
+foreach ($sections as $section) {
+    if (stripos($menu, $section) !== false) {
+        preg_match("/$section\s+(.*?)(?=(Starter|Main Course|Dessert|$))/si", $menu, $match);
+        if (!empty($match[1])) {
+            echo "<h5 class='menu-section-title'>{$section}</h5>";
+            echo "<p class='menu-item'>" . htmlspecialchars(trim($match[1])) . '</p>';
+        }
+    }
+}
+?>
         </div>
 
         <div class="sidebar-right">
