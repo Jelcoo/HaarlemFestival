@@ -49,7 +49,7 @@
 <div class="row">
     <?php if (!empty($locations)) { ?>
         <?php foreach ($locations as $location) { ?>
-            <?php include __DIR__ . '/../../../components/dashboard/location_card.php'; ?>
+            <?php include __DIR__ . '/../../../components/dashboard/cards/location_card.php'; ?>
         <?php } ?>
     <?php } else { ?>
         <p>No locations found.</p>

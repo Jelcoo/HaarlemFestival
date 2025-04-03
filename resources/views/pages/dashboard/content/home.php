@@ -29,7 +29,7 @@ $dashboardCards = [
     <!-- Dynamic Cards -->
     <div class="row">
         <?php foreach ($dashboardCards as $card) { ?>
-            <?php include __DIR__ . '/../../../components/dashboard/dashboard_card.php'; ?>
+            <?php include __DIR__ . '/../../../components/dashboard/cards/dashboard_card.php'; ?>
         <?php } ?>
     </div>
 </div>
