@@ -88,7 +88,7 @@ class LocationsController extends DashboardController
         return $this->showLocationForm('edit', $formData);
     }
 
-    public function editLocationPost() : string
+    public function editLocationPost()
     {
         try {
             $locationId = $_POST['id'] ?? null;
@@ -152,7 +152,7 @@ class LocationsController extends DashboardController
         return $this->showLocationForm();
     }
 
-    public function createLocationPost(): string
+    public function createLocationPost()
     {
         try {
             $validator = new Validator();

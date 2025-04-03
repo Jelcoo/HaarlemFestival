@@ -68,7 +68,7 @@ class DanceEventController extends DashboardController
             }
         } catch (\PDOException $e) {
             $this->danceRepository->attachArtistsToEvent($eventId, $eventArtists);
-            
+
             if ($e->getCode() === '23000') { // SQLSTATE[23000] => integrity constraint violation
                 $this->redirectToDanceEvents(false, 'Cannot delete this event because it has tickets or other data linked.');
             } else {
