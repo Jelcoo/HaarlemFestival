@@ -14,6 +14,10 @@ CREATE TABLE users (
 );
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `phone_number`, `password`, `role`, `address`, `city`, `postal_code`, `stripe_customer_id`) VALUES
 (1, 'John', 'Doe', 'johndoe@example.com', NULL, '$2a$12$I03L/LUh1SntONPFOVwz3eivdVa1O.hna9GFmfDbbGO/22imeOoR.', 'admin', NULL, NULL, NULL, NULL);
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `phone_number`, `password`, `role`, `address`, `city`, `postal_code`, `stripe_customer_id`) VALUES
+(2, 'John', 'Doe', 'doejohn@example.com', NULL, '$2a$12$I03L/LUh1SntONPFOVwz3eivdVa1O.hna9GFmfDbbGO/22imeOoR.', 'employee', NULL, NULL, NULL, NULL);
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `phone_number`, `password`, `role`, `address`, `city`, `postal_code`, `stripe_customer_id`) VALUES
+(3, 'John', 'Doe', 'customer@example.com', NULL, '$2a$12$I03L/LUh1SntONPFOVwz3eivdVa1O.hna9GFmfDbbGO/22imeOoR.', 'user', NULL, NULL, NULL, NULL);
 
 CREATE TABLE invoices (
     id INT PRIMARY KEY AUTO_INCREMENT,
