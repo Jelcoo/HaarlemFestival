@@ -34,7 +34,8 @@ $total = array_reduce($cartItems, function ($carry, $item) {
                                     <?php $displayedQuantity = $cartItem->quantities[0]->quantity; ?>
                                     <div class="card h-100 shadow-sm">
                                         <div class="card-body">
-                                            <h4 class="card-title"><?php echo $cartItem->event->location->name; ?></h4>
+                                            <h4 class="card-title"><?php echo htmlspecialchars($cartItem->event->location->name); ?>
+                                            </h4>
                                             <div class="card-text">
                                                 <p class="mb-1">
                                                     <i class="bi bi-clock"></i>
@@ -42,7 +43,7 @@ $total = array_reduce($cartItems, function ($carry, $item) {
                                                 </p>
                                                 <p class="mb-3">
                                                     <i class="bi bi-music-note-beamed"></i>
-                                                    <?php echo implode(', ', array_map(fn ($artist) => $artist->name, $cartItem->event->artists)); ?>
+                                                    <?php echo htmlspecialchars(implode(', ', array_map(fn($artist) => $artist->name, $cartItem->event->artists))); ?>
                                                 </p>
                                             </div>
                                         </div>
@@ -63,7 +64,8 @@ $total = array_reduce($cartItems, function ($carry, $item) {
                                     <?php $tourType = $cartItem->quantities[0]->type->value; ?>
                                     <div class="card h-100 shadow-sm">
                                         <div class="card-body">
-                                            <h4 class="card-title">History tour (<?php echo $cartItem->event->language; ?>)</h4>
+                                            <h4 class="card-title">History tour
+                                                (<?php echo htmlspecialchars($cartItem->event->language); ?>)</h4>
                                             <div class="card-text">
                                                 <p class="mb-1">
                                                     <i class="bi bi-clock"></i>
@@ -71,7 +73,8 @@ $total = array_reduce($cartItems, function ($carry, $item) {
                                                 </p>
                                                 <p class="mb-3">
                                                     <i class="bi bi-ticket-perforated"></i>
-                                                    Ticket type: <span class="badge bg-secondary"><?php echo $tourType; ?></span>
+                                                    Ticket type: <span
+                                                        class="badge bg-secondary"><?php echo htmlspecialchars($tourType); ?></span>
                                                 </p>
                                             </div>
                                         </div>
@@ -106,7 +109,9 @@ $total = array_reduce($cartItems, function ($carry, $item) {
                                     ?>
                                     <div class="card h-100 shadow-sm">
                                         <div class="card-body">
-                                            <h4 class="card-title"><?php echo $cartItem->event->restaurant->location->name; ?></h4>
+                                            <h4 class="card-title">
+                                                <?php echo htmlspecialchars($cartItem->event->restaurant->location->name); ?>
+                                            </h4>
                                             <div class="card-text">
                                                 <p class="mb-1">
                                                     <i class="bi bi-clock"></i>
@@ -119,7 +124,7 @@ $total = array_reduce($cartItems, function ($carry, $item) {
                                                 <?php if ($cartItem->note) { ?>
                                                     <p class="mb-3">
                                                         <i class="bi bi-chat-left-text"></i>
-                                                        <small class="text-muted"><?php echo $cartItem->note; ?></small>
+                                                        <small class="text-muted"><?php echo htmlspecialchars($cartItem->note); ?></small>
                                                     </p>
                                                 <?php } ?>
                                             </div>
@@ -157,9 +162,9 @@ $total = array_reduce($cartItems, function ($carry, $item) {
                 <?php if (isset($_GET['id']) || isset($fields['id'])) { ?>
                     <input type="hidden" name="id" value="<?php echo $_GET['id'] ?? $fields['id']; ?>">
                 <?php } ?>
-                <p class="fs-5 my-0">First name: <?php echo $user->firstname; ?></p>
-                <p class="fs-5 my-0">Last name: <?php echo $user->lastname; ?></p>
-                <p class="fs-5 my-0">Email: <?php echo $user->email; ?></p>
+                <p class="fs-5 my-0">First name: <?php echo htmlspecialchars($user->firstname); ?></p>
+                <p class="fs-5 my-0">Last name: <?php echo htmlspecialchars($user->lastname); ?></p>
+                <p class="fs-5 my-0">Email: <?php echo htmlspecialchars($user->email); ?></p>
                 <div class="form-group">
                     <label for="phone_number">Phone number</label>
                     <input type="text" class="form-control" name="phone_number" placeholder="Enter phone number" <?php echo isset($fields['phone_number']) ? 'value="' . $fields['phone_number'] . '"' : 'value="' . $user->phone_number . '"'; ?>>

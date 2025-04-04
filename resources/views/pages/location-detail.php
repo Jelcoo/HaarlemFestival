@@ -5,9 +5,9 @@ $header_dates = 'July 25 - 27, 2025';
 $header_image = !empty($headerAsset) ? $headerAsset[0]->getUrl() : '/assets/img/placeholder2.png';
 
 include_once __DIR__ . '/../components/header.php';
-/* @var \App\Models\Location $location */
+/** @var \App\Models\Location $location */
 ?>
-
+<link rel="stylesheet" href="/assets/css/history.css">
 <div class="container location-grid">
     <?php if (!$location) { ?>
         <h2 class="text-center">Location Not Found</h2>
@@ -24,7 +24,7 @@ include_once __DIR__ . '/../components/header.php';
                     <p><strong>Address:</strong> <?php echo htmlspecialchars($location->address); ?></p>
                 <?php } ?>
 
-                <div class="location-map-gallery">
+                <div class="location-map-gallery-2">
                     <?php if ($location->coordinates) { ?>
                         <div id="map" class="map-container"></div>
                     <?php } ?>
