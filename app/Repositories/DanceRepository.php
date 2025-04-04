@@ -238,6 +238,7 @@ GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, d
     public function eventHasTickets(int $eventId): bool
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
+
         return (bool) $queryBuilder->table('dance_tickets')->where('dance_event_id', '=', $eventId)->first();
     }
 }
