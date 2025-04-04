@@ -27,13 +27,19 @@ SELECT
     GROUP_CONCAT(DISTINCT a.name ORDER BY a.name SEPARATOR ', ') AS artist_names,
     de.session AS session,
     TIMESTAMPDIFF(MINUTE, CONCAT(de.start_date, ' ', de.start_time), CONCAT(de.end_date, ' ', de.end_time)) AS duration,
-    de.total_tickets - COALESCE(COUNT(DISTINCT dt.id), 0) AS tickets_available,
+    de.total_tickets - COALESCE(COUNT(DISTINCT CASE 
+        WHEN i.status = 'completed' OR 
+                (i.status = 'later' AND TIMESTAMPDIFF(HOUR, i.created_at, NOW()) < 24) OR
+                (i.status = 'failed' AND TIMESTAMPDIFF(HOUR, i.created_at, NOW()) < 24)
+        THEN dt.id 
+        END), 0) AS tickets_available,
     ROUND(de.price * (de.vat + 1), 2) AS price
 FROM dance_events de
 JOIN locations l ON de.location_id = l.id
 JOIN dance_event_artists dea ON de.id = dea.event_id
 JOIN artists a ON dea.artist_id = a.id
 LEFT JOIN dance_tickets dt ON de.id = dt.dance_event_id
+LEFT JOIN invoices i ON dt.invoice_id = i.id
 GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, de.end_time, de.total_tickets, de.price, de.vat");
 
         $query->execute();
@@ -53,13 +59,19 @@ SELECT
     GROUP_CONCAT(DISTINCT a.name ORDER BY a.name SEPARATOR ', ') AS artist_names,
     de.session AS session,
     TIMESTAMPDIFF(MINUTE, CONCAT(de.start_date, ' ', de.start_time), CONCAT(de.end_date, ' ', de.end_time)) AS duration,
-    de.total_tickets - COALESCE(COUNT(DISTINCT dt.id), 0) AS tickets_available,
+    de.total_tickets - COALESCE(COUNT(DISTINCT CASE 
+        WHEN i.status = 'completed' OR 
+                (i.status = 'later' AND TIMESTAMPDIFF(HOUR, i.created_at, NOW()) < 24) OR
+                (i.status = 'failed' AND TIMESTAMPDIFF(HOUR, i.created_at, NOW()) < 24)
+        THEN dt.id 
+        END), 0) AS tickets_available,
     ROUND(de.price * (de.vat + 1), 2) AS price
 FROM dance_events de
 JOIN locations l ON de.location_id = l.id
 JOIN dance_event_artists dea ON de.id = dea.event_id
 JOIN artists a ON dea.artist_id = a.id
 LEFT JOIN dance_tickets dt ON de.id = dt.dance_event_id
+LEFT JOIN invoices i ON dt.invoice_id = i.id
 WHERE dea.artist_id = :artistId
 GROUP BY de.id, de.start_date, de.start_time, l.name, de.session, de.end_date, de.end_time, de.total_tickets, de.price, de.vat");
 
