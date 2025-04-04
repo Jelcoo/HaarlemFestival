@@ -29,9 +29,11 @@ $totalItems = array_sum(array_map(function ($item) {
         </div>
         <div class="col-12 col-md-6 d-flex gap-3 justify-content-md-end pb-1 pb-md-0 px-md-0 align-items-center">
             <h2>Total items: <span id="total-items"><?php echo $totalItems; ?></span></h2>
-            <button type="button" class="btn btn-custom-yellow" data-bs-toggle="modal"
-                data-bs-target="#confirmModal">Place order <i
-                    class="fa-solid fa-arrow-up-right-from-square"></i></button>
+            <?php if ($totalItems > 0) { ?>
+                <button type="button" class="btn btn-custom-yellow" data-bs-toggle="modal"
+                    data-bs-target="#confirmModal">Place order <i
+                        class="fa-solid fa-arrow-up-right-from-square"></i></button>
+            <?php } ?>
         </div>
         <hr>
     </div>
