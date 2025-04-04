@@ -88,3 +88,7 @@ The following test accounts are available in the database:
    - Role: user
 
 These accounts can be used to test different user roles and permissions in the application.
+
+## Documentation
+
+ERD & UML diagrams are included in the docs directory.
