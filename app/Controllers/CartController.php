@@ -34,7 +34,7 @@ class CartController extends Controller
     public function index(array $paramaters = [])
     {
         $cart = $this->cartService->getSessionCart(true, true);
-
+        $_SESSION['cart'] = true;
         return $this->pageLoader->setPage('cart/index')->render([
             'cartItems' => $cart->items,
         ] + $paramaters);
