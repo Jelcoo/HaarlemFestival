@@ -31,7 +31,7 @@ class OrderService
                     $availability = $this->orderRepository->checkDanceTicketAvailable($item->event_id, $quantity->quantity, $quantity->type);
 
                     if (!$availability) {
-                        $errors['dance'][$item->event_id] = 'No seats available';
+                        $errors['dance'][$item->event_id] = 'No single tickets available';
                     }
                     break;
                 case 'App\\Models\\EventYummy':

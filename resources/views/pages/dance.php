@@ -109,6 +109,11 @@ include_once __DIR__ . '/../components/header.php';
                 </tbody>
             </table>
         </div>
+        <p><strong>* All-Access pass for this day €150,00, All-Access pass for Fri, Sat,Sun: €250,00.</strong><br>
+            The capacity of the Club sessions is very limited. Availability for All-Access pass holders cannot be
+            guaranteed due to safety regulations.<br>
+            Tickets available represent total capacity. (90% is sold as single tickets. 10% of total capacity is left
+            for Walk-ins/All-Access passholders.)</p>
     </div>
 <?php } ?>
 
