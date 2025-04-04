@@ -39,6 +39,7 @@ class CartController extends Controller
         } else {
             $_SESSION['cart'] = true;
         }
+
         return $this->pageLoader->setPage('cart/index')->render([
             'cartItems' => $cart->items,
         ] + $paramaters);
