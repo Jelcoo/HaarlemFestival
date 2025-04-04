@@ -34,7 +34,11 @@ class CartController extends Controller
     public function index(array $paramaters = [])
     {
         $cart = $this->cartService->getSessionCart(true, true);
-        $_SESSION['cart'] = true;
+        if (isset($_SESSION['cart']) && $this->getAuthUser() !== null) {
+            unset($_SESSION['cart']);
+        } else {
+            $_SESSION['cart'] = true;
+        }
         return $this->pageLoader->setPage('cart/index')->render([
             'cartItems' => $cart->items,
         ] + $paramaters);
