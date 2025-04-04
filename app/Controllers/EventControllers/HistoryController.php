@@ -2,10 +2,10 @@
 
 namespace App\Controllers\EventControllers;
 
+use App\Services\AssetService;
 use App\Controllers\Controller;
 use App\Services\ScheduleService;
 use App\Repositories\LocationRepository;
-use App\Services\AssetService;
 
 class HistoryController extends Controller
 {
@@ -52,8 +52,8 @@ class HistoryController extends Controller
 
         return $this->pageLoader->setPage('location-detail')->render([
             'location' => $location,
-            'headerAsset'=> $headerAsset,
-            'extraAssets'=> $extraAssets,
+            'headerAsset' => $headerAsset,
+            'extraAssets' => $extraAssets,
         ]);
     }
 }

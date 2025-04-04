@@ -5,7 +5,7 @@ $header_dates = 'July 25 - 27, 2025';
 $header_image = !empty($headerAsset) ? $headerAsset[0]->getUrl() : '/assets/img/placeholder2.png';
 
 include_once __DIR__ . '/../components/header.php';
-/** @var \App\Models\Location $location */
+/* @var \App\Models\Location $location */
 ?>
 <link rel="stylesheet" href="/assets/css/history.css">
 <div class="container location-grid">

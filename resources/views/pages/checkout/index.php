@@ -43,7 +43,7 @@ $total = array_reduce($cartItems, function ($carry, $item) {
                                                 </p>
                                                 <p class="mb-3">
                                                     <i class="bi bi-music-note-beamed"></i>
-                                                    <?php echo htmlspecialchars(implode(', ', array_map(fn($artist) => $artist->name, $cartItem->event->artists))); ?>
+                                                    <?php echo htmlspecialchars(implode(', ', array_map(fn ($artist) => $artist->name, $cartItem->event->artists))); ?>
                                                 </p>
                                             </div>
                                         </div>
