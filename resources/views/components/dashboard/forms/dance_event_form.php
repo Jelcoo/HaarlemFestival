@@ -84,7 +84,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                     </label>
                     <input type="number" id="total_tickets" name="total_tickets" class="form-control"
                         value="<?php echo htmlspecialchars($formData['total_tickets'] ?? ''); ?>" required
-                        <?php echo !empty($formData['has_tickets']) ? 'disabled' : ''; ?>>
+                        <?php echo !empty($formData['has_tickets']) ? 'readonly' : ''; ?>>
                 </div>
                 <div class="col-md-3">
                 <label for="price">
@@ -95,7 +95,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                     </label>
                     <input type="number" id="price" name="price" class="form-control" step="0.01"
                         value="<?php echo htmlspecialchars($formData['price'] ?? ''); ?>" required
-                        <?php echo !empty($formData['has_tickets']) ? 'disabled' : ''; ?>>
+                        <?php echo !empty($formData['has_tickets']) ? 'readonly' : ''; ?>>
                 </div>
                 <div class="col-md-3">
                     <label for="total_price">
@@ -105,7 +105,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                         <?php } ?>
                     </label>
                     <input type="number" id="total_price" class="form-control" step="0.01" required
-                        <?php echo !empty($formData['has_tickets']) ? 'disabled' : ''; ?>>
+                        <?php echo !empty($formData['has_tickets']) ? 'readonly' : ''; ?>>
                 </div>
                 <div class="col-md-3">
                     <label for="vat">
@@ -116,7 +116,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                     </label>
                     <input type="number" id="vat" name="vat" class="form-control" step="0.01"
                         value="<?php echo htmlspecialchars($formData['vat'] * 100 ?? ''); ?>" required
-                        <?php echo !empty($formData['has_tickets']) ? 'disabled' : ''; ?>>
+                        <?php echo !empty($formData['has_tickets']) ? 'readonly' : ''; ?>>
                 </div>
             </div>
 

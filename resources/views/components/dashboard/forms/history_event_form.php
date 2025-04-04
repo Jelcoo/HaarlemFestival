@@ -46,7 +46,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                     </label>
                     <input type="number" name="seats_per_tour" class="form-control"
                         value="<?php echo htmlspecialchars($formData['seats_per_tour'] ?? ''); ?>" required
-                        <?php echo !empty($formData['has_tickets']) ? 'disabled' : ''; ?>>
+                        <?php echo !empty($formData['has_tickets']) ? 'readonly' : ''; ?>>
                 </div>
                 <div class="col-md-6">
                     <label for="start_location">Start Location</label>
@@ -66,7 +66,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                     </label>
                     <input type="number" step="0.01" id="single_price" name="single_price" class="form-control"
                         value="<?php echo htmlspecialchars($formData['single_price'] ?? ''); ?>" required
-                        <?php echo !empty($formData['has_tickets']) ? 'disabled' : ''; ?>>
+                        <?php echo !empty($formData['has_tickets']) ? 'readonly' : ''; ?>>
                 </div>
                 <div class="col-md-3">
                     <label for="single_price_vat">
@@ -76,7 +76,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                         <?php } ?>
                     </label>
                     <input type="number" step="0.01" id="single_price_vat" class="form-control" required
-                    <?php echo !empty($formData['has_tickets']) ? 'disabled' : ''; ?>>
+                    <?php echo !empty($formData['has_tickets']) ? 'readonly' : ''; ?>>
                 </div>
 
                 <!-- Family Price -->
@@ -89,7 +89,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                     </label>
                     <input type="number" step="0.01" id="family_price" name="family_price" class="form-control"
                         value="<?php echo htmlspecialchars($formData['family_price'] ?? ''); ?>" required
-                        <?php echo !empty($formData['has_tickets']) ? 'disabled' : ''; ?>>
+                        <?php echo !empty($formData['has_tickets']) ? 'readonly' : ''; ?>>
                 </div>
                 <div class="col-md-3">
                     <label for="family_price_vat">
@@ -99,7 +99,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                         <?php } ?>
                     </label>
                     <input type="number" step="0.01" id="family_price_vat" class="form-control" required
-                        <?php echo !empty($formData['has_tickets']) ? 'disabled' : ''; ?>>
+                        <?php echo !empty($formData['has_tickets']) ? 'readonly' : ''; ?>>
                 </div>
             </div>
 
@@ -114,7 +114,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                     </label>
                     <input type="number" step="0.01" id="vat" name="vat" class="form-control"
                         value="<?php echo isset($formData['vat']) ? htmlspecialchars($formData['vat'] * 100) : ''; ?>" required
-                        <?php echo !empty($formData['has_tickets']) ? 'disabled' : ''; ?>>
+                        <?php echo !empty($formData['has_tickets']) ? 'readonly' : ''; ?>>
                 </div>
             </div>
 
