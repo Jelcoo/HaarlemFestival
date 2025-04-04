@@ -25,6 +25,7 @@ return $config = [
     'STRIPE_PUBLIC_KEY' => '',
     'STRIPE_SECRET_KEY' => '',
     'STRIPE_WEBHOOK_SECRET' => '',
+    'ENABLE_STRIPE' => true,
 
     // Set to null for no limit
     'CART_DANCE_MIN' => 1,
