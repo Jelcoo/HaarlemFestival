@@ -96,7 +96,7 @@ include_once __DIR__ . '/../components/header.php';
                                             $tours = array_map(function ($lang, $count) {
                                                 return count($count) . "x $lang";
                                             }, array_keys($start['tours']), array_values($start['tours']));
-                                    echo htmlspecialchars(implode('<br>', $tours));
+                                    echo implode('<br>', array_map('htmlspecialchars', $tours));
                                     ?>
                                         </div>
                                     </div>
