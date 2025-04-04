@@ -25,7 +25,7 @@ CREATE TABLE invoices (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 INSERT INTO `invoices` (`id`, `user_id`, `status`, `stripe_payment_id`, `created_at`, `completed_at`) VALUES
-(1, 1, 'started', 'pi_123xyz', '2025-03-06 10:52:27', NULL);
+(1, 1, 'completed', 'pi_123xyz', '2025-03-06 10:52:27', '2025-03-06 10:53:27');
 
 CREATE TABLE locations (
     id INT PRIMARY KEY AUTO_INCREMENT,
