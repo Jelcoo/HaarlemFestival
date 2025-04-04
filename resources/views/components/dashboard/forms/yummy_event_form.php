@@ -124,7 +124,7 @@ $isEdit = ($mode ?? 'create') === 'edit';
                     </label>
                     <input type="number" step="0.01" id="vat" name="vat" class="form-control"
                         value="<?php echo isset($formData['vat']) ? htmlspecialchars($formData['vat'] * 100) : ''; ?>" required
-                        <?php echo !empty($formData['has_tickets']) ? 'disabled' : ''; ?>>
+                        <?php echo !empty($formData['has_tickets']) ? 'readonly' : ''; ?>>
                 </div>
             </div>
 
