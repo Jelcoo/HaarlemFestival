@@ -12,6 +12,7 @@ if [ -f /app/config.php ]; then
 else
     echo "Creating config.php"
     cp config.php.example config.php
+    chmod -R 766 /app/config.php
 fi
 
 if [ -d /app/public/storage ]; then
