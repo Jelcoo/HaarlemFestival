@@ -40,15 +40,18 @@ $yummyErrors = $stockErrors['yummy'] ?? [];
                         <img src="<?php echo $cartItem->event->restaurant->assets[0]->getUrl(); ?>" alt="Image of venue">
                     <?php } ?>
                     <div>
-                        <p>Duration: <?php echo formatTime($cartItem->event->start_time); ?>-<?php echo formatTime($cartItem->event->end_time); ?></p>
+                        <p>Duration:
+                            <?php echo formatTime($cartItem->event->start_time); ?>-<?php echo formatTime($cartItem->event->end_time); ?>
+                        </p>
                         <p>Reservation cost: €<?php echo formatMoney($cartItem->singlePrice()); ?></p>
                         <?php if ($cartItem->note) { ?>
-                            <p>Notes: <?php echo $cartItem->note; ?></p>
+                            <p>Notes: <?php echo htmlspecialchars($cartItem->note); ?></p>
                         <?php } ?>
                     </div>
                 </div>
                 <div class="d-flex">
-                    <div class="d-flex flex-column align-items-stretch p-0 gap-2 justify-content-between" style="flex-grow: 0.5">
+                    <div class="d-flex flex-column align-items-stretch p-0 gap-2 justify-content-between"
+                        style="flex-grow: 0.5">
                         <div class="d-flex justify-content-between p-0">
                             <p>Adults: <?php echo $adultQuantity; ?></p>
                             <div class="counter">

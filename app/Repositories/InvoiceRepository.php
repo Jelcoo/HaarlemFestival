@@ -35,17 +35,6 @@ class InvoiceRepository extends Repository
         return array_map(fn ($invoice) => new Invoice($invoice), $invoices);
     }
 
-    public function getAllInvoices(): array
-    {
-        $queryBuilder = new QueryBuilder($this->getConnection());
-
-        $invoices = $queryBuilder
-            ->table('invoices')
-            ->get();
-
-        return array_map(fn ($invoice) => new Invoice($invoice), $invoices);
-    }
-
     public function getInvoicesByUserId(int $userId): array
     {
         $queryBuilder = new QueryBuilder($this->getConnection());

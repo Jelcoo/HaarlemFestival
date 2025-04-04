@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Config\Config;
 use App\Helpers\InvoiceHelper;
 
 class EmailWriterService
@@ -78,5 +79,22 @@ class EmailWriterService
         }
 
         $this->emailService->send();
+    }
+
+    public function sendPasswordResetEmail(User $user, string $resetLink): void
+    {
+        $this->emailService
+            ->addRecipient($user->email)
+            ->setContent(
+                'Password Reset Request',
+                "Hello {$user->firstname} {$user->lastname},\n\n" .
+                "We received a request to reset your password. Click the link below to reset it:\n\n" .
+                "{$resetLink}\n\n" .
+                "This link will expire in 1 hour.\n\n" .
+                "If you didn't request this password reset, you can safely ignore this email.\n\n" .
+                "Best regards,\n" .
+                Config::getKey('APP_NAME')
+            )
+            ->send();
     }
 }

@@ -101,6 +101,7 @@ class DanceEventController extends DashboardController
             'price' => $event->price,
             'vat' => $event->vat,
             'selected_artists' => $this->danceRepository->getEventArtists($eventId),
+            'has_tickets' => $this->danceRepository->eventHasTickets($eventId),
         ];
 
         return $this->showDanceEventForm('edit', $formData);
@@ -119,21 +120,23 @@ class DanceEventController extends DashboardController
                 throw new \Exception('Dance event not found.');
             }
 
+            $validationRules = [
+                'location_id' => 'required|integer',
+                'start_date' => 'required|date:Y-m-d',
+                'start_time' => 'required|date:H:i',
+                'end_date' => 'required|date:Y-m-d',
+                'end_time' => 'required|date:H:i',
+                'session' => 'required',
+            ];
+
+            if (!isset($_POST['has_tickets']) || !$_POST['has_tickets']) {
+                $validationRules['total_tickets'] = 'required|integer';
+                $validationRules['price'] = 'required|numeric';
+                $validationRules['vat'] = 'required|numeric';
+            }
+
             $validator = new Validator();
-            $validation = $validator->validate(
-                $_POST,
-                [
-                    'location_id' => 'required|integer',
-                    'start_date' => 'required|date:Y-m-d',
-                    'start_time' => 'required|date:H:i',
-                    'end_date' => 'required|date:Y-m-d',
-                    'end_time' => 'required|date:H:i',
-                    'session' => 'required',
-                    'total_tickets' => 'required|integer',
-                    'price' => 'required|numeric',
-                    'vat' => 'required|numeric',
-                ]
-            );
+            $validation = $validator->validate($_POST, $validationRules);
 
             if ($validation->fails()) {
                 throw new \Exception(implode(' ', $validation->errors()->all()));

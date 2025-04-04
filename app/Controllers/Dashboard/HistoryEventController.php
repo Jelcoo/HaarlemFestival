@@ -86,6 +86,7 @@ class HistoryEventController extends DashboardController
             'start_date' => Carbon::parse($event->start_date)->format('Y-m-d'),
             'end_time' => Carbon::parse($event->end_time)->format('H:i'),
             'end_date' => Carbon::parse($event->end_date)->format('Y-m-d'),
+            'has_tickets' => $this->historyRepository->eventHasTickets($eventId),
         ];
 
         return $this->showHistoryEventForm('edit', $formData);
@@ -104,19 +105,28 @@ class HistoryEventController extends DashboardController
                 $this->redirectToHistoryEvents(false, 'History event not found.');
             }
 
-            $validator = new Validator();
-            $validation = $validator->make($_POST, [
+            $validationRules = [
                 'language' => 'required',
                 'guide' => 'required',
-                'seats_per_tour' => 'required|numeric',
-                'family_price' => 'required|numeric',
-                'single_price' => 'required|numeric',
-                'vat' => 'required|numeric',
                 'start_location' => 'required',
                 'start_time' => 'required',
                 'start_date' => 'required',
                 'end_time' => 'required',
                 'end_date' => 'required',
+            ];
+
+            if (!isset($_POST['has_tickets']) || !$_POST['has_tickets']) {
+                $validationRules['seats_per_tour'] = 'required|numeric';
+                $validationRules['family_price'] = 'required|numeric';
+                $validationRules['single_price'] = 'required|numeric';
+                $validationRules['vat'] = 'required|numeric';
+            }
+
+            $validator = new Validator();
+            $validation = $validator->validate($_POST, $validationRules);
+
+            $validation = $validator->make($_POST, [
+
             ]);
 
             if ($validation->fails()) {

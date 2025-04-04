@@ -31,24 +31,27 @@ $historyErrors = $stockErrors['history'] ?? [];
             <?php $displayedQuantity = $cartItem->quantities[0]->quantity; ?>
             <?php $tourType = $cartItem->quantities[0]->type->value; ?>
             <div class="eventCard">
-                <h4>History tour (<?php echo $cartItem->event->language; ?>)</h4>
+                <h4>History tour (<?php echo htmlspecialchars($cartItem->event->language); ?>)</h4>
                 <div>
                     <div>
-                        <p>Duration: <?php echo formatTime($cartItem->event->start_time); ?>-<?php echo formatTime($cartItem->event->end_time); ?></p>
-                        <p>Ticket type: <?php echo $tourType; ?></p>
+                        <p>Duration:
+                            <?php echo formatTime($cartItem->event->start_time); ?>-<?php echo formatTime($cartItem->event->end_time); ?>
+                        </p>
+                        <p>Ticket type: <?php echo htmlspecialchars($tourType); ?></p>
                     </div>
                 </div>
                 <div class="d-flex">
                     <?php if ($tourType === 'family') { ?>
                         <p>&euro;<?php echo formatMoney($cartItem->singlePrice()); ?></p>
                     <?php } else { ?>
-                        <p><?php echo $displayedQuantity; ?> x &euro;<?php echo formatMoney($cartItem->singlePrice()); ?> = &euro;<?php echo formatMoney($cartItem->totalPrice()); ?></p>
+                        <p><?php echo $displayedQuantity; ?> x &euro;<?php echo formatMoney($cartItem->singlePrice()); ?> =
+                            &euro;<?php echo formatMoney($cartItem->totalPrice()); ?></p>
                     <?php } ?>
                     <div class="counter">
                         <form action="/cart/decrease" method="POST">
                             <button type="submit" class="decrease-btn" <?php echo ($tourType === 'family')
-                                                                            ? (($displayedQuantity <= $historyFamilyMin) ? 'disabled' : '')
-                                                                            : (($displayedQuantity <= $historySingleMin) ? 'disabled' : ''); ?>>
+                                ? (($displayedQuantity <= $historyFamilyMin) ? 'disabled' : '')
+                                : (($displayedQuantity <= $historySingleMin) ? 'disabled' : ''); ?>>
                                 <i class="fa-solid fa-minus"></i>
                             </button>
                             <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">
@@ -57,8 +60,8 @@ $historyErrors = $stockErrors['history'] ?? [];
                         <span><?php echo $displayedQuantity; ?></span>
                         <form action="/cart/increase" method="POST">
                             <button type="submit" class="increase-btn" <?php echo ($tourType === 'family')
-                                                                            ? (!is_null($historyFamilyMax) && ($displayedQuantity >= $historyFamilyMax) ? 'disabled' : '')
-                                                                            : (!is_null($historySingleMax) && ($displayedQuantity >= $historySingleMax) ? 'disabled' : ''); ?>>
+                                ? (!is_null($historyFamilyMax) && ($displayedQuantity >= $historyFamilyMax) ? 'disabled' : '')
+                                : (!is_null($historySingleMax) && ($displayedQuantity >= $historySingleMax) ? 'disabled' : ''); ?>>
                                 <i class="fa-solid fa-plus"></i>
                             </button>
                             <input type="hidden" name="item_id" value="<?php echo $cartItem->id; ?>">

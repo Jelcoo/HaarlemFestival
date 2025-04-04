@@ -2,17 +2,23 @@
 
 namespace App\Controllers\EventControllers;
 
+use App\Services\AssetService;
 use App\Controllers\Controller;
+use App\Services\ScheduleService;
 use App\Repositories\LocationRepository;
 
 class HistoryController extends Controller
 {
     private LocationRepository $locationRepository;
+    private ScheduleService $scheduleService;
+    private AssetService $assetService;
 
     public function __construct()
     {
         parent::__construct();
         $this->locationRepository = new LocationRepository();
+        $this->scheduleService = new ScheduleService();
+        $this->assetService = new AssetService();
     }
 
     public function showMain(): string
@@ -21,6 +27,7 @@ class HistoryController extends Controller
 
         return $this->pageLoader->setPage('history')->render([
             'locations' => $locations,
+            'schedules' => $this->scheduleService->getHistorySchedule(),
         ]);
     }
 
@@ -40,8 +47,13 @@ class HistoryController extends Controller
             exit;
         }
 
+        $headerAsset = $this->assetService->resolveAssets($location, 'header');
+        $extraAssets = $this->assetService->resolveAssets($location, 'extra');
+
         return $this->pageLoader->setPage('location-detail')->render([
             'location' => $location,
+            'headerAsset' => $headerAsset,
+            'extraAssets' => $extraAssets,
         ]);
     }
 }

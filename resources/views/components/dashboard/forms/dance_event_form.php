@@ -76,23 +76,47 @@ $isEdit = ($mode ?? 'create') === 'edit';
             <!-- Tickets, Price, VAT -->
             <div class="row mt-3">
                 <div class="col-md-3">
-                    <label for="total_tickets">Total Tickets</label>
+                    <label for="total_tickets">
+                        Total Tickets 
+                        <?php if (!empty($formData['has_tickets'])) { ?>
+                            <i class="fas fa-lock" title="Locked - tickets have been sold"></i>
+                        <?php } ?>
+                    </label>
                     <input type="number" id="total_tickets" name="total_tickets" class="form-control"
-                        value="<?php echo htmlspecialchars($formData['total_tickets'] ?? ''); ?>" required>
+                        value="<?php echo htmlspecialchars($formData['total_tickets'] ?? ''); ?>" required
+                        <?php echo !empty($formData['has_tickets']) ? 'readonly' : ''; ?>>
                 </div>
                 <div class="col-md-3">
-                    <label for="price">Base Price (€)</label>
+                <label for="price">
+                        Base Price (€) 
+                        <?php if (!empty($formData['has_tickets'])) { ?>
+                            <i class="fas fa-lock" title="Locked - tickets have been sold"></i>
+                        <?php } ?>
+                    </label>
                     <input type="number" id="price" name="price" class="form-control" step="0.01"
-                        value="<?php echo htmlspecialchars($formData['price'] ?? ''); ?>" required>
+                        value="<?php echo htmlspecialchars($formData['price'] ?? ''); ?>" required
+                        <?php echo !empty($formData['has_tickets']) ? 'readonly' : ''; ?>>
                 </div>
                 <div class="col-md-3">
-                    <label for="total_price">Total Price (€)</label>
-                    <input type="number" id="total_price" class="form-control" step="0.01" required>
+                    <label for="total_price">
+                        Total Price (€)
+                        <?php if (!empty($formData['has_tickets'])) { ?>
+                            <i class="fas fa-lock" title="Locked - tickets have been sold"></i>
+                        <?php } ?>
+                    </label>
+                    <input type="number" id="total_price" class="form-control" step="0.01" required
+                        <?php echo !empty($formData['has_tickets']) ? 'readonly' : ''; ?>>
                 </div>
                 <div class="col-md-3">
-                    <label for="vat">VAT (%)</label>
+                    <label for="vat">
+                        VAT (%) 
+                        <?php if (!empty($formData['has_tickets'])) { ?>
+                            <i class="fas fa-lock" title="Locked - tickets have been sold"></i>
+                        <?php } ?>
+                    </label>
                     <input type="number" id="vat" name="vat" class="form-control" step="0.01"
-                        value="<?php echo isset($formData['vat']) ? htmlspecialchars($formData['vat'] * 100) : '0'; ?>" required>
+                        value="<?php echo htmlspecialchars($formData['vat'] * 100 ?? ''); ?>" required
+                        <?php echo !empty($formData['has_tickets']) ? 'readonly' : ''; ?>>
                 </div>
             </div>
 

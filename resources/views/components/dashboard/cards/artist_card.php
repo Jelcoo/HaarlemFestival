@@ -10,7 +10,8 @@ $showDetails = isset($_GET['details']) && $_GET['details'] == $artist->id;
         <div class="card-body d-block d-md-flex align-items-start">
             <?php if (count($artist->assets) > 0) { ?>
                 <!-- Artist Cover -->
-                <img src="<?php echo $artist->assets[0]->getUrl(); ?>" alt="Artist Cover" class="img-fluid artist-cover me-3 mb-2">
+                <img src="<?php echo $artist->assets[0]->getUrl(); ?>" alt="Artist Cover"
+                    class="img-fluid artist-cover me-3 mb-2">
             <?php } ?>
 
             <!-- Artist Details -->
@@ -49,7 +50,8 @@ $showDetails = isset($_GET['details']) && $_GET['details'] == $artist->id;
 
                     <div>
                         <!-- Edit -->
-                        <a href="/dashboard/artists/edit?id=<?php echo $artist->id; ?>" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="/dashboard/artists/edit?id=<?php echo $artist->id; ?>"
+                            class="btn btn-warning btn-sm">Edit</a>
 
                         <!-- Delete -->
                         <form action="/dashboard/artists/delete" method="POST" class="d-inline">
@@ -62,10 +64,3 @@ $showDetails = isset($_GET['details']) && $_GET['details'] == $artist->id;
         </div>
     </div>
 </div>
-
-<style>
-    .artist-cover {
-        width: 8rem;
-        height: auto;
-    }
-</style>

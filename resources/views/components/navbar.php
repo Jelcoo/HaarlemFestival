@@ -22,7 +22,8 @@ $pages = [
             <ul class="navbar-nav">
                 <?php foreach ($pages as $url => $label) { ?>
                     <li class="nav-item">
-                        <a class="nav-link <?php echo ($_SERVER['REQUEST_URI'] === $url) ? 'active' : ''; ?>" href="<?php echo $url; ?>"><?php echo $label; ?></a>
+                        <a class="nav-link <?php echo ($_SERVER['REQUEST_URI'] === $url) ? 'active' : ''; ?>"
+                            href="<?php echo $url; ?>"><?php echo $label; ?></a>
                     </li>
                 <?php } ?>
             </ul>
@@ -42,20 +43,3 @@ $pages = [
         </div>
     </div>
 </nav>
-
-<style>
-    .festival-logo {
-        font-weight: bold;
-        color: var(--buttons); /* Gold */
-    }
-    .nav-item a {
-        color: green;
-        font-weight: 500;
-        text-decoration: none;
-    }
-    .nav-item .active {
-        color: var(--secondary); /* Dark blue */
-        font-weight: bold;
-        text-decoration: underline;
-    }
-</style>

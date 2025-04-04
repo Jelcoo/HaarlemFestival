@@ -16,23 +16,22 @@ include_once __DIR__ . '/../components/header.php';
         });
     </script>
 <?php } ?>
-
+<link rel="stylesheet" href="/assets/css/history.css">
 <h2 class="text-center mt-5">Locations</h2>
 <div class="container-fluid p-0">
     <div class="swiper">
-    <div class="swiper-wrapper">
-        <?php foreach ($locations as $location) { ?>
-            <a href="/history/<?php echo str_replace(' ', '_', $location->name) . '_' . $location->id; ?>"
-            class="swiper-slide"
-            <?php if (count($location->assets) > 0) { ?>
-                style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>'); text-decoration: none; color: inherit;"
-            <?php } ?>>
-                <div class="slide-content">
-                    <h2><?php echo htmlspecialchars($location->name); ?></h2>
-                </div>
-            </a>
-        <?php } ?>
-    </div>
+        <div class="swiper-wrapper">
+            <?php foreach ($locations as $location) { ?>
+                <a href="/history/<?php echo str_replace(' ', '_', $location->name) . '_' . $location->id; ?>"
+                    class="swiper-slide" <?php if (count($location->assets) > 0) { ?>
+                        style="background-image: url('<?php echo $location->assets[0]->getUrl(); ?>'); text-decoration: none; color: inherit;"
+                    <?php } ?>>
+                    <div class="slide-content">
+                        <h2><?php echo htmlspecialchars($location->name); ?></h2>
+                    </div>
+                </a>
+            <?php } ?>
+        </div>
         <div class="swiper-button-next"></div>
         <div class="swiper-button-prev"></div>
 
@@ -51,7 +50,7 @@ include_once __DIR__ . '/../components/header.php';
     <?php foreach ($schedules as $schedule) { ?>
         <?php if ($scheduleCount % 4 == 0) { ?>
             <div class="row g-0 gap-2 justify-content-center">
-        <?php } ?>
+            <?php } ?>
 
             <div class="tour-ticket-card card shadow-sm">
                 <div class="card-header text-center">
@@ -97,7 +96,7 @@ include_once __DIR__ . '/../components/header.php';
                                             $tours = array_map(function ($lang, $count) {
                                                 return count($count) . "x $lang";
                                             }, array_keys($start['tours']), array_values($start['tours']));
-                                    echo implode('<br>', $tours);
+                                    echo implode('<br>', array_map('htmlspecialchars', $tours));
                                     ?>
                                         </div>
                                     </div>
@@ -455,155 +454,3 @@ include_once __DIR__ . '/../components/header.php';
         return schedule;
     }
 </script>
-
-<style>
-    .swiper {
-        width: 100%;
-        height: 500px;
-    }
-
-    .swiper-slide {
-        position: relative;
-        background-repeat: no-repeat;
-        background-position: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .slide-content {
-        text-align: center;
-        color: white;
-        background: rgba(0, 0, 0, 0.5);
-        padding: 20px;
-        border-radius: 10px;
-        max-width: 80%;
-    }
-
-    .tour-ticket-card {
-        max-width: 300px;
-        border-radius: 10px;
-        overflow: hidden;
-    }
-
-    .tour-ticket-card .card-header {
-        background-color: #f8f9fa;
-        padding: 10px;
-    }
-
-    .tour-ticket-card .card-body {
-        padding: 15px;
-    }
-
-    .tour-ticket-card .guides-section,
-    .tour-ticket-card .starting-times {
-        border-top: 1px solid #e9ecef;
-        padding-top: 10px;
-        margin-top: 10px;
-    }
-
-    .booking-container {
-        max-width: 400px;
-        margin: 0 auto;
-        padding: 20px;
-        text-align: center;
-    }
-
-    .section-title {
-        font-size: 2rem;
-        font-weight: 500;
-        margin-bottom: 30px;
-    }
-
-    .field-label {
-        font-size: 1.2rem;
-        margin-bottom: 10px;
-        text-align: center;
-    }
-
-    .dropdown-select {
-        width: 100%;
-        background-color: white;
-        border-radius: 5px;
-        padding: 10px 15px;
-        margin-bottom: 20px;
-        color: black;
-        text-align: left;
-        position: relative;
-    }
-
-    .dropdown-select::after {
-        content: "";
-        position: absolute;
-        right: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    .modal-content {
-        background-color: var(--secondary-accent);
-        color: white;
-        border-radius: 10px;
-    }
-
-    .section-title {
-        font-size: 1.8rem;
-        font-weight: 500;
-        margin-bottom: 10px;
-    }
-
-    .section-content {
-        font-size: 1.2rem;
-        margin-bottom: 20px;
-    }
-
-    .quantity-control {
-        background-color: white;
-        border-radius: 5px;
-        padding: 5px 15px;
-        display: inline-flex;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .quantity-btn {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #333;
-        cursor: pointer;
-        padding: 0 10px;
-    }
-
-    .quantity-display {
-        font-size: 1.2rem;
-        margin: 0 15px;
-        color: #333;
-    }
-
-    .book-btn {
-        background-color: var(--buttons);
-        border: none;
-        color: black;
-        font-weight: bold;
-        padding: 10px 20px;
-        border-radius: 5px;
-        width: 100%;
-        font-size: 1.2rem;
-    }
-
-    .book-btn:hover {
-        background-color: var(--buttons-accent);
-    }
-
-    .book-btn:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-    }
-
-    .modal-body {
-        padding: 30px;
-        text-align: center;
-    }
-</style>

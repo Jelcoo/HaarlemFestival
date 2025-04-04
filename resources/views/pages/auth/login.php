@@ -21,5 +21,8 @@
         <p>
             Don't have an account? <a href="/register">Register</a>
         </p>
+        <p>
+            <a href="/forgot-password">Forgot your password?</a>
+        </p>
     </div>
 </div>

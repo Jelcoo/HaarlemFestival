@@ -103,4 +103,11 @@ class YummyRepository extends Repository
 
         return true;
     }
+
+    public function eventHasTickets(int $eventId): bool
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        return (bool) $queryBuilder->table('yummy_tickets')->where('yummy_event_id', '=', $eventId)->first();
+    }
 }

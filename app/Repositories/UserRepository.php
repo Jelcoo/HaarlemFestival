@@ -121,4 +121,32 @@ class UserRepository extends Repository
             ]
         );
     }
+
+    public function createPasswordResetToken(int $userId, string $token, string $expiresAt): void
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+        $queryBuilder->table('password_reset_tokens')->insert([
+            'user_id' => $userId,
+            'token' => $token,
+            'expires_at' => $expiresAt,
+        ]);
+    }
+
+    public function getValidPasswordResetToken(string $token): ?array
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+
+        return $queryBuilder->table('password_reset_tokens')
+            ->where('token', '=', $token)
+            ->where('expires_at', '>', date('Y-m-d H:i:s'))
+            ->first();
+    }
+
+    public function deletePasswordResetToken(string $token): void
+    {
+        $queryBuilder = new QueryBuilder($this->getConnection());
+        $queryBuilder->table('password_reset_tokens')
+            ->where('token', '=', $token)
+            ->delete();
+    }
 }

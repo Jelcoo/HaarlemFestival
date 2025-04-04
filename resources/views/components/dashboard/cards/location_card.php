@@ -10,7 +10,8 @@ $showDetails = isset($_GET['details']) && $_GET['details'] == $location->id;
         <div class="card-body d-block d-md-flex align-items-start">
             <?php if (count($location->assets) > 0) { ?>
                 <!-- Location Cover -->
-                <img src="<?php echo $location->assets[0]->getUrl(); ?>" alt="Location Cover" class="img-fluid location-cover me-3 mb-2">
+                <img src="<?php echo $location->assets[0]->getUrl(); ?>" alt="Location Cover"
+                    class="img-fluid location-cover me-3 mb-2">
             <?php } ?>
 
             <!-- Location Details -->
@@ -54,7 +55,8 @@ $showDetails = isset($_GET['details']) && $_GET['details'] == $location->id;
 
                     <div>
                         <!-- Edit -->
-                        <a href="/dashboard/locations/edit?id=<?php echo $location->id; ?>" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="/dashboard/locations/edit?id=<?php echo $location->id; ?>"
+                            class="btn btn-warning btn-sm">Edit</a>
 
                         <!-- Delete -->
                         <form action="/dashboard/locations/delete" method="POST" class="d-inline">
@@ -67,10 +69,3 @@ $showDetails = isset($_GET['details']) && $_GET['details'] == $location->id;
         </div>
     </div>
 </div>
-
-<style>
-    .location-cover {
-        width: 8rem;
-        height: auto;
-    }
-</style>

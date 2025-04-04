@@ -86,6 +86,7 @@ class YummyEventController extends DashboardController
             'start_time' => Carbon::parse($event->start_time)->format('H:i'),
             'end_date' => Carbon::parse($event->end_date)->format('Y-m-d'),
             'end_time' => Carbon::parse($event->end_time)->format('H:i'),
+            'has_tickets' => $this->yummyRepository->eventHasTickets($eventId),
         ];
 
         return $this->showYummyEventForm('edit', $formData);
@@ -104,19 +105,24 @@ class YummyEventController extends DashboardController
                 $this->redirectToYummyEvents(false, 'Yummy event not found.');
             }
 
-            $validator = new Validator();
-            $validation = $validator->make($_POST, [
+            $validationRules = [
                 'restaurant_id' => 'required|numeric',
-                'total_seats' => 'required|numeric',
-                'kids_price' => 'required|numeric',
-                'adult_price' => 'required|numeric',
-                'reservation_cost' => 'required|numeric',
-                'vat' => 'required|numeric',
                 'start_time' => 'required',
                 'start_date' => 'required',
                 'end_time' => 'required',
                 'end_date' => 'required',
-            ]);
+            ];
+
+            if (!isset($_POST['has_tickets']) || $_POST['has_tickets'] === '0') {
+                $validationRules['total_seats'] = 'required|numeric';
+                $validationRules['kids_price'] = 'required|numeric';
+                $validationRules['adult_price'] = 'required|numeric';
+                $validationRules['reservation_cost'] = 'required|numeric';
+                $validationRules['vat'] = 'required|numeric';
+            }
+
+            $validator = new Validator();
+            $validation = $validator->validate($_POST, $validationRules);
 
             if ($validation->fails()) {
                 throw new \Exception(implode(' ', $validation->errors()->all()));

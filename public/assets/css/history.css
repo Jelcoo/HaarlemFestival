@@ -1,0 +1,132 @@
+.swiper {
+    width: 100%;
+    height: 500px;
+}
+
+.swiper-slide {
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide-content {
+    text-align: center;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 80%;
+}
+
+.tour-ticket-card {
+    max-width: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tour-ticket-card .card-header {
+    background-color: #f8f9fa;
+    padding: 10px;
+}
+
+.tour-ticket-card .card-body {
+    padding: 15px;
+}
+
+.tour-ticket-card .guides-section,
+.tour-ticket-card .starting-times {
+    border-top: 1px solid #e9ecef;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.booking-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.field-label {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.dropdown-select {
+    width: 100%;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    color: black;
+    text-align: left;
+    position: relative;
+}
+
+.dropdown-select::after {
+    content: "";
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.book-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.location-grid {
+    padding: 50px 0;
+}
+
+.location-details {
+    padding: 20px;
+}
+
+.location-title {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.location-details h3 {
+    margin-top: 30px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.location-details ul {
+    padding-left: 20px;
+}
+
+.location-details ul li {
+    margin-bottom: 10px;
+}
+
+.location-map-gallery-2 {
+    margin-top: 30px;
+}
+
+.location-map-gallery-2>.map-container {
+    height: 300px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.gallery-grid img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+}

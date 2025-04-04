@@ -14,6 +14,10 @@ CREATE TABLE users (
 );
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `phone_number`, `password`, `role`, `address`, `city`, `postal_code`, `stripe_customer_id`) VALUES
 (1, 'John', 'Doe', 'johndoe@example.com', NULL, '$2a$12$I03L/LUh1SntONPFOVwz3eivdVa1O.hna9GFmfDbbGO/22imeOoR.', 'admin', NULL, NULL, NULL, NULL);
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `phone_number`, `password`, `role`, `address`, `city`, `postal_code`, `stripe_customer_id`) VALUES
+(2, 'John', 'Doe', 'doejohn@example.com', NULL, '$2a$12$I03L/LUh1SntONPFOVwz3eivdVa1O.hna9GFmfDbbGO/22imeOoR.', 'employee', NULL, NULL, NULL, NULL);
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `phone_number`, `password`, `role`, `address`, `city`, `postal_code`, `stripe_customer_id`) VALUES
+(3, 'John', 'Doe', 'customer@example.com', NULL, '$2a$12$I03L/LUh1SntONPFOVwz3eivdVa1O.hna9GFmfDbbGO/22imeOoR.', 'user', NULL, NULL, NULL, NULL);
 
 CREATE TABLE invoices (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -25,7 +29,7 @@ CREATE TABLE invoices (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 INSERT INTO `invoices` (`id`, `user_id`, `status`, `stripe_payment_id`, `created_at`, `completed_at`) VALUES
-(1, 1, 'started', 'pi_123xyz', '2025-03-06 10:52:27', NULL);
+(1, 1, 'completed', 'pi_123xyz', '2025-03-06 10:52:27', '2025-03-06 10:53:27');
 
 CREATE TABLE locations (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -404,16 +408,30 @@ INSERT INTO assets (`id`, `collection`, `filepath`, `filename`, `mimetype`, `siz
 (57, 'album', 'assets/img/artists/album', 'armin_mirage.png', 'image/png', 229527, 'App\\Models\\Artist', 2),
 (58, 'album', 'assets/img/artists/album', 'armin_intense.png', 'image/png', 86617, 'App\\Models\\Artist', 2),
 (59, 'album', 'assets/img/artists/album', 'armin_balance.png', 'image/png', 84392, 'App\\Models\\Artist', 2),
-(60, 'header', 'assets/img/artists/header', 'armin_header.png', 'image/png', 84392, 'App\\Models\\Artist', 2),
-(61, 'header', 'assets/img/artists/header', 'tiesto_header.png', 'image/png', 84392, 'App\\Models\\Artist', 4),
-(62, 'extra', 'assets/img/restaurants/extra', 'roemer_extra1.png', 'image/png', 11118, 'App\\Models\\Restaurant', 1),
-(63, 'extra', 'assets/img/restaurants/extra', 'roemer_extra2.png', 'image/png', 11118, 'App\\Models\\Restaurant', 1),
+(60, 'header', 'assets/img/artists/header', 'armin_header.png', 'image/png', 2782027, 'App\\Models\\Artist', 2),
+(61, 'header', 'assets/img/artists/header', 'tiesto_header.png', 'image/png', 1341835, 'App\\Models\\Artist', 4),
+(62, 'extra', 'assets/img/restaurants/extra', 'roemer_extra1.png', 'image/png', 8718679, 'App\\Models\\Restaurant', 1),
+(63, 'extra', 'assets/img/restaurants/extra', 'roemer_extra2.png', 'image/png', 120806, 'App\\Models\\Restaurant', 1),
 (64, 'logo', 'assets/img/restaurants/logo', 'roemer.png', 'image/png', 11118, 'App\\Models\\Restaurant', 1),
-(65, 'header', 'assets/img/restaurants/header', 'roemer_header.png', 'image/png', 11118, 'App\\Models\\Restaurant', 1),
-(66, 'header', 'assets/img/restaurants/header', 'ratatouille_header.png', 'image/png', 11118, 'App\\Models\\Restaurant', 2),
-(67, 'extra', 'assets/img/restaurants/extra', 'ratatouille_extra1.png', 'image/png', 11118, 'App\\Models\\Restaurant', 2),
-(68, 'extra', 'assets/img/restaurants/extra', 'ratatouille_extra2.png', 'image/png', 11118, 'App\\Models\\Restaurant', 2),
-(69, 'logo', 'assets/img/restaurants/logo', 'ratatouille.png', 'image/png', 11118, 'App\\Models\\Restaurant', 2);
+(65, 'header', 'assets/img/restaurants/header', 'roemer_header.png', 'image/png', 7647507, 'App\\Models\\Restaurant', 1),
+(66, 'header', 'assets/img/restaurants/header', 'ratatouille_header.png', 'image/png', 11171603, 'App\\Models\\Restaurant', 2),
+(67, 'extra', 'assets/img/restaurants/extra', 'ratatouille_extra1.png', 'image/png', 294895, 'App\\Models\\Restaurant', 2),
+(68, 'extra', 'assets/img/restaurants/extra', 'ratatouille_extra2.png', 'image/png', 938616, 'App\\Models\\Restaurant', 2),
+(69, 'logo', 'assets/img/restaurants/logo', 'ratatouille.png', 'image/png', 11118, 'App\\Models\\Restaurant', 2),
+(70, 'header', 'assets/img/locations/header', 'stbavo_header.jpeg', 'image/jpeg', 679180, 'App\\Models\\Location', 10),
+(71, 'header', 'assets/img/locations/header', 'grotemarkt_header.png', 'image/png', 1587583, 'App\\Models\\Location', 16),
+(72, 'extra', 'assets/img/locations/extra', 'stbavo_extra1.jpeg', 'image/jpeg', 661942, 'App\\Models\\Location', 10),
+(73, 'extra', 'assets/img/locations/extra', 'stbavo_extra2.jpeg', 'image/jpeg', 913209, 'App\\Models\\Location', 10),
+(74, 'extra', 'assets/img/locations/extra', 'stbavo_extra3.jpeg', 'image/jpeg', 598957, 'App\\Models\\Location', 10),
+(75, 'extra', 'assets/img/locations/extra', 'stbavo_extra4.png', 'image/png', 5484593, 'App\\Models\\Location', 10),
+(76, 'extra', 'assets/img/locations/extra', 'stbavo_extra5.jpeg', 'image/jpeg', 115998, 'App\\Models\\Location', 10),
+(77, 'extra', 'assets/img/locations/extra', 'grotemarkt_extra1.jpeg', 'image/jpeg', 374601, 'App\\Models\\Location', 16),
+(78, 'extra', 'assets/img/locations/extra', 'grotemarkt_extra2.png', 'image/png', 1779134, 'App\\Models\\Location', 16),
+(79, 'extra', 'assets/img/locations/extra', 'grotemarkt_extra3.png', 'image/png', 1479887, 'App\\Models\\Location', 16),
+(80, 'extra', 'assets/img/locations/extra', 'grotemarkt_extra4.jpeg', 'image/jpeg', 117141, 'App\\Models\\Location', 16),
+(81, 'extra', 'assets/img/locations/extra', 'grotemarkt_extra5.jpeg', 'image/jpeg', 451133, 'App\\Models\\Location', 16);
+
+
 
 
 CREATE TABLE carts (
@@ -438,3 +456,12 @@ CREATE TABLE cart_item_quantities (
     quantity INT NOT NULL,
     FOREIGN KEY (cart_item_id) REFERENCES cart_items(id) ON DELETE CASCADE
 );
+
+CREATE TABLE password_reset_tokens (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+)
