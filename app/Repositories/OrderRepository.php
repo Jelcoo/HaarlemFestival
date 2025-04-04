@@ -26,7 +26,7 @@ class OrderRepository extends Repository
             foreach ($cart->items as $item) {
                 if ($item->event_model == EventDance::class) {
                     for ($i = 0; $i < $item->quantity(); ++$i) {
-                        $sql = 'INSERT INTO dance_tickets (dance_event_id, invoice_id, all_access) VALUES (:dance_event_id, :invoice_id, :all_access)';
+                        $sql = 'INSERT INTO dance_tickets (dance_event_id, invoice_id, all_access, qrcode) VALUES (:dance_event_id, :invoice_id, :all_access, 1)';
                         $stmt = $pdoConnection->prepare($sql);
                         $stmt->execute([
                             'dance_event_id' => $item->event_id,
@@ -35,7 +35,7 @@ class OrderRepository extends Repository
                         ]);
                     }
                 } elseif ($item->event_model == EventYummy::class) {
-                    $sql = 'INSERT INTO yummy_tickets (yummy_event_id, invoice_id, kids_count, adult_count) VALUES (:yummy_event_id, :invoice_id, :kids_count, :adult_count)';
+                    $sql = 'INSERT INTO yummy_tickets (yummy_event_id, invoice_id, kids_count, adult_count, qrcode) VALUES (:yummy_event_id, :invoice_id, :kids_count, :adult_count, 1)';
                     $stmt = $pdoConnection->prepare($sql);
                     $stmt->execute([
                         'yummy_event_id' => $item->event_id,
@@ -44,7 +44,7 @@ class OrderRepository extends Repository
                         'adult_count' => $item->quantities[1]->quantity,
                     ]);
                 } elseif ($item->event_model == EventHistory::class) {
-                    $sql = 'INSERT INTO history_tickets (history_event_id, invoice_id, total_seats, family_ticket) VALUES (:history_event_id, :invoice_id, :total_seats, :family_ticket)';
+                    $sql = 'INSERT INTO history_tickets (history_event_id, invoice_id, total_seats, family_ticket, qrcode) VALUES (:history_event_id, :invoice_id, :total_seats, :family_ticket, 1)';
                     $stmt = $pdoConnection->prepare($sql);
                     $stmt->execute([
                         'history_event_id' => $item->event_id,
