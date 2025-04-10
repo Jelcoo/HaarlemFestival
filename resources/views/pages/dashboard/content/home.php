@@ -23,12 +23,17 @@ $dashboardCards = [
     [
         'title' => 'Dance Events Management',
         'description' => 'Create and manage dance events. Update event details, manage participants, and track performances.',
-        'url' => '/dashboard/dance-events',
+        'url' => '/dashboard/events/dance',
     ],
     [
         'title' => 'Yummy Events Management',
         'description' => 'Oversee Yummy Events, manage food vendors, and update event information for an organized experience.',
-        'url' => '/dashboard/yummy-events',
+        'url' => '/dashboard/events/yummy',
+    ],
+    [
+        'title' => 'History Events Management',
+        'description' => 'Manage historical tours and events. Set tour schedules, languages, guides, and ticket prices.',
+        'url' => '/dashboard/events/history',
     ],
 ];
 ?>
