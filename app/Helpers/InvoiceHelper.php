@@ -2,9 +2,9 @@
 
 namespace App\Helpers;
 
-use App\Config\Config;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use App\Config\Config;
 use App\Models\Location;
 use App\Models\Restaurant;
 use App\Application\PageLoader;
@@ -19,13 +19,6 @@ class InvoiceHelper
     {
         $this->invoiceRepository = new InvoiceRepository();
         $this->pageLoader = new PageLoader();
-    }
-
-    private function ensureDirectoryExists(string $path): void
-    {
-        if (!is_dir($path)) {
-            mkdir($path, 0777, true);
-        }
     }
 
     public function generateInvoicePdf(int $invoiceId): string
