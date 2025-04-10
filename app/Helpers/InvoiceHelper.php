@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Config\Config;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use App\Models\Location;
@@ -96,8 +97,7 @@ class InvoiceHelper
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        $this->ensureDirectoryExists(__DIR__ . '/../../storage/invoices');
-        $path = __DIR__ . "/../../storage/invoices/invoice_{$invoiceId}.pdf";
+        $path = Config::getKey('STORAGE_PATH') . "/invoices/invoice_{$invoiceId}.pdf";
         file_put_contents($path, $dompdf->output());
 
         return $path;
@@ -155,10 +155,8 @@ class InvoiceHelper
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        $this->ensureDirectoryExists(__DIR__ . '/../../storage/tickets');
-
         $ticketId = $entry['ticket']->id;
-        $path = __DIR__ . "/../../storage/tickets/{$type}_ticket_{$ticketId}.pdf";
+        $path = Config::getKey('STORAGE_PATH') . "/tickets/{$type}_ticket_{$ticketId}.pdf";
         file_put_contents($path, $dompdf->output());
 
         return $path;

@@ -22,6 +22,20 @@ else
     mkdir -p /app/public/storage
 fi
 
+if [ -d /app/public/storage/invoices ]; then
+    echo "public/storage/invoices already exists"
+else
+    echo "Creating public/storage/invoices"
+    mkdir -p /app/public/storage/invoices
+fi
+
+if [ -d /app/public/storage/tickets ]; then
+    echo "public/storage/invoices already exists"
+else
+    echo "Creating public/storage/tickets"
+    mkdir -p /app/public/storage/tickets
+fi
+
 echo "Setting permissions"
 chmod -R 777 /app/public/storage
 

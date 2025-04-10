@@ -1,14 +1,16 @@
 <script src="https://js.stripe.com/v3/"></script>
-<form id="payment-form">
-    <div id="payment-element">
-        <!--Stripe.js injects the Payment Element-->
-    </div>
-    <button id="submit">
-        <div class="spinner hidden" id="spinner"></div>
-        <span id="button-text">Pay now</span>
-    </button>
-    <div id="payment-message" class="hidden"></div>
-</form>
+<div class="container mt-4">
+    <form id="payment-form" class="d-flex flex-column align-items-center flex-grow-1 gap-4">
+        <div id="payment-element" class="w-100">
+            <!--Stripe.js injects the Payment Element-->
+        </div>
+        <button id="submit" class="btn btn-custom-yellow">
+            <div class="spinner hidden" id="spinner"></div>
+            <span id="button-text">Pay now</span>
+        </button>
+        <div id="payment-message" class="hidden"></div>
+    </form>
+</div>
 <script>
     const stripe = Stripe(
         "<?php echo App\Config\Config::getKey('STRIPE_PUBLIC_KEY'); ?>"
