@@ -19,7 +19,7 @@ class OrderRepository extends Repository
 
             $sql = 'INSERT INTO invoices (user_id) VALUES (:user_id)';
             $stmt = $pdoConnection->prepare($sql);
-            $stmt->execute(['user_id' => $cart->user_id]);
+            $stmt->execute(['user_id' => $_SESSION['user_id']]);
 
             $invoiceId = $pdoConnection->lastInsertId();
 
